@@ -1,0 +1,5 @@
+{
+  "main": "app.js",
+  "worker": false,
+  "description": "Making a first module."
+}

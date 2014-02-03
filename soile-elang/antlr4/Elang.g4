@@ -1,0 +1,5 @@
+XSym
+0068
+1820a033be139a1cb49d7d2a4835611d
+/Users/tuope/NetBeansProjects/AboExperimentLang/src/elang01/Elang.g4
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           

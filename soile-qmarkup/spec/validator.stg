@@ -1,0 +1,233 @@
+delimiters "$", "$"
+
+
+default_value(name, value) ::= "$name$($if(value)$ $value$ $endif$)"
+
+validate(method_name, entry) ::= "$method_name$($entry$)"
+
+object_get(name) ::= "object.get(\"$name$\")"
+
+object_add(key, value) ::= "object.put(\"$key$\", $value$)"
+
+array_get(index) ::= "array.get($index$)"
+
+array_add(index, value) ::= "array.add($index$, $value$)"
+
+validate_repeat(method_name, validation_method) ::= <<
+    $\n$ 
+    @SuppressWarnings("unchecked")
+    protected void $method_name$(Value value) 
+            throws MalformedCommandException {
+        validateArray(value);
+        ArrayList<Value> array = (ArrayList<Value>) value.asJavaObject();
+        Iterator<Value> it = array.iterator();
+        while (it.hasNext()) {
+            $validation_method$(it.next());
+        }
+    }
+>>
+
+validate_array(method_name, size, statements) ::= <<
+    $\n$
+    @SuppressWarnings("unchecked")
+    protected void $method_name$(Value value) 
+            throws MalformedCommandException {
+            
+        validateArray(value);
+        ArrayList<Value> array = (ArrayList<Value>) value.asJavaObject();
+        if (array.size() != $size$) {
+            String msg = String.format("Missing elements in array.");
+            throw new MalformedCommandException(msg);
+        }
+        $statements: {s | $validate(s.method, array_get(s.index))$; }; separator="\n"$
+    }
+
+>>
+
+validate_object(method_name, statements) ::= <<
+    $\n$
+    @SuppressWarnings("unchecked")
+    protected void $method_name$(Value value) 
+            throws MalformedCommandException {
+
+        validateObject(value);
+        Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
+
+        $statements: {s | $validate_object_stmt(s.key, s.validator_method, s.value_method, s.value) $ }; separator="\n"$
+    }
+
+>>
+
+validate_object_stmt(key, validator_method, value_method, value) ::= <<
+        if (object.containsKey("$key$")) {
+            $validate(validator_method, object_get(key))$;
+        } 
+        else {
+        $if(value_method)$
+            $object_add(key, default_value(value_method, value))$;
+        $else$
+            String msg = String.format("Missing object element: '%s'.", "$key$");
+            throw new MalformedCommandException(msg);
+        $endif$
+        }
+>>
+
+validate_command(method_name, statements) ::= <<
+    $\n$
+    @SuppressWarnings("unchecked")
+    protected void $method_name$(Value value) 
+            throws MalformedCommandException {
+        validateObject(value);
+        Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
+        $statements: {s | $validate_object_stmt(s.key, s.validator_method, s.value_method, s.value) $ }; separator="\n"$
+    }
+
+>>
+
+command_class(class_name, method_name) ::= <<
+
+    public static class $class_name$ extends Validator {
+        @Override
+        public void validate(Value value) throws MalformedCommandException {
+        	$method_name$(value);
+        }
+
+        @Override
+        public String name() {
+            return "$class_name$";
+        }
+    }
+
+>>
+
+default_object_value(method_name, statements) ::= <<
+    $\n$
+    protected Value $method_name$() {
+        Map<String, Value> object = new HashMap<>();
+
+        $statements: {s | $object_add(s.key, default_value(s.method))$; }; separator="\n"$
+
+        return new ObjectValue(object);
+    }
+
+>>
+
+default_array_value(method_name, statements) ::= <<
+    $\n$
+    protected Value $method_name$() {
+        ArrayList<Value> array = new ArrayList<>();
+        
+        $statements: {s | $array_add(s.index, default_value(s.name, s.value))$; }; separator="\n"$
+
+        return new ArrayValue(array);
+    }
+
+>>
+
+body(methods, innerclasses, validators) ::= <<
+package fi.abo.kogni.soile2.qmarkup.typespec;
+
+/******************************************************************
+ * This file has been DYNAMICALLY generated! Do not edit by hand! *
+ * Instead, make changes to the "./spec/t.typespec" file, and     *
+ * run GenerateValidator.java. Finally, copy the generated code   *
+ * to this file.                                                  *
+ ******************************************************************/
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import fi.abo.kogni.soile2.qmarkup.ArrayValue;
+import fi.abo.kogni.soile2.qmarkup.BooleanValue;
+import fi.abo.kogni.soile2.qmarkup.IntegerValue;
+import fi.abo.kogni.soile2.qmarkup.ObjectValue;
+import fi.abo.kogni.soile2.qmarkup.StringValue;
+import fi.abo.kogni.soile2.qmarkup.Value;
+
+@SuppressWarnings("unused")
+public abstract class Validator {
+
+    public static Validator validatorFor(String name) {
+        return validators.get(name);
+    }
+
+	public abstract String name();
+    public abstract void validate(Value value) throws MalformedCommandException;
+
+    $innerclasses: {c | $c.body$ }; separator="\n"$
+    
+    $methods: {m | $m.method$ }; separator="\n"$
+    
+    protected Value defaultStringValue(String s) {
+        return new StringValue(s);
+    }
+
+    protected Value defaultIntegerValue(Integer i) {
+        return new IntegerValue(i);
+    }
+
+    protected Value defaultIntegerValue(String s) {
+        return new IntegerValue(s);
+    }
+
+    protected Value defaultBooleanValue(Boolean b) {
+        return new BooleanValue(b);
+    }
+
+    protected Value defaultBooleanValue(String s) {
+        return new BooleanValue(s);
+    }
+
+    protected void validateBoolean(Value value)
+            throws MalformedCommandException {
+        Object obj = value.asJavaObject();
+        if (!(obj instanceof Boolean)) {
+            String msg = String.format("Value '%s' is not Boolean.", value);
+            throw new MalformedCommandException(msg);
+        }
+    }
+
+    protected void validateInteger(Value value)
+            throws MalformedCommandException {
+        Object obj = value.asJavaObject();
+        if (!(obj instanceof Integer)) {
+            String msg = String.format("Value '%s' is not Integer.", value);
+            throw new MalformedCommandException(msg);
+        }
+    }
+
+    protected void validateString(Value value) throws MalformedCommandException {
+        Object obj = value.asJavaObject();
+        if (!(obj instanceof String)) {
+            String msg = String.format("Value '%s' is not String.", value);
+            throw new MalformedCommandException(msg);
+        }
+    }
+
+    protected void validateObject(Value value) throws MalformedCommandException {
+        Object obj = value.asJavaObject();
+        if (!(obj instanceof Map<?, ?>)) {
+            String msg = String.format("Value '%s' is not Object.", value);
+            throw new MalformedCommandException(msg);
+        }
+    }
+
+    protected void validateArray(Value value) throws MalformedCommandException {
+        Object obj = value.asJavaObject();
+        if (!(obj instanceof ArrayList<?>)) {
+            String msg = String.format("Value '%s' is not Array.", value);
+            throw new MalformedCommandException(msg);
+        }
+    }
+
+    public static final HashMap<String, Validator> validators;
+    
+    static {
+        validators = new HashMap<>();
+        $validators: {v | validators.put("$v.name$", new $v.name$());}; separator="\n"$
+    }
+
+}
+>>  

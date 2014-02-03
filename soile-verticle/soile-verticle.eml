@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component jdk="1.7" jdk_type="JavaSDK">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="antlr-4.0-complete.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/antlr-4.0-complete.jar!/"/>
+	</lib>
+	<lib name="commons-codec-1.8.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/commons-codec-1.8.jar!/"/>
+	</lib>
+	<lib name="commons-io-2.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/commons-io-2.4.jar!/"/>
+	</lib>
+	<lib name="commons-lang3-3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/commons-lang3-3.1.jar!/"/>
+	</lib>
+	<lib name="fastutil-6.5.9.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/fastutil-6.5.9.jar!/"/>
+	</lib>
+	<lib name="hazelcast-2.6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/hazelcast-2.6.jar!/"/>
+	</lib>
+	<lib name="jackson-annotations-2.2.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/jackson-annotations-2.2.2.jar!/"/>
+	</lib>
+	<lib name="jackson-core-2.2.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/jackson-core-2.2.2.jar!/"/>
+	</lib>
+	<lib name="jackson-databind-2.2.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/jackson-databind-2.2.2.jar!/"/>
+	</lib>
+	<lib name="netty-all-4.0.2.Final.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/netty-all-4.0.2.Final.jar!/"/>
+	</lib>
+	<lib name="soile2-qmarkup.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/soile2-qmarkup.jar!/"/>
+	</lib>
+	<lib name="soile2-utils.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/soile2-utils.jar!/"/>
+	</lib>
+	<lib name="vertx-core-2.0.0-final.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/vertx-core-2.0.0-final.jar!/"/>
+	</lib>
+	<lib name="vertx-platform-2.0.0-final.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/vertx-platform-2.0.0-final.jar!/"/>
+	</lib>
+</component>

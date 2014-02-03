@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Kbd</title>
+  </head>
+  <body>
+    <h1>jQuery keyboard events</h1>
+    
+    <p id="region" style="border: thin solid black; width: 2cm; height: 2cm;">
+      
+    </p>
+
+    <p>
+      Key: <span id="keycode">&nbsp;</span>
+    </p>
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <!-- 
+      http://stackoverflow.com/questions/593602/keyboard-shortcuts-with-jquery 
+    -->
+    <script src="http://cdn.craig.is/js/mousetrap/mousetrap.min.js?0b092"></script>
+    <script>
+      $(document).ready(function() {
+        var writemsg = function(msg) {
+          $('#keycode').text(msg);
+        };
+        
+        $('#region').mousedown(function(e){
+          writemsg('mousedown');
+        });
+        
+        Mousetrap.bind('x', function(e) {
+          var s = '';
+          if (e.which !== undefined){
+            s += 'which ';
+          }
+          if (e.keyCode !== undefined){
+            s += 'keyCode ';
+          }
+          if (e.timeStamp !== undefined){
+            s += 'timeStamp ';
+          }
+          writemsg(s);
+        });
+        Mousetrap.bind('left', function() {
+          writemsg('left');
+        });
+      });
+    </script>
+  </body>
+</html>

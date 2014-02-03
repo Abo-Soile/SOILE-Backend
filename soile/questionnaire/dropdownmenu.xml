@@ -1,0 +1,26 @@
+<dropdownmenu id="someid" dbcolumn="jagbori" dbtype="char(*)">
+  <label>Valitse kaupunki</label>
+  <option dbvalue="tampere">Tampere</option>
+  <option dbvalue="helsinki">Helsinki</option>
+</dropdownmenu>
+
+<!-- 
+
+
+/pagetitle Language background
+
+/info 
+This is {/bold bolded} paragraph one.
+
+This is {/emph emphasized} paragraph two.
+/end
+
+/dropdownmenu
+  dbcolumn: jagbori
+  dbtype: char(*)
+  label: Valitse kaupunki
+  option: {dbvalue: 'tampere', text: 'Tampere'}
+  option: {dbvalue: 'helsinki', text: 'Helsinki'}
+/end
+
+-->

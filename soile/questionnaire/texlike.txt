@@ -1,0 +1,61 @@
+/pagetitle "Main title"
+
+/info
+  Info about the questionnaire, paragraph 1.
+  
+  Info about the questionnaire, paragraph 2.
+/end
+
+/dropdownmenu
+  dbcolumn: jagbori
+  dbtype: char(*)
+  text: Valitse kaupunki
+  option: {dbvalue: 'tampere', text: 'Tampere'}
+  option: {dbvalue: 'helsinki', text: 'Helsinki'}
+/end
+
+
+/singleselect 
+  text: 'Valitse koulutustausta'
+  dbcolumn: edubg
+  dbtype: int
+  option: {dbvalue: 0, text: 'Lukio'}
+  option: {dbvalue: 1, text: 'Yliopisto'}
+/end
+
+/slider
+  dbcolumn: hurtrott
+  dbtype: int
+  labels: ['litet', 'kanske', 'mycket']
+  minimum: 0, 
+  maximum: 2,
+  increment: 1
+/end
+
+/numberfield
+  text: 'Anna ikasi'
+  dbcolumn: age
+  dbtype: int
+  minimum: 15
+  maximum: 120
+  increment: 1
+/end
+
+/textfield
+  text: 'Tell us about yourself'
+  rows: 4
+  columns: 80
+  maximum-size: 1024
+  required: no
+/end
+
+/paragraph
+
+It is {/strong NOT} allowed to do this or that.
+
+By the way, this is a second paragraph, just to save
+from typing.
+
+/end
+
+

@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Demo</title>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <style type="text/css">
+      .hiddenimg {
+        display: none;
+        visibility: hidden;
+      }
+      
+      #page {
+        width: 960px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      #display {
+        border: thin solid black;
+        width: 720px;
+        height: 360px;
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page">
+      <div>
+        <textarea id="markup" rows="20" cols="100">Markup code here.</textarea>
+        
+        <div>
+          <p style="float: left; width: 300px;">
+            <button id="runbutton">Run</button>
+          </p>
+          <p style="float: left; width: 360px;">
+            <strong>Reaction time</strong>:
+            <span id="rt">&nbsp;</span>
+          </p>
+        </div>
+        
+        <p style="clear: both;">
+        </p>
+        
+      </div>
+      
+      <div id="display">
+      </div>
+    </div>
+    
+  <script>
+    var ns;
+  
+    var getid = function(s) {
+      if (typeof s === 'string') {
+        if (s.charAt(0) === '#') {
+          return s;
+        }
+        return '#'.concat(s);
+      }
+      return s;
+    };
+    var hideimg = function(id) {
+      id = getid(id);
+      $(id).css('display', 'none');
+      $(id).css('visibility', 'hidden');
+    };
+    var showimg = function(id) {
+      id = getid(id);
+      $(id).css('display', 'inline');
+      $(id).css('visibility', 'visible');
+    };
+    var createimg = function(props) {
+      var to = '#display';
+      
+      if (arguments.length > 1) {
+        to = arguments[1];
+      }
+      if (! props.hasOwnProperty('class')) {
+        props['class'] = "hiddenimg";
+      }
+      jQuery('<img />', props).appendTo(getid(to));
+    };
+    var place = function(id, left, top) {
+      id = getid(id);
+      $(id).css('position', 'absolute');
+      $(id).css('left', left);
+      $(id).css('top', top);
+    };
+    var timestamp = (function() {
+      var _now1 = function() {
+        return Date.now();
+      };
+      var _now2 = function() {
+        return (new Date()).getTime();
+      };
+  
+      if (Date.now !== undefined && typeof Date.now == 'function') {
+        return _now1;
+      }
+      return _now2;
+    })();
+    var futurets = function(ms) {
+      return timestamp() + ms;
+    };
+    var freeze = (function(){
+      if (Object.freeze !== undefined || typeof Object.freeze === 'function') {
+        return function(obj){
+          return Object.freeze(obj);
+        };
+      }
+      return function(obj){
+        return obj;
+      };
+    })();
+
+    var seal = (function(){
+      if (Object.seal !== undefined || typeof Object.seal === 'function') {
+        return function(obj){
+          return Object.seal(obj);
+        };
+      }
+      return function(obj){
+        return obj;
+      };
+    })();
+
+    var scheduler = (function() {
+      var _obj = {
+        add: _schdadd,
+        delay: 25,
+        running: false,
+        start: _schdstart,
+        stop: _schdstop,
+        tasks: [],
+        timeoutID: null
+      };
+  
+      function _scheduledf() {
+        _scheduledf1.call(_obj);
+      }
+  
+      function _scheduledf1() {
+        var now = timestamp();
+        var tasks = this.tasks;
+        var task;
+  
+        if (tasks.length > 0) {
+          while (tasks.length > 0) {
+            task = tasks[0];
+            if (task.due < now + 5) {
+              task = tasks.shift();
+              task.func.apply(task.context, task.params);
+              if (task.repeat === true) {
+                this.add(task.func, task.context, task.params, task.delay, task.repeat);
+              }
+            } else {
+              return;
+            }
+          }
+        }
+        if (tasks.length === 0) {
+          this.stop();
+        }
+      }
+  
+      function _schdcompare(a, b) {
+        var _cmp = function(x, y) {
+          if (x < y) { return -1; }
+          if (y < x) { return 1; }
+        };
+        
+        if (a.due !== b.due) {
+          return _cmp(a.due, b.due);
+        }
+        return _cmp(a.index, b.index);
+      }
+  
+      function _schdadd(func, ctx, params, delay, repeat) {
+        var tasks = this.tasks;
+        var i;
+        
+        delay = Math.max(this.delay, delay);
+        tasks.push({
+          func: func,
+          context: ctx,
+          params: params,
+          delay: delay,
+          due: futurets(delay),
+          repeat: repeat,
+          index: -1   // This is needed to keep the sorting stable.
+        });
+        for (i = 0; i < tasks.length; ++i) {
+          tasks[i].index = i;
+        }
+        tasks.sort(_schdcompare);
+        if (! this.running) {
+          this.start();
+        }
+      }
+  
+      function _schdstart() {
+        if (! this.running) {
+          this.running = true;
+          this.timeoutID = setInterval(_scheduledf, this.delay);
+          _scheduledf();
+        }
+      }
+  
+      function _schdstop() {
+        if (this.running) {
+          this.running = false;
+          clearInterval(this.timeoutID);
+          this.timeoutID = null;
+        }
+      }
+      return _obj;
+    })();
+  
+    var init = function(){
+      var _ns = {};
+      
+      _ns.vars = (function(){
+        var globals = {};
+        var constants = {};
+        var functions = {};
+        var special = {};
+        var setget = function(o) {
+          return function() {
+            if (arguments.length > 1) {
+              o[arguments[0]] = arguments[1];
+              return arguments[1];
+            } else if (arguments.length == 1) {
+              return o[arguments[0]];
+            }
+            return undefined;
+          };
+        };
+        var justget = function(o) {
+          return function() {
+            if (arguments.length > 0) {
+              return o[arguments[0]];
+            }
+            return undefined;
+          };
+        };
+        var _c = setget(constants),
+            _f = setget(functions),
+            _g = setget(globals),
+            _s = setget(special);
+
+        
+        _g('img1', 'imgblackstar');
+        createimg({
+          src: 'https://cdn1.iconfinder.com/data/icons/30_Free_Black_ToolBar_Icons/40/Black_Star.png',
+          id: 'imgblackstar'
+        });
+        _g('img2', 'imgyellowstar');
+        createimg({
+          src: 'http://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Full_Star_Yellow.svg/64px-Full_Star_Yellow.svg.png',
+          id: 'imgyellowstar'
+        });
+        _g('loc1', {x: 10, y: 20});
+        _g('loc2', {x: 20, y: 10});
+        
+        _s('stimuli', [
+          { stimulus: _g('img1'), duration: 500, location: _g('loc1') },
+          { stimulus: _g('img2'), duration: 1000, location: _g('loc2') },
+          { stimulus: _g('img1'), duration: 1000, location: _g('loc2') },
+          { stimulus: _g('img2'), duration: 500, location: _g('loc1') }
+        ]);
+        _s('stimulus', null);
+        
+        _f('_f0', function(){
+          
+        });
+        
+        freeze(constants);
+        seal(globals);
+        seal(special);
+        
+        return {
+          c: justget(constants),
+          f: setget(functions),
+          g: setget(globals),
+          s: setget(special)
+        };
+      })();
+      return _ns;
+    };
+  
+    $(document).ready(function() {
+      var width = Math.min($('#markup').width(), $('#display').width());
+      var prevts = timestamp();
+  
+      $('#markup').width(width);
+      $('#display').width(width);
+      
+      ns = init();
+  
+      $('#runbutton').click(function(event) {
+        showimg('imgblackstar');
+        showimg('imgyellowstar');
+        place('imgblackstar', '200px', '100px');
+        scheduler.add(function() {
+          hideimg('imgyellowstar');
+        }, {}, [], 6000, false);
+        scheduler.add(function() {
+          hideimg('imgblackstar');
+        }, {}, [], 2000, false);
+        scheduler.add(function() {
+          place('imgyellowstar', '200px', '100px');
+        }, {}, [], 4000, false);
+        scheduler.add(function() {
+          var _ts = timestamp();
+          var msg = 'now: '.concat(_ts);
+          msg = msg.concat(', (now - previous) = ').concat(_ts - prevts);
+          console.log(msg);
+          prevts = _ts;
+        }, {}, [], 2000, true);
+      });
+    });
+  </script>
+  </body>
+</html>

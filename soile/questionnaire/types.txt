@@ -1,0 +1,36 @@
+command dropdownmenu {
+
+  dbcolumn: String,
+  
+  dbtype: String,
+  
+  optional: Boolean ?,
+  
+  option: {
+    text: String,
+    dbvalue: (String | Integer)
+  },
+  
+  numbers: [Integer...],
+  
+  figures: [Integer, Boolean, {name: String, length: Integer}]
+
+}
+
+Map<String, Value>
+
+public void validateDropdownmenu( Map<String, Value> ddm )
+
+Value v = ddm.get("dbcolumn");
+
+if (v.getValueType() == ValueType.STRING) {}
+else {error}
+
+if (map.containsKey("optional")) {
+  v = map.get("optional")
+  if (v.getValueType() == ValueType.BOOLEAN)
+  else error
+}
+
+public void dropdownmenu_option( (Map<String, Value>) ddm.get("option").asJavaObject() )
+

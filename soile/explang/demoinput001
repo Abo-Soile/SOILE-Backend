@@ -1,0 +1,29 @@
+gvar img1 <- imagefile("url")
+gvar img2 <- imagefile("url")
+gvar loc1 <- {x: 10, y: 20}
+gvar loc2 <- {x: 20, y: 10}
+
+gvar data <- [
+
+  { stimulus: img1, duration: 500, location: loc1 }
+  { stimulus: img2, duration: 1000, location: loc2 }
+  { stimulus: img1, duration: 1000, location: loc2 }
+  { stimulus: img2, duration: 500, location: loc1 }
+
+]
+
+iteration
+
+  var d <- datum
+  var img <- d.stimulus
+  var loc <- d.location
+  var dur <- d.duration
+  
+  location(img loc)
+  show(img)
+  starttimer()
+  wait(dur)
+  hide(img)
+
+end
+

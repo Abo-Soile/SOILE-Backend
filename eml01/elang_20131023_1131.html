@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Elang</title>
+    <style type="text/css">
+      .hiddenimg {
+        display: block;
+        visibility: visible;
+      }
+      
+      .hiddenelem {
+        display: none;
+        visibility: hidden;
+      }
+
+      #page {
+        width: 960px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      #display {
+        border: thin solid black;
+        width: 720px;
+        height: 360px;
+        position: relative;
+      }
+
+      #message {
+        display: none;
+        position: absolute;
+        font-size: xx-large;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page">
+      <div>
+        <textarea id="markup" rows="20" cols="100"> </textarea>
+      </div>
+      <div id="display">
+        <p id="message">
+          Message
+        </p>
+      </div>
+      <button id="runbutton">Run</button>
+    </div>
+    
+    <!-- http://stackoverflow.com/questions/2180391/why-should-i-use-googles-cdn-for-jquery -->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="elang.js"></script>
+    <script src="ecode.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        jQuery('#runbutton').click(function(){
+	  SOILE2.rt.exec_pi();
+	});
+	setTimeout(function(){
+		jQuery('#runbutton').click();
+		}, 2000);
+      });
+    </script>
+  </body>
+</html>

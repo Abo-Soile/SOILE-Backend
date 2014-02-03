@@ -1,0 +1,44 @@
+TYPE
+	o serif
+	o sansserif
+	o monospace
+
+SIZE
+	o normal
+	o small
+	o big
+
+STYLE
+	o bold
+	o italic
+	o underline
+	o overline
+	o linethrough
+	o uppercase
+	o lowercase
+	o capitalize
+
+COLOR
+	o aqua 
+	o black 
+	o blue 
+	o fuchsia 
+	o gray 
+	o green 
+	o lime  
+	o maroon 
+	o navy 
+	o olive 
+	o orange 
+	o purple 
+	o red 
+	o silver 
+	o teal 
+	o white 
+	o yellow
+
+INDENT
+	o indent
+
+
+

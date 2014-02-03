@@ -1,0 +1,29 @@
+
+
+/dropdownmenu {
+  "dbcolumn": "jagbori",
+  "dbtype": "char(*)",
+  "text": "Valitse kaupunki",
+  "options": [{"dbvalue": "tampere", "text": "Tampere"},
+  	      {"dbvalue": "helsinki", "text": "Helsinki"}]
+}
+
+/singleselect {
+  "text": "Valitse koulutustausta",
+  "dbcolumn": "edubg",
+  "dbtype": "int",
+  "options": [{"dbvalue": 0, "text": "Lukio"}, 
+              {"dbvalue": 1, "text": "AMK"},
+  	      {"dbvalue": 2, "text": "Yliopisto"}]
+}
+
+/multiselect {
+  "text": "Valitse kieli",
+  "dbcolumn": "edubg",
+  "dbtype": "int",
+  "options": [{"dbvalue": 0, "text": "suomi"}, 
+  	      {"dbvalue": 1, "text": "ruotsi"},
+  	      {"dbvalue": 2, "text": "englanti"}]
+}
+
+

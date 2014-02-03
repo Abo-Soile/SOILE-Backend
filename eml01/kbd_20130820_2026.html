@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <title>Kbd</title>
+  </head>
+  <body>
+    <h1>jQuery keyboard events</h1>
+    
+    <div id="col1" style="width: 20%; border: thin solid black; float: left; margin-right: 1cm;">
+      <dl id="def1">
+        
+      </dl>
+    </div>
+    
+    <div id="col2" style="width: 20%; border: thin solid black; float: left; margin-right: 1cm;">
+      <dl id="def2">
+        
+      </dl>
+    </div>
+    
+    <div id="col3" style="width: 20%; border: thin solid black; float: left;">
+      <dl id="def3">
+        
+      </dl>
+    </div>
+    
+    <p style="clear: both;">&nbsp;</p>
+    
+    <p>
+      Key: <span id="keycode">&nbsp;</span>
+    </p>
+    
+    <script>
+		$(document).ready(function(){
+		  var ids = ['#def1', '#def2', '#def3'];
+		  
+		  // http://jsfiddle.net/vWx8V/
+		  // http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
+		  
+		  /*
+		   * 
+[
+  {"key": "backspace", "code": 8},
+  {"key": "tab", "code": 9},
+  {"key": "enter", "code": 13},
+  {"key": "shift", "code": 16},
+  {"key": "ctrl", "code": 17},
+  {"key": "alt", "code": 18},
+  {"key": "pause/break", "code": 19},
+  {"key": "caps lock", "code": 20},
+  {"key": "escape", "code": 27},
+  {"key": "page up", "code": 33},
+  {"key": "page down", "code": 34},
+  {"key": "end", "code": 35},
+  {"key": "home", "code": 36},
+  {"key": "left arrow", "code": 37},
+  {"key": "up arrow", "code": 38},
+  {"key": "right arrow", "code": 39},
+  {"key": "down arrow", "code": 40},
+  {"key": "insert", "code": 45},
+  {"key": "delete", "code": 46},
+  {"key": "0", "code": 48},
+  {"key": "1", "code": 49},
+  {"key": "2", "code": 50},
+  {"key": "3", "code": 51},
+  {"key": "4", "code": 52},
+  {"key": "5", "code": 53},
+  {"key": "6", "code": 54},
+  {"key": "7", "code": 55},
+  {"key": "8", "code": 56},
+  {"key": "9", "code": 57},
+  {"key": "a", "code": 65},
+  {"key": "b", "code": 66},
+  {"key": "c", "code": 67},
+  {"key": "d", "code": 68},
+  {"key": "e", "code": 69},
+  {"key": "f", "code": 70},
+  {"key": "g", "code": 71},
+  {"key": "h", "code": 72},
+  {"key": "i", "code": 73},
+  {"key": "j", "code": 74},
+  {"key": "k", "code": 75},
+  {"key": "l", "code": 76},
+  {"key": "m", "code": 77},
+  {"key": "n", "code": 78},
+  {"key": "o", "code": 79},
+  {"key": "p", "code": 80},
+  {"key": "q", "code": 81},
+  {"key": "r", "code": 82},
+  {"key": "s", "code": 83},
+  {"key": "t", "code": 84},
+  {"key": "u", "code": 85},
+  {"key": "v", "code": 86},
+  {"key": "w", "code": 87},
+  {"key": "x", "code": 88},
+  {"key": "y", "code": 89},
+  {"key": "z", "code": 90},
+  {"key": "left window key", "code": 91},
+  {"key": "right window key", "code": 92},
+  {"key": "select key", "code": 93},
+  {"key": "numpad 0", "code": 96},
+  {"key": "numpad 1", "code": 97},
+  {"key": "numpad 2", "code": 98},
+  {"key": "numpad 3", "code": 99},
+  {"key": "numpad 4", "code": 100},
+  {"key": "numpad 5", "code": 101},
+  {"key": "numpad 6", "code": 102},
+  {"key": "numpad 7", "code": 103},
+  {"key": "numpad 8", "code": 104},
+  {"key": "numpad 9", "code": 105},
+  {"key": "multiply", "code": 106},
+  {"key": "add", "code": 107},
+  {"key": "subtract", "code": 109},
+  {"key": "decimal point", "code": 110},
+  {"key": "divide", "code": 111},
+  {"key": "f1", "code": 112},
+  {"key": "f2", "code": 113},
+  {"key": "f3", "code": 114},
+  {"key": "f4", "code": 115},
+  {"key": "f5", "code": 116},
+  {"key": "f6", "code": 117},
+  {"key": "f7", "code": 118},
+  {"key": "f8", "code": 119},
+  {"key": "f9", "code": 120},
+  {"key": "f10", "code": 121},
+  {"key": "f11", "code": 122},
+  {"key": "f12", "code": 123},
+  {"key": "num lock", "code": 144},
+  {"key": "scroll lock", "code": 145},
+  {"key": "semi-colon", "code": 186},
+  {"key": "equal sign", "code": 187},
+  {"key": "comma", "code": 188},
+  {"key": "dash", "code": 189},
+  {"key": "period", "code": 190},
+  {"key": "forward slash", "code": 191},
+  {"key": "grave accent", "code": 192},
+  {"key": "open bracket", "code": 219},
+  {"key": "back slash", "code": 220},
+  {"key": "close braket", "code": 221},
+  {"key": "single quote", "code": 222},
+]
+       * 
+		   */
+		  
+		  var lookup = (function(){
+		    var lookuptbl = [
+          {"key": "backspace", "code": 8},
+          {"key": "tab", "code": 9},
+          {"key": "enter", "code": 13},
+          {"key": "shift", "code": 16},
+          {"key": "ctrl", "code": 17},
+          {"key": "alt", "code": 18},
+          {"key": "pause/break", "code": 19},
+          {"key": "caps lock", "code": 20},
+          {"key": "escape", "code": 27},
+          {"key": "page up", "code": 33},
+          {"key": "page down", "code": 34},
+          {"key": "end", "code": 35},
+          {"key": "home", "code": 36},
+          {"key": "left arrow", "code": 37},
+          {"key": "up arrow", "code": 38},
+          {"key": "right arrow", "code": 39},
+          {"key": "down arrow", "code": 40},
+          {"key": "insert", "code": 45},
+          {"key": "delete", "code": 46},
+          {"key": "0", "code": 48},
+          {"key": "1", "code": 49},
+          {"key": "2", "code": 50},
+          {"key": "3", "code": 51},
+          {"key": "4", "code": 52},
+          {"key": "5", "code": 53},
+          {"key": "6", "code": 54},
+          {"key": "7", "code": 55},
+          {"key": "8", "code": 56},
+          {"key": "9", "code": 57},
+          {"key": "a", "code": 65},
+          {"key": "b", "code": 66},
+          {"key": "c", "code": 67},
+          {"key": "d", "code": 68},
+          {"key": "e", "code": 69},
+          {"key": "f", "code": 70},
+          {"key": "g", "code": 71},
+          {"key": "h", "code": 72},
+          {"key": "i", "code": 73},
+          {"key": "j", "code": 74},
+          {"key": "k", "code": 75},
+          {"key": "l", "code": 76},
+          {"key": "m", "code": 77},
+          {"key": "n", "code": 78},
+          {"key": "o", "code": 79},
+          {"key": "p", "code": 80},
+          {"key": "q", "code": 81},
+          {"key": "r", "code": 82},
+          {"key": "s", "code": 83},
+          {"key": "t", "code": 84},
+          {"key": "u", "code": 85},
+          {"key": "v", "code": 86},
+          {"key": "w", "code": 87},
+          {"key": "x", "code": 88},
+          {"key": "y", "code": 89},
+          {"key": "z", "code": 90},
+          {"key": "left window key", "code": 91},
+          {"key": "right window key", "code": 92},
+          {"key": "select key", "code": 93},
+          {"key": "numpad 0", "code": 96},
+          {"key": "numpad 1", "code": 97},
+          {"key": "numpad 2", "code": 98},
+          {"key": "numpad 3", "code": 99},
+          {"key": "numpad 4", "code": 100},
+          {"key": "numpad 5", "code": 101},
+          {"key": "numpad 6", "code": 102},
+          {"key": "numpad 7", "code": 103},
+          {"key": "numpad 8", "code": 104},
+          {"key": "numpad 9", "code": 105},
+          {"key": "multiply", "code": 106},
+          {"key": "add", "code": 107},
+          {"key": "subtract", "code": 109},
+          {"key": "decimal point", "code": 110},
+          {"key": "divide", "code": 111},
+          {"key": "f1", "code": 112},
+          {"key": "f2", "code": 113},
+          {"key": "f3", "code": 114},
+          {"key": "f4", "code": 115},
+          {"key": "f5", "code": 116},
+          {"key": "f6", "code": 117},
+          {"key": "f7", "code": 118},
+          {"key": "f8", "code": 119},
+          {"key": "f9", "code": 120},
+          {"key": "f10", "code": 121},
+          {"key": "f11", "code": 122},
+          {"key": "f12", "code": 123},
+          {"key": "num lock", "code": 144},
+          {"key": "scroll lock", "code": 145},
+          {"key": "semi-colon", "code": 186},
+          {"key": "equal sign", "code": 187},
+          {"key": "comma", "code": 188},
+          {"key": "dash", "code": 189},
+          {"key": "period", "code": 190},
+          {"key": "forward slash", "code": 191},
+          {"key": "grave accent", "code": 192},
+          {"key": "open bracket", "code": 219},
+          {"key": "back slash", "code": 220},
+          {"key": "close braket", "code": 221},
+          {"key": "single quote", "code": 222}
+        ];
+        
+        // http://jsperf.com/code-review-1480
+        // http://codereview.stackexchange.com/questions/5363/efficient-binary-search
+        var bsearch = (function(){
+          return function(c){
+            return (function(code){
+              var beginning = 0, end = this.length;
+              var idx;
+              var elem;
+              
+              while (true) {
+                idx = ((beginning + end) >> 1);
+                elem = this[idx];
+                if ((idx === end || idx === beginning) && elem['code'] !== code) {
+                  return null;
+                }
+                if (elem['code'] > code) {
+                  end = idx;
+                } else if (elem['code'] < code) {
+                  beginning = idx;
+                } else {
+                  return elem;
+                }
+              }
+            }).call(lookuptbl, c);
+          };
+        })();
+		    return function(code){
+		      var result = bsearch(code);
+		      result = (result === null ? 'null' : result['key']);
+		      return result;
+		    };
+		  })();
+		  
+		  keyCodeToChar = {8:"Backspace",9:"Tab",13:"Enter",16:"Shift",17:"Ctrl",18:"Alt",19:"Pause/Break",20:"Caps Lock",27:"Esc",32:"Space",33:"Page Up",34:"Page Down",35:"End",36:"Home",37:"Left",38:"Up",39:"Right",40:"Down",45:"Insert",46:"Delete",48:"0",49:"1",50:"2",51:"3",52:"4",53:"5",54:"6",55:"7",56:"8",57:"9",65:"A",66:"B",67:"C",68:"D",69:"E",70:"F",71:"G",72:"H",73:"I",74:"J",75:"K",76:"L",77:"M",78:"N",79:"O",80:"P",81:"Q",82:"R",83:"S",84:"T",85:"U",86:"V",87:"W",88:"X",89:"Y",90:"Z",91:"Windows",93:"Right Click",96:"Numpad 0",97:"Numpad 1",98:"Numpad 2",99:"Numpad 3",100:"Numpad 4",101:"Numpad 5",102:"Numpad 6",103:"Numpad 7",104:"Numpad 8",105:"Numpad 9",106:"Numpad *",107:"Numpad +",109:"Numpad -",110:"Numpad .",111:"Numpad /",112:"F1",113:"F2",114:"F3",115:"F4",116:"F5",117:"F6",118:"F7",119:"F8",120:"F9",121:"F10",122:"F11",123:"F12",144:"Num Lock",145:"Scroll Lock",182:"My Computer",183:"My Calculator",186:";",187:"=",188:",",189:"-",190:".",191:"/",192:"`",219:"[",220:"\\",221:"]",222:"'"};
+		  var f = function(id, data){
+		    $(id).text(data);
+		    $(id).css('border', 'thin dotted black');
+		  };
+		  var showkey = function(event){
+        jQuery('#keycode').empty();
+		    //jQuery('#keycode').text(keyCodeToChar[event.keyCode]);
+        jQuery('#keycode').text(lookup(event.keyCode));
+		  };
+		  var add2list = function(idx, key, value){
+		      var dt = '<dt>' + key + '</dt>';
+		      var dd = '<dd>' + new String(value) + '</dd>';
+		      var id = ids[idx % ids.length];
+		      jQuery(id).append(dt.concat(dd));
+		  };
+		  var props = function(obj){
+		    var index = 0;
+		    
+		    jQuery.each(ids, function(_, e){
+		      jQuery(e).empty();
+		    });
+		    jQuery.each(obj, function(key, value){
+		      if (typeof value === 'function') {
+		        value = 'function';
+		      }
+		      add2list(index, key, value);
+		      index += 1;
+		    });
+		  };
+		  
+		  $(document).keydown(function(event){
+		    //var dl = jQuery('#def1');
+		    //dl.append('<dt>dt</dt><dd>'.concat(jQuery.now()).concat('</dd>'));
+		    event.stopPropagation();
+		    props(event);
+        showkey(event);
+		    //$('#properties').empty();
+		    //$('#properties').text(props(event));
+		  });
+		});
+    </script>
+  </body>
+</html>

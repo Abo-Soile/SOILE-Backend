@@ -1,0 +1,6 @@
+{
+  "main": "fi.kogni.abo.soile2.verticles.QuestionnaireRenderVerticle",
+  "worker": false,
+  "includes": "fi.abo.kogni.soile~common-resources~1.0",
+  "description": "This module implements the questionnaire language renderer."
+}

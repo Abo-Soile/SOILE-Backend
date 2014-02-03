@@ -1,0 +1,80 @@
+command dropdownmenu {
+
+    dbcolumn: String,
+    numeric: Boolean(true),
+    label: String,
+    options: [ {dbvalue: String, text: String}* ]
+
+}
+
+command slider {
+
+    dbcolumn: String,
+    numeric: Boolean(true),
+    labels: [Integer*],
+    minimum: Integer,
+    maximum: Integer,
+    increment: Integer(1),
+    select: Integer
+
+}
+
+command singleselect {
+
+    numeric: Boolean(true),
+    default_value: String,
+    dbcolumn: String,
+    options: [ [ {
+    		  dbvalue: String, 
+    		  text: String, 
+    		  checked: Boolean(false)}* ]* ]
+
+}
+
+command multiselect {
+
+    numeric: Boolean(true),
+    default_value: String,
+    options: [ [ {dbcolumn: String,
+    		  dbvalue: String, 
+    		  text: String, 
+    		  checked: Boolean(false)}* ]* ]
+
+}
+
+command numberfield {
+
+    dbcolumn: String,
+    numeric: Boolean(true),
+    label: String,
+    value: Integer,
+    minimum: Integer,
+    maximum: Integer,
+    increment: Integer(1)
+
+}
+
+command textarea {
+
+    dbcolumn: String,
+    rows: Integer(4),
+    columns: Integer(80),
+    label: String,
+    length: Integer,
+    optional: Boolean(true),
+    text: String("")
+
+}
+
+command textbox {
+
+    dbcolumn: String,
+    label: String(""),
+    linebreak: Boolean(false),
+    length: Integer,
+    optional: Boolean(false),
+    text: String("")
+    
+}
+
+

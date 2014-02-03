@@ -1,0 +1,82 @@
+val LIMIT <- 2
+val posX <- {top: 10 left: 100}
+val posY <- {top: 100 left: 200}
+val imgurl <- "http://cache0.bdcdn.net/assets/images/book/medium/9789/4623/9789462390324.jpg"
+val url1 <- "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Chess_blt45.svg/50px-Chess_blt45.svg.png"
+val url2 <- "http://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Chess_ndt45.svg/50px-Chess_ndt45.svg.png"
+gvar cond1 <- 1
+gvar bookimg <- imagefile(imgurl)
+
+function condf()
+  return true
+end
+
+function handler(id)
+  helptext(id)
+end
+
+intermezzo-phase Alpha
+  wait(10)
+end
+
+information-phase Info
+  helptext(cond1)
+  cond1 <- plus(cond1 1)
+  timeout(seconds(1))
+end
+
+information-phase FinalPhase
+  helptext("Final phase")
+  timeout(seconds(2))
+end
+
+interaction-phase MainPhase
+  enterphase
+    helptext("enterphase")
+    show(bookimg {top: 20 left: 500})
+    onmouseclick(bookimg {inputid: "11" action: handler})
+    setstimuli([{posX: {top: 20 left: 20} posY: {top: 120 left: 220}} 
+                {posX: {top: 200 left: 320} posY: {top: 20 left: 5}}
+                {posX: {top: 320 left: 400} posY: {top: 50 left: 100}}])
+  end
+  
+  leavephase
+    helptext("leavephase")
+  end
+  
+  beforeiteration
+    helptext("beforeiteration")
+  end
+  
+  afteriteration
+    helptext("afteriteration")
+  end
+  
+  iteration
+    var img1 <- imagefile(url1)
+    var img2 <- imagefile(url2)
+    var i <- 0
+    var s <- nothing
+    var b <- yes
+    
+      s <- stimulus()
+      helptext(s.posX)
+      show(img1 s.posX)
+      wait(1500)
+      helptext(s.posY)
+      show(img2 s.posY)
+      wait(seconds(1))
+      hide(img1)
+      hide(img2)
+      wait(1000)
+  end
+end
+
+transition
+  start(Alpha),
+  Alpha -> Info,
+  Info -> MainPhase if (greaterthan(cond1 LIMIT)),
+  MainPhase -> FinalPhase if (condf()),
+  final(FinalPhase)
+end
+

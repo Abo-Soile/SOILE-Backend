@@ -1,0 +1,913 @@
+var SOILE2;
+
+if (SOILE2 !== undefined){
+  throw new Error('SOILE2 already defined!');
+}
+
+SOILE2 = (function(){
+  'use strict';
+
+  var soile2 = {};
+  var bin = {};        // builtin
+  var rt = {};         // runtime
+  var defs = {};       // definitions (gvars; vals; functions)
+  var util = {};       // miscellaneous utility functions
+  
+  soile2.defs = defs;
+  soile2.rt = rt;
+  soile2.bin = bin;
+  soile2.util = util;
+
+  bin.onmouseclick = function(id, conf){
+    var args = Array.prototype.slice.call(arguments);
+    var _resettimer, _inputid, _id, action;
+
+    if (_.isString(id)) {
+      _id = soile2.util.getid(id);
+      if (_.isObject(conf)) {
+        if (_.isNumber(conf.inputid)) {
+          _inputid = conf.inputid.toString(10);
+        }
+        _inputid = (_.isString(conf['inputid'])) ? conf['inputid'] : id;
+        _resettimer = (_.isBoolean(conf['resettimer'])) ? conf['resettimer'] : false;
+        if (_.isFunction(conf.action)) {
+          action = conf.action;
+          jQuery(_id).click(function(e){
+            if (_resettimer) {
+              // TODO Reset timer here.
+            }
+            console.log('mouse clicked. ' + _inputid);
+            action.call({}, _inputid);
+          });
+        }
+      } else if (soile2.rt.truthvalue(conf) === false) {
+        jQuery(_id).unbind('click');
+      }
+    }
+  };
+  
+  /*
+   * Copy data -- numbers, strings, arrays or objects but NO
+   * functions.
+   */
+  bin.copydata = function(data){
+    return soile2.util.copyobject(data);
+  };
+  
+  /*
+   * Stimuli are basically implemented as id strings (DOM id's),
+   * so copying a stimulus means copying the DOM element 
+   * identified by the ID string.
+   */
+  bin.copystimulus = function(stim){
+    var id;
+    var newId, newStim;
+    
+    if (soile2.util.is_string(stim)){
+      id = soile2.util.getid(stim);
+    }
+    
+    if (soile2.util.is_string(id)){
+      // http://api.jquery.com/clone/
+      // http://stackoverflow.com/questions/1226029/jquery-clone-id
+      newId = soile2.rt.uniqueid('id');
+      newStim = jQuery(id).clone().attr('id', newId);
+      newStim.appendTo(soile2.util.getid("display"));
+      return newId;
+    }
+    return null;
+  };
+
+  bin.emptymsg = function(){
+    var id = soile2.util.getid('message');
+    jQuery(id).text('');
+  };
+  
+  bin.hidemsg = function(){
+    var id = soile2.util.getid('message');
+    jQuery(id).css('display', 'none');
+    jQuery(id).text('');
+  };
+  
+  bin.showmsg = function(msg){
+    var id = soile2.util.getid('message');
+    jQuery(id).css('display', 'block');
+    jQuery(id).css('left', '50px');
+    jQuery(id).css('top', '50px');
+    jQuery(id).text(msg);
+  };
+  
+  bin.helptext = function(msg){
+    console.log(msg);
+  };
+  
+  bin.not = function(arg){
+    var args = Array.prototype.slice.call(arguments);
+    if (args.length == 0){
+      return undefined;
+    }
+    return ! (soile2.rt.truthvalue(args[0]));
+  };
+
+  bin.and = function(){
+    var args = Array.prototype.slice.call(arguments);
+    if (args.length == 0){
+      return undefined;
+    }
+    return _.reduce(_.map(args, soile2.rt.truthvalue), function(cumul, elem){
+      return cumul && elem;
+    }, true);
+  };
+
+  bin.or = function(){
+    var args = Array.prototype.slice.call(arguments);
+    if (args.length == 0){
+      return undefined;
+    }
+    return _.some(_.map(args, soile2.rt.truthvalue));
+  };
+
+  bin.divide = function(x, y){
+    if (_.isNumber(x) && _.isNumber(y)){
+      if (y === 0) {
+        return Number.NaN;
+      }
+      return (x / y);
+    }
+    return undefined;
+  };
+
+  bin.eq = function(x, y){
+    return _.isEqual(x, y);
+  };
+  
+  bin.equals = bin.eq;
+
+  bin.gt = function(x, y){
+    if (_.isNumber(x) && _.isNumber(y)){
+      return (x > y);
+    }
+    return false;
+  };
+  
+  bin.greaterthan = bin.gt;
+
+  bin.hide = function(id){
+    id = soile2.util.getid(id);
+    jQuery(id).addClass("hiddenelem");
+  };
+  
+  bin.show = function(id){
+    var args = Array.prototype.slice.call(arguments);
+    var id, pos;
+    
+    if (args.length == 2){
+      id = soile2.util.getid(args[0]);
+      pos = args[1];
+    }
+    else if (args.length == 1){
+      id = soile2.util.getid(args[0]);
+    }
+    
+    if (typeof id !== 'undefined'){
+      if (jQuery(id).length > 0){
+        jQuery(id).removeClass("hiddenelem");
+        if (typeof pos !== 'undefined'){
+          soile2.bin.position(id, pos);
+        }
+      }
+    }
+  };
+  
+  bin.imagefile = function(url){
+    var id = soile2.rt.uniqueid();
+    var props = {
+      "id": id,
+      "class": "hiddenelem",
+      "src": url
+    };
+    jQuery('<img />', props).appendTo(soile2.util.getid("display"));
+    soile2.rt.dyn.add(id);
+    return id;
+  };
+  
+  /*
+   * Convert an integer representing minutes to milliseconds.
+   */
+  bin.minutes = function(m){
+    if (soile2.util.is_number(m)){
+      return (m*60*1000);
+    }
+    return 0;
+  };
+  
+  /*
+   * Convert an integer representing seconds to milliseconds.
+   */
+  bin.seconds = function(m){
+    if (soile2.util.is_number(m)){
+      return (m*1000);
+    }
+    return 0;
+  };
+  
+  bin.position = function(){
+    var arr = Array.prototype.slice.call(arguments);
+    var id, top, left, args;
+    
+    if (arr.length < 2){
+      return;
+    }
+    args = arr.splice(1);
+    id = soile2.util.getid(arr[0]);
+
+    if (args.length == 1){
+      if (typeof args[0] === 'object'
+          &&
+          args[0].hasOwnProperty('top')
+          &&
+          args[0].hasOwnProperty('left')) {
+            
+        top = args[0].top;
+        left = args[0].left;
+        
+      }
+    }
+    else if (args.length > 1){
+      left = args[0];
+      top = args[1];
+    }
+    
+    if (soile2.util.is_number(top) && soile2.util.is_number(left)){
+      // http://stackoverflow.com/questions/4724794/how-do-i-give-a-jquery-element-absolute-positioning-on-a-page
+      jQuery(id).css({
+        position:  'absolute',
+        top: soile2.util.to_integer(top),
+        left: soile2.util.to_integer(left)
+      });
+    }
+  };
+
+  bin.lt = function(x, y){
+    if (_.isNumber(x) && _.isNumber(y)){
+      return (x < y);
+    }
+    return false;
+  };
+  
+  bin.lessthan = bin.lt;
+
+  bin.minus = function(){
+    var nums = _.filter(_.toArray(arguments), _.isNumber);
+    if (nums.length == 0){
+      return undefined;
+    }
+    if (nums.length == 1){
+      return nums[0];
+    }
+    return (nums[0] + _.reduce(nums.slice(1), function(memo, num){
+      return memo - num;
+    }, 0));
+  };
+
+  bin.multiply = function(){
+    var nums = _.filter(_.toArray(arguments), _.isNumber);
+    if (_.isEmpty(nums)){
+      return undefined;
+    }
+    return _.reduce(nums, function(memo, num){
+      return memo * num;
+    }, 1);
+  };
+
+  bin.plus = function(){
+    var nums = _.filter(_.toArray(arguments), _.isNumber);
+    return _.reduce(nums, function(memo, num){
+      return memo + num;
+    }, 0);
+  };
+
+  bin.recordts = function(){
+  };
+
+  bin.stimulus = function(){
+    return soile2.rt.stimuli.get();
+  };
+  
+  bin.setstimuli = function(arr){
+    soile2.rt.stimuli.set(arr);
+  };
+  
+  bin.length = function(o){
+    if (_.isArray(o) || _.isString(o)){
+      return o.length;
+    }
+    return -1;
+  };
+  
+  bin.kbdkey = function(name){
+    if (_.isString(name)){
+      return soile2.rt.kbd.keycode(name);
+    }
+    return undefined;
+  };
+
+  bin.tag = function(){
+    return {};
+  };
+  
+  bin.timeout = function(dur){
+    soile2.rt.schd.suspend(dur);
+  };
+  
+  // For dynamically added elements. (For instance, a call to 'imagefile' adds an element.)
+  rt.dyn = (function(){
+    var ids = [];
+    
+    return {
+      'add': function(id){
+        ids.push(id);
+      },
+      'clear': function(){
+        while (ids.length > 0){
+          jQuery(soile2.util.getid(ids.pop())).remove();
+        }
+      }
+    };
+  })();
+  
+  rt.finalize_defs = function(){
+    soile2.rt.seal(soile2.defs.gvars);
+    soile2.rt.freeze(soile2.defs.vals);
+    soile2.rt.freeze(soile2.defs.fns);
+  };
+  
+  rt.freeze = (function(){
+    if (Object.freeze !== undefined || typeof Object.freeze === 'function') {
+      return function(obj){
+        return Object.freeze(obj);
+      };
+    }
+    return function(obj){
+      return obj;
+    };
+  })();
+  
+  rt.truthvalue = function(value){
+    // http://stackoverflow.com/questions/7615214/in-javascript-why-is-0-equal-to-false-but-not-false-by-itself
+    // http://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/
+    
+    if (_.isBoolean(value)) {
+      return value;
+    }
+    if (_.isNull(value) || _.isUndefined(value)){
+      return false;
+    }
+    return true;
+  };
+  
+  rt.milliseconds = function(num){
+    if (_.isNumber(num)){
+      return Math.abs(num);
+    }
+    if (_.isString(num)){
+      return Math.abs(parseInt(num, 10));
+    }
+    return 0;
+  };
+  
+  rt.undefvar = function(name){
+    var vars = soile2.defs.vars;
+    
+    if (vars.hasOwnProperty(name)){
+      delete vars[name];
+    }
+  };
+  
+  rt.kbd = (function(){
+    var name2keycode = soile2.rt.freeze({
+      "left": 37,
+      "up": 38,
+      "right": 39,
+      "down": 40,
+      "0": 48,
+      "1": 49,
+      "2": 50,
+      "3": 51,
+      "4": 52,
+      "5": 53,
+      "6": 54,
+      "7": 55,
+      "8": 56,
+      "9": 57,
+      "a": 65,
+      "b": 66,
+      "c": 67,
+      "d": 68,
+      "e": 69,
+      "f": 70,
+      "g": 71,
+      "h": 72,
+      "i": 73,
+      "j": 74,
+      "k": 75,
+      "l": 76,
+      "m": 77,
+      "n": 78,
+      "o": 79,
+      "p": 80,
+      "q": 81,
+      "r": 82,
+      "s": 83,
+      "t": 84,
+      "u": 85,
+      "v": 86,
+      "w": 87,
+      "x": 88,
+      "y": 89,
+      "z": 90
+    });
+    
+    var keycode2name = soile2.rt.freeze({
+      37: "left",
+      38: "up",
+      39: "right",
+      40: "down",
+      48: "0",
+      49: "1",
+      50: "2",
+      51: "3",
+      52: "4",
+      53: "5",
+      54: "6",
+      55: "7",
+      56: "8",
+      57: "9",
+      65: "a",
+      66: "b",
+      67: "c",
+      68: "d",
+      69: "e",
+      70: "f",
+      71: "g",
+      72: "h",
+      73: "i",
+      74: "j",
+      75: "k",
+      76: "l",
+      77: "m",
+      78: "n",
+      79: "o",
+      80: "p",
+      81: "q",
+      82: "r",
+      83: "s",
+      84: "t",
+      85: "u",
+      86: "v",
+      87: "w",
+      88: "x",
+      89: "y",
+      90: "z",
+    });
+
+    var lookupf = function(key){
+      if (this.hasOwnProperty(key) === true){
+        return this[key];
+      }
+      return null;
+    };
+    
+    return {
+      'name': function(keyCode){
+        return lookupf.call(keycode2name, keyCode);
+      },
+      
+      'keycode': function(keyName){
+        return lookupf.call(name2keycode, keyName);
+      }
+    };
+    
+  })();
+  
+  rt.stimuli = (function(){
+    var _stimuli = [];
+
+    var _hasmore = function(){
+      return _stimuli.length > 0;
+    };
+
+    return {
+      'hasmore': _hasmore,
+      'get': function(){
+        if (_hasmore() === true) {
+          return _stimuli.pop();
+        }
+        return null;
+      },
+      'set': function(arr){
+        if (_.isArray(arr) && arr.length > 0) {
+          _stimuli = soile2.bin.copydata(arr);
+          _stimuli.reverse();
+        }
+      }
+    };
+  })();
+  
+  rt.clear_vars = function(){
+    var __vars = soile2.defs.vars;
+    for (var p in __vars){
+      if (__vars.hasOwnProperty(p) === true){
+        delete __vars[p];
+      }
+    }
+  };
+  
+  rt.reset_defs = function(){
+    var reset = function(obj, name){
+      if (obj.hasOwnProperty(name)){
+        delete obj[name];
+      }
+      obj[name] = {};
+    };
+    
+    reset(soile2.defs, 'gvars');
+    reset(soile2.defs, 'vals');
+    reset(soile2.defs, 'fns');
+    reset(soile2.defs, 'vars');
+  };
+  
+  rt.opcodes = (function(){
+    return soile2.rt.freeze({
+      Eoc: -1,
+      Assign: 0,
+      Fcall: 1,
+      If: 2,
+      While: 3,
+      Goto: 4,
+      Wait: 5,
+      Def: 6,
+      Undef: 7,
+      Suspend: 8
+    });
+  })();
+  
+  // Get next "program instruction."
+  rt.get_pi = undefined;
+  
+  // Reset "program instructions."
+  rt.reset_piarray = function(){
+    soile2.rt.get_pi = function(idx){
+      return null;
+    };
+  };
+  
+  /*
+   * Save "program instructions." Note that we are 
+   * assigning a FUNCTION, not an array. The 
+   * "program instruction" array is really a 
+   * function which closes over an array 
+   * (this is for encapsulation).
+   */
+  rt.set_piarray = function(piafunc){
+    soile2.rt.get_pi = piafunc;
+  };
+  
+  rt.pi_opcode = function(pi){
+    if (pi === undefined || pi === null){
+      return -1;
+    }
+    if (typeof pi !== "object" || pi.hasOwnProperty("opcode") === false){
+      return -1;
+    }
+    return pi.opcode;
+  };
+  
+  rt.pi_index = (function(){
+    var index = 0;
+    
+    return {
+      'get': function(){
+        var current = index;
+        index += 1;
+        return current;
+      },
+      'set': function(i){
+        index = i;
+      }
+    };
+  })();
+  
+  /*
+   * Execute a program instruction (or several program instructions).
+   */
+  rt.exec_pi = function(){
+    var scheduler = soile2.rt.schd;
+    var opcodes = soile2.rt.opcodes;
+    var dowait = false;
+    var waitfor = 0;
+    var pi, opcode, idx;
+    
+    while (true){
+      idx = soile2.rt.pi_index.get();
+      pi = soile2.rt.get_pi(idx);
+      opcode = soile2.rt.pi_opcode(pi);
+      if (opcode < 0){
+        break;
+      }
+      if (opcode == opcodes.Assign){
+        pi.host[pi.name] = (pi.value)();
+        continue;
+      }
+      else if (opcode == opcodes.Fcall){
+        (pi.host[pi.name]).apply(pi.host, pi.params());
+        continue;
+      }
+      else if (opcode == opcodes.If){
+        if (pi.cond.call({}) === false){
+          soile2.rt.pi_index.set(pi.jmp);
+        }
+        continue;
+      }
+      else if (opcode == opcodes.While){
+        if ((pi.cond)() === false){
+          soile2.rt.pi_index.set(pi.jmp);
+        }
+        continue;
+      }
+      else if (opcode == opcodes.Goto){
+        soile2.rt.pi_index.set(pi.jmp);
+        continue;
+      }
+      else if (opcode == opcodes.Def){
+        pi['func'].call({}, []);
+        continue;
+      }
+      else if (opcode == opcodes.Undef){
+        soile2.rt.clear_vars();
+        continue;
+      }
+      else if (opcode == opcodes.Suspend){
+        scheduler.suspend();
+        return;
+      }
+
+      if (opcode == opcodes.Wait){
+        dowait = true;
+        waitfor = pi.ms();
+        break;
+      }
+    }
+    
+    if (dowait){
+      scheduler.wait(waitfor);
+      return;
+    }
+  };
+  
+  // The scheduler.
+  rt.schd = (function(){
+    // The "unit" of the delay times; i.e. the delay time is some multiple of this.
+    var MINDELAY = 5;
+
+    // How long the execution will be suspended. ('dur' stands for duration.)
+    var suspend_dur = -1;
+    
+    var due_ts;
+    
+    // This will be the integer returned from a call to setTimeout.
+    var settimeout_id;
+    
+    var msleft = function(ts){
+      return Math.abs(ts - soile2.rt.timestamp());
+    };
+    
+    var keep_waiting = function(ts){
+      return (msleft(ts) > MINDELAY);
+    };
+    
+    var compute_delay = function(ts){
+      var delay = msleft(ts);
+      if (delay < 10){
+        return MINDELAY;
+      }
+      if (delay < 50){
+        return MINDELAY * 2;
+      }
+      if (delay < 100){
+        return MINDELAY * 5;
+      }
+      if (delay < 500){
+        return MINDELAY * 10;
+      }
+      if (delay < 1000){
+        return MINDELAY * 15;
+      }
+      return MINDELAY * 20;
+    };
+    
+    var schedule = function(delay){
+      settimeout_id = setTimeout(scheduled, delay);
+    };
+    
+    var scheduled = function(){
+      settimeout_id = undefined;
+      if (keep_waiting(due_ts) === true){
+        schedule(compute_delay(due_ts));
+        return;
+      }
+      resume();
+    };
+    
+    var cancel = function(){
+      if (settimeout_id) {
+        clearTimeout(settimeout_id);
+        settimeout_id = undefined;
+        due_ts = -1;
+      }
+    };
+    
+    var resume = function(){
+      var args = Array.prototype.slice.call(arguments);
+      if (args.length > 0) {
+        if (soile2.util.is_number(args[0])) {
+          soile2.rt.pi_index.set(args[0]);
+        }
+      }
+      soile2.rt.exec_pi();
+    };
+    
+    var suspend = function(){
+      var args = Array.prototype.slice.call(arguments);
+      
+      /*
+       * When the 'suspend' method is called with a number as a parameter,
+       * that will set the duration of suspension WITHOUT suspending the 
+       * execution of the program flow.
+       * 
+       * The researcher can control the length of the suspension with the
+       * built-in method soile2.bin.timeout (which corresponds to the 
+       * 'timeout' built-in function in the domain specific language.
+       */
+      if (args.length > 0){
+        if (soile2.util.is_number(args[0])){
+          suspend_dur = Math.abs(args[0]);
+        }
+        return;
+      }
+      
+      /*
+       * If no suspension duration has been set previously, just stop the
+       * execution of the program; otherwise, set a timeout.
+       */
+      cancel();
+      if (suspend_dur > 0){
+        settimeout_id = setTimeout(function(){
+          resume();
+        }, suspend_dur);
+        suspend_dur = -1;
+      }
+    };
+    
+    var wait = function(ms){
+      due_ts = soile2.rt.future_timestamp(ms);
+      schedule(compute_delay(due_ts));
+    };
+    
+    return {
+      'cancel': cancel,
+      'resume': resume,
+      'suspend': suspend,
+      'wait': wait,
+    };
+  })();
+  
+  rt.seal = (function(){
+    if (Object.seal !== undefined || typeof Object.seal === 'function') {
+      return function(obj){
+        return Object.seal(obj);
+      };
+    }
+    return function(obj){
+      return obj;
+    };
+  })();
+  
+  rt.future_timestamp = function(ms) {
+    return (soile2.rt.timestamp() + ms);
+  };
+  
+  rt.timestamp = (function(){
+    // http://stackoverflow.com/questions/221294/how-do-you-get-a-timestamp-in-javascript
+    if (Date.now !== undefined && typeof Date.now == 'function') {
+      return function(){
+        return Date.now();
+      };
+    }
+    return function(){
+      return (new Date()).getTime();
+    };
+  })();
+
+  rt.uniqueid = (function(){
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var prefix = 'id';
+    var default_len = 16;
+    
+    return function(){
+      var args = Array.prototype.slice.call(arguments);
+      var len = default_len;
+      var idx = 0;
+      var id = prefix;
+      var i = 0;
+
+      while (i < args.length){
+        if (_.isNumber(args[i]) && Math.abs(args[i]) > 0) {
+          len = Math.abs(args[i]);
+        }
+        if (_.isString(args[i])) {
+          id = args[i];
+        }
+        i += 1;
+      }
+
+      while (len > 0){
+        idx = Math.floor(Math.random() * chars.length);
+        id += chars.substring(idx, idx + 1);
+        len -= 1;
+      }
+      return id;
+    };
+  })();
+
+  rt.phases = (function(){
+    return {
+      'intermezzo': function(){
+
+      },
+      'information': function(idx){
+
+      }
+    };
+  })();
+
+  // High-level utility functions.
+  
+  util.copyobject = function(oldObject){
+    // https://github.com/douglascrockford/JSON-js
+    // http://bestiejs.github.io/json3/
+    
+    /*
+     * We copy an object, or an array, by first serializing 
+     * it into a JSON string, and then de-serializing it.
+     * It may not be the most efficient way, but it is 
+     * conceptually simple and clear.
+     * 
+     * We assume that the objects we copy do not contain
+     * functions. They would be lost in the 
+     * serializing process.
+     */
+    return JSON.parse(JSON.stringify(oldObject));
+  };
+  
+  util.eval = function(code){
+    jQuery.globalEval(code);
+  };
+  
+  util.getid = function(s) {
+    if (typeof s === 'string') {
+      if (s.charAt(0) === '#') {
+        return s;
+      }
+      return '#'.concat(s);
+    }
+    return s;
+  };
+  
+  // Return true if an object has an id property.
+  util.hasobjid = function(elem){
+    return (_.isObject(elem) && (_.has(elem, '_id') || _.has(elem, 'id')));
+  };
+  
+  util.is_boolean = function(o){
+    return _.isBoolean(o);
+  };
+
+  util.is_number = function(i){
+    // http://stackoverflow.com/questions/1019515/javascript-test-for-an-integer
+    //return ! isNaN(parseInt(i, 10));
+    return _.isNumber(i);
+  };
+
+  util.is_string = function(s){
+    return _.isString(s);
+  };
+
+  util.to_integer = function(i){
+    return parseInt(i, 10);
+  };
+
+  soile2.bin = soile2.rt.seal(bin);
+  
+  return soile2;
+})();

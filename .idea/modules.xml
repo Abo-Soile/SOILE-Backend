@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/eml01/eml01.iml" filepath="$PROJECT_DIR$/eml01/eml01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qml-guide/qml-guide.iml" filepath="$PROJECT_DIR$/qml-guide/qml-guide.iml" />
+      <module fileurl="file://$PROJECT_DIR$/soile-elang/soile-elang.iml" filepath="$PROJECT_DIR$/soile-elang/soile-elang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/soile-qmarkup/soile-qmarkup.iml" filepath="$PROJECT_DIR$/soile-qmarkup/soile-qmarkup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/soile-testing/soile-testing.iml" filepath="$PROJECT_DIR$/soile-testing/soile-testing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/soile-utils/soile-utils.iml" filepath="$PROJECT_DIR$/soile-utils/soile-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/soile-verticle/soile-verticle.iml" filepath="$PROJECT_DIR$/soile-verticle/soile-verticle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/soile2-styles/soile2-styles.iml" filepath="$PROJECT_DIR$/soile2-styles/soile2-styles.iml" />
+    </modules>
+  </component>
+</project>
+

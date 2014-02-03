@@ -1,0 +1,16 @@
+questionnaire(id, blocks, modules, parameters) ::= <<
+
+<div data-dojo-type="dijit/form/Form" data-dojo-id="$id$"
+     id="$id$" encType="multipart/form-data" action="" method="">
+    
+    $blocks:{block | $add_block(block.content)$}$
+    
+</div>
+
+>>
+
+add_block(block) ::= <<
+    $block$ $\n$
+    <p style="height: 0.1cm; clear: both">&nbsp;</p>
+>>
+

@@ -1,0 +1,6 @@
+{
+  "main": "fi.kogni.abo.soile2.verticles.DiskIOVerticle",
+  "worker": true,
+  "includes": "fi.abo.kogni.soile~common-resources~1.0",
+  "description": "This module implements disk IO functionality. It contains a verticle whose main responsibility is data persistence."
+}

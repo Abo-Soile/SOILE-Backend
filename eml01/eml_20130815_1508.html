@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <title>EML</title>
+  </head>
+  <body>
+    <h1>jQuery</h1>
+    
+    <div class="container">
+      <div id="div1">
+      </div>
+      <div id="div2">
+      </div>
+    </div>
+
+    <!-- 
+      http://webdesign.about.com/od/css/f/blfaqhidden.htm 
+      http://www.w3.org/wiki/CSS/Properties/display
+      http://www.w3.org/wiki/CSS/Properties/visibility
+      http://learnlayout.com/display.html
+    -->
+    
+    <div id="div3" style="display: none; clear: both; position: relative;">
+      <img id="image01" src="s03.png" alt="[kuva]" />
+    </div>
+    
+    <script>
+		$(document).ready(function() {
+			setTimeout(function(){
+			  //$('body').append($('<p>').text("The DOM is now loaded and can be manipulated."));
+			  //$( ".hello" ).clone().appendTo( ".goodbye" );
+			  jQuery.each(['#div1', '#div2'], function(idx, div){
+			    var img = $('#image01').clone();
+			    img.css('display', 'inline');
+          img.css('visibility', 'visible');
+          img.prop('id', 'imagediv'.concat(idx));
+          img.appendTo(div);
+			  });
+			}, 2000);
+      setTimeout(function(){
+        var div = jQuery('#div3');
+        div.css('display', 'block');
+        div.css('border', 'thick solid black');
+      }, 1000);
+      setTimeout(function(){
+        var img = jQuery('#image01');
+        //img.css({position: 'absolute', top: 10, right: 50});
+        img.css({position: 'absolute'});
+        img.animate({ left: '+=100' }, 2000);
+        jQuery('#div3').height('2cm');
+      }, 3000);
+		});
+    </script>
+  </body>
+</html>

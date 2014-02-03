@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component jdk="1.7" jdk_type="JavaSDK">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="commons-io-2.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-utils/lib/commons-io-2.4.jar!/"/>
+	</lib>
+	<lib name="C:\Dropbox\DevStuff\SoileIDEA\soile2\soile-utils\lib\commons-codec-1.8.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-utils/lib/commons-codec-1.8.jar!/"/>
+	</lib>
+</component>
