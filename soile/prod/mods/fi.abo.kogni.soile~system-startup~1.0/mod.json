@@ -1,6 +1,0 @@
-{
-  "main": "fi.kogni.abo.soile2.verticles.StartupVerticle",
-  "worker": false,
-  "includes": "fi.abo.kogni.soile~common-resources~1.0",
-  "description": "This module starts up the rest of the Soile system."
-}
