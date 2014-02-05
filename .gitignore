@@ -6,3 +6,13 @@
 bin/
 *.class
 generated/
+
+*soile-elang/jar
+*soile-utils/jar
+*soile-verticle/jar
+*soile-qmarkup/jar
+
+prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-elang.jar
+prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-qmarkup.jar
+prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-utils.jar
+prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-verticle.jar
