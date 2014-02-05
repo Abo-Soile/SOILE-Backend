@@ -15,7 +15,7 @@ class TestGenScriptWrapper {
 
         //String tmplFilename = "/Users/tuope/programming/soile/prod/mods/fi.abo.kogni.soile~experiment-lang~1.0/templates/elang.stg";
         //String tmplFilename = "C:/Dropbox/DevStuff/SoileIDEA/soile2/soile/prod/mods/fi.abo.kogni.soile~experiment-lang~1.0/templates/elang.stg";
-        String tmplFilename = basePath + "/soile/prod/mods/fi.abo.kogni.soile~experiment-lang~1.0/templates/elang.stg";
+        String tmplFilename = basePath + "/prod/mods/fi.abo.kogni.soile~experiment-lang~1.0/templates/elang.stg";
         test.setTemplate(tmplFilename);
         //String inputFilename = "/Users/tuope/programming/soile/explang/demoinput008";
         //String inputFilename = "C:/Dropbox/DevStuff/SoileIDEA/soile2/soile/explang/demoinput008";
