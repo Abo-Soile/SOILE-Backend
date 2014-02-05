@@ -104,15 +104,22 @@ var templateManager = (function(folder){
       });
     },
     'render_template':function(templateName, data, request) {
+      if(isLoaded) {
       eb.send("dust.render", {"name":templateName, "context":data}, function(reply){
           request.response.end(reply.output);
-      });
+          });
+      }else {
+        this.loadAll();
+      }
+      
+
     },
     'loadAll':function(){
       if(!isLoaded){
         for(var i=0; i<templates.length;i++){
           this.load_template(templates[i]);
         }
+        isLoaded = true;
       }
     }
   };
@@ -122,7 +129,7 @@ var templateManager = (function(folder){
 
 //Ugly hack to make sure that the template module is online before loading
 //Base templates
-var timerID = vertx.setTimer(1000, function() {
+var timerID = vertx.setTimer(2000, function() {
   console.log("\n ------Loading base templates------");
  // templateManager.load_template("header");
  // templateManager.load_template("footer");
