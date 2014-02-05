@@ -158,14 +158,12 @@ var read_khtoken = (function() {
 
 routeMatcher.get("/a", function(request){
 
-  templateManager.load_template('landing');
-
-  request.response.end("This is a test");
+  templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
 });
 
 routeMatcher.get("/aa", function(request){
 
-  templateManager.render_template('landing', {"name":"Daniel Testing"},request);
+  templateManager.render_template('landing', {"name":"Daniel Testing","test":"This is a test"},request);
 
 });
 

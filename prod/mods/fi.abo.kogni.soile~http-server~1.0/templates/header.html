@@ -9,8 +9,13 @@
    			<!--[if lt IE 9]>
      		 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   	  	<![endif]-->
-  		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+
+    <!-- Bootstrap3 theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
 
 
 		<script type="text/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
@@ -19,14 +24,22 @@
 	</head>
 
 	<body>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <a class="navbar-brand" href="/">Soile</a>
+        {?name}<p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">{name}</a></p>{/name}
+        {^name}<button type="button" class="btn btn-default navbar-btn navbar-right">Sign in</button>{/name}
+      </div>
+</nav>
     <div class="container">
       <div class="row" id="header">
         <div class="span9">
           <h1>Soile</h1>
         </div>
         <div id="usercontrol">
-          <p><a href="/logout">{name}</a></p>
+          <p><a href="/logout">{name}</a></p> 
         </div>
       </div>
+    </div>
       
 
