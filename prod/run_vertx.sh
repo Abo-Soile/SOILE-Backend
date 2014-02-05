@@ -1,4 +1,4 @@
-#!/opt/local/bin/bash
+#!/bin/bash
 
 # For adding certain parameters to the JVM.
 # Consult the following web pages in order to fine-tune the JVM.
