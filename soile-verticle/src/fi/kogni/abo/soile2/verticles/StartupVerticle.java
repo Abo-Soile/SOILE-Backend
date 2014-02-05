@@ -81,6 +81,7 @@ public final class StartupVerticle extends SoileVerticle {
         JsonObject config = new JsonObject();
         config.putObject("shared", sharedConf);
         config.putObject("config", verticleConf);
+        //System.out.println(config.toString());
         return config;
     }
 

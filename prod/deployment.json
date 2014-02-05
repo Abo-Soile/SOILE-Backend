@@ -19,6 +19,11 @@
       "module": "fi.abo.kogni.soile~http-server~1.0",
       "config": "http_server",
       "instances": 2
+    },
+    {
+      "module": "fi.abo.kogni.soile~vertx-mod-template-engines~1.0",
+      "config": "dustjs",
+      "instances": 1
     }
   ],
 
@@ -47,11 +52,16 @@
   "http_server": {
     "port": 8082,
     "host": "localhost",
-    "directory": "./static_files"
+    "directory": "./static_files",
+    "template_folder":"./templates" 
   },
 
   "questionnaire_markup": {
     "templates": "./templates"
+  },
+
+  "dustjs":{
+    "engine":"dustjs-linkedin"
   }
 
 }

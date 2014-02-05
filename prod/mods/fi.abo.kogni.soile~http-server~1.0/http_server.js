@@ -71,6 +71,19 @@ var utils = (function(conf){
 
 })(shared_config);
 
+var templateManager = (function(folder){
+  var templates = [];
+  vertx.fileSystem.readDir(folder, function(err,res){
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i]);
+      templates.push(res[i]);
+      console.log(JSON.stringify(templates));
+
+    }  
+  });
+
+})(http_config.template_folder);
+
 var read_khtoken = (function() {
   var pattern = /khtoken=(\w+)/;
   return function(cookie) {
@@ -91,10 +104,38 @@ var read_khtoken = (function() {
   };
 })();
 
+routeMatcher.get("/a", function(request){
+  request.response.end("This is a test");
+});
+
+routeMatcher.get('/dust', function(request){
+  var eb = vertx.eventBus;
+
+  eb.send("dust.compile", {'name':'test', "source":"hello {x}"}, function(reply){
+      request.response.end(JSON.stringify(reply));
+  });
+});
+
+routeMatcher.get('/dust1', function(request){
+  var eb = vertx.eventBus;
+  eb.send("dust.load", {"name":"test", "context": {"x":"world"}}, function(reply){
+   request.response.end(JSON.stringify(reply));
+  });
+});
+
+routeMatcher.get('/dust2', function(request){
+  var eb = vertx.eventBus;
+  eb.send("dust.render", {"name":"test", "context": {"x":"world"}}, function(reply){
+   request.response.end(JSON.stringify(reply));
+  });
+});
+
+
 routeMatcher.get('/experiment/demo', function(request) {
   var file = 'demo.html';
   request.response.sendFile(utils.file_from_serverdir(file));
 });
+
 
 routeMatcher.post('/experiment/run', function(request) {
   var body = new vertx.Buffer();
