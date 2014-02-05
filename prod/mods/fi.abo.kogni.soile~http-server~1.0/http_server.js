@@ -11,6 +11,9 @@ var host = http_config['host'];
 var http_directory = http_config['directory'];
 var routeMatcher = new vertx.RouteMatcher();
 
+function arrayContains(item, array){
+  return (arrhaystack.indexOf(needle) > -1);
+}
 
 var utils = (function(conf){
 
@@ -66,23 +69,65 @@ var utils = (function(conf){
     'build_url': function(host, port, resource) {
       return 'http://' + host + ':' + port + resource;
     }
-
   };
 
 })(shared_config);
 
 var templateManager = (function(folder){
   var templates = [];
+  var isLoaded = false;
+
+  var eb = vertx.eventBus;
   vertx.fileSystem.readDir(folder, function(err,res){
     for (var i = 0; i < res.length; i++) {
-      console.log(res[i]);
-      templates.push(res[i]);
+      var sp = res[i].lastIndexOf("/")+1;
+      //console.log(res[i].slice(sp).replace(".html",""));
+      templates.push(res[i].slice(sp).replace(".html",""));
+      }
       console.log(JSON.stringify(templates));
 
-    }  
-  });
+    });
+
+  return {
+    'load_template':function(templateName) {
+      console.log("Loading template " + templateName);
+      vertx.fileSystem.readFile(folder+templateName+".html", function(err,res){
+        if(!err){
+          var templateContent = res.getString(0,res.length());
+          eb.send("dust.compile", {'name':templateName, "source":templateContent}, function(reply){
+            console.log("Loading template "+ JSON.stringify(reply));
+          });
+        }
+        else {
+          console.log(err);
+        }
+      });
+    },
+    'render_template':function(templateName, data, request) {
+      eb.send("dust.render", {"name":templateName, "context":data}, function(reply){
+          request.response.end(reply.output);
+      });
+    },
+    'loadAll':function(){
+      if(!isLoaded){
+        for(var i=0; i<templates.length;i++){
+          this.load_template(templates[i]);
+        }
+      }
+    }
+  };
 
 })(http_config.template_folder);
+
+
+//Ugly hack to make sure that the template module is online before loading
+//Base templates
+var timerID = vertx.setTimer(1000, function() {
+  console.log("\n ------Loading base templates------");
+ // templateManager.load_template("header");
+ // templateManager.load_template("footer");
+  templateManager.loadAll();
+});
 
 var read_khtoken = (function() {
   var pattern = /khtoken=(\w+)/;
@@ -105,8 +150,18 @@ var read_khtoken = (function() {
 })();
 
 routeMatcher.get("/a", function(request){
+
+  templateManager.load_template('landing');
+
   request.response.end("This is a test");
 });
+
+routeMatcher.get("/aa", function(request){
+
+  templateManager.render_template('landing', {"name":"Daniel Testing"},request);
+
+});
+
 
 routeMatcher.get('/dust', function(request){
   var eb = vertx.eventBus;

@@ -18,7 +18,7 @@
     {
       "module": "fi.abo.kogni.soile~http-server~1.0",
       "config": "http_server",
-      "instances": 2
+      "instances": 1
     },
     {
       "module": "fi.abo.kogni.soile~vertx-mod-template-engines~1.0",
@@ -50,10 +50,10 @@
   "gc": {},
 
   "http_server": {
-    "port": 8082,
+    "port": 8083,
     "host": "localhost",
     "directory": "./static_files",
-    "template_folder":"./templates" 
+    "template_folder":"templates/" 
   },
 
   "questionnaire_markup": {
