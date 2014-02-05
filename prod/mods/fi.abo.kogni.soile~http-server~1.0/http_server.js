@@ -11,6 +11,7 @@ var host = http_config['host'];
 var http_directory = http_config['directory'];
 var routeMatcher = new vertx.RouteMatcher();
 
+
 var utils = (function(conf){
 
   var addresses = conf['addresses'];
@@ -170,11 +171,25 @@ routeMatcher.post('/questionnaire/render', function(request) {
 });
 
 routeMatcher.get('/questionnaire/generated/:id', function(request) {
+  console.log(request.method);
   var id = request.params().get('id');
   var file = utils.build_path(utils.get_basedir(),
                               utils.get_directory('questionnaires'),
                               id);
+  console.log(utils.build_path(utils.get_basedir(),utils.get_directory('questionnaires'),id));
+  console.log(utils.get_basedir());
+ vertx.fileSystem.readDir('', function(err, res){
+    //console.log(err);
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i]);  
+    };
+  });
   request.response.sendFile(file);
+
+});
+
+routeMatcher.post('questionnaire/generated/:id', function(request) {
+  console.log(request.method);
 });
 
 /* This will match static files. ('Static files' are files which 

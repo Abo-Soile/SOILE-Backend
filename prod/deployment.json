@@ -24,7 +24,7 @@
 
   "shared": {
     "directories": {
-      "/": "/Users/tuope/programming/soile/prod",
+      "/": "/home/danno/SoileIDEA/soile2/prod",
       "questionnaires": "./generated/questionnaire"
     },
     "addresses": {
@@ -45,7 +45,7 @@
   "gc": {},
 
   "http_server": {
-    "port": 8080,
+    "port": 8082,
     "host": "localhost",
     "directory": "./static_files"
   },
