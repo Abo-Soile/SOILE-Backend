@@ -157,7 +157,7 @@ var read_khtoken = (function() {
 })();
 
 routeMatcher.get("/a", function(request){
-
+  console.log(JSON.stringify(container.config));
   templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
 });
 

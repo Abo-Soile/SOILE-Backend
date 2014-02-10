@@ -80,7 +80,12 @@ public final class StartupVerticle extends SoileVerticle {
         
         JsonObject config = new JsonObject();
         config.putObject("shared", sharedConf);
-        config.putObject("config", verticleConf);
+
+        //TODO Refactor and remove the duplicated config object
+        config.putObject("config", verticleConf);  //Refactor away at some point
+
+        //Inserts the config in the jsonroot, vertx expects this so this method should be used
+        config.mergeIn(verticleConf);
         //System.out.println(config.toString());
         return config;
     }
