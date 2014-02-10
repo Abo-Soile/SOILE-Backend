@@ -73,6 +73,31 @@ var utils = (function(conf){
 
 })(shared_config);
 
+var queryMongo = {
+
+  getOneExperiment: function(id, response) {
+    vertx.eventBus.send("vertx.mongo-persistor",{"action":"findone", 
+   "collection":"experiment","matcher":{"name":id}},function(reply){
+      response(reply);
+    });
+  },
+
+  getExperimentList: function(response) {
+    vertx.eventBus.send("vertx.mongo-persistor",{"action":"find",
+    "collection":"experiment"},function(reply){
+      response(reply);
+    })
+  },
+
+  saveForm: function(name, form, response) {
+    vertx.eventBus.send("vertx.mongo-persistor",{"action":"save",
+      "collection":"forms","document":"form":form}, function(reply){
+        response(reply)
+      })
+  }
+
+}
+
 var templateManager = (function(folder){
   var templates = [];
   var isLoaded = false;
@@ -158,6 +183,17 @@ var read_khtoken = (function() {
 
 routeMatcher.get("/a", function(request){
   console.log(JSON.stringify(container.config));
+
+  vertx.eventBus.send("vertx.mongo-persistor",{"action":"save", 
+        "collection":"test","document":{"name":"Doe Joeddddd", "Age":10}},function(reply){
+          console.log(JSON.stringify(reply));
+        })
+
+  vertx.eventBus.send("vertx.mongo-persistor",{"action":"find", 
+      "collection":"test"},function(reply){
+        console.log(JSON.stringify(reply));
+      })
+
   templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
 });
 
@@ -187,6 +223,32 @@ routeMatcher.get('/dust2', function(request){
   var eb = vertx.eventBus;
   eb.send("dust.render", {"name":"test", "context": {"x":"world"}}, function(reply){
    request.response.end(JSON.stringify(reply));
+  });
+});
+
+routeMatcher.get("/experiment", function(request){
+  queryMongo.getExperimentList(function(r){
+    console.log(JSON.stringify(r.results));
+    templateManager.render_template("experimentList", {"experiments":r.results}, request);
+  })
+});
+
+routeMatcher.get("/experiment/new", function(request){
+  templateManager.render_template("experimentform", {},request);
+});
+
+routeMatcher.get('/experiment/:id', function(request){
+  var id = request.params().get('id');
+    // eb.send("vertx.mongo-persistor",{"action":"findone", 
+  //  "collection":"experiment","matcher":{"name":id}},function(reply){
+  //     console.log(JSON.stringify(reply));
+  //     var expname = reply.result.name
+  //     
+
+  //   });
+  queryMongo.getOneExperiment(id,function(r){
+    expname = r.result.name;
+    templateManager.render_template("experiment", {"exp_name":expname},request)
   });
 });
 

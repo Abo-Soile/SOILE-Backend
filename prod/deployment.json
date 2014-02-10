@@ -24,6 +24,11 @@
       "module": "fi.abo.kogni.soile~vertx-mod-template-engines~1.0",
       "config": "dustjs",
       "instances": 1
+    },
+    {
+      "module": "io.vertx~mod-mongo-persistor~2.1.0",
+      "config": "mongo",
+      "instances": 1
     }
   ],
 
@@ -50,7 +55,7 @@
   "gc": {},
 
   "http_server": {
-    "port": 8083,
+    "port": 8081,
     "host": "localhost",
     "directory": "./static_files",
     "template_folder":"templates/" 
@@ -62,6 +67,13 @@
 
   "dustjs":{
     "engine":"dustjs-linkedin"
+  },
+
+  "mongo": {
+    "address": "vertx.mongo-persistor",
+    "host": "127.0.0.1",
+    "port": 27017,
+    "db_name": "soiletest"
   }
 
 }
