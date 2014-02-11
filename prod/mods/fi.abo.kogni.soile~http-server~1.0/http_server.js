@@ -89,11 +89,19 @@ var queryMongo = {
     })
   },
 
-  saveForm: function(name, form, response) {
+  //Saves a form, does 
+  saveForm: function(name, form, id, response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"save",
       "collection":"forms","document":{"form":form}}, function(reply){
         response(reply)
       })
+  },
+
+  getForm: function(id, response){
+    vertx.eventBus.send("vertx.mongo-persistor", {"action":"findone",
+    "collection":"forms","matcher":{"_id":id}}, function(reply) {
+      response(reply);
+    })
   }
 
 }
@@ -311,7 +319,8 @@ routeMatcher.post('/questionnaire/render', function(request) {
 
     // http://nelsonwells.net/2012/02/json-stringify-with-mapped-variables/#more-153
     var msg = {
-      'markup': body.getString(0, body.length())
+      'markup': body.getString(0, body.length()),
+      'action': "save"
     };
 
     eb.send(address, msg, function(reply) {
@@ -350,6 +359,20 @@ routeMatcher.get('/questionnaire/generated/:id', function(request) {
   request.response.sendFile(file);
 
 });
+
+routeMatcher.get('/questionnaire/mongo/:id', function(request){
+  var id = request.params().get('id')
+  queryMongo.getForm(id, function(r){
+    console.log(JSON.stringify(r))
+    var form = r.result.form;
+    var markup = r.result.markup;
+    templateManager.render_template('displayForm', {"form":form,"markup":markup},request)
+  })
+})
+
+routeMatcher.post('/questionnaire/mongo/:id', function(request) {
+  var body
+})
 
 routeMatcher.post('questionnaire/generated/:id', function(request) {
   console.log(request.method);

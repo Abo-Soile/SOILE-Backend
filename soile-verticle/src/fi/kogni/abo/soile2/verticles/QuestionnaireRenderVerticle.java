@@ -2,6 +2,7 @@ package fi.kogni.abo.soile2.verticles;
 
 import java.nio.ByteBuffer;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 
@@ -12,6 +13,15 @@ import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
 import fi.abo.kogni.soile2.utils.generator.IdGenerator;
 import fi.kogni.abo.soile2.handlers.VerticleMessageHandler;
 
+
+
+// This verticle handles generation, verification and storage/update of qustioneers.
+// Message format: {"action": <action>, "markup": <markup>, "id":<id>}
+//
+// Action can be either render or save. The collection will be updated if a ID is provided,
+// if not a new "form" is created. Id's are built using a self implemented method that
+// generates a sh256 hash based on the form input, whould most likely be better to use mongos
+// inbuilt _id but this should work for now
 public final class QuestionnaireRenderVerticle extends SoileVerticle {
 
     public QuestionnaireRenderVerticle() {
@@ -38,11 +48,13 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
     }
 
     //Saves the questioneer to mongo
-    private void saveToMongo(String id, String questionnaire) {
+    private void saveToMongo(String id, String markup,String questionnaire) {
         JsonObject msg = new JsonObject();
 
         JsonObject data = new JsonObject();
+        data.putString("_id", id);
         data.putString("form", questionnaire);
+        data.putString("markup", markup);
 
         msg.putString("action","save");
         msg.putString("collection", "forms");
@@ -73,6 +85,13 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
             JsonObject reply = new JsonObject();
             reply.putString("id", "");
             String markup = json.getString("markup");
+            String action = json.getString("action");
+
+            //Checking if id exists
+            Boolean hasID = true;
+            if(json.getString("id")==null) {
+              hasID = false;
+            }
             InputReader reader = new InputReader(markup);
             reader.addListener(builder);
             builder.questionnaireId("questionnaire-id");
@@ -87,8 +106,16 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
                 generator.update(buffer);
                 String id = generator.getId();
                 reply.putString("id", id);
-                saveToDisk(id, output);
-                saveToMongo(id, output);
+                if (action.equals("save")){
+                    saveToDisk(id, output);
+                    if(hasID) {
+                        saveToMongo(json.getString("id"), markup, output);
+                    }
+                    saveToMongo(id, markup, output);
+                }
+                if(action.equals("render")){
+                    reply.putString("form", output);
+                }
                 builder.reset();
                 generator.reset();
             } catch (MalformedCommandException e) {
