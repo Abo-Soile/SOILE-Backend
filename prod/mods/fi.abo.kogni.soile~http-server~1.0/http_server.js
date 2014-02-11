@@ -91,7 +91,7 @@ var queryMongo = {
 
   saveForm: function(name, form, response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"save",
-      "collection":"forms","document":"form":form}, function(reply){
+      "collection":"forms","document":{"form":form}}, function(reply){
         response(reply)
       })
   }

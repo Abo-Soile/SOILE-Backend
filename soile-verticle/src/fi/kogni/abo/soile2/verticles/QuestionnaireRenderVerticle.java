@@ -26,7 +26,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
         String address = getAddress("questionnaire_render");
         registerMessageHandler(address, handler);
     }
-    
+    //Saves the questioneer to disk
     private void saveToDisk(String id, String questionnaire) {
         JsonObject msg = new JsonObject();
         msg.putString("dirname", getDirectoryName("questionnaires"));
@@ -35,6 +35,20 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
         sendMessage(getAddress("disk_io"), msg);
         
         // TODO Send a message to garbage collector verticle, too.
+    }
+
+    //Saves the questioneer to mongo
+    private void saveToMongo(String id, String questionnaire) {
+        JsonObject msg = new JsonObject();
+
+        JsonObject data = new JsonObject();
+        data.putString("form", questionnaire);
+
+        msg.putString("action","save");
+        msg.putString("collection", "forms");
+        msg.putObject("document",data);
+
+        sendMessage("vertx.mongo-persistor", msg);
     }
     
     private class Handler extends VerticleMessageHandler {
@@ -74,6 +88,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
                 String id = generator.getId();
                 reply.putString("id", id);
                 saveToDisk(id, output);
+                saveToMongo(id, output);
                 builder.reset();
                 generator.reset();
             } catch (MalformedCommandException e) {
