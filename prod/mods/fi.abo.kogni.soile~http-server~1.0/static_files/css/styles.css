@@ -2,14 +2,14 @@
 	outline: none !important;
 }
 
-body {
+/*body {
 	margin: 0;
 	padding: 2em;
 	font-family: Lucida Sans,Lucida Grande,Arial !important;
 	font-size: 13px !important;
 	background: white;
 	color: #333;
-}
+}*/
 
 button {
 	-webkit-transition: background-color 0.2s linear;

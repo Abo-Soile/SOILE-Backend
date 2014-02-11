@@ -2,9 +2,17 @@
 <div id="main" class="container">
 	<div class="row">
 		<div class="col-md-6"> 
-			<textarea>
+			<textarea >
 				{markup}
 			</textarea>
+			<button data-dojo-type="dijit/form/Button" type="button">	Click me too!
+  			<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
+      			require(["dojo/dom"], function(dom){
+            	dom.byId("result2").innerHTML += "Thank you! ";
+			        });
+			    </script>
+			</button>
+<div id="result2"></div>
 		</div>
 		<div class="col-md-6">
 			{form|s}
