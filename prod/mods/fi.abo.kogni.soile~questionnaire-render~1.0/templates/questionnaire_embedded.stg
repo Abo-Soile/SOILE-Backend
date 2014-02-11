@@ -1,0 +1,364 @@
+delimiters "$", "$"
+
+
+questionnaire_html(title, body, stmts) ::= <<
+
+<title>$title$</title>
+<link rel="stylesheet" href="/css/styles.css" media="screen">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dijit/themes/claro/claro.css">
+
+  <h1>$title$</h1>
+
+  <div style="width: 960px">
+  
+    $body$
+    
+    <p style="height: 1em; clear: both;"><!-- SPACER --></p>
+  
+    <p>
+      <button data-dojo-type="dijit/form/Button" type="button" id="submitButton">
+        Show data
+      </button>
+    </p>
+    
+    <div>
+      <dl id="formdata">
+      </dl>
+    </div>
+  </div>
+
+  </div>
+  
+  <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.1/dojo/dojo.js" 
+          data-dojo-config="async: true, parseOnLoad: true">
+  </script>
+                      
+  <script>
+    require(["dijit/form/HorizontalSlider", 
+             "dijit/form/HorizontalRuleLabels", 
+             "dijit/form/HorizontalRule", 
+             "dijit/form/Button", 
+             "dijit/form/Select",
+             "dijit/form/FilteringSelect",
+             "dijit/form/ComboBox",
+             "dijit/form/CheckBox",
+             "dijit/form/RadioButton",
+             "dijit/form/NumberSpinner",
+             "dijit/form/TextBox",
+             "dojo/dom",
+             "dojo/dom-construct", 
+             "dojo/aspect", 
+             "dijit/registry", 
+             "dojo/on",
+             "dojo/parser",
+             "dojo/query",
+             "dojo/cookie",
+             "dojo/json",
+             "dojo/ready"],
+      function(HorizontalSlider, 
+               HorizontalRuleLabels, 
+               HorizontalRule, 
+               Button, 
+               Select,
+               FilteringSelect,
+               ComboBox,
+               CheckBox,
+               RadioButton,
+               NumberSpinner,
+               TextBox,
+               dom,
+               domConstruct, 
+               aspect, 
+               registry, 
+               on,
+               parser,
+               query,
+               cookie,
+               JSON,
+               ready) {
+
+        ready(function() {
+          parser.parse();
+          
+          on(dom.byId('submitButton'), "click", function() {
+            var qdata = {};
+            var is_checked = function(id) {
+              var widget = registry.byId(id);
+              return (widget.get('checked') === true ? true : false);
+            };
+            var widget_value = function(id) {
+              return registry.byId(id).get('value');
+            };
+            var validate_widget = function(id) {
+              return (registry.byId(id).validate() === true ? true : false);
+            };
+            var nonempty_text_widget = function(id) {
+              var text = widget_value(id);
+              return (text.length > 0);
+            };
+            var set_select_value = function(id, value, default_value) {
+              return (is_checked(id) === true ? value : default_value);
+            };
+            var text_widget_value = function(id, maxlen) {
+              var text = widget_value(id);
+              if (maxlen > text.length) {
+                return text;
+              }
+              return text.substring(0, maxlen);
+            };
+            
+            var save_value = function(data, params, column, get_value){
+              data[column] = get_value.apply({}, params);
+            };
+            
+            var save_first_checked = function(data,
+                                              ids, 
+                                              values,
+                                              column_name,
+                                              default_value){
+              var len = Math.min(ids.length, values.length);
+              var i = 0;
+              var use_default = true;
+              var id, value;
+              
+              while (i < len){
+                id = ids[i];
+                if (is_checked(id)){
+                  use_default = false;
+                  value = values[i];
+                  break;
+                }
+                i += 1;
+              }
+              if (use_default){
+                value = default_value;
+              }
+              data[column_name] = value;
+            };
+            
+            var save_all_checked = function(data,
+                                            ids, 
+                                            values,
+                                            column_names,
+                                            default_value){
+              var len = Math.min(ids.length, values.length, column_names.length);
+              var i = 0;
+              var id, value, column;
+
+              while (i < len){
+                id = ids[i];
+                column = column_names[i];
+                if (is_checked(id)){
+                  value = values[i];
+                } else {
+                  value = default_value;
+                }
+                data[column] = value;
+                i += 1;
+              }
+            };
+            
+            var show_saved_data = function(data){
+              for (var key in data){
+                if (data.hasOwnProperty(key)){
+                  domConstruct.create('dt', {innerHTML: key}, 'formdata');
+                  domConstruct.create('dd', {innerHTML: data[key]}, 'formdata');
+                }
+              }
+            };
+            
+            var send_questionnaire_data = function(data){
+              show_saved_data(data);
+              console.log(JSON.stringify(data));
+            }
+            
+            domConstruct.empty('formdata');
+            $stmts$
+            send_questionnaire_data(qdata);
+            
+          });
+        });
+      });
+  </script>
+
+>>
+
+qdata_widgetdata_dropdownmenu(id, column) ::= <<
+  save_value(qdata, ['$id$'], '$column$', widget_value);
+>>
+
+qdata_widgetdata_multiselect(ids, columns, values, defaultValue) ::= <<
+  save_all_checked(qdata,
+                   [$ids:{id | '$id.text$'}; separator=","$],
+                   [$values:{val | '$val.text$'}; separator=","$],
+                   [$columns:{col | '$col.text$'}; separator=","$],
+                   '$defaultValue$');
+>>
+
+qdata_widgetdata_singleselect(ids, columnName, values, defaultValue) ::= <<
+  save_first_checked(qdata,
+                     [$ids:{id | '$id.text$'}; separator=","$],
+                     [$values:{val | '$val.text$'}; separator=","$],
+                     '$columnName$', '$defaultValue$');
+>>
+
+qdata_widgetdata_numberfield(id, columnName) ::= <<
+  save_value(qdata, ['$id$'], '$columnName$', widget_value);
+>>
+
+qdata_widgetdata_slider(id, columnName) ::= <<
+  save_value(qdata, ['$id$'], '$columnName$', widget_value);
+>>
+
+qdata_widgetdata_textarea(id, columnName, maxlength) ::= <<
+  save_value(qdata, ['$id$', $maxlength$], '$columnName$', text_widget_value);
+>>
+
+qdata_widgetdata_textbox(id, columnName, maxlength) ::= <<
+  save_value(qdata, ['$id$', $maxlength$], '$columnName$', text_widget_value);
+>>
+
+qdata_push_widget_value(id, column, checksum, length) ::= <<
+  // UNUSED: $checksum$, $length$ 
+  domConstruct.create('dt', {innerHTML: '<b>$column$</b>'}, 'formdata');
+  domConstruct.create('dd', {innerHTML: widget_value('$id$')}, 'formdata');
+>>
+
+qdata_push_text_widget_value(id, column, checksum, length, maxlength) ::= <<
+  // UNUSED: $checksum$, $length$ 
+  domConstruct.create('dt', {innerHTML: '<b>$column$</b>'}, 'formdata');
+  domConstruct.create('dd', {innerHTML: text_widget_value('$id$', $maxlength$)}, 'formdata');
+>>
+
+qdata_push_select_value(id, column, checksum, length, value, default_value) ::= <<
+  // UNUSED: $checksum$, $length$ 
+  domConstruct.create('dt', {innerHTML: '<b>$column$</b>'}, 'formdata');
+  domConstruct.create('dd', {innerHTML: set_select_value('$id$', '$value$', '$default_value$')}, 'formdata');
+>>
+
+qdata_validate_widget(id) ::= <<
+  // UNUSED: $id$ 
+>>
+
+qdata_nonempty_text_widget(id) ::= <<
+  // UNUSED: $id$ 
+>>
+
+dropdownmenu(id, label, options) ::= <<
+
+<div>
+<select id="$id$" name="$id$"
+        data-dojo-type="dijit/form/FilteringSelect"
+        data-dojo-props="value: '', placeHolder: '$label$'">
+ $options:{op | <option value="$op.short$">$op.long$</option>}; separator="\n"$
+</select>
+</div>
+
+>>
+
+numberfield(id, 
+	    name, 
+	    label, 
+	    value, 
+	    width, 
+	    minimum, 
+	    maximum, 
+	    increment) ::= <<
+
+<label for="$id$">$label$</label>
+&nbsp;
+<input  data-dojo-type="dijit/form/NumberSpinner"
+        id="$id$" name="someNumber" value="$value$"
+        style="width: $width$em;"
+        data-dojo-props="smallDelta:$increment$, 
+                         constraints:{min:$minimum$, max:$maximum$, places:0}" />
+
+>>
+
+textbox(id, label, length, text, separator) ::= <<
+
+$if(label)$
+<label for="$id$">$label$</label>
+$separator$
+$endif$
+<input id="$id$" data-dojo-type="dijit/form/TextBox"
+       data-dojo-props="placeHolder:'$text$',maxLength:$length$" />
+
+>>
+
+textarea(id, text, rows, columns, label) ::= <<
+
+<label for="$id$">$label$</label>
+<br />
+<textarea id="$id$" rows="$rows$" cols="$columns$"
+          data-dojo-type="dijit/form/SimpleTextarea"
+          style="width:auto;"
+          data-dojo-props="selectOnClick:true">$text$</textarea>
+
+>>
+
+slider(id, labels, minimum, maximum, increment, select, count) ::= <<
+
+<div style="width: 400px;">
+<ol data-dojo-type="dijit/form/HorizontalRuleLabels"
+    data-dojo-props="container: 'topDecoration'"
+    style="height: 1.1em; font-weight: bold">
+  $labels:{lbl | <li>$lbl.value$</li>}; separator="\n"$
+</ol>
+<div data-dojo-type="dijit/form/HorizontalRule"
+     data-dojo-props="container: 'topDecoration', count: $count$"
+     style="height: 5px; margin: 0 12px;">
+</div>
+<input id="$id$" type="range" value="3"
+       data-dojo-type="dijit/form/HorizontalSlider"
+       data-dojo-props="
+                minimum: $minimum$,
+                maximum: $maximum$,
+                value: $select$,
+                clickSelect: true,
+                showButtons: true,
+                discreteValues: $count$,
+                pageIncrement: 1" />
+</div>
+
+>>
+
+select(columns) ::= <<
+
+<div style="margin-bottom: 1cm; display: block; width: 700px;">
+ $columns:{col | $col.content$}; separator="\n"$
+</div>
+ 
+>>
+
+selection_column(elems, width) ::= <<
+
+<div style="width: $width$px; float: left; display: block">
+ $elems:{elem | $elem.content$}; separator="\n"$
+</div>
+ 
+>>
+
+radiobutton(id, name, value, label, checked) ::= <<
+ <input type="radio" id="$id$" name="$name$" value="$value$" $if(checked)$ checked $endif$
+        data-dojo-type="dijit/form/RadioButton" />
+ <label for="$id$">$label$</label>
+ <br />
+>>
+
+checkbox(id, name, value, label, checked) ::= <<
+ <input type="checkbox" id="$id$" name="$name$" value="$value$" $if(checked)$ checked $endif$
+        data-dojo-type="dijit/form/CheckBox" />
+ <label for="$id$">$label$</label>
+ <br />
+>>
+
+vspacer() ::= "<p style=\"height: 1em; clear: both;\"><!-- SPACER --></p>"
+
+tag(name, attributes, empty) ::= "<$name$ $attributes:{attr | $attribute(attr.name, attr.value)$}$ $if(empty)$/> $else$> $endif$ "
+
+attribute(name, value) ::= " $name$=\"$value$\" "
+
+style(decls) ::= <<
+ $decls:{decl | $decl.text$}; separator=" "$
+>>

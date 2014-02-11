@@ -21,7 +21,8 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         this.pendingTags = new ArrayDeque<>();
         this.tsStack = new ArrayDeque<>();
         this.bsStack = new ArrayDeque<>();
-        this.group = template.getTemplate("questionnaire_proto.stg");
+    //    this.group = template.getTemplate("questionnaire_proto.stg");
+        this.group = template.getTemplate("questionnaire_embedded.stg");
         this.questionnaire = questionnaireST();
         this.spacer = group.getInstanceOf("vspacer");
         this.body = new StringBuilder();
