@@ -389,9 +389,15 @@ routeMatcher.post('/questionnaire/mongo/:id', function(request) {
 
     vertx.eventBus.send(address, message, function(reply) {
       //console.log(JSON.stringify(reply));
+      var response = {}
+      if (reply.hasOwnProperty('error') === true) {
+        response['error'] = reply['error'];
+      }
+      else {
+        response = {"test":"testresponse",
+                      "data": reply.form} 
+                  }
 
-      var response = {"test":"testresponse",
-                      "data": reply.form}
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(response));
     })

@@ -29,9 +29,6 @@ questionnaire_html(title, body, stmts) ::= <<
 
   </div>
   
-  <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.1/dojo/dojo.js" 
-          data-dojo-config="async: true, parseOnLoad: true">
-  </script>
                       
   <script>
     require(["dijit/form/HorizontalSlider", 
