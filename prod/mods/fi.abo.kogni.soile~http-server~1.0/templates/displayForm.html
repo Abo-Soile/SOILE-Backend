@@ -2,22 +2,52 @@
 <div id="main" class="container">
 	<div class="row">
 		<div class="col-md-6"> 
-			<textarea >
+			<textarea data-dojo-type="dijit/form/Textarea" id="markup">
 				{markup}
 			</textarea>
-			<button data-dojo-type="dijit/form/Button" type="button">	Click me too!
-  			<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
+			<button id="renderform" data-dojo-type="dijit/form/Button" type="button">	Click me toooooo!
+  			<!--<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
       			require(["dojo/dom"], function(dom){
-            	dom.byId("result2").innerHTML += "Thank you! ";
+            	dom.byId("markup").innerHTML += "Thank you! ";
 			        });
-			    </script>
+			    </script>-->
 			</button>
 <div id="result2"></div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-6" id="renderWindow">
 			{form|s}
 		</div>
 	</div>
 </div>
+
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
+<script type="text/javascript">
+require(["dijit/form/Button", "dojo/dom","dojo/request", "dijit/registry","dojo/on", "dojo/json","dojo/ready"], function(Button, dom, request, registry,on, json,ready){ 
+		ready(function() {
+
+		var markup = dom.byId("markup");
+		markup = registry.byId("markup");
+		var renderForm = dom.byId("renderform");
+		var renderWindow = dom.byId("renderWindow");
+
+		on(renderForm, "click", function() {
+			console.log("posting data");
+			request.post("",{
+				data: markup.get("value")
+
+			}).then(function(reply){
+				console.log(reply);
+
+				jsonData = json.parse(reply);
+				console.log(jsonData);
+
+				var renderedForm = jsonData.data;
+				renderWindow.innerHTML = renderedForm;
+			})
+		})
+	});
+})
+	
+</script>
 
 {>footer /}
