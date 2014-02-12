@@ -58,7 +58,8 @@
     "port": 8081,
     "host": "localhost",
     "directory": "./static_files",
-    "template_folder":"templates/" 
+    "template_folder":"templates/",
+    "debugMode":true
   },
 
   "questionnaire_markup": {
