@@ -9,7 +9,7 @@ questionnaire_html(title, body, stmts) ::= <<
 
   <h1>$title$</h1>
 
-  <div style="width: 960px">
+  <div>
   
     $body$
     
@@ -25,10 +25,7 @@ questionnaire_html(title, body, stmts) ::= <<
       <dl id="formdata">
       </dl>
     </div>
-  </div>
-
-  </div>
-  
+  </div>  
                       
   <script>
     require(["dijit/form/HorizontalSlider", 

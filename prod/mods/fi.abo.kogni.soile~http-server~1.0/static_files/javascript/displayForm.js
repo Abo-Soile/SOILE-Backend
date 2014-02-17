@@ -1,43 +1,9 @@
-{>header /}
-<script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
-<div id="main" class="container">
-	<div class="row">
-		<div class="col-md-6"> 
-			<div id="error-message" style="visibility: hidden;" class="alert alert-danger">
-
-			</div>
-			<textarea data-dojo-type="dijit/form/Textarea" id="markup">
-				{markup}
-			</textarea>
-			<button id="renderform" data-dojo-type="dijit/form/Button" type="button">	Update Form
-  			<!--<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
-      			require(["dojo/dom"], function(dom){
-            	dom.byId("markup").innerHTML += "Thank you! ";
-			        });
-			    </script>-->
-			</button>
-			<div id="result2"></div>
-		</div>
-		<div class="col-md-6" id="renderWindow">
-			{form|s} 
-
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md">
-			<div id="contPane"> </div>
-		</div>
-	</div>
-</div>
-
-<script type="text/javascript" src="/javascript/displayForm.js"></script>
-<!--
 require(["dijit/form/Button", 
 			"dojo/dom",
 			"dojo/dom-style",
 			"dojo/request", 
 			"dijit/registry",
-			"dojo/parser,"
+			"dojo/parser",
 			"dojo/on", 
 			"dojo/json",
 			"dojox/layout/ContentPane",
@@ -84,6 +50,7 @@ require(["dijit/form/Button",
 					var renderedForm = jsonData.data;
 					renderWindow.innerHTML = renderedForm;
 
+					//parser.parse();
 					contentPane.set("content",jsonData.data);
 					/*Createing or updating the contentpane*/
 				}
@@ -91,7 +58,3 @@ require(["dijit/form/Button",
 		})
 	});
 })
-	
-</script> -->
-
-{>footer /}
