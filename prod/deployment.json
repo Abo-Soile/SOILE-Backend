@@ -55,8 +55,8 @@
   "gc": {},
 
   "http_server": {
-    "port": 8081,
-    "host": "localhost",
+    "port": 8080,
+    "host": "0.0.0.0",
     "directory": "./static_files",
     "template_folder":"templates/",
     "debugMode":true

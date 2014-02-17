@@ -248,7 +248,6 @@ routeMatcher.get("/experiment/new", function(request){
 });
 
 routeMatcher.post("/experiment/new", function(request) {
-request.expectMultiPart(true);
 
   request.endHandler(function() {
 
