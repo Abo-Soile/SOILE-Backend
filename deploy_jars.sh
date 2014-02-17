@@ -3,6 +3,12 @@
 TO="prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib"
 ANT="ant"
 
+mkdir soile-qmarkup/bin
+mkdir soile-elang/bin
+mkdir soile utils/bin
+mkdir soile-verticle/bin
+
+
 $ANT -f soile-qmarkup/build.xml makejar
 $ANT -f soile-elang/build.xml makejar
 $ANT -f soile-utils/build.xml makejar
