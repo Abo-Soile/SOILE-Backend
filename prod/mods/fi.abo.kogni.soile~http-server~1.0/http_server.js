@@ -372,6 +372,7 @@ routeMatcher.get('/questionnaire/mongo/:id', function(request){
 
 routeMatcher.post('/questionnaire/mongo/:id', function(request) {
   var postdata = new vertx.Buffer();
+  var id = request.params().get("id");
 
   request.dataHandler(function(data) {
     postdata.appendBuffer(data);
@@ -384,7 +385,8 @@ routeMatcher.post('/questionnaire/mongo/:id', function(request) {
 
     message = {
       "markup": markup,
-      "action": "render"
+      "action": "save",
+      "id": id
     }
 
     vertx.eventBus.send(address, message, function(reply) {
@@ -404,6 +406,14 @@ routeMatcher.post('/questionnaire/mongo/:id', function(request) {
   
   });
 })
+
+routeMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
+  var id = request.params().get('id');
+  queryMongo.getForm(id,function(r) {
+    var form = r.result.form;
+    request.response.end(form);
+  })
+});
 
 routeMatcher.post('questionnaire/generated/:id', function(request) {
   console.log(request.method);

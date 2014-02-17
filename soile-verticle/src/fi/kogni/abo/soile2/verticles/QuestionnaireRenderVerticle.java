@@ -3,6 +3,7 @@ package fi.kogni.abo.soile2.verticles;
 import java.nio.ByteBuffer;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 
@@ -60,7 +61,13 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
         msg.putString("collection", "forms");
         msg.putObject("document",data);
 
-        sendMessage("vertx.mongo-persistor", msg);
+        vertx.eventBus().send("vertx.mongo-persistor", msg, new org.vertx.java.core.Handler<Message>() {
+            @Override
+            public void handle(Message message) {
+                System.out.println(message.body().toString());
+            }
+        });
+                sendMessage("vertx.mongo-persistor", msg);
     }
     
     private class Handler extends VerticleMessageHandler {
@@ -110,8 +117,12 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
                     saveToDisk(id, output);
                     if(hasID) {
                         saveToMongo(json.getString("id"), markup, output);
+                        System.out.println("Saving with id " + json.getString("id"));
+                    }else{
+                        saveToMongo(id, markup, output);
+                        System.out.println("Saving with generated");
                     }
-                    saveToMongo(id, markup, output);
+                    reply.putString("form", output);
                 }
                 if(action.equals("render")){
                     reply.putString("form", output);

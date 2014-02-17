@@ -1,8 +1,8 @@
 {>header /}
-<script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dijit/themes/claro/claro.css">
 <div id="main" class="container">
 	<div class="row">
-		<div class="col-md-6"> 
+		<div class="col-md-5"> 
 			<div id="error-message" style="visibility: hidden;" class="alert alert-danger">
 
 			</div>
@@ -18,8 +18,7 @@
 			</button>
 			<div id="result2"></div>
 		</div>
-		<div class="col-md-6" id="renderWindow">
-			{form|s} 
+		<div class="col-md-7" id="renderWindow">
 
 		</div>
 	</div>
@@ -30,6 +29,7 @@
 	</div>
 </div>
 
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 <script type="text/javascript" src="/javascript/displayForm.js"></script>
 <!--
 require(["dijit/form/Button", 
