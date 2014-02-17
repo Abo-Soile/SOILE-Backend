@@ -234,6 +234,7 @@ routeMatcher.get('/dust2', function(request){
   });
 });
 
+
 routeMatcher.get("/experiment", function(request){
   queryMongo.getExperimentList(function(r){
     console.log(JSON.stringify(r.results));
@@ -241,9 +242,22 @@ routeMatcher.get("/experiment", function(request){
   })
 });
 
+
 routeMatcher.get("/experiment/new", function(request){
   templateManager.render_template("experimentform", {},request);
 });
+
+routeMatcher.post("/experiment/new", function(request) {
+request.expectMultiPart(true);
+
+  request.endHandler(function() {
+
+    var attrs = request.formAttributes();
+    console.log(attrs.getAll());
+
+    request.response.end("This is a response");
+  })
+})
 
 routeMatcher.get('/experiment/:id', function(request){
   var id = request.params().get('id');
