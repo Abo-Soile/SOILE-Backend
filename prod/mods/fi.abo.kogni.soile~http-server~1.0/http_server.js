@@ -301,14 +301,30 @@ routeMatcher.get('/experiment/:id', function(request){
 
   //   });
   queryMongo.getExperiment(id,function(r){
-    expname = r.result.name;
+    expname = r.result.experiment.name;
+    var experiment = r.result.experiment;
+    console.log(JSON.stringify(r));
     templateManager.render_template("experiment", {"exp_name":expname},request)
   });
 });
 
 routeMatcher.post('/experiment/:id', function(request){
-  
+
 })
+
+
+routeMatcher.get('/experiment/:id/edit', function(request){
+  var id = request.params().get('id');
+  console.log(id);
+
+  queryMongo.getExperiment(id,function(r){
+    var experiment = r.result.experiment;
+    console.log(JSON.stringify(r));
+    templateManager.render_template("editexperiment", {"exp":experiment},request)
+  });
+});
+
+
 
 routeMatcher.get('/experiment/demo', function(request) {
   var file = 'demo.html';
