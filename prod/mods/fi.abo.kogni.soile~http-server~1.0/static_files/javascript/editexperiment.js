@@ -6,6 +6,8 @@ require(["dojo/dom",
 		"dojo/dom-form",
 		"dojo/request/xhr",
 		"dojo/json",
+		"dojox/layout/ContentPane",
+		"dojox/widget/DialogSimple",
 		"dojo/ready"],
 function(dom,
 		parser,
@@ -15,17 +17,51 @@ function(dom,
 		domForm,
 		xhr,
 		json,
+		contentPane,
+		Dialog,
 		ready) {
 	ready(function() {
 		parser.parse();
 
 		var submitButton = dom.byId("submit");
+		var newForm = dom.byId("newform")
+
 		var form = dom.byId("expForm");
 
 		var name = registry.byId("name");
 		var description = registry.byId("description");
 		var startDate = registry.byId("startDate");
 		var endDate = registry.byId("endDate");
+
+		var dialog = "";
+		//var contentpane = new ContentPane("").placeAt("contentpane");
+
+		on(newForm, "click", function() {
+			xhr.post("/questionnaire/render",
+				"").then(function(data){
+					var data = json.parse(data);
+					console.log(data);
+					//contentpane.setHref("/questionnaire/render/"+data.id);
+
+
+				    var dialog = new Dialog({
+				    	"title":"titlfs",
+				    	"href":"/questionnaire/mongo/"+data.id,
+				    	"executeScripts":"true"
+				    });
+				    dialog.show();
+				    console.log("showing dialogs")
+
+					var dialog = new Dialog({
+						"title":"titlfs",
+						"content":"<iframe src=/questionnaire/mongo/"+data.id +"></iframe>",
+						"executeScripts":"true"
+						});
+					dialog.show();
+				    
+				})
+			
+		});
 
 		on(submitButton, "click", function() {
 			var isValid = true;
