@@ -74,10 +74,11 @@ var utils = (function(conf){
 })(shared_config);
 
 var queryMongo = {
+  mongoAddress: "vertx.mongo-persistor",
 
-  getOneExperiment: function(id, response) {
+  getExperiment: function(id, response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"findone", 
-   "collection":"experiment","matcher":{"name":id}},function(reply){
+   "collection":"experiment","matcher":{"_id":id}},function(reply){
       response(reply);
     });
   },
@@ -88,6 +89,13 @@ var queryMongo = {
       response(reply);
     })
   },
+  saveExperiment: function(exp,response){
+    vertx.eventBus.send(this.mongoAddress, {"action":"save", 
+      "collection":"experiment", "document":{"experiment":exp}}, function(reply){
+        response(reply);
+      })
+  }
+  ,
 
   //Saves a form, does 
   saveForm: function(name, form, id, response) {
@@ -247,14 +255,39 @@ routeMatcher.get("/experiment/new", function(request){
   templateManager.render_template("experimentform", {},request);
 });
 
+
 routeMatcher.post("/experiment/new", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer){
+    data.appendBuffer(buffer);
+  })
 
   request.endHandler(function() {
 
-    var attrs = request.formAttributes();
-    console.log(attrs.getAll());
+    var id = "sdfj2834dfGER";
+    console.log(data.getString(0, data.length())); 
+    jsonData = JSON.parse(data.getString(0, data.length()));
 
-    request.response.end("This is a response");
+    var sDate = new Date(jsonData.startDate);
+    var eDate = new Date(jsonData.endDate);
+
+
+    console.log(sDate.toString());
+
+    queryMongo.saveExperiment(jsonData, function(r){
+      console.log(JSON.stringify(r));
+      var resp = {
+        "status":"ok",
+        "id":r._id
+      }
+      request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+      request.response.end(JSON.stringify(resp));
+
+    })
+
+
+    //request.response.end({"status":"ok","id":id});
   })
 })
 
@@ -267,12 +300,15 @@ routeMatcher.get('/experiment/:id', function(request){
   //     
 
   //   });
-  queryMongo.getOneExperiment(id,function(r){
+  queryMongo.getExperiment(id,function(r){
     expname = r.result.name;
     templateManager.render_template("experiment", {"exp_name":expname},request)
   });
 });
 
+routeMatcher.post('/experiment/:id', function(request){
+  
+})
 
 routeMatcher.get('/experiment/demo', function(request) {
   var file = 'demo.html';
