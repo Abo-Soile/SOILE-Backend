@@ -112,6 +112,8 @@ var queryMongo = {
       response(reply);
     })
   },
+
+  
   saveExperiment: function(exp,response){
     vertx.eventBus.send(this.mongoAddress, {"action":"save", 
       "collection":"experiment", "document":{"experiment":exp}}, function(reply){
@@ -325,9 +327,9 @@ routeMatcher.get('/experiment/:id', function(request){
   //   });
   queryMongo.getExperiment(id,function(r){
     expname = r.result.experiment.name;
-    var experiment = r.result.experiment;
+    var experiment = r.result;
     console.log(JSON.stringify(r));
-    templateManager.render_template("experiment", {"exp_name":expname},request)
+    templateManager.render_template("experiment", {"exp":experiment},request)
   });
 });
 

@@ -2,7 +2,12 @@
 <div id="main" class="container">
 	<div class="row">
 		<div class="span10"> 
-			<h1>Experiment {exp_name}</h1>
+			<h1>{exp.experiment.name}</h1>
+			<p> {exp.experiment.description}</p>
+			<ul>
+				{#exp.components}
+				<li>{name}, {id}</li>
+				{/exp.components}
 		</div>
 	</div>
 </div>

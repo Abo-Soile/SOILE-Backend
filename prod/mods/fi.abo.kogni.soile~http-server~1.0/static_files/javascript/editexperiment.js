@@ -145,7 +145,8 @@ function(dom,
 				id:"name:"+id,
 				value:"Unamed Form",
 				onChange: function(value){
-					console.log(value);
+					console.log(value +" " + id);
+
 				}});
 
 			var editButton = new dijit.form.Button({
