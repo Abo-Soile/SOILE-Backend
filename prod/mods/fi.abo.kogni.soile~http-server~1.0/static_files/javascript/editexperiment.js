@@ -1,4 +1,5 @@
 require(["dojo/dom",
+		"dojo/dom-construct",
 		"dojo/parser", 
 		"dijit/form/TextBox",
 		"dijit/registry",
@@ -10,6 +11,7 @@ require(["dojo/dom",
 		"dojox/widget/DialogSimple",
 		"dojo/ready"],
 function(dom,
+		construct,
 		parser,
 		TextBox,
 		registry,
@@ -33,32 +35,38 @@ function(dom,
 		var startDate = registry.byId("startDate");
 		var endDate = registry.byId("endDate");
 
+		var componentList = dom.byId("componentlist")
+
 		var dialog = "";
 		//var contentpane = new ContentPane("").placeAt("contentpane");
 
 		on(newForm, "click", function() {
-			xhr.post("/questionnaire/render",
+			xhr.post("addform",
 				"").then(function(data){
 					var data = json.parse(data);
 					console.log(data);
 					//contentpane.setHref("/questionnaire/render/"+data.id);
 
-
-				    var dialog = new Dialog({
-				    	"title":"titlfs",
-				    	"href":"/questionnaire/mongo/"+data.id,
-				    	"executeScripts":"true"
-				    });
-				    dialog.show();
-				    console.log("showing dialogs")
-
 					var dialog = new Dialog({
 						"title":"titlfs",
-						"content":"<iframe src=/questionnaire/mongo/"+data.id +"></iframe>",
+						"content":"<iframe id='formframe' src=/questionnaire/mongo/"+data.id +"></iframe>",
 						"executeScripts":"true"
+
 						});
-					dialog.show();
-				    
+					// dialog.show();
+
+					createComponentRow(data.id, {"dialog":dialog});
+
+					//li.innerHtml+=editbutton.domNode;
+					console.log(li);
+					console.log("creating list");
+				    // var dialog = new Dialog({
+				    // 	"title":"titlfs",
+				    // 	"href":"/questionnaire/mongo/"+data.id,
+				    // 	"executeScripts":"true"
+				    // });
+				    // dialog.show();
+				    // console.log("showing dialogs") 
 				})
 			
 		});
@@ -99,6 +107,75 @@ function(dom,
 				});
 			}
 		});
+
+		xhr.get("json").then(function(data) {
+			var jsonData = json.parse(data);
+			components = jsonData.components;
+			console.log(components);
+			for(var i =0;i<components.length;i++) {
+				console.log("adding " + components[i].id);
+				createComponentRow(components[i].id, 
+								{name:components[i].name});
+			}
+		})
+
+		//ID must be a valid component id
+		//valid opts {name:name, dialog:<dialogobject>}
+		function createComponentRow(id, opts) {
+
+			var name = "";
+			if(opts.name !== undefined) {
+				name = opts.name;
+			}else {
+				name = "Unamed Form";
+			}
+
+			// if(opts.dialog === undefined) {
+			// 	dialog = new dojox.widget.DialogSimple({
+			// 			"title":"titlfs",
+			// 			"content":"<iframe id='formframe' src=/questionnaire/mongo/"+id +"></iframe>",
+			// 			"executeScripts":"true"
+			// 			});
+			//}
+			var componentList = dom.byId("componentlist")
+
+			var li = construct.create("li", null,componentlist,"last");
+					
+			var nameBox = new dijit.form.TextBox({
+				id:"name:"+id,
+				value:"Unamed Form",
+				onChange: function(value){
+					console.log(value);
+				}});
+
+			var editButton = new dijit.form.Button({
+			 	label:"Edit",
+			 	id:"edit:"+id,
+				onClick: function(){
+					console.log("edit " + id);
+
+					var dialog = new Dialog({
+						"title":"titlfs",
+						"content":"<iframe id='formframe' src=/questionnaire/mongo/"+id +"></iframe>",
+						"executeScripts":"true"
+						});
+					dialog.show();
+				}});
+
+			var deleteButton = new dijit.form.Button({
+			 	label:"Delete",
+			 	id:"delete:"+id,
+				onClick: function(){
+					console.log("delete " + id);
+					construct.destroy(li);
+				}});
+
+			construct.place(nameBox.domNode, li);
+			construct.place(editButton.domNode, li);
+			construct.place(deleteButton.domNode,li)
+
+		}
 	});
 });
+
 

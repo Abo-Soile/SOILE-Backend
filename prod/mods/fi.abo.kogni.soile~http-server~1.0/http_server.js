@@ -83,6 +83,29 @@ var queryMongo = {
     });
   },
 
+  addFormToExperiment: function(expid,formid, name,response) {
+    vertx.eventBus.send(this.mongoAddress, {
+      "action":"update",
+      "collection":"experiment",
+      "criteria":{
+        "_id":expid
+      },
+      "objNew": {
+        "$push":{
+          "components":{
+            "id":formid,
+            "name":name, 
+            "type":"form"
+          }
+        }
+      }
+    }, function(reply){
+      console.log(JSON.stringify(reply))
+      response(reply);
+
+    })
+  },
+
   getExperimentList: function(response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"find",
     "collection":"experiment"},function(reply){
@@ -324,7 +347,37 @@ routeMatcher.get('/experiment/:id/edit', function(request){
   });
 });
 
+routeMatcher.post('/experiment/:id/addform', function(request){
+  var address = utils.get_address('questionnaire_render');
+  var expId = request.params().get('id');
 
+
+  // http://nelsonwells.net/2012/02/json-stringify-with-mapped-variables/#more-153
+  var msg = {
+    'markup': "",
+    'action': "save"
+  };
+
+  vertx.eventBus.send(address, msg, function(reply) {
+    var response = {};
+    var id = reply['id'];
+    queryMongo.addFormToExperiment(expId,id,"Unnamed Form", function(r){
+      response.id = id;
+
+      request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+      request.response.end(JSON.stringify(response));
+    })
+  });
+})
+
+routeMatcher.get('/experiment/:id/json', function(request){
+  var expId = request.params().get('id');
+
+  queryMongo.getExperiment(expId, function(r){
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(JSON.stringify(r.result));
+  })
+});
 
 routeMatcher.get('/experiment/demo', function(request) {
   var file = 'demo.html';

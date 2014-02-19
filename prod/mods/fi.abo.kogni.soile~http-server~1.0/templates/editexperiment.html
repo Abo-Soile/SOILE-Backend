@@ -19,14 +19,23 @@
 				<br>
 
 				<div id="components">
+					<ul id="componentlist">
+						{#components}
+							<li id="{id}">{name}</li>
+						{/components}
 
-					<button data-dojo-type="dijit/form/Button" name="newtest" value="New Test" id="newtest">New Test</button>
+					</ul>
+
+					<button data-dojo-type="dijit/form/Button" name="newtest" value="New Test" id="newtest">New Test</button><br>
+
 					<button data-dojo-type="dijit/form/Button" name="newform" value="New Form" id="newform">New Form</button>
+
 					
 					</div>
 				</div>
 
 				<div id="contentpane">
+
 				</div>
 
 
