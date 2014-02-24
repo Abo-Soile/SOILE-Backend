@@ -223,7 +223,7 @@ var read_khtoken = (function() {
 })();
 
 routeMatcher.get("/login", function(request) {
-  templateManager.render_template('test', "",request)
+  templateManager.render_template('login', "",request)
 })
 
 routeMatcher.post("/login", function(request) {
@@ -399,6 +399,28 @@ routeMatcher.get('/experiment/:id/json', function(request){
     request.response.end(JSON.stringify(r.result));
   })
 });
+
+
+routeMatcher.get('/experiment/:id/phase/:phase', function(request) {
+  var expID = request.params().get('id');
+  var phase = request.params().get('phase');
+
+  queryMongo.getExperiment(expID, function(r) {
+    phase = r.result.components[phase];
+    if(phase.type === "form") {
+      console.log("Form ");
+
+      queryMongo.getForm(phase.id, function(r2) {
+        var form = r2.result.form;
+        request.response.end(form);
+      })
+
+    }
+    else {
+      console.log("Test")
+    }
+  })
+})
 
 routeMatcher.get('/experiment/demo', function(request) {
   var file = 'demo.html';
