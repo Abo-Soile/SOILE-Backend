@@ -100,7 +100,7 @@ function(dom,
 					respData = json.parse(data);
 					if(respData.status=="ok") {
 						console.log("Navigating");
-						window.location.replace(respData.id);
+						window.location.replace("");
 						
 					}
 
@@ -146,6 +146,7 @@ function(dom,
 				value:"Unamed Form",
 				onChange: function(value){
 					console.log(value +" " + id);
+					xhr.post()
 
 				}});
 

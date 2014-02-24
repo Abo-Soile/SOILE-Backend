@@ -2,8 +2,8 @@
 <div id="main" class="container">
 	<div class="row">
 		<div class="span10"> 
-			<h1>{exp.experiment.name}</h1>
-			<p> {exp.experiment.description}</p>
+			<h1>{exp.name}</h1>
+			<p> {exp.description}</p>
 			<ul>
 				{#exp.components}
 				<li><a href="phase/{$idx}">phase {$idx} {@idx}{.}{/idx} {type} {name}, {id}</a></li>

@@ -116,11 +116,18 @@ var queryMongo = {
   
   saveExperiment: function(exp,response){
     vertx.eventBus.send(this.mongoAddress, {"action":"save", 
-      "collection":"experiment", "document":{"experiment":exp}}, function(reply){
+      "collection":"experiment", "document":exp}, function(reply){
         response(reply);
       })
-  }
-  ,
+  },
+
+  updateExperiment: function(exp, id,response){
+    exp._id = id;
+    vertx.eventBus.send(this.mongoAddress, {"action":"save", 
+      "collection":"experiment", "document":exp}, function(reply){
+        response(reply);
+      })
+  },
 
   //Saves a form, does 
   saveForm: function(name, form, id, response) {
@@ -221,8 +228,8 @@ var read_khtoken = (function() {
     return null;
   };
 })();
-
-routeMatcher.get("/login", function(request) {
+routeMatcher
+.get("/login", function(request) {
   templateManager.render_template('login', "",request)
 })
 
@@ -345,16 +352,13 @@ routeMatcher.get('/experiment/:id', function(request){
 
   //   });
   queryMongo.getExperiment(id,function(r){
-    expname = r.result.experiment.name;
+    expname = r.result.name;
     var experiment = r.result;
     console.log(JSON.stringify(r));
     templateManager.render_template("experiment", {"exp":experiment},request)
   });
 });
 
-routeMatcher.post('/experiment/:id', function(request){
-
-})
 
 
 routeMatcher.get('/experiment/:id/edit', function(request){
@@ -362,11 +366,43 @@ routeMatcher.get('/experiment/:id/edit', function(request){
   console.log(id);
 
   queryMongo.getExperiment(id,function(r){
-    var experiment = r.result.experiment;
+    var experiment = r.result;
     console.log(JSON.stringify(r));
     templateManager.render_template("editexperiment", {"exp":experiment},request)
   });
 });
+
+routeMatcher.post('/experiment/:id/edit', function(request){
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer){
+    data.appendBuffer(buffer);
+  })
+
+  request.endHandler(function() {
+
+    var id = request.params().get('id');
+    console.log(data.getString(0, data.length())); 
+    jsonData = JSON.parse(data.getString(0, data.length()));
+
+    var sDate = new Date(jsonData.startDate);
+    var eDate = new Date(jsonData.endDate);
+
+
+    console.log(sDate.toString());
+
+    queryMongo.updateExperiment(jsonData, id,function(r){
+      console.log(JSON.stringify(r));
+      var resp = r;
+      request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+      request.response.end(JSON.stringify(resp));
+
+    })
+
+
+    //request.response.end({"status":"ok","id":id});
+  })
+})
 
 routeMatcher.post('/experiment/:id/addform', function(request){
   var address = utils.get_address('questionnaire_render');
