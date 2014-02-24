@@ -222,6 +222,26 @@ var read_khtoken = (function() {
   };
 })();
 
+routeMatcher.get("/login", function(request) {
+  templateManager.render_template('test', "",request)
+})
+
+routeMatcher.post("/login", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer){
+    data.appendBuffer(buffer);
+  })
+
+  request.endHandler(function() {
+
+
+    console.log("Data: " + data.getString(0, data.length()));
+
+    request.response.end("Returning testpost");
+  });
+})
+
 routeMatcher.get("/a", function(request){
   console.log(JSON.stringify(container.config));
 
@@ -247,10 +267,9 @@ routeMatcher.get("/aa", function(request){
 
 routeMatcher.get('/dust', function(request){
   var eb = vertx.eventBus;
+  templateManager.loadAll();
 
-  eb.send("dust.compile", {'name':'test', "source":"hello {x}"}, function(reply){
-      request.response.end(JSON.stringify(reply));
-  });
+  request.response.end("Updated templates");
 });
 
 routeMatcher.get('/dust1', function(request){
