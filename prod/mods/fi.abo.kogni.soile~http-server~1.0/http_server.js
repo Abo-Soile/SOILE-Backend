@@ -11,6 +11,8 @@ var host = http_config['host'];
 var http_directory = http_config['directory'];
 var routeMatcher = new vertx.RouteMatcher();
 
+var DEBUG = true;   //This variable could stored in configs
+
 function arrayContains(item, array){
   return (arrhaystack.indexOf(needle) > -1);
 }
@@ -177,18 +179,22 @@ var templateManager = (function(folder){
       });
     },
     'render_template':function(templateName, data, request) {
-      if(isLoaded) {
-      eb.send("dust.render", {"name":templateName, "context":data}, function(reply){
-          request.response.end(reply.output);
+      if(!isLoaded||DEBUG) {
+        this.load_template(templateName);
+        vertx.setTimer(500, function(){
+          eb.send("dust.render", {"name":templateName, "context":data}, function(reply){
+            request.response.end(reply.output);
           });
-      }else {
-        this.loadAll();
+        })
+      }else{
+        eb.send("dust.render", {"name":templateName, "context":data}, function(reply){
+            request.response.end(reply.output);
+            });
       }
-      
 
     },
     'loadAll':function(){
-      if(!isLoaded){
+      if(!isLoaded||DEBUG){
         for(var i=0; i<templates.length;i++){
           this.load_template(templates[i]);
         }
