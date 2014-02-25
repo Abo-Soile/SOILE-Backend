@@ -468,13 +468,34 @@ routeMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
       queryMongo.getForm(phase.id, function(r2) {
         var form = r2.result.form;
-        request.response.end(form);
+
+        templateManager.render_template("formphase", {"form":form}, request);
+
+       // request.response.end(form);
       })
+    if(phase.type === "test") {
+      console.log("test")
+    }
 
     }
     else {
-      console.log("Test")
+      console.log("Phase type is undefined");
     }
+  })
+});
+
+routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+    var postData = buffer.toString(0, buffer.length()) 
+
+    console.log(postData);
+    request.response.end("Data \n" + postData);
   })
 })
 
