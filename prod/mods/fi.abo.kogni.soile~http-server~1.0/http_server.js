@@ -144,6 +144,20 @@ var queryMongo = {
     "collection":"forms","matcher":{"_id":id}}, function(reply) {
       response(reply);
     })
+  },
+
+  saveTest: function(test,response) {
+    vertx.eventBus.send(this.mongoAddress, {"action":"save",
+    "collection":"tests","document":test}, function(reply) {
+      response.reply()
+    })
+  },
+
+  getTest: function(id, response){
+    vertx.eventBus.send(this.mongoAddress, {"action":"findone",
+    "collection":"tests","matcher":{"_id":id}}, function(reply) {
+      response(reply);
+    });
   }
 
 }
@@ -464,13 +478,13 @@ routeMatcher.get('/experiment/:id/phase/:phase', function(request) {
   })
 })
 
-routeMatcher.get('/experiment/demo', function(request) {
+routeMatcher.get('/test/demo', function(request) {
   var file = 'demo.html';
   request.response.sendFile(utils.file_from_serverdir(file));
 });
 
 
-routeMatcher.post('/experiment/run', function(request) {
+routeMatcher.post('/test/run', function(request) {
   var body = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
