@@ -123,10 +123,10 @@ var queryMongo = {
       })
   },
 
-  updateExperiment: function(exp, id,response){
-    exp._id = id;
-    vertx.eventBus.send(this.mongoAddress, {"action":"save", 
-      "collection":"experiment", "document":exp}, function(reply){
+  updateExperiment: function(exp, id, response){
+    vertx.eventBus.send(this.mongoAddress, {"action":"update", 
+      "collection":"experiment", "criteria":{"_id":id},
+      "objNew":{"$set":exp}}, function(reply){
         response(reply);
       })
   },
