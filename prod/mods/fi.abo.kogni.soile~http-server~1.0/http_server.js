@@ -663,6 +663,22 @@ routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico)$', functio
   req.response.sendFile(utils.file_from_serverdir(req.path()));
 });
 
+routeMatcher.allWithRegEx('.*/', function(req) {
+  console.log((req.absoluteURI()));
+  console.log((req.uri()))
+
+  var url = req.uri().substring(0, req.uri().length - 1);
+
+  console.log(url);
+
+  req.response.statusCode(302);
+  req.response.putHeader('Location', url);
+  req.response.end();
+})
+
+routeMatcher.noMatch(function(req) {
+  req.response.end("404");
+})
 /* Let this be the last specified match. */
 routeMatcher.allWithRegEx('.+', function(req) {
   var file = http_directory.concat('/questionnaire.html');
