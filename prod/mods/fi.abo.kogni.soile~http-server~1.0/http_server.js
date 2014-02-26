@@ -158,6 +158,13 @@ var queryMongo = {
     "collection":"tests","matcher":{"_id":id}}, function(reply) {
       response(reply);
     });
+  },
+
+  saveFormData: function(id ,data, response) {
+    vertx.eventBus.send(this.mongoAddress, {"action":"save",
+    "collection":"formdata", "document":doc}, function(reply) {
+      response.reply();
+    })
   }
 
 }
@@ -492,7 +499,7 @@ routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
   });
 
   request.endHandler(function() {
-    var postData = buffer.toString(0, buffer.length()) 
+    var postData = data.getString(0, data.length()) 
 
     console.log(postData);
     request.response.end("Data \n" + postData);

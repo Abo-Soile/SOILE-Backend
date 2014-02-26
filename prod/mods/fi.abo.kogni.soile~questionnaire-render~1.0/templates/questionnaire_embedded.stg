@@ -14,12 +14,6 @@ questionnaire_html(title, body, stmts) ::= <<
     $body$
     
     <p style="height: 1em; clear: both;"><!-- SPACER --></p>
-  
-    <p>
-      <button data-dojo-type="dijit/form/Button" type="button" id="submitButton">
-        Show data
-      </button>
-    </p>
     
     <div>
       <dl id="formdata">

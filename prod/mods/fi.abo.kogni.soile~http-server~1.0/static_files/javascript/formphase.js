@@ -19,6 +19,7 @@ require(["dijit/form/HorizontalSlider",
          "dojo/query",
          "dojo/cookie",
          "dojo/json",
+         "dojo/request/xhr",
          "dojo/ready"],
   function(HorizontalSlider, 
            HorizontalRuleLabels, 
@@ -40,6 +41,7 @@ require(["dijit/form/HorizontalSlider",
            query,
            cookie,
            JSON,
+           xhr,
            ready) {
 
   ready(function() {
@@ -78,7 +80,7 @@ require(["dijit/form/HorizontalSlider",
 
     var save_value = function(data, params, column){
       var id = params[0];
-      testdata[column] = registry.byId(params[0]).get('value');
+      qdata[column] = registry.byId(params[0]).get('value');
     };
 
     var save_textwidget_value = function(data, params, column) {
@@ -93,7 +95,7 @@ require(["dijit/form/HorizontalSlider",
       else {
         text = text.substring(0, maxlen);
       }
-      testdata[column] = text;
+      qdata[column] = text;
     }
 
     var save_first_checked = function(data,
@@ -118,7 +120,7 @@ require(["dijit/form/HorizontalSlider",
       if (use_default){
         value = default_value;
       }
-      testdata[column_name] = value;
+      qdata[column_name] = value;
     };
 
     var save_all_checked = function(data,
@@ -138,31 +140,27 @@ require(["dijit/form/HorizontalSlider",
         } else {
           value = default_value;
         }
-        testdata[column] = value;
+        qdata[column] = value;
         i += 1;
       }
     };
 
     var show_saved_data = function(data){
-      for (var key in testdata){
-        if (testdata.hasOwnProperty(key)){
+      for (var key in qdata){
+        if (qdata.hasOwnProperty(key)){
           domConstruct.create('dt', {innerHTML: key}, 'formdata');
-          domConstruct.create('dd', {innerHTML: testdata[key]}, 'formdata');
+          domConstruct.create('dd', {innerHTML: qdata[key]}, 'formdata');
         }
       }
     };
 
     var send_questionnaire_data = function(data){
-      show_saved_data(data);
       console.log(JSON.stringify(data));
 
     }
-
-    on(dom.byId('submitButton'), "click", function() {
-      var domContainer = dom.byId("formcol");
-      var widgets = registry.findWidgets(domContainer);
-
+    var loadData = function() {
       var funcArray = window.funcArray;
+      qdata = {}
 
       for(var i = 0; i<funcArray.length; i++) {
         console.log(funcArray[i]);
@@ -185,16 +183,32 @@ require(["dijit/form/HorizontalSlider",
             break;
         }
       }
+      return qdata;
+    }
 
-      send_questionnaire_data(qdata);
+    on(dom.byId('showData'), "click", function() {
+      var domContainer = dom.byId("formcol");
+      var widgets = registry.findWidgets(domContainer);
 
-      console.log("test next");
-      console.log(testdata);
+      var d = loadData();
+
+      show_saved_data(d);
 
       console.log("Widgets:");
       console.log(widgets);
 
+    });
 
+    on(dom.byId("submitButton"), "click", function() { 
+      console.log("submitbutton");
+
+      var formdata = loadData();
+      send_questionnaire_data(formdata);
+
+      xhr.post("",{data:JSON.stringify(formdata)}).then(function(response) {
+        console.log(response);
+        window.location.replace("../");
+      });
 
     });
   });
