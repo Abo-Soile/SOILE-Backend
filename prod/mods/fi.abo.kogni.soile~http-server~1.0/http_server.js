@@ -4,23 +4,23 @@ var console = require('vertx/console');
 
 var server = vertx.createHttpServer();
 var config = container.config;
-var http_config = config['config'];
-var shared_config = config['shared'];
-var port = http_config['port'];
-var host = http_config['host'];
-var http_directory = http_config['directory'];
+var http_config = config.config;
+var shared_config = config.shared;
+var port = http_config.port;
+var host = http_config.host;
+var http_directory = http_config.directory;
 var routeMatcher = new vertx.RouteMatcher();
 
 var DEBUG = true;   //This variable could stored in configs
 
-function arrayContains(item, array){
-  return (arrhaystack.indexOf(needle) > -1);
-}
+// function arrayContains(item, array){
+//   return (arrhaystack.indexOf(needle) > -1);
+// }
 
-var utils = (function(conf){
+var utils = (function(conf) {
 
-  var addresses = conf['addresses'];
-  var directories = conf['directories'];
+  var addresses = conf.addresses;
+  var directories = conf.directories;
 
   return {
 
@@ -31,38 +31,38 @@ var utils = (function(conf){
     },
 
     'get_address': function(address) {
-        return addresses[address];
+      return addresses[address];
     },
 
     'get_directory': function(dir) {
-        return directories[dir];
+      return directories[dir];
     },
 
     // Get the base directory of the ENTIRE app.
-    'get_basedir': function(){
+    'get_basedir': function() {
       return this.get_directory('/');
     },
 
     // Get the base directory of the HTTP server.
-    'get_serverdir': function(){
+    'get_serverdir': function() {
       return http_directory;
     },
 
-    'file_exists': function(path){
+    'file_exists': function(path) {
       var file = new java.io.File(path);
       return file.exists();
     },
 
-    'file_from_serverdir': function(path){
+    'file_from_serverdir': function(path) {
       return this.build_path(this.get_serverdir(), path);
     },
 
-    'file_from_basedir': function(path){
+    'file_from_basedir': function(path) {
       return this.build_path(this.get_basedir(), path);
     },
 
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/arguments
-    'build_path': function(){
+    'build_path': function() {
       var args = Array.slice(arguments);
       var path = args.join('/');
       return this.secure_path(path);
@@ -77,54 +77,54 @@ var utils = (function(conf){
 
 var queryMongo = require('mongoHandler');
 
-var templateManager = (function(folder){
+var templateManager = (function(folder) {
   var templates = [];
   var isLoaded = false;
-
   var eb = vertx.eventBus;
-  vertx.fileSystem.readDir(folder, function(err,res){
-    for (var i = 0; i < res.length; i++) {
-      var sp = res[i].lastIndexOf("/")+1;
+  var i, sp;
+  vertx.fileSystem.readDir(folder, function(err, res) {
+    for (i = 0; i < res.length; i++) {
+      sp = res[i].lastIndexOf("/") + 1;
       //console.log(res[i].slice(sp).replace(".html",""));
-      templates.push(res[i].slice(sp).replace(".html",""));
-      }
-      console.log(JSON.stringify(templates));
+      templates.push(res[i].slice(sp).replace(".html", ""));
+    }
+    console.log(JSON.stringify(templates));
 
-    });
+  });
 
   return {
-    'load_template':function(templateName) {
+    'load_template': function(templateName) {
       console.log("Loading template " + templateName);
-      vertx.fileSystem.readFile(folder+templateName+".html", function(err,res){
-        if(!err){
-          var templateContent = res.getString(0,res.length());
-          eb.send("dust.compile", {'name':templateName, "source":templateContent}, function(reply){
-            console.log("Loading template "+ JSON.stringify(reply));
+      vertx.fileSystem.readFile(folder + templateName + ".html", function(err, res) {
+        if (!err) {
+          var templateContent = res.getString(0, res.length());
+          eb.send("dust.compile", {'name': templateName, "source": templateContent}, function(reply) {
+            console.log("Loading template " + JSON.stringify(reply));
           });
-        }
-        else {
+        } else {
           console.log(err);
         }
       });
     },
-    'render_template':function(templateName, data, request) {
-      if(!isLoaded||DEBUG) {
+    'render_template': function(templateName, data, request) {
+      if (!isLoaded || DEBUG) {
         this.load_template(templateName);
-        vertx.setTimer(500, function(){
-          eb.send("dust.render", {"name":templateName, "context":data}, function(reply){
+        vertx.setTimer(500, function() {
+          eb.send("dust.render", {"name": templateName, "context": data}, function(reply) {
             request.response.end(reply.output);
           });
-        })
+        });
       }else{
-        eb.send("dust.render", {"name":templateName, "context":data}, function(reply){
+        eb.send("dust.render", {"name":templateName, "context":data}, function(reply) {
             request.response.end(reply.output);
             });
       }
 
     },
     'loadAll':function(){
+      var i;
       if(!isLoaded||DEBUG){
-        for(var i=0; i<templates.length;i++){
+        for(i=0; i<templates.length;i++){
           this.load_template(templates[i]);
         }
         isLoaded = true;
@@ -163,17 +163,19 @@ var read_khtoken = (function() {
     return null;
   };
 })();
-routeMatcher
-.get("/login", function(request) {
-  templateManager.render_template('login', "",request)
-})
+
+
+routeMatcher.get("/login", function(request) {
+  templateManager.render_template('login', "",request);
+});
+
 
 routeMatcher.post("/login", function(request) {
   var data = new vertx.Buffer();
 
-  request.dataHandler(function(buffer){
+  request.dataHandler(function(buffer) {
     data.appendBuffer(buffer);
-  })
+  });
 
   request.endHandler(function() {
 
@@ -182,7 +184,11 @@ routeMatcher.post("/login", function(request) {
 
     request.response.end("Returning testpost");
   });
-})
+});
+
+routeMatcher.get("/logout", function(request) {
+  requst.response.end("Logging user out");
+});
 
 routeMatcher.get("/a", function(request){
   console.log(JSON.stringify(container.config));
@@ -190,12 +196,12 @@ routeMatcher.get("/a", function(request){
   vertx.eventBus.send("vertx.mongo-persistor",{"action":"save", 
         "collection":"test","document":{"name":"Doe Joeddddd", "Age":10}},function(reply){
           console.log(JSON.stringify(reply));
-        })
+        });
 
   vertx.eventBus.send("vertx.mongo-persistor",{"action":"find", 
       "collection":"test"},function(reply){
         console.log(JSON.stringify(reply));
-      })
+      });
 
   templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
 });
@@ -208,7 +214,6 @@ routeMatcher.get("/aa", function(request){
 
 
 routeMatcher.get('/dust', function(request){
-  var eb = vertx.eventBus;
   templateManager.loadAll();
 
   request.response.end("Updated templates");
@@ -233,7 +238,7 @@ routeMatcher.get("/experiment", function(request){
   queryMongo.getExperimentList(function(r){
     console.log(JSON.stringify(r.results));
     templateManager.render_template("experimentList", {"experiments":r.results}, request);
-  })
+  });
 });
 
 
@@ -247,13 +252,13 @@ routeMatcher.post("/experiment/new", function(request) {
 
   request.dataHandler(function(buffer){
     data.appendBuffer(buffer);
-  })
+  });
 
   request.endHandler(function() {
 
     var id = "sdfj2834dfGER";
+    var jsonData = JSON.parse(data.getString(0, data.length()));
     console.log(data.getString(0, data.length())); 
-    jsonData = JSON.parse(data.getString(0, data.length()));
 
     var sDate = new Date(jsonData.startDate);
     var eDate = new Date(jsonData.endDate);
@@ -266,16 +271,16 @@ routeMatcher.post("/experiment/new", function(request) {
       var resp = {
         "status":"ok",
         "id":r._id
-      }
+      };
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(resp));
 
-    })
+    });
 
 
     //request.response.end({"status":"ok","id":id});
-  })
-})
+  });
+});
 
 routeMatcher.get('/experiment/:id', function(request){
   var id = request.params().get('id');
@@ -287,10 +292,10 @@ routeMatcher.get('/experiment/:id', function(request){
 
   //   });
   queryMongo.getExperiment(id,function(r){
-    expname = r.result.name;
+    var expname = r.result.name;
     var experiment = r.result;
     console.log(JSON.stringify(r));
-    templateManager.render_template("experiment", {"exp":experiment},request)
+    templateManager.render_template("experiment", {"exp":experiment},request);
   });
 });
 
@@ -303,7 +308,7 @@ routeMatcher.get('/experiment/:id/edit', function(request){
   queryMongo.getExperiment(id,function(r){
     var experiment = r.result;
     console.log(JSON.stringify(r));
-    templateManager.render_template("editexperiment", {"exp":experiment},request)
+    templateManager.render_template("editexperiment", {"exp":experiment},request);
   });
 });
 
@@ -312,13 +317,13 @@ routeMatcher.post('/experiment/:id/edit', function(request){
 
   request.dataHandler(function(buffer){
     data.appendBuffer(buffer);
-  })
+  });
 
   request.endHandler(function() {
 
     var id = request.params().get('id');
+    var jsonData = JSON.parse(data.getString(0, data.length()));
     console.log(data.getString(0, data.length())); 
-    jsonData = JSON.parse(data.getString(0, data.length()));
 
     var sDate = new Date(jsonData.startDate);
     var eDate = new Date(jsonData.endDate);
@@ -332,12 +337,10 @@ routeMatcher.post('/experiment/:id/edit', function(request){
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(resp));
 
-    })
-
-
+    });
     //request.response.end({"status":"ok","id":id});
-  })
-})
+  });
+});
 
 routeMatcher.post('/experiment/:id/addform', function(request){
   var address = utils.get_address('questionnaire_render');
@@ -352,15 +355,15 @@ routeMatcher.post('/experiment/:id/addform', function(request){
 
   vertx.eventBus.send(address, msg, function(reply) {
     var response = {};
-    var id = reply['id'];
+    var id = reply.id;
     queryMongo.addFormToExperiment(expId,id,"Unnamed Form", function(r){
       response.id = id;
 
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(response));
-    })
+    });
   });
-})
+});
 
 routeMatcher.get('/experiment/:id/json', function(request){
   var expId = request.params().get('id');
@@ -368,7 +371,7 @@ routeMatcher.get('/experiment/:id/json', function(request){
   queryMongo.getExperiment(expId, function(r){
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(r.result));
-  })
+  });
 });
 
 
@@ -387,16 +390,16 @@ routeMatcher.get('/experiment/:id/phase/:phase', function(request) {
         templateManager.render_template("formphase", {"form":form}, request);
 
        // request.response.end(form);
-      })
+      });
     if(phase.type === "test") {
-      console.log("test")
+      console.log("test");
     }
 
     }
     else {
       console.log("Phase type is undefined");
     }
-  })
+  });
 });
 
 routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
@@ -410,16 +413,16 @@ routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
   });
 
   request.endHandler(function() {
-    var postData = data.getString(0, data.length()) 
-    var postJson = JSON.parse(postData)
+    var postData = data.getString(0, data.length());
+    var postJson = JSON.parse(postData);
     console.log(postData);
 
     queryMongo.saveFormData(phase, expID, postJson, function(r){
       console.log(JSON.stringify(r));
       request.response.end("Data \n" + postData);
-    })
-  })
-})
+    });
+  });
+});
 
 
 routeMatcher.get('/test/demo', function(request) {
@@ -445,9 +448,9 @@ routeMatcher.post('/test/run', function(request) {
       var response = {};
 
       if (reply.hasOwnProperty('errors') === true) {
-        response['errors'] = reply['errors'];
+        response.errors = reply.errors;
       } else {
-        response['code'] = reply['code'];
+        response.code = reply.code;
       }
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(response));
@@ -489,12 +492,12 @@ routeMatcher.post('/questionnaire/render', function(request) {
       var id = '', link = '';
 
       if (reply.hasOwnProperty('error') === true) {
-        response['error'] = reply['error'];
+        response.error = reply.error;
       } else {
-        id = reply['id'];
+        id = reply.id;
         link = utils.build_url(host, port, '/questionnaire/generated/'.concat(id));
-        response['id'] = id;
-        response['link'] = link;
+        response.id = id;
+        response.link = link;
       }
 
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
@@ -513,7 +516,8 @@ routeMatcher.get('/questionnaire/generated/:id', function(request) {
   console.log(utils.get_basedir());
  vertx.fileSystem.readDir('', function(err, res){
     //console.log(err);
-    for (var i = 0; i < res.length; i++) {
+    var i;
+    for (i = 0; i < res.length; i++) {
       console.log(res[i]);  
     };
   });
@@ -522,14 +526,14 @@ routeMatcher.get('/questionnaire/generated/:id', function(request) {
 });
 
 routeMatcher.get('/questionnaire/mongo/:id', function(request){
-  var id = request.params().get('id')
+  var id = request.params().get('id');
   queryMongo.getForm(id, function(r){
     //console.log(JSON.stringify(r))
     var form = r.result.form;
     var markup = r.result.markup;
-    templateManager.render_template('displayForm', {"form":form,"markup":markup},request)
-  })
-})
+    templateManager.render_template('displayForm', {"form":form,"markup":markup},request);
+  });
+});
 
 routeMatcher.post('/questionnaire/mongo/:id', function(request) {
   var postdata = new vertx.Buffer();
@@ -537,43 +541,43 @@ routeMatcher.post('/questionnaire/mongo/:id', function(request) {
 
   request.dataHandler(function(data) {
     postdata.appendBuffer(data);
-  })
+  });
 
   request.endHandler(function() {
     var markup = postdata.getString(0, postdata.length());
 
     var address = utils.get_address("questionnaire_render");
 
-    message = {
+    var message = {
       "markup": markup,
       "action": "save",
       "id": id
-    }
+    };
 
     vertx.eventBus.send(address, message, function(reply) {
       //console.log(JSON.stringify(reply));
-      var response = {}
+      var response = {};
       if (reply.hasOwnProperty('error') === true) {
-        response['error'] = reply['error'];
+        response.error = reply.error;
       }
       else {
         response = {"test":"testresponse",
                       "data": reply.form} 
-                  }
+                  };
 
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(response));
-    })
+    });
   
   });
-})
+});
 
 routeMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
   var id = request.params().get('id');
   queryMongo.getForm(id,function(r) {
     var form = r.result.form;
     request.response.end(form);
-  })
+  });
 });
 
 routeMatcher.post('questionnaire/generated/:id', function(request) {
@@ -587,8 +591,8 @@ routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico)$', functio
 });
 
 routeMatcher.allWithRegEx('.*/', function(req) {
-  console.log((req.absoluteURI()));
-  console.log((req.uri()))
+  console.log(req.absoluteURI());
+  console.log(req.uri());
 
   var url = req.uri().substring(0, req.uri().length - 1);
 
@@ -597,11 +601,12 @@ routeMatcher.allWithRegEx('.*/', function(req) {
   req.response.statusCode(302);
   req.response.putHeader('Location', url);
   req.response.end();
-})
+});
 
 routeMatcher.noMatch(function(req) {
   req.response.end("404");
-})
+});
+
 /* Let this be the last specified match. */
 routeMatcher.allWithRegEx('.+', function(req) {
   var file = http_directory.concat('/questionnaire.html');
