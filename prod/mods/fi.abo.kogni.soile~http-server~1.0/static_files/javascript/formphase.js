@@ -207,7 +207,7 @@ require(["dijit/form/HorizontalSlider",
 
       xhr.post("",{data:JSON.stringify(formdata)}).then(function(response) {
         console.log(response);
-        window.location.replace("../");
+        window.location.assign("../");
       });
 
     });

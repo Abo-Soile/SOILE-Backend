@@ -160,10 +160,13 @@ var queryMongo = {
     });
   },
 
-  saveFormData: function(id ,data, response) {
+  saveFormData: function(phase, experimentid ,data, response) {
+    var doc = data;
+    data.phase = phase;
+    data.expId = experimentid;
     vertx.eventBus.send(this.mongoAddress, {"action":"save",
     "collection":"formdata", "document":doc}, function(reply) {
-      response.reply();
+      response(reply);
     })
   }
 
@@ -492,6 +495,9 @@ routeMatcher.get('/experiment/:id/phase/:phase', function(request) {
 });
 
 routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
+  var expID = request.params().get('id');
+  var phase = request.params().get('phase');
+
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -500,11 +506,16 @@ routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
 
   request.endHandler(function() {
     var postData = data.getString(0, data.length()) 
-
+    var postJson = JSON.parse(postData)
     console.log(postData);
-    request.response.end("Data \n" + postData);
+
+    queryMongo.saveFormData(phase, expID, postJson, function(r){
+      console.log(JSON.stringify(r));
+      request.response.end("Data \n" + postData);
+    })
   })
 })
+
 
 routeMatcher.get('/test/demo', function(request) {
   var file = 'demo.html';
