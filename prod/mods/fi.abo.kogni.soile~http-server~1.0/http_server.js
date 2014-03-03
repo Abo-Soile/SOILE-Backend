@@ -11,6 +11,14 @@ var host = http_config.host;
 var http_directory = http_config.directory;
 var routeMatcher = new vertx.RouteMatcher();
 
+function customMatcher() {
+  var test = "6";
+}
+
+customMatcher.prototype = new vertx.RouteMatcher();
+
+routeMatcher = new customMatcher();
+
 var DEBUG = true;   //This variable could stored in configs
 
 // function arrayContains(item, array){
