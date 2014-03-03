@@ -514,12 +514,12 @@ routeMatcher.get('/questionnaire/generated/:id', function(request) {
                               id);
   console.log(utils.build_path(utils.get_basedir(),utils.get_directory('questionnaires'),id));
   console.log(utils.get_basedir());
- vertx.fileSystem.readDir('', function(err, res){
+  vertx.fileSystem.readDir('', function(err, res){
     //console.log(err);
     var i;
     for (i = 0; i < res.length; i++) {
       console.log(res[i]);  
-    };
+    }
   });
   request.response.sendFile(file);
 
@@ -559,10 +559,9 @@ routeMatcher.post('/questionnaire/mongo/:id', function(request) {
       var response = {};
       if (reply.hasOwnProperty('error') === true) {
         response.error = reply.error;
-      }
-      else {
+      } else {
         response = {"test":"testresponse",
-                      "data": reply.form} 
+                      "data": reply.form};
                   };
 
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
@@ -576,6 +575,7 @@ routeMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
   var id = request.params().get('id');
   queryMongo.getForm(id,function(r) {
     var form = r.result.form;
+    form = "<div id='formcol'>".concat(form,"</div>");
     request.response.end(form);
   });
 });

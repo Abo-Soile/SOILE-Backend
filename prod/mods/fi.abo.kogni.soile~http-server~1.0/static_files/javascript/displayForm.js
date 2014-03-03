@@ -55,12 +55,12 @@ require(["dijit/form/Button",
 				/*updating the div with the new form*/
 				//var renderedForm = jsonData.data;
 				//renderWindow.innerHTML = renderedForm;
-
+				var cont = "<div id=formcol>"+jsonData.data+"</div>"
 
 				/* Destroying and creating a new contentpane*/
 				contentPane.destroyRecursive();
 				contentPane = new ContentPane({
-					"content":jsonData.data}).placeAt("renderWindow");
+					"content":cont}).placeAt("renderWindow");
 			}
 		})
 	})

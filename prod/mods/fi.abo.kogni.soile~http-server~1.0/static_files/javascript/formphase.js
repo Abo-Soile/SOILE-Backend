@@ -146,8 +146,12 @@ require(["dijit/form/HorizontalSlider",
     };
 
     var show_saved_data = function(data){
+      //Emptying div before rendering
+      domConstruct.empty("formdata");
+      
       for (var key in qdata){
         if (qdata.hasOwnProperty(key)){
+
           domConstruct.create('dt', {innerHTML: key}, 'formdata');
           domConstruct.create('dd', {innerHTML: qdata[key]}, 'formdata');
         }
@@ -185,31 +189,33 @@ require(["dijit/form/HorizontalSlider",
       }
       return qdata;
     }
+    if (dom.byId('showData')) {
+      on(dom.byId('showData'), "click", function() {
+        var domContainer = dom.byId("formcol");
+        var widgets = registry.findWidgets(domContainer);
 
-    on(dom.byId('showData'), "click", function() {
-      var domContainer = dom.byId("formcol");
-      var widgets = registry.findWidgets(domContainer);
+        var d = loadData();
 
-      var d = loadData();
+        show_saved_data(d);
 
-      show_saved_data(d);
+        //console.log("Widgets:");
+        //console.log(widgets);
 
-      console.log("Widgets:");
-      console.log(widgets);
-
-    });
-
-    on(dom.byId("submitButton"), "click", function() { 
-      console.log("submitbutton");
-
-      var formdata = loadData();
-      send_questionnaire_data(formdata);
-
-      xhr.post("",{data:JSON.stringify(formdata)}).then(function(response) {
-        console.log(response);
-        window.location.assign("../");
       });
+    };
+    if (dom.byId("submitButton")) {
+      on(dom.byId("submitButton"), "click", function() { 
+        console.log("submitbutton");
 
-    });
+        var formdata = loadData();
+        send_questionnaire_data(formdata);
+
+        xhr.post("",{data:JSON.stringify(formdata)}).then(function(response) {
+          console.log(response);
+          window.location.assign("../");
+        });
+
+      });
+    };
   });
 });

@@ -15,10 +15,6 @@ questionnaire_html(title, body, stmts) ::= <<
     
     <p style="height: 1em; clear: both;"><!-- SPACER --></p>
     
-    <div>
-      <dl id="formdata">
-      </dl>
-    </div>
   </div>  
                       
   <script>
