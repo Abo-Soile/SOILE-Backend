@@ -8,6 +8,7 @@ mkdir soile-elang/bin
 mkdir soile-utils/bin
 mkdir soile-verticle/bin
 
+$ANT -f soile2ant.xml
 
 $ANT -f soile-qmarkup/build.xml makejar
 $ANT -f soile-elang/build.xml makejar

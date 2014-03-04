@@ -13,7 +13,7 @@ if [ ! -d "fi.abo.kogni.soile~vertx-mod-template-engines~1.0
 	git clone git@github.com:carchrae/vertx-mod-template-engines.git
 
 	echo "Renaming folder"
-	mv "vertx-mod-template-engines" "$domain~vertx-mod-template-engines~$version"
+	mv vertx-mod-template-engines $domain~vertx-mod-template-engines~$version
 fi
 
 #Vertex mongo persistor
