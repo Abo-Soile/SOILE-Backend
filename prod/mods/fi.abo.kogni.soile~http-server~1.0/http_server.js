@@ -13,8 +13,13 @@ var routeMatcher = new vertx.RouteMatcher();
 
 function customMatcher() {
   var test = "6";
+
 }
 
+function tester(request, func) {
+  console.log("test");
+  func(request);
+}
 customMatcher.prototype = new vertx.RouteMatcher();
 
 routeMatcher = new customMatcher();
@@ -115,6 +120,12 @@ var templateManager = (function(folder) {
       });
     },
     'render_template': function(templateName, data, request) {
+
+
+      console.log("SDSDFsdfisduf sf sdfs  \n\n");
+      data.URI = String(request.absoluteURI());
+      console.log(JSON.stringify(data));
+
       if (!isLoaded || DEBUG) {
         this.load_template(templateName);
         vertx.setTimer(500, function() {
@@ -244,7 +255,8 @@ routeMatcher.get('/dust2', function(request){
 
 routeMatcher.get("/experiment", function(request){
   queryMongo.getExperimentList(function(r){
-    console.log(JSON.stringify(r.results));
+    //console.log(JSON.stringify(r.results));
+    //console.log(request.absoluteURI());
     templateManager.render_template("experimentList", {"experiments":r.results}, request);
   });
 });
@@ -590,6 +602,11 @@ routeMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
 
 routeMatcher.post('questionnaire/generated/:id', function(request) {
   console.log(request.method);
+});
+
+routeMatcher.get('/', function(request) {
+  templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
+
 });
 
 /* This will match static files. ('Static files' are files which 
