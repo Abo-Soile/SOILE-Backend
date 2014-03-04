@@ -158,8 +158,9 @@ function(dom,
 
 					var dialog = new Dialog({
 						"title":"titlfs",
-						"content":"<iframe id='formframe' src=/questionnaire/mongo/"+id +"></iframe>",
-						"executeScripts":"true"
+						"content":"<iframe width='100%' height='600px'  id='formframe' src=/questionnaire/mongo/"+id +"></iframe>",
+						"executeScripts":"true",
+						"style":"width: 90%; height:650px;"
 						});
 					dialog.show();
 				}});
@@ -172,9 +173,17 @@ function(dom,
 					construct.destroy(li);
 				}});
 
+			var newWindowButton = new dijit.form.Button({
+				label:"Edit in new window",
+				onClick: function() {
+					window.open("/questionnaire/mongo/"+id)
+				}
+			})
+
 			construct.place(nameBox.domNode, li);
 			construct.place(editButton.domNode, li);
 			construct.place(deleteButton.domNode,li)
+			construct.place(newWindowButton.domNode, li);
 
 		}
 	});
