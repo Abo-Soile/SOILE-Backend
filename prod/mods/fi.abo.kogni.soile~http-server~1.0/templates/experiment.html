@@ -2,11 +2,11 @@
 <div id="main" class="container">
 	<div class="row">
 		<div class="span10"> 
-			<h1>{exp.name}</h1>
+			<h1>{exp.name}   <h4><a href="{URI}/edit">Edit</a></h1>
 			<p> {exp.description}</p>
 			<ul>
 				{#exp.components uri=URI}
-				<li><a href="{uri}/phase/{$idx}">phase {$idx} {@idx}{.}{/idx} {type} {name}, {id}</a></li>
+				<li><a href="{uri}/phase/{$idx}">phase {$idx} {@idx}{.}{/idx} {type} {name}</a></li>
 				{/exp.components}
 			</ul>
 			<h2><a href="{URI}/data">Show gathered data</a></h2>
