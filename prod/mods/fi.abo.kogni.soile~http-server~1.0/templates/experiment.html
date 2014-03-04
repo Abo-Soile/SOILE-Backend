@@ -5,8 +5,8 @@
 			<h1>{exp.name}</h1>
 			<p> {exp.description}</p>
 			<ul>
-				{#exp.components}
-				<li><a href="phase/{$idx}">phase {$idx} {@idx}{.}{/idx} {type} {name}, {id}</a></li>
+				{#exp.components uri=URI}
+				<li><a href="{uri}/phase/{$idx}">phase {$idx} {@idx}{.}{/idx} {type} {name}, {id}</a></li>
 				{/exp.components}
 		</div>
 	</div>

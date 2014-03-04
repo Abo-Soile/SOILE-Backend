@@ -3,8 +3,8 @@
 	<div class="row">
 		<div class="span10"> 
 			<ul>
-				{#experiments}
-					<li>{name}</li>
+				{#experiments uri=URI}
+					<li><a href="{uri}/{_id}">{name}</a></li>
 				{/experiments}
 			</ul>
 		</div>
