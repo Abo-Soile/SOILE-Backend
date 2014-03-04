@@ -5,7 +5,7 @@ ANT="ant"
 
 mkdir soile-qmarkup/bin
 mkdir soile-elang/bin
-mkdir soile utils/bin
+mkdir soile-utils/bin
 mkdir soile-verticle/bin
 
 
