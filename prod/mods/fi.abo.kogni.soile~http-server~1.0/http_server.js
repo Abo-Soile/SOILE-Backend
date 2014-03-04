@@ -445,6 +445,13 @@ routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
 });
 
 
+routeMatcher.get('/experiment/:id/data', function(request) {
+  var expID = request.params().get('id');
+  queryMongo.getExperimentFormData(expID, function(r) {
+    request.response.end(JSON.stringify(r));
+  });
+})
+
 routeMatcher.get('/test/demo', function(request) {
   var file = 'demo.html';
   request.response.sendFile(utils.file_from_serverdir(file));

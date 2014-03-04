@@ -14,6 +14,14 @@ var mongoHandler = {
     });
   },
 
+  getExperimentFormData: function(id, response) {
+    vertx.eventBus.send(this.mongoAddress, {"action":"find",
+    "collection":"formdata","matcher":{"expId":id}}, function(reply) {
+      response(reply);
+    })
+  }
+  ,
+
   addFormToExperiment: function(expid,formid, name,response) {
     vertx.eventBus.send(this.mongoAddress, {
       "action":"update",
