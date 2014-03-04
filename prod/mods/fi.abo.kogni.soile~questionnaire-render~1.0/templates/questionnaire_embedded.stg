@@ -68,7 +68,7 @@ questionnaire_html(title, body, stmts) ::= <<
 
           
           var funcArray = [];
-          domConstruct.empty('formdata');
+          //domConstruct.empty('formdata');
 
           $stmts$
           //send_questionnaire_data(qdata);
