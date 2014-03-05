@@ -646,6 +646,62 @@ routeMatcher.post('questionnaire/generated/:id', function(request) {
   console.log(request.method);
 });
 
+routeMatcher.get('/test', function(request) {
+  queryMongo.getTestList(function(r) {
+    templateManager.render_template('testlist', {"tests":r.results},request);
+  })
+
+});
+
+
+routeMatcher.post("/test", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    data = data.getString(0, data.length());
+    var name = data.split("=")[1];
+
+    queryMongo.saveTest({"name":name}, function(r) {
+      console.log(JSON.stringify(r));
+
+      request.response.putHeader("Location", request.absoluteURI + name)
+      request.response.end("");
+      
+    })
+  });
+});
+
+
+routeMatcher.get('/test/:id', function(request) {
+  var id = request.params().get('id');
+  var code = "sadas";
+  queryMongo.getTest(id, function(r) {
+    templateManager.render_template('testEditor', {"code":code,"test":r.result}, request);
+  })
+});
+
+
+routeMatcher.post("/test/:id/complie", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    data = data.getString(0, data.length());
+    var jsonData = JSON.parse(data);
+
+    request.response.end("Returning testpost");
+  });
+});
+
 routeMatcher.get('/', function(request) {
   templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
 

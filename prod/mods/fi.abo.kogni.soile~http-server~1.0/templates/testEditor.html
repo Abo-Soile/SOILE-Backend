@@ -1,0 +1,36 @@
+{>header /}
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
+    <script src="/javascript/soile2.js"></script>
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+            <textarea data-dojo-type="dijit/form/Textarea" id="code">
+                {test.code}
+            </textarea>    
+
+
+            </div>
+            
+            <div class="col-md-12">
+                <button data-dojo-type="dijit/form/Button" type="button" id="compileButton">Save&Compile</button>
+
+                <button data-dojo-type="dijit/form/Button" type="button" id="runButton"> Run</button>
+            </div>
+            <hr>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="display">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/javascript/testeditor.js"></script>
+
+{>footer /}

@@ -112,13 +112,20 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   saveTest: function(test,response) {
     vertx.eventBus.send(this.mongoAddress, {"action":"save",
     "collection":"tests","document":test}, function(reply) {
-      response.reply()
+      response(reply)
     })
   },
 
   getTest: function(id, response){
     vertx.eventBus.send(this.mongoAddress, {"action":"findone",
     "collection":"tests","matcher":{"_id":id}}, function(reply) {
+      response(reply);
+    });
+  },
+
+  getTestList: function(response){
+    vertx.eventBus.send(this.mongoAddress, {"action":"find",
+    "collection":"tests"}, function(reply) {
       response(reply);
     });
   },
