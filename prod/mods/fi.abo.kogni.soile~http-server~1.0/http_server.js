@@ -16,10 +16,6 @@ function customMatcher() {
 
 }
 
-function tester(request, func) {
-  console.log("test");
-  func(request);
-}
 customMatcher.prototype = new vertx.RouteMatcher();
 
 routeMatcher = new customMatcher();
@@ -183,10 +179,27 @@ var read_khtoken = (function() {
   };
 })();
 
+//Injects session code that is run before the actual request
+//It would probably be best to generalize this abit more to make it extendable
+//with other functionality as well
+function session(func) {
+  console.log("test");
+  return function (request) {
+    console.log("Before returnfunction");
+    request.headers().forEach(function(key,value){
+      console.log(key + " - " + value);
+    });
+    console.log(request.headers());
+    func(request)
+  }
+}
 
-routeMatcher.get("/login", function(request) {
+routeMatcher.get("/login", session(function(request) {
+  request.response.putHeader("Set-Cookie","MySessionToken");
+  request.response.putHeader("Set-Cookie","MyAuthToken");
+
   templateManager.render_template('login', "",request);
-});
+}));
 
 
 routeMatcher.post("/login", function(request) {
@@ -255,8 +268,7 @@ routeMatcher.get('/dust2', function(request){
 
 routeMatcher.get("/experiment", function(request){
   queryMongo.getExperimentList(function(r){
-    //console.log(JSON.stringify(r.results));
-    //console.log(request.absoluteURI());
+
     templateManager.render_template("experimentList", {"experiments":r.results}, request);
   });
 });
