@@ -44,6 +44,32 @@ var mongoHandler = {
 
     })
   },
+/*
+  Mongo example that should work
+
+db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
+"components.id":"59cecd81aca2c289942422d904ef495dfc21a6a3"},
+{$set:{"components.$.name":"MY new name"}})
+
+*/
+
+  editExperimentFormName: function(expid, formid, name, response) {
+
+    var query = {
+      "action":"update",
+      "collection":"experiment",
+      "criteria":{
+        "_id":expid,
+        "components.id":formid
+      },
+      "objNew":{"$set":{"components.$.name":name}}
+      }
+    //var command = "db.experiment.update({'_id':'"+expid+"','components.id':'"+formid+"'},{$set:{'components.$.name':'"+name+"''}})";
+    // console.log("\n"+command+"\n");
+    vertx.eventBus.send(this.mongoAddress, query, function(reply){
+      response(reply);
+    })
+  },
 
   getExperimentList: function(response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"find",

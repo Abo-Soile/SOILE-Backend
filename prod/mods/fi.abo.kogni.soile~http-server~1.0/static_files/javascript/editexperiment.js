@@ -6,6 +6,7 @@ require(["dojo/dom",
 		"dojo/on",
 		"dojo/dom-form",
 		"dojo/request/xhr",
+		"dojo/request",
 		"dojo/json",
 		"dojox/layout/ContentPane",
 		"dojox/widget/DialogSimple",
@@ -18,6 +19,7 @@ function(dom,
 		on,
 		domForm,
 		xhr,
+		request,
 		json,
 		contentPane,
 		Dialog,
@@ -143,12 +145,16 @@ function(dom,
 					
 			var nameBox = new dijit.form.TextBox({
 				id:"name:"+id,
-				value:"Unamed Form",
+				value:name,
 				onChange: function(value){
-					console.log(value +" " + id);
-					xhr.post()
-
-				}});
+					console.log(value +" ---- " + id);
+					xhr.post("editformname", {
+						data: json.stringify({"id":id, "name":value})
+					}).then(function(res) {
+						console.log(res);
+					});
+				}
+			});
 
 			var editButton = new dijit.form.Button({
 			 	label:"Edit",
