@@ -101,7 +101,7 @@ qdata_widgetdata_singleselect(ids, columnName, values, defaultValue) ::= <<
 >>
 
 qdata_widgetdata_numberfield(id, columnName) ::= <<
-  funcArray.push({"fun":"save_value", "params":[qdata, ['$id$'], '$columnName$'];
+  funcArray.push({"fun":"save_value", "params":[qdata, ['$id$'], '$columnName$']});
 >>
 
 qdata_widgetdata_slider(id, columnName) ::= <<
