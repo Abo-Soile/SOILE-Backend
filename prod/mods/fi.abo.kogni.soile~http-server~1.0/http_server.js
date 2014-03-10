@@ -686,8 +686,9 @@ routeMatcher.get('/test/:id', function(request) {
 });
 
 
-routeMatcher.post("/test/:id/complie", function(request) {
+routeMatcher.post("/test/:id", function(request) {
   var data = new vertx.Buffer();
+  var id = request.params().get('id');
 
   request.dataHandler(function(buffer) {
     data.appendBuffer(buffer);
@@ -696,9 +697,42 @@ routeMatcher.post("/test/:id/complie", function(request) {
   request.endHandler(function() {
 
     data = data.getString(0, data.length());
-    var jsonData = JSON.parse(data);
+    var code = JSON.parse(data).code;
 
-    request.response.end("Returning testpost");
+    var address = utils.get_address('experiment_language');
+    var eb = vertx.eventBus;
+    var msg = {
+      'code': code
+    };
+
+
+
+    eb.send(address, msg, function(reply) {
+      var response = {};
+
+      var test = {};
+
+      test._id = id;
+      test.code = code;
+
+      if (reply.hasOwnProperty('errors') === true) {
+        response.errors = reply.errors;
+
+        test.js = "";
+        test.compiled = false;
+      } else {
+        response.code = reply.code;
+        test.js = response.code;
+        test.compiled = true;
+      }
+
+      queryMongo.saveTest(test, function() {
+        request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+        request.response.end(JSON.stringify(response));
+      });
+    });
+    //send to compiler -> send to mongo
+
   });
 });
 
