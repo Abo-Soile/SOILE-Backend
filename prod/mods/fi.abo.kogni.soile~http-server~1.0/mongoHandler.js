@@ -71,6 +71,27 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     })
   },
 
+
+// http://stackoverflow.com/questions/4588303/in-mongodb-how-do-you-remove-an-array-element-by-its-index
+// The above method could also be used 
+  deleteComponentFromExperiment: function(expid, compid, response) {
+
+    var query =  {
+      "action":"update",
+      "collection":"experiment",
+      "criteria":{
+        "_id":expid,
+        "components.id":compid
+      },
+      "objNew":{"$pull":{"components":{"id":compid}}}
+    };
+    
+
+    vertx.eventBus.send(this.mongoAddress, query, function(reply) {
+      response(reply);
+    });
+  },
+
   getExperimentList: function(response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"find",
     "collection":"experiment"},function(reply){

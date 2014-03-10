@@ -176,7 +176,12 @@ function(dom,
 			 	id:"delete:"+id,
 				onClick: function(){
 					console.log("delete " + id);
-					construct.destroy(li);
+					xhr.post("deletecomponent",
+						{
+							data: json.stringify({"id":id})
+						}).then(function(res) {
+							construct.destroy(li);
+					})
 				}});
 
 			var newWindowButton = new dijit.form.Button({

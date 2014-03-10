@@ -419,6 +419,26 @@ routeMatcher.post('/experiment/:id/editformname', function(request){
   });
 });
 
+routeMatcher.post('/experiment/:id/deletecomponent', function(request) {
+  var expId = request.params().get('id');
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer){
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+    var jsonData = (JSON.parse(data.getString(0, data.length())));
+    console.log(JSON.stringify(jsonData));
+
+    queryMongo.deleteComponentFromExperiment(expId, jsonData.id, function(r) {
+      console.log(JSON.stringify(r));
+
+      request.response.end(JSON.stringify(r.result));
+    })
+
+  });
+});
 
 routeMatcher.get('/experiment/:id/json', function(request){
   var expId = request.params().get('id');
