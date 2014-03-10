@@ -64,7 +64,7 @@
       $('#error_message').width(width);
       
       $('#runbutton').click(function(event) {
-        $.post(  /* url */  '/experiment/run',  
+        $.post(  /* url */  '/test/run',  
                  /* data */  $('#elcode').val(),
                  /* success */  function(data, textStatus, jqXHR){
           if (data.hasOwnProperty('errors')) {

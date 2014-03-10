@@ -36,6 +36,8 @@ function(dom,
 		var codeBox = registry.byId("code");
 		var errorBox = dom.byId("errorbox");
 
+		var compiledCode = "";
+
 		on(compileButton, "click", function() {
 			console.log("compile");
 
@@ -52,13 +54,19 @@ function(dom,
 					console.log("errors");
 				}else {
 					domClass.add(errorBox,"hidden");
+					compiledCode = data.code;
 				}
 
 			})
 		})
 
 		on(runButton, "click", function() {
-			console.log("running");
+			console.log(compiledCode);
+			console.log("Executing soile");
+			SOILE2.util.eval(compiledCode);
+			setTimeout(function() {
+				SOILE2.rt.exec_pi();
+			}, 1500);
 		})
 	});
 });

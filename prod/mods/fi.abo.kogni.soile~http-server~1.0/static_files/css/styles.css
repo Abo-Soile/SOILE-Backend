@@ -59,3 +59,26 @@ p {
 .hidden {
 	display: none;
 }
+
+
+.hiddenelem {
+	display: none;
+	visibility: hidden;
+}
+/*#page {
+	width: 960px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#display {
+	border: thin solid black;
+	width: 720px;
+	height: 360px;
+	position: relative;
+}*/
+#message {
+	display: none;
+	position: absolute;
+	font-size: x-large;
+}
