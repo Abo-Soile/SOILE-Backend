@@ -229,6 +229,10 @@ var sessionManager =  {
       var c = this.createCookie("PersonToken", utils.getRandomInt(0, 10000000000000000), 900);
       this.request.response.putHeader("Set-Cookie",c);
     }
+  },
+
+  getPersonToken: function() {
+    return this.readCookie("PersonToken");
   }
 
 }
@@ -543,6 +547,8 @@ routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phase = request.params().get('phase');
 
+  var userID = request.session.getPersonToken();
+
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -554,7 +560,7 @@ routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
     var postJson = JSON.parse(postData);
     console.log(postData);
 
-    queryMongo.saveFormData(phase, expID, postJson, function(r){
+    queryMongo.saveFormData(phase, expID, postJson,  userID,function(r){
       console.log(JSON.stringify(r));
       request.response.end("Data \n" + postData);
     });

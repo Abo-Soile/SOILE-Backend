@@ -151,10 +151,11 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     });
   },
 
-  saveFormData: function(phase, experimentid ,data, response) {
+  saveFormData: function(phase, experimentid ,data, userid,response) {
     var doc = data;
     data.phase = phase;
     data.expId = experimentid;
+    data.userid = userid
     vertx.eventBus.send(this.mongoAddress, {"action":"save",
     "collection":"formdata", "document":doc}, function(reply) {
       response(reply);
