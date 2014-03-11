@@ -79,6 +79,10 @@ var utils = (function(conf) {
 
     'build_url': function(host, port, resource) {
       return 'http://' + host + ':' + port + resource;
+    },
+
+    'getRandomInt': function(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
   };
 
@@ -117,8 +121,6 @@ var templateManager = (function(folder) {
     },
     'render_template': function(templateName, data, request) {
 
-
-      console.log("SDSDFsdfisduf sf sdfs  \n\n");
       data.URI = String(request.absoluteURI());
       console.log(JSON.stringify(data));
 
@@ -179,6 +181,58 @@ var read_khtoken = (function() {
   };
 })();
 
+var sessionManager =  {
+
+  cookies: null,
+  request: null,
+
+  loadManager: function(request) {
+    this.cookies = request.headers().get("Cookie")
+    this.request = request;
+    return this;
+  },
+
+  createCookie: function(name, value, days) {
+    if(days) {
+      var date = new Date();
+      date.setTime(date.getTime()+(days*24*60*60*1000));
+      var expires = "; expires="+date.toGMTString();
+    }
+    else var expires = "";
+
+    return name+"="+value+expires+"; path=/";
+  },
+
+  readCookie: function(name) {
+    var nameEQ = name + "=";
+    
+    //Dont do anything if no cookies exist
+    if(!this.cookies) return 0;
+    
+    var ca = this.cookies.split(';');
+
+    for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return 0;
+  },
+
+  eraseCookie: function(name) {
+    this.createCookie(name,"", -1);
+  },
+
+  setPersonToken: function() {
+    console.log(this.readCookie("PersonToken"));
+    if(!this.readCookie("PersonToken")) {
+      var c = this.createCookie("PersonToken", utils.getRandomInt(0, 10000000000000000), 900);
+      this.request.response.putHeader("Set-Cookie",c);
+    }
+  }
+
+}
+
 //Injects session code that is run before the actual request
 //It would probably be best to generalize this abit more to make it extendable
 //with other functionality as well
@@ -187,16 +241,24 @@ function session(func) {
   return function (request) {
     console.log("Before returnfunction");
     request.headers().forEach(function(key,value){
-      console.log(key + " - " + value);
+      //console.log(key + " - " + value);
     });
-    console.log(request.headers());
+
+    console.log("Cookies:: " + request.headers().get("Cookie"));
+
+    var session = sessionManager.loadManager(request);
+    session.setPersonToken();
+
+    //Sending the session manager with the request
+    request.session = session;
+
     func(request)
   }
 }
 
 routeMatcher.get("/login", session(function(request) {
-  request.response.putHeader("Set-Cookie","MySessionToken");
-  request.response.putHeader("Set-Cookie","MyAuthToken");
+ // request.response.putHeader("Set-Cookie","MySessionToken");
+ // request.response.putHeader("Set-Cookie","MyAuthToken");
 
   templateManager.render_template('login', "",request);
 }));
@@ -503,7 +565,7 @@ routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
 routeMatcher.get('/experiment/:id/data', function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {
-    request.response.end(JSON.stringify(r));
+    request.response.end(JSON.stringify(r.results));
   });
 })
 
