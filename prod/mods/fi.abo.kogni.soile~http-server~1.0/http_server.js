@@ -9,16 +9,62 @@ var shared_config = config.shared;
 var port = http_config.port;
 var host = http_config.host;
 var http_directory = http_config.directory;
-var routeMatcher = new vertx.RouteMatcher();
+//var routeMatcher = new vertx.RouteMatcher();
+
+
+// This function returns a function that calls the requesthandler
+// which makes it possible to run arbitrary code before the request
+function sessionTest(func) {
+  return function(request) {
+    console.log("this should be seen before the request")
+
+    request.headers().forEach(function(key,value){
+      //console.log(key + " - " + value);
+    });
+
+    console.log("Cookies:: " + request.headers().get("Cookie"));
+
+    var session = sessionManager.loadManager(request);
+    session.setPersonToken();
+
+    //Sending the session manager with the request
+    request.session = session;
+
+    func(request);
+  }
+}
+
+
 
 function customMatcher() {
   var test = "6";
-
 }
 
 customMatcher.prototype = new vertx.RouteMatcher();
 
-routeMatcher = new customMatcher();
+//more methods from the routematcher should be implementd as needed.
+customMatcher.get = function(pattern, handler) {
+  routeMatcher.get(pattern, sessionTest(handler));
+}
+
+customMatcher.post = function(pattern, handler) {
+  routeMatcher.post(pattern, sessionTest(handler));
+}
+
+customMatcher.allWithRegEx = function(pattern, handler) {
+  routeMatcher.allWithRegEx(pattern, sessionTest(handler));
+}
+
+customMatcher.noMatch = function(pattern, handler) {
+  routeMatcher.noMatch(pattern, sessionTest(handler));
+}
+
+
+// Generates  a new customMatcher and sets it to routmatcher
+// this matcher is then bound to de server object at the bottom
+// of this file. The normal routematcher can also be called if 
+// needed.
+var routeMatcher = new customMatcher();
 
 var DEBUG = true;   //This variable could stored in configs
 
@@ -260,15 +306,15 @@ function session(func) {
   }
 }
 
-routeMatcher.get("/login", session(function(request) {
+customMatcher.get("/login", function(request) {
  // request.response.putHeader("Set-Cookie","MySessionToken");
  // request.response.putHeader("Set-Cookie","MyAuthToken");
 
   templateManager.render_template('login', "",request);
-}));
+});
 
 
-routeMatcher.post("/login", function(request) {
+customMatcher.post("/login", function(request) {
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -284,11 +330,11 @@ routeMatcher.post("/login", function(request) {
   });
 });
 
-routeMatcher.get("/logout", function(request) {
-  requst.response.end("Logging user out");
+customMatcher.get("/logout", function(request) {
+  request.response.end("Logging user out");
 });
 
-routeMatcher.get("/a", function(request){
+customMatcher.get("/a", function(request){
   console.log(JSON.stringify(container.config));
 
   vertx.eventBus.send("vertx.mongo-persistor",{"action":"save", 
@@ -304,27 +350,27 @@ routeMatcher.get("/a", function(request){
   templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
 });
 
-routeMatcher.get("/aa", function(request){
+customMatcher.get("/aa", function(request){
 
   templateManager.render_template('landing', {"name":"Daniel Testing","test":"This is a test"},request);
 
 });
 
 
-routeMatcher.get('/dust', function(request){
+customMatcher.get('/dust', function(request){
   templateManager.loadAll();
 
   request.response.end("Updated templates");
 });
 
-routeMatcher.get('/dust1', function(request){
+customMatcher.get('/dust1', function(request){
   var eb = vertx.eventBus;
   eb.send("dust.load", {"name":"test", "context": {"x":"world"}}, function(reply){
    request.response.end(JSON.stringify(reply));
   });
 });
 
-routeMatcher.get('/dust2', function(request){
+customMatcher.get('/dust2', function(request){
   var eb = vertx.eventBus;
   eb.send("dust.render", {"name":"test", "context": {"x":"world"}}, function(reply){
    request.response.end(JSON.stringify(reply));
@@ -332,7 +378,7 @@ routeMatcher.get('/dust2', function(request){
 });
 
 
-routeMatcher.get("/experiment", function(request){
+customMatcher.get("/experiment", function(request){
   queryMongo.getExperimentList(function(r){
 
     templateManager.render_template("experimentList", {"experiments":r.results}, request);
@@ -340,12 +386,12 @@ routeMatcher.get("/experiment", function(request){
 });
 
 
-routeMatcher.get("/experiment/new", function(request){
+customMatcher.get("/experiment/new", function(request){
   templateManager.render_template("experimentform", {},request);
 });
 
 
-routeMatcher.post("/experiment/new", function(request) {
+customMatcher.post("/experiment/new", function(request) {
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer){
@@ -380,7 +426,7 @@ routeMatcher.post("/experiment/new", function(request) {
   });
 });
 
-routeMatcher.get('/experiment/:id', function(request){
+customMatcher.get('/experiment/:id', function(request){
   var id = request.params().get('id');
     // eb.send("vertx.mongo-persistor",{"action":"findone", 
   //  "collection":"experiment","matcher":{"name":id}},function(reply){
@@ -399,7 +445,7 @@ routeMatcher.get('/experiment/:id', function(request){
 
 
 
-routeMatcher.get('/experiment/:id/edit', function(request){
+customMatcher.get('/experiment/:id/edit', function(request){
   var id = request.params().get('id');
   console.log(id);
 
@@ -410,7 +456,7 @@ routeMatcher.get('/experiment/:id/edit', function(request){
   });
 });
 
-routeMatcher.post('/experiment/:id/edit', function(request){
+customMatcher.post('/experiment/:id/edit', function(request){
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer){
@@ -440,7 +486,7 @@ routeMatcher.post('/experiment/:id/edit', function(request){
   });
 });
 
-routeMatcher.post('/experiment/:id/addform', function(request){
+customMatcher.post('/experiment/:id/addform', function(request){
   var address = utils.get_address('questionnaire_render');
   var expId = request.params().get('id');
 
@@ -463,7 +509,7 @@ routeMatcher.post('/experiment/:id/addform', function(request){
   });
 });
 
-routeMatcher.post('/experiment/:id/editformname', function(request){
+customMatcher.post('/experiment/:id/editformname', function(request){
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -485,7 +531,7 @@ routeMatcher.post('/experiment/:id/editformname', function(request){
   });
 });
 
-routeMatcher.post('/experiment/:id/deletecomponent', function(request) {
+customMatcher.post('/experiment/:id/deletecomponent', function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -506,7 +552,7 @@ routeMatcher.post('/experiment/:id/deletecomponent', function(request) {
   });
 });
 
-routeMatcher.get('/experiment/:id/json', function(request){
+customMatcher.get('/experiment/:id/json', function(request){
   var expId = request.params().get('id');
 
   queryMongo.getExperiment(expId, function(r){
@@ -516,7 +562,7 @@ routeMatcher.get('/experiment/:id/json', function(request){
 });
 
 
-routeMatcher.get('/experiment/:id/phase/:phase', function(request) {
+customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phase = request.params().get('phase');
 
@@ -543,7 +589,7 @@ routeMatcher.get('/experiment/:id/phase/:phase', function(request) {
   });
 });
 
-routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
+customMatcher.post('/experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phase = request.params().get('phase');
 
@@ -568,20 +614,20 @@ routeMatcher.post('/experiment/:id/phase/:phase', function(request) {
 });
 
 
-routeMatcher.get('/experiment/:id/data', function(request) {
+customMatcher.get('/experiment/:id/data', function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {
     request.response.end(JSON.stringify(r.results));
   });
 })
 
-routeMatcher.get('/test/demo', function(request) {
+customMatcher.get('/test/demo', function(request) {
   var file = 'demo.html';
   request.response.sendFile(utils.file_from_serverdir(file));
 });
 
 
-routeMatcher.post('/test/run', function(request) {
+customMatcher.post('/test/run', function(request) {
   var body = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -608,19 +654,19 @@ routeMatcher.post('/test/run', function(request) {
   });
 });
 
-routeMatcher.get('/questionnaire', function(req) {
+customMatcher.get('/questionnaire', function(req) {
   var file = http_directory.concat('/questionnaire.html');
 
   req.response.sendFile(file);
 });
 
-routeMatcher.get('/questionnaire/guide', function(request) {
+customMatcher.get('/questionnaire/guide', function(request) {
   var file = 'qml-guide.html';
 
   request.response.sendFile(utils.file_from_serverdir(file));
 });
 
-routeMatcher.post('/questionnaire/render', function(request) {
+customMatcher.post('/questionnaire/render', function(request) {
   var body = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -656,7 +702,7 @@ routeMatcher.post('/questionnaire/render', function(request) {
   });
 });
 
-routeMatcher.get('/questionnaire/generated/:id', function(request) {
+customMatcher.get('/questionnaire/generated/:id', function(request) {
   console.log(request.method);
   var id = request.params().get('id');
   var file = utils.build_path(utils.get_basedir(),
@@ -675,7 +721,7 @@ routeMatcher.get('/questionnaire/generated/:id', function(request) {
 
 });
 
-routeMatcher.get('/questionnaire/mongo/:id', function(request){
+customMatcher.get('/questionnaire/mongo/:id', function(request){
   var id = request.params().get('id');
   queryMongo.getForm(id, function(r){
     //console.log(JSON.stringify(r))
@@ -685,7 +731,7 @@ routeMatcher.get('/questionnaire/mongo/:id', function(request){
   });
 });
 
-routeMatcher.post('/questionnaire/mongo/:id', function(request) {
+customMatcher.post('/questionnaire/mongo/:id', function(request) {
   var postdata = new vertx.Buffer();
   var id = request.params().get("id");
 
@@ -721,7 +767,7 @@ routeMatcher.post('/questionnaire/mongo/:id', function(request) {
   });
 });
 
-routeMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
+customMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
   var id = request.params().get('id');
   queryMongo.getForm(id,function(r) {
     var form = r.result.form;
@@ -730,11 +776,11 @@ routeMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
   });
 });
 
-routeMatcher.post('questionnaire/generated/:id', function(request) {
+customMatcher.post('questionnaire/generated/:id', function(request) {
   console.log(request.method);
 });
 
-routeMatcher.get('/test', function(request) {
+customMatcher.get('/test', function(request) {
   queryMongo.getTestList(function(r) {
     templateManager.render_template('testlist', {"tests":r.results},request);
   })
@@ -742,7 +788,7 @@ routeMatcher.get('/test', function(request) {
 });
 
 
-routeMatcher.post("/test", function(request) {
+customMatcher.post("/test", function(request) {
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -765,7 +811,7 @@ routeMatcher.post("/test", function(request) {
 });
 
 
-routeMatcher.get('/test/:id', function(request) {
+customMatcher.get('/test/:id', function(request) {
   var id = request.params().get('id');
   var code = "sadas";
   queryMongo.getTest(id, function(r) {
@@ -774,7 +820,7 @@ routeMatcher.get('/test/:id', function(request) {
 });
 
 
-routeMatcher.post("/test/:id", function(request) {
+customMatcher.post("/test/:id", function(request) {
   var data = new vertx.Buffer();
   var id = request.params().get('id');
 
@@ -824,18 +870,18 @@ routeMatcher.post("/test/:id", function(request) {
   });
 });
 
-routeMatcher.get('/', function(request) {
+customMatcher.get('/', function(request) {
   templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
 
 });
 
 /* This will match static files. ('Static files' are files which 
  * have not been generated programmatically.) */
-routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico)$', function(req) {
+customMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico)$', function(req) {
   req.response.sendFile(utils.file_from_serverdir(req.path()));
 });
 
-routeMatcher.allWithRegEx('.*/', function(req) {
+customMatcher.allWithRegEx('.*/', function(req) {
   console.log(req.absoluteURI());
   console.log(req.uri());
 
@@ -848,12 +894,12 @@ routeMatcher.allWithRegEx('.*/', function(req) {
   req.response.end();
 });
 
-routeMatcher.noMatch(function(req) {
+customMatcher.noMatch(function(req) {
   req.response.end("404");
 });
 
 /* Let this be the last specified match. */
-routeMatcher.allWithRegEx('.+', function(req) {
+customMatcher.allWithRegEx('.+', function(req) {
   var file = http_directory.concat('/questionnaire.html');
 
   req.response.sendFile(file);
