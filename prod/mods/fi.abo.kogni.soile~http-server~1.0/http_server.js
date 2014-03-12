@@ -621,6 +621,8 @@ customMatcher.get('/experiment/:id/data', function(request) {
   queryMongo.getExperimentFormData(expID, function(r) {
     data = r.results;
 
+    var sep = "; ";
+
     var phases = 0;
 
     var fields = [];
@@ -664,24 +666,24 @@ customMatcher.get('/experiment/:id/data', function(request) {
       }
     }
     var mergedFields = [];
-    mergedFields = "userid, ".concat(mergedFields.concat.apply(mergedFields, fields));  
+    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
     
-    var stringFields = mergedFields.split(",");
+    var stringFields = mergedFields.join(sep);
 
     var userFields = ""
     for(id in userData) {
       var mergedUserData = [];
-      mergedUserData = (id+", ").concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
+      mergedUserData = ([id]).concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
 
-      userFields += mergedUserData.split(", ");
+      userFields += mergedUserData.join(sep);
       userFields += "\n";
 
 
     }
     request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
     request.response.putHeader("Content-Disposition", "attachment; filename=questioneerdata.csv");
-    
-    request.response.end(stringFields+"\n"+ userFields);
+
+    request.response.end("\ufeff " + stringFields+"\n"+ userFields);
 
      // request.response.end(JSON.stringify(fields) + "\n\n\n" +JSON.stringify(userData));
      
