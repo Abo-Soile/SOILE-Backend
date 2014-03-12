@@ -679,6 +679,8 @@ customMatcher.get('/experiment/:id/data', function(request) {
 
     }
     request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+    request.response.putHeader("Content-Disposition", "attachment; filename='questioneerdata.csv'")
+
     request.response.end(stringFields+"\n"+ userFields);
 
      // request.response.end(JSON.stringify(fields) + "\n\n\n" +JSON.stringify(userData));
