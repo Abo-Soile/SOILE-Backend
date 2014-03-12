@@ -16,13 +16,13 @@ var http_directory = http_config.directory;
 // which makes it possible to run arbitrary code before the request
 function sessionTest(func) {
   return function(request) {
-    console.log("this should be seen before the request")
+    //console.log("this should be seen before the request")
 
     request.headers().forEach(function(key,value){
       //console.log(key + " - " + value);
     });
 
-    console.log("Cookies:: " + request.headers().get("Cookie"));
+    //console.log("Cookies:: " + request.headers().get("Cookie"));
 
     var session = sessionManager.loadManager(request);
     session.setPersonToken();
@@ -168,7 +168,9 @@ var templateManager = (function(folder) {
     'render_template': function(templateName, data, request) {
 
       data.URI = String(request.absoluteURI());
-      console.log(JSON.stringify(data));
+      data.token = request.session.getPersonToken();
+
+      // console.log(JSON.stringify(data));
 
       if (!isLoaded || DEBUG) {
         this.load_template(templateName);
@@ -270,7 +272,7 @@ var sessionManager =  {
   },
 
   setPersonToken: function() {
-    console.log(this.readCookie("PersonToken"));
+    //console.log(this.readCookie("PersonToken"));
     if(!this.readCookie("PersonToken")) {
       var c = this.createCookie("PersonToken", utils.getRandomInt(0, 10000000000000000), 900);
       this.request.response.putHeader("Set-Cookie",c);
@@ -617,7 +619,71 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
 customMatcher.get('/experiment/:id/data', function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {
-    request.response.end(JSON.stringify(r.results));
+    data = r.results;
+
+    var phases = 0;
+
+    var fields = []
+    //fields.push("userid");
+
+    var userData = {};
+
+    //finding max phase an
+    for(var i in data) {
+      var item = data[i];
+      phase = parseInt(item.phase)
+
+      if(!("userid" in item)) {
+        item.userid = "Missing";
+      }
+
+      if ((phase+1) > phases) {
+        phases = parseInt(item.phase);
+        console.log(phases);
+      }
+
+      if (!fields[phase]) {
+        console.log("newPhase")
+        fields[phase] = []
+
+        for (var prop in item) {
+          //console.log(prop);
+          if(!(prop=="_id"||prop=="phase"||prop=="userid"||prop=="expId")) {
+            fields[phase].push(prop.slice(17,-1));
+          }
+        }
+      }
+      if(!userData[item.userid]) {
+        userData[item.userid] = [];
+      }
+      userData[item.userid][phase] = [];
+      for( j in item) {
+        if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
+          userData[item.userid][phase].push(item[j]);
+        }
+      }
+    }
+    var mergedFields = [];
+    mergedFields = "userid, ".concat(mergedFields.concat.apply(mergedFields, fields));  
+    
+    var stringFields = mergedFields.split(",");
+
+    var userFields = ""
+    for(id in userData) {
+      var mergedUserData = [];
+      mergedUserData = (id+", ").concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
+
+      userFields += mergedUserData.split(", ");
+      userFields += "\n"
+
+
+    }
+    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+    request.response.end(stringFields+"\n"+ userFields);
+
+     // request.response.end(JSON.stringify(fields) + "\n\n\n" +JSON.stringify(userData));
+     
+     //request.response.end(JSON.stringify(r.results));
   });
 })
 
