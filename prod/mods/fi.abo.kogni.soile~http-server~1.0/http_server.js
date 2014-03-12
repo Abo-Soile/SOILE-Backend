@@ -623,7 +623,7 @@ customMatcher.get('/experiment/:id/data', function(request) {
 
     var phases = 0;
 
-    var fields = []
+    var fields = [];
     //fields.push("userid");
 
     var userData = {};
@@ -639,11 +639,11 @@ customMatcher.get('/experiment/:id/data', function(request) {
 
       if ((phase+1) > phases) {
         phases = parseInt(item.phase);
-        console.log(phases);
+        // console.log(phases);
       }
 
       if (!fields[phase]) {
-        console.log("newPhase")
+        // console.log("newPhase");
         fields[phase] = []
 
         for (var prop in item) {
@@ -674,13 +674,13 @@ customMatcher.get('/experiment/:id/data', function(request) {
       mergedUserData = (id+", ").concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
 
       userFields += mergedUserData.split(", ");
-      userFields += "\n"
+      userFields += "\n";
 
 
     }
     request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
-    request.response.putHeader("Content-Disposition", "attachment; filename=questioneerdata.csv")
-
+    request.response.putHeader("Content-Disposition", "attachment; filename=questioneerdata.csv");
+    
     request.response.end(stringFields+"\n"+ userFields);
 
      // request.response.end(JSON.stringify(fields) + "\n\n\n" +JSON.stringify(userData));
