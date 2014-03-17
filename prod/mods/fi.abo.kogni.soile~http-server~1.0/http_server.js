@@ -571,6 +571,20 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   queryMongo.getExperiment(expID, function(r) {
     phase = r.result.components[phaseNo];
 
+    if(phase===undefined) {
+        var url = request.absoluteURI().toString();
+        var cut = url.indexOf("/phase/");
+        console.log(cut)
+        url = url.substr(0,cut);
+
+        console.log(url);
+
+        request.response.statusCode(302);
+        request.response.putHeader('Location', url);
+        request.response.end();
+        return;
+      }
+
     var noOfPhases = r.result.components.length;
 
     var context = {"completed":phaseNo/noOfPhases*100, "phasesLeft":phaseNo+"/"+noOfPhases}

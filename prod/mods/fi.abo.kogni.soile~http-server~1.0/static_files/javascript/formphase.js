@@ -212,9 +212,15 @@ require(["dijit/form/HorizontalSlider",
 
         xhr.post("",{data:JSON.stringify(formdata)}).then(function(response) {
           console.log(response);
-          currentPhase = parseInt(document.URL.slice(76));
+
+          var url = document.URL;
           
-          window.location.href = document.URL.slice(0,76)+(currentPhase+1);
+          currentPhase = parseInt(document.URL.slice(76));
+          currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
+
+          url = url.slice(0, url.lastIndexOf("/")+1);
+
+          window.location.href = url+(currentPhase+1);
           //window.location.assign("../");
         });
 
