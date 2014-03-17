@@ -566,17 +566,23 @@ customMatcher.get('/experiment/:id/json', function(request){
 
 customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
-  var phase = request.params().get('phase');
+  var phaseNo = request.params().get('phase');
 
   queryMongo.getExperiment(expID, function(r) {
-    phase = r.result.components[phase];
+    phase = r.result.components[phaseNo];
+
+    var noOfPhases = r.result.components.length;
+
+    var context = {"completed":phaseNo/noOfPhases*100, "phasesLeft":phaseNo+"/"+noOfPhases}
+
     if(phase.type === "form") {
       console.log("Form ");
 
       queryMongo.getForm(phase.id, function(r2) {
         var form = r2.result.form;
+        context.form = form;
 
-        templateManager.render_template("formphase", {"form":form}, request);
+        templateManager.render_template("formphase", context, request);
 
        // request.response.end(form);
       });
