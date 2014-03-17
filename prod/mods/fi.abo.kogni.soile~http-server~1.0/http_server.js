@@ -671,7 +671,7 @@ customMatcher.get('/experiment/:id/data', function(request) {
         for (var prop in item) {
           //console.log(prop);
           if(!(prop=="_id"||prop=="phase"||prop=="userid"||prop=="expId")) {
-            fields[phase].push(prop.slice(17,-1));
+            fields[phase].push(prop.slice(17, prop.length));
           }
         }
       }
