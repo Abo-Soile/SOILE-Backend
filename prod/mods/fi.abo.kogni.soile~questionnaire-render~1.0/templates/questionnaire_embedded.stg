@@ -169,7 +169,7 @@ numberfield(id,
         id="$id$" name="someNumber" value="$value$"
         style="width: $width$em;"
         data-dojo-props="smallDelta:$increment$, 
-                         constraints:{min:$minimum$, max:$maximum$, pattern:'0.#'}" />
+                         constraints:{min:$minimum$, max:$maximum$}" />
 
 >>
 
