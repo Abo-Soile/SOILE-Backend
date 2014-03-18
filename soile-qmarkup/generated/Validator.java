@@ -635,6 +635,15 @@ public abstract class Validator {
         }
     }
 
+    protected void validateFloat(Value value)
+            throws MalformedCommandException {
+        Object obj = value.asJavaObject();
+        if (!(obj instanceof Float)) {
+            String msg = String.format("Value '%s' is not Float.", value);
+            throw new MalformedCommandException(msg);
+        }
+    }
+
     protected void validateString(Value value) throws MalformedCommandException {
         Object obj = value.asJavaObject();
         if (!(obj instanceof String)) {
