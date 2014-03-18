@@ -5,8 +5,12 @@
 
 #package fi.abo.kogni.soile2.qmarkup.typespec;
 
+echo "Generating language"
+java -classpath prod/jars/antlr-4.0-complete.jar org.antlr.v4.Tool soile-qmarkup/spec/TypeSpec.g4 -o tempA/
 
-java -classpath prod/jars/antlr-4.0-complete.jar org.antlr.v4.Tool soile-qmarkup/spec/TypeSpec.g4 -o temp/
+echo "Moving files"
+mv tempA/**/**/*.java soile-qmarkup/src/fi/abo/kogni/soile2/qmarkup/typespec
 
-mv temp/**/**/*.java soile-qmarkup/src/fi/abo/kogni/soile2/qmarkup/typespec
+echo "Deleting temps"
+rm -rf tempA/
 
