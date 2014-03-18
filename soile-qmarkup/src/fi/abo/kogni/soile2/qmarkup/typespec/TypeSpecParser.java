@@ -1,11 +1,15 @@
-// Generated from TypeSpec.g4 by ANTLR 4.0
+// Generated from soile-qmarkup/spec/TypeSpec.g4 by ANTLR 4.0
+
 package fi.abo.kogni.soile2.qmarkup.typespec;
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class TypeSpecParser extends Parser {

@@ -1,5 +1,7 @@
-// Generated from TypeSpec.g4 by ANTLR 4.0
+// Generated from soile-qmarkup/spec/TypeSpec.g4 by ANTLR 4.0
+
 package fi.abo.kogni.soile2.qmarkup.typespec;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
