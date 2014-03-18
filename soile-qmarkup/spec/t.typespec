@@ -50,7 +50,7 @@ command numberfield {
     value: Integer,
     minimum: Integer,
     maximum: Integer,
-    increment: Integer(1)
+    increment: Float(1)
 
 }
 

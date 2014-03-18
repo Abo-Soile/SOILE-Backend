@@ -15,9 +15,11 @@ public class GenerateValidator {
     public static void main(String[] args) {
         FileInputStream is = null;
         FileOutputStream out = null;
+
+        System.out.println(System.getProperty("user.dir"));
         try {
-            is = new FileInputStream("./spec/t.typespec");
-            out = new FileOutputStream("./generated/Validator.java");
+            is = new FileInputStream("./soile-qmarkup/spec/t.typespec");
+            out = new FileOutputStream("./soile-qmarkup/generated/Validator.java");
             ANTLRInputStream input = new ANTLRInputStream(is);
             TypeSpecLexer lexer = new TypeSpecLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);

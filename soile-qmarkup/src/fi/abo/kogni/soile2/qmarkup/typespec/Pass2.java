@@ -28,7 +28,7 @@ public class Pass2 extends Pass {
 
     public Pass2(IdentityHashMap<ParserRuleContext, NodeData> nd) {
         super(nd);
-        Template template = new Template("./spec");
+        Template template = new Template("./soile-qmarkup/spec");
         tgroup = template.getTemplate("validator.stg");
         validator = tgroup.getInstanceOf("body");
         generatedTypes = new HashSet<>();
