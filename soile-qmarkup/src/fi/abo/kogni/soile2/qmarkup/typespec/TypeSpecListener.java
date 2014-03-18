@@ -39,14 +39,17 @@ public interface TypeSpecListener extends ParseTreeListener {
 	void enterDef(TypeSpecParser.DefContext ctx);
 	void exitDef(TypeSpecParser.DefContext ctx);
 
+	void enterFloat_type(TypeSpecParser.Float_typeContext ctx);
+	void exitFloat_type(TypeSpecParser.Float_typeContext ctx);
+
+	void enterString_type(TypeSpecParser.String_typeContext ctx);
+	void exitString_type(TypeSpecParser.String_typeContext ctx);
+
 	void enterCommand(TypeSpecParser.CommandContext ctx);
 	void exitCommand(TypeSpecParser.CommandContext ctx);
 
 	void enterSimple_type(TypeSpecParser.Simple_typeContext ctx);
 	void exitSimple_type(TypeSpecParser.Simple_typeContext ctx);
-
-	void enterString_type(TypeSpecParser.String_typeContext ctx);
-	void exitString_type(TypeSpecParser.String_typeContext ctx);
 
 	void enterArray_type(TypeSpecParser.Array_typeContext ctx);
 	void exitArray_type(TypeSpecParser.Array_typeContext ctx);

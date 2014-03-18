@@ -14,7 +14,7 @@ command slider {
     labels: [Integer*],
     minimum: Integer,
     maximum: Integer,
-    increment: Integer(1),
+    increment: Integer,
     select: Integer
 
 }
@@ -50,7 +50,7 @@ command numberfield {
     value: Integer,
     minimum: Integer,
     maximum: Integer,
-    increment: Integer(1)
+    increment: Float
 
 }
 

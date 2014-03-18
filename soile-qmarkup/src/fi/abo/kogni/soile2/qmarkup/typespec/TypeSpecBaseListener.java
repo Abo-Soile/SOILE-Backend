@@ -42,14 +42,17 @@ public class TypeSpecBaseListener implements TypeSpecListener {
 	@Override public void enterDef(TypeSpecParser.DefContext ctx) { }
 	@Override public void exitDef(TypeSpecParser.DefContext ctx) { }
 
+	@Override public void enterFloat_type(TypeSpecParser.Float_typeContext ctx) { }
+	@Override public void exitFloat_type(TypeSpecParser.Float_typeContext ctx) { }
+
+	@Override public void enterString_type(TypeSpecParser.String_typeContext ctx) { }
+	@Override public void exitString_type(TypeSpecParser.String_typeContext ctx) { }
+
 	@Override public void enterCommand(TypeSpecParser.CommandContext ctx) { }
 	@Override public void exitCommand(TypeSpecParser.CommandContext ctx) { }
 
 	@Override public void enterSimple_type(TypeSpecParser.Simple_typeContext ctx) { }
 	@Override public void exitSimple_type(TypeSpecParser.Simple_typeContext ctx) { }
-
-	@Override public void enterString_type(TypeSpecParser.String_typeContext ctx) { }
-	@Override public void exitString_type(TypeSpecParser.String_typeContext ctx) { }
 
 	@Override public void enterArray_type(TypeSpecParser.Array_typeContext ctx) { }
 	@Override public void exitArray_type(TypeSpecParser.Array_typeContext ctx) { }

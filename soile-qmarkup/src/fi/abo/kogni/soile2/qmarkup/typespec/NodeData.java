@@ -84,6 +84,17 @@ public class NodeData {
     public void setIntegerType() {
         setIntegerType("Integer");
     }
+
+    public void setFloatType(String name) {
+        setFlag(FLAG_FLOAT);
+        this.valueClassName = name;
+        this.validationMethod = NameGenerator.validateXXX(this.valueClassName);
+        this.defaultValueMethod = NameGenerator.defaultXXXValue(this.valueClassName);
+    }
+
+    public void setFloatType() {
+        setIntegerType("Float");
+    }
     
     public void setBooleanType(String name) {
         setFlag(FLAG_BOOLEAN);
@@ -171,6 +182,10 @@ public class NodeData {
         return getFlag(FLAG_INTEGER);
     }
 
+    public boolean isFloatType() {
+        return getFlag(FLAG_FLOAT);
+    }
+
     public boolean isBooleanType() {
         return getFlag(FLAG_BOOLEAN);
     }
@@ -246,6 +261,7 @@ public class NodeData {
     private static final int FLAG_PRIMITIVE_FIELDS;
     private static final int FLAG_REPEAT;
     private static final int FLAG_STRING;
+    private static final int FLAG_FLOAT;
     
     static {
         int i = 0;
@@ -258,5 +274,6 @@ public class NodeData {
         FLAG_PRIMITIVE_FIELDS =       i;          i += 1;
         FLAG_REPEAT =                 i;          i += 1;
         FLAG_STRING =                 i;          i += 1;
+        FLAG_FLOAT =                  i;          i += 1;
     }
 }

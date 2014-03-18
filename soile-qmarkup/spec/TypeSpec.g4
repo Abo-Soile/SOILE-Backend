@@ -24,6 +24,7 @@ type
 
 simple_type
           : integer_type
+          | float_type
           | string_type
           | boolean_type	
           ;
@@ -35,6 +36,7 @@ compound_type
             ;
            
 integer_type: TYPE_INTEGER  ( '(' INTEGER ')' )? ;
+float_type: TYPE_FLOAT  ( '(' FLOAT ')' )? ;
 string_type:  TYPE_STRING   ( '(' STRING ')' )? ;
 boolean_type: TYPE_BOOLEAN  ( '(' BOOLEAN ')' )? ;
 array_type: '[' type (',' type)* ']' ;
@@ -42,13 +44,16 @@ repeat_type: '[' type '*' ']' ;
 object_type: object ;
 
 TYPE_INTEGER: 'Integer' ;
+TYPE_FLOAT: 'Float' ;
 TYPE_STRING: 'String' ;
 TYPE_BOOLEAN: 'Boolean' ;
 BOOLEAN: 'true' | 'false' ;
 INTEGER: '-'? INT ;
+FLOAT: [1-9]*'.'[0-9]* | '0.'[0-9]* ;
 STRING: '"' [a-zA-Z0-9 _]* '"' ;
 REQUIRED: 'required' ;
 ID: [a-zA-Z_] [a-zA-Z0-9_]* ;
+
 fragment INT: '0' | [1-9] [0-9]* ;
 
 WS: [ \t\n\r]+ -> skip ;

@@ -244,7 +244,8 @@ public abstract class Validator {
                         validateInteger(object.get("increment"));
                     } 
                     else {
-                        object.put("increment", defaultIntegerValue( 1 ));
+                        String msg = String.format("Missing object element: '%s'.", "increment");
+                        throw new MalformedCommandException(msg);
                     } 
                     if (object.containsKey("select")) {
                         validateInteger(object.get("select"));
@@ -486,10 +487,11 @@ public abstract class Validator {
                         throw new MalformedCommandException(msg);
                     } 
                     if (object.containsKey("increment")) {
-                        validateInteger(object.get("increment"));
+                        validateFloat(object.get("increment"));
                     } 
                     else {
-                        object.put("increment", defaultIntegerValue( 1 ));
+                        String msg = String.format("Missing object element: '%s'.", "increment");
+                        throw new MalformedCommandException(msg);
                     } 
         }
      

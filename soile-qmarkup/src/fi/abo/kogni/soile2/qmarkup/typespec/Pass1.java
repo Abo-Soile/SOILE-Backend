@@ -7,17 +7,15 @@ import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import fi.abo.kogni.soile2.qmarkup.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import fi.abo.kogni.soile2.qmarkup.BooleanValue;
-import fi.abo.kogni.soile2.qmarkup.IntegerValue;
-import fi.abo.kogni.soile2.qmarkup.ScalarValue;
-import fi.abo.kogni.soile2.qmarkup.StringValue;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Array_typeContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Boolean_typeContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.DefContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.FieldContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Integer_typeContext;
+import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Float_typeContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.ObjectContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Object_typeContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Repeat_typeContext;
@@ -152,6 +150,21 @@ public class Pass1 extends Pass {
         String name = ctx.TYPE_INTEGER().getText();
         nd.setSignature(primitiveSignature(name));
         nd.setIntegerType(name);
+        nd.setTypeContext(ctx);
+    }
+
+    @Override
+    public void exitFloat_type(Float_typeContext ctx) {
+        TypeContext type = types.peek();
+        NodeData nd = getNodeData(type);
+        if(ctx.FLOAT() != null) {
+            ScalarValue v = new FloatValue();
+            v.setValue(ctx.FLOAT().getText());
+            nd.setDefaultValue(v);
+        }
+        String name = ctx.TYPE_FLOAT().getText();
+        nd.setSignature((primitiveSignature(name)));
+        nd.setFloatType(name);
         nd.setTypeContext(ctx);
     }
 

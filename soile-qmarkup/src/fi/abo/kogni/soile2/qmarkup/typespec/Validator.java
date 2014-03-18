@@ -40,7 +40,7 @@ public abstract class Validator {
                 return "dropdownmenu";
             }
         }
-     
+
         public static class slider extends Validator {
             @Override
             public void validate(Value value) throws MalformedCommandException {
@@ -52,7 +52,7 @@ public abstract class Validator {
                 return "slider";
             }
         }
-     
+
         public static class singleselect extends Validator {
             @Override
             public void validate(Value value) throws MalformedCommandException {
@@ -64,7 +64,7 @@ public abstract class Validator {
                 return "singleselect";
             }
         }
-     
+
         public static class multiselect extends Validator {
             @Override
             public void validate(Value value) throws MalformedCommandException {
@@ -76,7 +76,7 @@ public abstract class Validator {
                 return "multiselect";
             }
         }
-     
+
         public static class numberfield extends Validator {
             @Override
             public void validate(Value value) throws MalformedCommandException {
@@ -88,7 +88,7 @@ public abstract class Validator {
                 return "numberfield";
             }
         }
-     
+
         public static class textarea extends Validator {
             @Override
             public void validate(Value value) throws MalformedCommandException {
@@ -100,7 +100,7 @@ public abstract class Validator {
                 return "textarea";
             }
         }
-     
+
         public static class textbox extends Validator {
             @Override
             public void validate(Value value) throws MalformedCommandException {
@@ -112,12 +112,12 @@ public abstract class Validator {
                 return "textbox";
             }
         }
-     
+
 
 
 
         @SuppressWarnings("unchecked")
-        protected void validateObject_2147483646(Value value) 
+        protected void validateObject_2147483646(Value value)
                 throws MalformedCommandException {
 
             validateObject(value);
@@ -125,24 +125,24 @@ public abstract class Validator {
 
                     if (object.containsKey("dbvalue")) {
                         validateString(object.get("dbvalue"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbvalue");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("text")) {
                         validateString(object.get("text"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "text");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
         }
-     
 
-     
+
+
         @SuppressWarnings("unchecked")
-        protected void validateRepeat_2147483645(Value value) 
+        protected void validateRepeat_2147483645(Value value)
                 throws MalformedCommandException {
             validateArray(value);
             ArrayList<Value> array = (ArrayList<Value>) value.asJavaObject();
@@ -150,47 +150,47 @@ public abstract class Validator {
             while (it.hasNext()) {
                 validateObject_2147483646(it.next());
             }
-        } 
+        }
 
 
         @SuppressWarnings("unchecked")
-        protected void validateCommand1(Value value) 
+        protected void validateCommand1(Value value)
                 throws MalformedCommandException {
             validateObject(value);
             Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
                     if (object.containsKey("dbcolumn")) {
                         validateString(object.get("dbcolumn"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbcolumn");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("numeric")) {
                         validateBoolean(object.get("numeric"));
-                    } 
+                    }
                     else {
                         object.put("numeric", defaultBooleanValue( true ));
-                    } 
+                    }
                     if (object.containsKey("label")) {
                         validateString(object.get("label"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "label");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("options")) {
                         validateRepeat_2147483645(object.get("options"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "options");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
         }
-     
 
-     
+
+
         @SuppressWarnings("unchecked")
-        protected void validateRepeat_2147483644(Value value) 
+        protected void validateRepeat_2147483644(Value value)
                 throws MalformedCommandException {
             validateArray(value);
             ArrayList<Value> array = (ArrayList<Value>) value.asJavaObject();
@@ -198,67 +198,67 @@ public abstract class Validator {
             while (it.hasNext()) {
                 validateInteger(it.next());
             }
-        } 
+        }
 
 
         @SuppressWarnings("unchecked")
-        protected void validateCommand2(Value value) 
+        protected void validateCommand2(Value value)
                 throws MalformedCommandException {
             validateObject(value);
             Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
                     if (object.containsKey("dbcolumn")) {
                         validateString(object.get("dbcolumn"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbcolumn");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("numeric")) {
                         validateBoolean(object.get("numeric"));
-                    } 
+                    }
                     else {
                         object.put("numeric", defaultBooleanValue( true ));
-                    } 
+                    }
                     if (object.containsKey("labels")) {
                         validateRepeat_2147483644(object.get("labels"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "labels");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("minimum")) {
                         validateInteger(object.get("minimum"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "minimum");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("maximum")) {
                         validateInteger(object.get("maximum"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "maximum");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("increment")) {
                         validateInteger(object.get("increment"));
-                    } 
+                    }
                     else {
                         object.put("increment", defaultIntegerValue( 1 ));
-                    } 
+                    }
                     if (object.containsKey("select")) {
                         validateInteger(object.get("select"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "select");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
         }
-     
+
 
 
         @SuppressWarnings("unchecked")
-        protected void validateObject_2147483643(Value value) 
+        protected void validateObject_2147483643(Value value)
                 throws MalformedCommandException {
 
             validateObject(value);
@@ -266,30 +266,30 @@ public abstract class Validator {
 
                     if (object.containsKey("dbvalue")) {
                         validateString(object.get("dbvalue"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbvalue");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("text")) {
                         validateString(object.get("text"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "text");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("checked")) {
                         validateBoolean(object.get("checked"));
-                    } 
+                    }
                     else {
                         object.put("checked", defaultBooleanValue( false ));
-                    } 
+                    }
         }
-     
 
-     
+
+
         @SuppressWarnings("unchecked")
-        protected void validateRepeat_2147483642(Value value) 
+        protected void validateRepeat_2147483642(Value value)
                 throws MalformedCommandException {
             validateArray(value);
             ArrayList<Value> array = (ArrayList<Value>) value.asJavaObject();
@@ -297,11 +297,11 @@ public abstract class Validator {
             while (it.hasNext()) {
                 validateObject_2147483643(it.next());
             }
-        } 
+        }
 
-     
+
         @SuppressWarnings("unchecked")
-        protected void validateRepeat_2147483641(Value value) 
+        protected void validateRepeat_2147483641(Value value)
                 throws MalformedCommandException {
             validateArray(value);
             ArrayList<Value> array = (ArrayList<Value>) value.asJavaObject();
@@ -309,47 +309,47 @@ public abstract class Validator {
             while (it.hasNext()) {
                 validateRepeat_2147483642(it.next());
             }
-        } 
+        }
 
 
         @SuppressWarnings("unchecked")
-        protected void validateCommand3(Value value) 
+        protected void validateCommand3(Value value)
                 throws MalformedCommandException {
             validateObject(value);
             Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
                     if (object.containsKey("numeric")) {
                         validateBoolean(object.get("numeric"));
-                    } 
+                    }
                     else {
                         object.put("numeric", defaultBooleanValue( true ));
-                    } 
+                    }
                     if (object.containsKey("default_value")) {
                         validateString(object.get("default_value"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "default_value");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("dbcolumn")) {
                         validateString(object.get("dbcolumn"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbcolumn");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("options")) {
                         validateRepeat_2147483641(object.get("options"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "options");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
         }
-     
+
 
 
         @SuppressWarnings("unchecked")
-        protected void validateObject_2147483640(Value value) 
+        protected void validateObject_2147483640(Value value)
                 throws MalformedCommandException {
 
             validateObject(value);
@@ -357,37 +357,37 @@ public abstract class Validator {
 
                     if (object.containsKey("dbcolumn")) {
                         validateString(object.get("dbcolumn"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbcolumn");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("dbvalue")) {
                         validateString(object.get("dbvalue"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbvalue");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("text")) {
                         validateString(object.get("text"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "text");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("checked")) {
                         validateBoolean(object.get("checked"));
-                    } 
+                    }
                     else {
                         object.put("checked", defaultBooleanValue( false ));
-                    } 
+                    }
         }
-     
 
-     
+
+
         @SuppressWarnings("unchecked")
-        protected void validateRepeat_2147483639(Value value) 
+        protected void validateRepeat_2147483639(Value value)
                 throws MalformedCommandException {
             validateArray(value);
             ArrayList<Value> array = (ArrayList<Value>) value.asJavaObject();
@@ -395,11 +395,11 @@ public abstract class Validator {
             while (it.hasNext()) {
                 validateObject_2147483640(it.next());
             }
-        } 
+        }
 
-     
+
         @SuppressWarnings("unchecked")
-        protected void validateRepeat_2147483638(Value value) 
+        protected void validateRepeat_2147483638(Value value)
                 throws MalformedCommandException {
             validateArray(value);
             ArrayList<Value> array = (ArrayList<Value>) value.asJavaObject();
@@ -407,193 +407,193 @@ public abstract class Validator {
             while (it.hasNext()) {
                 validateRepeat_2147483639(it.next());
             }
-        } 
+        }
 
 
         @SuppressWarnings("unchecked")
-        protected void validateCommand4(Value value) 
+        protected void validateCommand4(Value value)
                 throws MalformedCommandException {
             validateObject(value);
             Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
                     if (object.containsKey("numeric")) {
                         validateBoolean(object.get("numeric"));
-                    } 
+                    }
                     else {
                         object.put("numeric", defaultBooleanValue( true ));
-                    } 
+                    }
                     if (object.containsKey("default_value")) {
                         validateString(object.get("default_value"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "default_value");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("options")) {
                         validateRepeat_2147483638(object.get("options"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "options");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
         }
-     
+
 
 
         @SuppressWarnings("unchecked")
-        protected void validateCommand5(Value value) 
+        protected void validateCommand5(Value value)
                 throws MalformedCommandException {
             validateObject(value);
             Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
                     if (object.containsKey("dbcolumn")) {
                         validateString(object.get("dbcolumn"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbcolumn");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("numeric")) {
                         validateBoolean(object.get("numeric"));
-                    } 
+                    }
                     else {
                         object.put("numeric", defaultBooleanValue( true ));
-                    } 
+                    }
                     if (object.containsKey("label")) {
                         validateString(object.get("label"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "label");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("value")) {
                         validateInteger(object.get("value"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "value");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("minimum")) {
                         validateInteger(object.get("minimum"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "minimum");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("maximum")) {
                         validateInteger(object.get("maximum"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "maximum");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("increment")) {
                         validateInteger(object.get("increment"));
-                    } 
+                    }
                     else {
                         object.put("increment", defaultIntegerValue( 1 ));
-                    } 
+                    }
         }
-     
+
 
 
         @SuppressWarnings("unchecked")
-        protected void validateCommand6(Value value) 
+        protected void validateCommand6(Value value)
                 throws MalformedCommandException {
             validateObject(value);
             Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
                     if (object.containsKey("dbcolumn")) {
                         validateString(object.get("dbcolumn"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbcolumn");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("rows")) {
                         validateInteger(object.get("rows"));
-                    } 
+                    }
                     else {
                         object.put("rows", defaultIntegerValue( 4 ));
-                    } 
+                    }
                     if (object.containsKey("columns")) {
                         validateInteger(object.get("columns"));
-                    } 
+                    }
                     else {
                         object.put("columns", defaultIntegerValue( 80 ));
-                    } 
+                    }
                     if (object.containsKey("label")) {
                         validateString(object.get("label"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "label");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("length")) {
                         validateInteger(object.get("length"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "length");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("optional")) {
                         validateBoolean(object.get("optional"));
-                    } 
+                    }
                     else {
                         object.put("optional", defaultBooleanValue( true ));
-                    } 
+                    }
                     if (object.containsKey("text")) {
                         validateString(object.get("text"));
-                    } 
+                    }
                     else {
                         object.put("text", defaultStringValue( "" ));
-                    } 
+                    }
         }
-     
+
 
 
         @SuppressWarnings("unchecked")
-        protected void validateCommand7(Value value) 
+        protected void validateCommand7(Value value)
                 throws MalformedCommandException {
             validateObject(value);
             Map<String, Value> object = (Map<String, Value>) value.asJavaObject();
                     if (object.containsKey("dbcolumn")) {
                         validateString(object.get("dbcolumn"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "dbcolumn");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("label")) {
                         validateString(object.get("label"));
-                    } 
+                    }
                     else {
                         object.put("label", defaultStringValue( "" ));
-                    } 
+                    }
                     if (object.containsKey("linebreak")) {
                         validateBoolean(object.get("linebreak"));
-                    } 
+                    }
                     else {
                         object.put("linebreak", defaultBooleanValue( false ));
-                    } 
+                    }
                     if (object.containsKey("length")) {
                         validateInteger(object.get("length"));
-                    } 
+                    }
                     else {
                         String msg = String.format("Missing object element: '%s'.", "length");
                         throw new MalformedCommandException(msg);
-                    } 
+                    }
                     if (object.containsKey("optional")) {
                         validateBoolean(object.get("optional"));
-                    } 
+                    }
                     else {
                         object.put("optional", defaultBooleanValue( false ));
-                    } 
+                    }
                     if (object.containsKey("text")) {
                         validateString(object.get("text"));
-                    } 
+                    }
                     else {
                         object.put("text", defaultStringValue( "" ));
-                    } 
+                    }
         }
-     
+
 
     protected Value defaultStringValue(String s) {
         return new StringValue(s);
