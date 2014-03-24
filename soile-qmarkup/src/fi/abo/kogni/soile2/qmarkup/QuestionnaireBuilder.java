@@ -301,11 +301,14 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 String field = createColumnName(questionnaireId(),
                         value.getValue("dbcolumn").toString());
                 Value maxlen = value.getValue("length");
+                Boolean required = false;
+                required = ((BooleanValue) value.getValue("optional")).asBoolean();
                 tmpl.add("id", id);
                 tmpl.add("rows", value.getValue("rows"));
                 tmpl.add("columns", value.getValue("columns"));
                 tmpl.add("text", value.getValue("text"));
                 tmpl.add("label", value.getValue("label"));
+                tmpl.add("required", required);
                 tawd.setId(id);
                 tawd.setColumn(encrypt(field));
                 tawd.setMaxLength(maxlen.toString());

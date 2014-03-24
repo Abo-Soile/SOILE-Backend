@@ -185,13 +185,13 @@ $endif$
 
 >>
 
-textarea(id, text, rows, columns, label) ::= <<
+textarea(id, text, rows, columns, label, required) ::= <<
 
 <label for="$id$">$label$</label>
 <br />
 <textarea id="$id$" rows="$rows$" cols="$columns$"
-          data-dojo-type="dijit/form/SimpleTextarea"
-          required="true"
+          data-dojo-type="dijit/form/ValidationTextarea"
+          required="$required$"
           style="width:auto;"
           data-dojo-props="selectOnClick:true">$text$</textarea>
 
