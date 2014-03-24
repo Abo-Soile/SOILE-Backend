@@ -51,7 +51,6 @@ command numberfield {
     minimum: Integer,
     maximum: Integer,
     increment: Float
-
 }
 
 command textarea {

@@ -49,12 +49,14 @@ TYPE_STRING: 'String' ;
 TYPE_BOOLEAN: 'Boolean' ;
 BOOLEAN: 'true' | 'false' ;
 INTEGER: '-'? INT ;
-FLOAT: [1-9]*'.'[0-9]* | '0.'[0-9]* ;
+FLOAT: DIGIT+ '.' DIGIT* | DIGIT+  ;
+//FLOAT: STRING  ;
 STRING: '"' [a-zA-Z0-9 _]* '"' ;
 REQUIRED: 'required' ;
 ID: [a-zA-Z_] [a-zA-Z0-9_]* ;
 
 fragment INT: '0' | [1-9] [0-9]* ;
+fragment DIGIT: [0-9] ;
 
 WS: [ \t\n\r]+ -> skip ;
 
