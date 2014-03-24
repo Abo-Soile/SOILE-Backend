@@ -47,6 +47,16 @@ require(["dijit/form/HorizontalSlider",
   ready(function() {
     parser.parse();
 
+    //Disable mousewheel events on spinners to prevent the user from
+    //editing an answer when scrolling
+    dojo.extend(dijit.form.NumberSpinner, {
+      _mouseWheeled: function() {}
+    });
+
+    dojo.extend(dijit.form.HorizontalSlider, {
+      _mouseWheeled: function() {}
+    });
+
     var qdata = {};
     var testdata = {};
 
