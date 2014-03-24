@@ -71,7 +71,7 @@ command textbox {
     label: String(""),
     linebreak: Boolean(false),
     length: Integer,
-    optional: Boolean(false),
+    optional: Boolean(true),
     text: String("")
     
 }

@@ -342,6 +342,11 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 String field = createColumnName(questionnaireId(),
                         value.getValue("dbcolumn").toString());
                 String label = value.getValue("label").toString();
+                Boolean required = false;
+                System.out.println(required);
+                required = !((BooleanValue) value.getValue("optional")).asBoolean();
+
+                System.out.println("after: " +required);
                 String separator = "&nbsp;";
                 if (linebreak) {
                     separator = Tag.newEmptyTag(Tag.LINEBREAK).toString();
@@ -355,6 +360,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Value maxlen = value.getValue("length");
                 tmpl.add("length", maxlen);
                 tmpl.add("text", value.getValue("text"));
+                tmpl.add("required", required);
                 tbwd.setId(id);
                 tbwd.setColumn(encrypt(field));
                 tbwd.setMaxLength(maxlen.toString());

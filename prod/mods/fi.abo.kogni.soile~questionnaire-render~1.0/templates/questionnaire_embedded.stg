@@ -173,14 +173,15 @@ numberfield(id,
 
 >>
 
-textbox(id, label, length, text, separator) ::= <<
+textbox(id, label, length, text, separator, required) ::= <<
 
 $if(label)$
 <label for="$id$">$label$</label>
 $separator$
 $endif$
-<input id="$id$" data-dojo-type="dijit/form/TextBox"
-       data-dojo-props="placeHolder:'$text$',maxLength:$length$" />
+<input id="$id$" data-dojo-type="dijit/form/ValidationTextBox"
+       data-dojo-props="placeHolder:'$text$',maxLength:$length$"
+       required="$required$" />
 
 >>
 
@@ -190,6 +191,7 @@ textarea(id, text, rows, columns, label) ::= <<
 <br />
 <textarea id="$id$" rows="$rows$" cols="$columns$"
           data-dojo-type="dijit/form/SimpleTextarea"
+          required="true"
           style="width:auto;"
           data-dojo-props="selectOnClick:true">$text$</textarea>
 

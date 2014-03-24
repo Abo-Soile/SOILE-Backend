@@ -49,6 +49,10 @@ require(["dijit/form/HorizontalSlider",
 
     var qdata = {};
     var testdata = {};
+
+    var dojoForm = registry.byId("formcol");
+    console.log(dojoForm);
+
     var is_checked = function(id) {
       var widget = registry.byId(id);
       return (widget.get('checked') === true ? true : false);
@@ -207,22 +211,26 @@ require(["dijit/form/HorizontalSlider",
       on(dom.byId("submitButton"), "click", function() { 
         console.log("submitbutton");
 
-        var formdata = loadData();
-        send_questionnaire_data(formdata);
+        var valid = formcol.validate();
 
-        xhr.post("",{data:JSON.stringify(formdata)}).then(function(response) {
-          console.log(response);
+        if(valid) {
+          var formdata = loadData();
+          send_questionnaire_data(formdata);
 
-          var url = document.URL;
-          
-          currentPhase = parseInt(document.URL.slice(76));
-          currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
+          xhr.post("",{data:JSON.stringify(formdata)}).then(function(response) {
+            console.log(response);
 
-          url = url.slice(0, url.lastIndexOf("/")+1);
+            var url = document.URL;
+            
+            currentPhase = parseInt(document.URL.slice(76));
+            currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
 
-          window.location.href = url+(currentPhase+1);
-          //window.location.assign("../");
-        });
+            url = url.slice(0, url.lastIndexOf("/")+1);
+
+            window.location.href = url+(currentPhase+1);
+            //window.location.assign("../");
+          });
+        }
 
       });
     };

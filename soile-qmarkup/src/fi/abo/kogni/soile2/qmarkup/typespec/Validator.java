@@ -586,7 +586,7 @@ public abstract class Validator {
             validateBoolean(object.get("optional"));
         }
         else {
-            object.put("optional", defaultBooleanValue( false ));
+            object.put("optional", defaultBooleanValue( true ));
         }
         if (object.containsKey("text")) {
             validateString(object.get("text"));
