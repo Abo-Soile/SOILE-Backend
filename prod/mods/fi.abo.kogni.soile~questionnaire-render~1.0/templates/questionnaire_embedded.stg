@@ -190,7 +190,7 @@ textarea(id, text, rows, columns, label, required) ::= <<
 <label for="$id$">$label$</label>
 <br />
 <textarea id="$id$" rows="$rows$" cols="$columns$"
-          data-dojo-type="dijit/form/ValidationTextarea"
+          data-dojo-type="myWidgets/ValidationTextArea"
           required="$required$"
           style="width:auto;"
           data-dojo-props="selectOnClick:true">$text$</textarea>
