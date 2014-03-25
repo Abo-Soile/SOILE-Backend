@@ -41,9 +41,6 @@ p {
 	line-height: 1.5;
 }
 
-body {
-	background-color: #F8F8F8;
-}
 
 .break
 {
@@ -75,8 +72,8 @@ body {
 	height: 50px;
 }
 
-#main {
-	min-height: 550px;
+body > .container {
+	padding-bottom: 50px;
 }
 /*#page {
 	width: 960px;
@@ -96,8 +93,24 @@ body {
 	font-size: x-large;
 }
 
+/*Bootstrap sticky footer http://getbootstrap.com/examples/sticky-footer-navbar/*/
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	background-color: #F8F8F8;
+	margin-bottom: 100px;
+}
+
 #footer {
-	margin-top: 50px;
-	height: 100px;
-	background-color: grey;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: #EAEADE;
+}
+
+#foot {
+	min-height: 100px;
 }
