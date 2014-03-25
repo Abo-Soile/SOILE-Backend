@@ -87,3 +87,8 @@ p {
 	position: absolute;
 	font-size: x-large;
 }
+
+#footer {
+	margin-top: 50px;
+	background-color: grey;
+}
