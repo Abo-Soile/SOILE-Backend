@@ -41,6 +41,10 @@ p {
 	line-height: 1.5;
 }
 
+body {
+	background-color: #F8F8F8;
+}
+
 .break
 {
 	float:none;
@@ -70,6 +74,10 @@ p {
 .placeholder50px {
 	height: 50px;
 }
+
+#main {
+	min-height: 550px;
+}
 /*#page {
 	width: 960px;
 	margin-left: auto;
@@ -90,5 +98,6 @@ p {
 
 #footer {
 	margin-top: 50px;
+	height: 100px;
 	background-color: grey;
 }
