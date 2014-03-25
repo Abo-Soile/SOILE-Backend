@@ -10,6 +10,8 @@ require(["dojo/dom",
 		"dojo/json",
 		"dojox/layout/ContentPane",
 		"dojox/widget/DialogSimple",
+		"dojo/store/Memory",
+		"dijit/form/FilteringSelect",
 		"dojo/ready"],
 function(dom,
 		construct,
@@ -23,12 +25,15 @@ function(dom,
 		json,
 		contentPane,
 		Dialog,
+		Memory,
+		FilteringSelect,
 		ready) {
 	ready(function() {
 		parser.parse();
 
 		var submitButton = dom.byId("submit");
 		var newForm = dom.byId("newform")
+		var newTest = dom.byId("newtest")
 
 		var form = dom.byId("expForm");
 
@@ -37,7 +42,34 @@ function(dom,
 		var startDate = registry.byId("startDate");
 		var endDate = registry.byId("endDate");
 
-		var componentList = dom.byId("componentlist")
+		var componentList = dom.byId("componentlist");
+
+		var experimentStore = null;
+		var filteringSelect = null;
+
+		xhr.get("/test/json").then(function(jsonData) {
+			var experimentList = json.parse(jsonData);
+			experimentStore = new Memory({
+				data: experimentList
+			});
+
+			for(var i = 0; i<experimentList.length; i++){
+				experimentList[i].id = experimentList[i]._id;
+			}
+
+			console.log(experimentList);
+
+			filteringSelect = new FilteringSelect({
+				id:"testSelector",
+				name: "test",
+				store: experimentStore,
+				searchAttr: "name",
+				value: experimentList[0]._id},
+				"testSelector"
+			);
+
+		})
+
 
 		var dialog = "";
 		//var contentpane = new ContentPane("").placeAt("contentpane");
@@ -72,6 +104,16 @@ function(dom,
 				})
 			
 		});
+
+		on(newTest, "click", function() {
+			var testId = filteringSelect.get('value');
+			var testName = filteringSelect.get('displayedValue');
+			xhr.post("addtest", {
+				data: json.stringify({"testId":testId,"name":testName})
+			}).then(function(data) {
+				console.log(data);
+			})
+		})
 
 		on(submitButton, "click", function() {
 			var isValid = true;

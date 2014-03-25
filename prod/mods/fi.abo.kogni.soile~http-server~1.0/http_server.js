@@ -533,6 +533,26 @@ customMatcher.post('/experiment/:id/editformname', function(request){
   });
 });
 
+customMatcher.post("/experiment/:id/addtest", function(request) {
+  var expId = request.params().get('id');
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    data = data.getString(0, data.length());
+    data = JSON.parse(data);
+
+    queryMongo.addTestToExperiment(expId, data.testId, data.name, function(r) {
+      request.response.end(JSON.stringify(r.result));
+    })
+
+  });
+});
+
 customMatcher.post('/experiment/:id/deletecomponent', function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
@@ -564,6 +584,8 @@ customMatcher.get('/experiment/:id/json', function(request){
 });
 
 
+//Shows a specific phase, if phase doesn't exist, assume last phase
+//and redirect to some kind of final page
 customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phaseNo = request.params().get('phase');
@@ -611,6 +633,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   });
 });
 
+//Records data from a certain phase,
 customMatcher.post('/experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phase = request.params().get('phase');
@@ -877,6 +900,12 @@ customMatcher.get('/test', function(request) {
 
 });
 
+customMatcher.get('/test/json', function(request) {
+  queryMongo.getTestList(function(r) {
+    request.response.end(JSON.stringify(r.results))
+  })
+})
+
 
 customMatcher.post("/test", function(request) {
   var data = new vertx.Buffer();
@@ -950,7 +979,7 @@ customMatcher.post("/test/:id", function(request) {
         test.compiled = true;
       }
 
-      queryMongo.saveTest(test, function() {
+      queryMongo.updateTest(test, function() {
         request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
         request.response.end(JSON.stringify(response));
       });

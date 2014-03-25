@@ -44,6 +44,29 @@ var mongoHandler = {
 
     })
   },
+
+  addTestToExperiment: function(expid,testid, name,response) {
+    vertx.eventBus.send(this.mongoAddress, {
+      "action":"update",
+      "collection":"experiment",
+      "criteria":{
+        "_id":expid
+      },
+      "objNew": {
+        "$push":{
+          "components":{
+            "id":testid,
+            "name":name, 
+            "type":"test"
+          }
+        }
+      }
+    }, function(reply){
+      console.log(JSON.stringify(reply))
+      response(reply);
+
+    })
+  },
 /*
   Mongo example that should work
 
@@ -136,6 +159,19 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       response(reply)
     })
   },
+  updateTest: function(test,response) {
+    vertx.eventBus.send(this.mongoAddress, {"action":"update",
+    "collection":"tests", "criteria":{"_id":test._id},
+    "objNew":{"$set":{
+        "code": test.code,
+        "js": test.js,
+        "compiled":test.compiled
+      }
+    }}, function(reply) {
+      response(reply)
+    })
+  }
+  ,
 
   getTest: function(id, response){
     vertx.eventBus.send(this.mongoAddress, {"action":"findone",
