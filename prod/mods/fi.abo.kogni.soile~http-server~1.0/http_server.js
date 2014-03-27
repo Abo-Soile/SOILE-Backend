@@ -622,16 +622,42 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
        // request.response.end(form);
       });
+    }
     if(phase.type === "test") {
       console.log("test");
-    }
 
+      queryMongo.getTest(phase.id, function(r2) {
+        var experimentJs = r2.result.js;
+        context.experiment = experimentJs.replace(/(\r\n|\n|\r)/gm,"");
+
+;
+
+        templateManager.render_template("testphase", context, request);
+      })
     }
+    
     else {
+      console.log(phase.type);
       console.log("Phase type is undefined");
     }
   });
 });
+
+customMatcher.get('/experiment/:id/phase/:phase/json', function(request) {
+  var expID = request.params().get('id');
+  var phaseNo = request.params().get('phase'); 
+
+  queryMongo.getExperiment(expID, function(r) {
+    phase = r.result.components[phaseNo];
+
+    queryMongo.getTest(phase.id, function(r2) {
+
+      request.response.end(r2.result.js)
+    });
+  });
+
+});
+
 
 //Records data from a certain phase,
 customMatcher.post('/experiment/:id/phase/:phase', function(request) {
