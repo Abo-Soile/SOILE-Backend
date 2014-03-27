@@ -89,7 +89,7 @@ function(dom,
 						});
 					// dialog.show();
 
-					createComponentRow(data.id, {"dialog":dialog});
+					createComponentRow(data.id, {"dialog":dialog, "type":"form"});
 
 					//li.innerHtml+=editbutton.domNode;
 					console.log(li);
@@ -108,12 +108,17 @@ function(dom,
 		on(newTest, "click", function() {
 			var testId = filteringSelect.get('value');
 			var testName = filteringSelect.get('displayedValue');
+
+			console.log("Adding test");
 			xhr.post("addtest", {
 				data: json.stringify({"testId":testId,"name":testName})
 			}).then(function(data) {
-				console.log(data);
-			})
-		})
+				data = json.parse(data);
+				console.log("Creating test row" + data);
+
+				createComponentRow(data.id, {"type":"test"})
+			});
+		});
 
 		on(submitButton, "click", function() {
 			var isValid = true;
@@ -159,7 +164,9 @@ function(dom,
 			for(var i =0;i<components.length;i++) {
 				console.log("adding " + components[i].id);
 				createComponentRow(components[i].id, 
-								{name:components[i].name});
+								{name:components[i].name, 
+								 type:components[i].type
+								});
 			}
 		})
 
