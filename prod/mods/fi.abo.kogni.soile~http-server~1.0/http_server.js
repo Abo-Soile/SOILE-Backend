@@ -12,6 +12,11 @@ var http_directory = http_config.directory;
 //var routeMatcher = new vertx.RouteMatcher();
 
 
+messageDigest = java.security.MessageDigest.getInstance("SHA-256");
+
+var a = new java.lang.String("sdfsdfs");
+console.log(a.hashCode());
+
 // This function returns a function that calls the requesthandler
 // which makes it possible to run arbitrary code before the request
 function sessionTest(func) {
