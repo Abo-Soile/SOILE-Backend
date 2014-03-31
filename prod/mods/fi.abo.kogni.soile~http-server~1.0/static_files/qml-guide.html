@@ -807,10 +807,13 @@
       <strong>value</strong>: <em>Integer</em>,
       <strong>minimum</strong>: <em>Integer</em>,
       <strong>maximum</strong>: <em>Integer</em>,
-      <strong>increment</strong>: <em>Integer</em>
+      <strong>increment</strong>: <em>Integer</em> or <em>"Decimal value"</em>
   }
           </pre>
         </div>
+        <p>
+          Increment can be either an integer(5) or a decimal value(3.6).Note that decimal values must be surrounded by quotes("5.5"). If not it's interpreted as an integer.
+       </p>
 
         <hr />
 
@@ -869,10 +872,13 @@
       <strong>columns</strong>: <em>Integer</em>,
       <strong>label</strong>: <em>String</em>,
       <strong>text</strong>: <em>String</em>
+      <strong>optional</strong>: <em>Boolean</em> (default=true)
   }
           </pre>
-        </div>
 
+        </div>
+        
+        <p>The <strong>Optional</strong> field is not required and can be left out, the default value for it is false</p>
         <hr />
 
         <h3><a name="cmd_textbox">/textbox</a></h3>
@@ -885,9 +891,12 @@
       <strong>linebreak</strong>: <em>Boolean</em>,
       <strong>length</strong>: <em>Integer</em>,
       <strong>text</strong>: <em>String</em>
+      <strong>optional</strong>: <em>Boolean</em> (default=true)
   }
           </pre>
         </div>
+          
+          <p>The <strong>Optional</strong> field is not required and can be left out, the default value for it is false </p>
 
         <hr />
 
