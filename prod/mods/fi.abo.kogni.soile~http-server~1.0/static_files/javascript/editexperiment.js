@@ -116,7 +116,8 @@ function(dom,
 				data = json.parse(data);
 				console.log("Creating test row" + data);
 
-				createComponentRow(data.id, {"type":"test"})
+				createComponentRow(data.id, {"type":"test", 
+											 "name":data.name})
 			});
 		});
 
@@ -192,58 +193,86 @@ function(dom,
 
 			var li = construct.create("li", null,componentlist,"last");
 					
-			var nameBox = new dijit.form.TextBox({
-				id:"name:"+id,
-				value:name,
-				onChange: function(value){
-					console.log(value +" ---- " + id);
-					xhr.post("editformname", {
-						data: json.stringify({"id":id, "name":value})
-					}).then(function(res) {
-						console.log(res);
-					});
-				}
-			});
-
-			var editButton = new dijit.form.Button({
-			 	label:"Edit",
-			 	id:"edit:"+id,
-				onClick: function(){
-					console.log("edit " + id);
-
-					var dialog = new Dialog({
-						"title":"titlfs",
-						"content":"<iframe width='100%' height='600px'  id='formframe' src=/questionnaire/mongo/"+id +"></iframe>",
-						"executeScripts":"true",
-						"style":"width: 90%; height:650px;"
-						});
-					dialog.show();
-				}});
-
-			var deleteButton = new dijit.form.Button({
-			 	label:"Delete",
-			 	id:"delete:"+id,
-				onClick: function(){
-					console.log("delete " + id);
-					xhr.post("deletecomponent",
-						{
-							data: json.stringify({"id":id})
+			if(opts.type === "form") {
+				var nameBox = new dijit.form.TextBox({
+					id:"name:"+id,
+					value:name,
+					onChange: function(value){
+						console.log(value +" ---- " + id);
+						xhr.post("editformname", {
+							data: json.stringify({"id":id, "name":value})
 						}).then(function(res) {
-							construct.destroy(li);
-					})
-				}});
+							console.log(res);
+						});
+					}
+				});
 
-			var newWindowButton = new dijit.form.Button({
-				label:"Edit in new window",
-				onClick: function() {
-					window.open("/questionnaire/mongo/"+id)
-				}
-			})
+				var editButton = new dijit.form.Button({
+				 	label:"Edit",
+				 	id:"edit:"+id,
+					onClick: function(){
+						console.log("edit " + id);
 
-			construct.place(nameBox.domNode, li);
-			construct.place(editButton.domNode, li);
-			construct.place(deleteButton.domNode,li)
-			construct.place(newWindowButton.domNode, li);
+						var dialog = new Dialog({
+							"title":"titlfs",
+							"content":"<iframe width='100%' height='600px'  id='formframe' src=/questionnaire/mongo/"+id +"></iframe>",
+							"executeScripts":"true",
+							"style":"width: 90%; height:650px;"
+							});
+						dialog.show();
+					}});
+
+				var deleteButton = new dijit.form.Button({
+				 	label:"Delete",
+				 	id:"delete:"+id,
+					onClick: function(){
+						console.log("delete " + id);
+						xhr.post("deletecomponent",
+							{
+								data: json.stringify({"id":id})
+							}).then(function(res) {
+								construct.destroy(li);
+						})
+					}});
+
+				var newWindowButton = new dijit.form.Button({
+					label:"Edit in new window",
+					onClick: function() {
+						window.open("/questionnaire/mongo/"+id)
+					}
+				})
+
+				construct.place(nameBox.domNode, li);
+				construct.place(editButton.domNode, li);
+				construct.place(deleteButton.domNode,li)
+				construct.place(newWindowButton.domNode, li);
+			}
+			else if(opts.type === "test") {
+
+				console.log("Test");
+				var nameBox = new dijit.form.TextBox({
+					id:"name"+id,
+					readOnly:true,
+					disabled: true,
+					value:opts.name
+				});
+
+				var deleteButton = new dijit.form.Button({
+				 	label:"Delete",
+				 	id:"delete:"+id,
+					onClick: function(){
+						console.log("delete " + id);
+						xhr.post("deletecomponent",
+							{
+								data: json.stringify({"id":id})
+							}).then(function(res) {
+								construct.destroy(li);
+						})
+					}});
+
+				construct.place(nameBox.domNode, li);
+				construct.place(deleteButton.domNode, li);
+			}
 
 		}
 	});

@@ -547,7 +547,12 @@ customMatcher.post("/experiment/:id/addtest", function(request) {
     data = JSON.parse(data);
 
     queryMongo.addTestToExperiment(expId, data.testId, data.name, function(r) {
-      request.response.end(JSON.stringify(r.result));
+      
+      var resp = r;
+      resp.name = data.name,
+      resp.id = data.testId
+      console.log(JSON.stringify(resp))
+      request.response.end(JSON.stringify(resp));
     })
 
   });
