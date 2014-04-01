@@ -144,6 +144,8 @@ var utils = (function(conf) {
 
 var queryMongo = require('mongoHandler');
 
+queryMongo.setIndexes();
+
 var templateManager = (function(folder) {
   var templates = [];
   var isLoaded = false;

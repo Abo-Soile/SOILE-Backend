@@ -1,6 +1,20 @@
 var vertx = require('vertx');
 var console = require('vertx/console');
 
+function _hashPassword(password) {
+
+  var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
+  var jpass = new java.lang.String(password);
+
+  var bytes = messageDigest.digest(jpass.getBytes());
+
+  var hexString = java.math.BigInteger(1, bytes).toString(16);
+
+  console.log(hexString);
+
+  return hexString;
+}
+
 var mongoHandler = {
   mongoAddress: "vertx.mongo-persistor",
   test: function(){
@@ -202,9 +216,43 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     vertx.eventBus.send(this.mongoAddress, {"action":"findone",
     "collection":"users", "matcher":{"username":username, "password":password}},
     function(reply) {
+
+      _hashPassword("testinghashing");
       response(reply);
     })
+  },
+
+  newUser: function(username, password, response) {
+
+    var pass = _hashPassword(password);
+
+    vertx.eventBus.send(this.mongoAddress, {"action": "save",
+    "collection":"users", "document":{"username":username, "password":pass}},
+     function(reply) {
+      response(reply);
+     })
+  },
+
+  //Function that sets all indexes at startup
+  setIndexes: function() {
+    vertx.eventBus.send(this.mongoAddress, {"action": "command",
+    "command":
+      "{eval: 'function() {db.users.ensureIndex({username:1}, {unique: true});}', args: []}" }, 
+      
+      function(reply) {
+        console.log("Setting user index");
+        console.log(JSON.stringify(reply));
+      })
   }
+
+  // _hashPassword: function(password) {
+  //   var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
+  //   var jpass = new java.lang.String(password);
+
+  //   var bytes = messageDigest.digest(jpass.getBytes());
+
+  //   console.log(bytes);
+  // }
 };
 
 module.exports = mongoHandler;
