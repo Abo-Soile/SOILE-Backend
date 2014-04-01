@@ -11,6 +11,8 @@ var host = http_config.host;
 var http_directory = http_config.directory;
 //var routeMatcher = new vertx.RouteMatcher();
 
+var sessionMap = vertx.getMap("soile.session.map");
+
 
 messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 
@@ -138,6 +140,7 @@ var utils = (function(conf) {
   };
 
 })(shared_config);
+
 
 var queryMongo = require('mongoHandler');
 
@@ -286,6 +289,54 @@ var sessionManager =  {
 
   getPersonToken: function() {
     return this.readCookie("PersonToken");
+  },
+
+  setSessionCookie: function(key) {
+    var c = this.createCookie("Session", key, 1);
+    this.request.response.putHeader("Set-Cookie", c);
+  },
+
+  getSessionCookie: function() {
+    return this.readCookie("Session");
+  },
+
+
+  login: function(username, password) {
+      console.log("----Logging in-----")
+      //console.log(JSON.stringify(r));
+
+      var sessionKey = java.util.UUID.randomUUID().toString();
+      console.log(this.getPersonToken());
+      this.setSessionCookie(sessionKey);
+
+      var timerID = vertx.setTimer(1000*60*60*24, function(timerID) {
+        sessionMap.put(sessionKey, null);
+      });
+
+      sessionMap.put(sessionKey, JSON.stringify({"username":username, "timerID": timerID}));
+  },
+
+  loggedIn: function() {
+    var sessionData = sessionMap.get(this.getSessionCookie());
+    if(sessionData == null) {
+      return false;
+    }
+    else {return JSON.parse(sessionData);}
+      
+  },
+
+  logout: function() {
+    var data = this.loggedIn();
+    if(data) {
+      console.log("Logging out");
+      console.log(JSON.stringify(data));
+      vertx.cancelTimer(data.timerID);
+      sessionMap.put(this.getSessionCookie(), "");
+
+      this.setSessionCookie("");
+    } else {
+      console.log("there was no data");
+    }   
   }
 
 }
@@ -316,7 +367,7 @@ function session(func) {
 customMatcher.get("/login", function(request) {
  // request.response.putHeader("Set-Cookie","MySessionToken");
  // request.response.putHeader("Set-Cookie","MyAuthToken");
-
+  
   templateManager.render_template('login', "",request);
 });
 
@@ -330,15 +381,24 @@ customMatcher.post("/login", function(request) {
 
   request.endHandler(function() {
 
-
     console.log("Data: " + data.getString(0, data.length()));
 
-    request.response.end("Returning testpost");
+    queryMongo.authUser("test", "test", function(r) {
+      
+      console.log(JSON.stringify(r));
+      request.session.login("test","test");
+
+      request.response.end("Returning testpost");
+    })
   });
 });
 
 customMatcher.get("/logout", function(request) {
-  request.response.end("Logging user out");
+  var uname = request.session.loggedIn();
+
+  request.session.logout();
+
+  request.response.end("Logging user out " + JSON.stringify(uname));
 });
 
 customMatcher.get("/a", function(request){
