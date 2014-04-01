@@ -679,7 +679,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
     var noOfPhases = r.result.components.length;
 
-    var context = {"completed":phaseNo/noOfPhases*100, "phasesLeft":phaseNo+"/"+noOfPhases}
+    var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases}
 
     if(phase.type === "form") {
       console.log("Form ");
@@ -699,8 +699,6 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
       queryMongo.getTest(phase.id, function(r2) {
         var experimentJs = r2.result.js;
         context.experiment = experimentJs.replace(/(\r\n|\n|\r)/gm,"");
-
-;
 
         templateManager.render_template("testphase", context, request);
       })
