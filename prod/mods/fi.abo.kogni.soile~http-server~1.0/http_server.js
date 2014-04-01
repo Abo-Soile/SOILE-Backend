@@ -403,6 +403,43 @@ customMatcher.get("/logout", function(request) {
   request.response.end("Logging user out " + JSON.stringify(uname));
 });
 
+customMatcher.get('/signup', function(request) {
+
+  templateManager.render_template('signup', {},request);
+
+});
+
+customMatcher.post("/signup", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    var params = {};
+
+    data = data.getString(0, data.length());
+
+    data = data.split('&');
+    for(var i = 0; i<data.length;i++) {
+      datapart = data[i].split('=');
+      params[datapart[0]] = datapart[1];
+    }
+
+    //console.log(data);
+    console.log(JSON.stringify(params));
+
+    var templateVars = {}
+    templateVars.username = params.email;
+    templateVars.errors = "Errorszzzz"
+
+    templateManager.render_template('signup', templateVars,request);
+  });
+});
+
+
 customMatcher.get("/a", function(request){
   console.log(JSON.stringify(container.config));
 

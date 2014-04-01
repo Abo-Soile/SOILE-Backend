@@ -213,11 +213,15 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   },
 
   authUser: function(username, password, response) {
+
+    var pass = _hashPassword(password);
+
     vertx.eventBus.send(this.mongoAddress, {"action":"findone",
-    "collection":"users", "matcher":{"username":username, "password":password}},
+    "collection":"users", "matcher":{"username":username, "password":pass}},
     function(reply) {
 
       _hashPassword("testinghashing");
+      console.log(reply);
       response(reply);
     })
   },
@@ -227,7 +231,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     var pass = _hashPassword(password);
 
     vertx.eventBus.send(this.mongoAddress, {"action": "save",
-    "collection":"users", "document":{"username":username, "password":pass}},
+    "collection":"users", "document":{"username":username, "password":pass, "admin":false}},
      function(reply) {
       response(reply);
      })
