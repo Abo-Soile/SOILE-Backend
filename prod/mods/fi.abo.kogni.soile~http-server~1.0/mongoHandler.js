@@ -221,8 +221,12 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     "collection":"users", "matcher":{"username":username, "password":pass}},
     function(reply) {
 
-      _hashPassword("testinghashing");
-      console.log(reply);
+      console.log("Finding user");
+      console.log(JSON.stringify(reply));
+      if(reply.result==null) {
+        reply.status="notfound";
+      }
+      
       response(reply);
     })
   },

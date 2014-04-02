@@ -31,6 +31,15 @@ function sessionTest(func) {
 
     //console.log("Cookies:: " + request.headers().get("Cookie"));
 
+    request.redirect = function(url) {
+      console.log("Redirecting to " + url);
+      console.log(this.remoteAddress());
+
+      this.response.statusCode(302);
+      this.response.putHeader('Location', url);
+      this.response.end();
+    }
+
     var session = sessionManager.loadManager(request);
     session.setPersonToken();
 
@@ -314,7 +323,7 @@ var sessionManager =  {
   },
 
 
-  login: function(username, password) {
+  login: function(username, admin) {
       console.log("----Logging in-----")
       //console.log(JSON.stringify(r));
 
@@ -326,7 +335,8 @@ var sessionManager =  {
         sessionMap.put(sessionKey, null);
       });
 
-      sessionMap.put(sessionKey, JSON.stringify({"username":username, "timerID": timerID}));
+      sessionMap.put(sessionKey, JSON.stringify({"username":username, "timerID": timerID,
+                                                 "admin":admin}));
   },
 
   loggedIn: function() {
@@ -370,6 +380,15 @@ function session(func) {
     var session = sessionManager.loadManager(request);
     session.setPersonToken();
 
+    request.prototype.redirect = function(url) {
+      console.log("Redirecting to " + url);
+      console.log(this.remoteAddress());
+
+      this.response.statusCode(302);
+      this.response.putHeader('Location', url);
+      this.response.end();
+    }
+
     //Sending the session manager with the request
     request.session = session;
 
@@ -394,14 +413,29 @@ customMatcher.post("/login", function(request) {
 
   request.endHandler(function() {
 
-    console.log("Data: " + data.getString(0, data.length()));
+    var params = data.getString(0, data.length());
+    params = utils.getUrlParams(params);
 
-    queryMongo.authUser("test", "test", function(r) {
+    var username = params.uername;
+    var password = params.password;
+
+    var templateVars = {};
+
+    queryMongo.authUser(username, password, function(r) {
       
       console.log(JSON.stringify(r));
-      request.session.login("test","test");
+      if (r.status==="ok") {
+        request.session.login(r.result.username,r.result.admin);
+        request.redirect("/");
+        return 
+      }
+      else {
 
-      request.response.end("Returning testpost");
+        templateVars.errors = "Wrong username or password";
+        templateManager.render_template('login', templateVars, request);
+      }
+
+      //request.response.end("Returning testpost");
     })
   });
 });
