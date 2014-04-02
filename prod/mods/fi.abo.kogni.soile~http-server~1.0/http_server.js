@@ -199,8 +199,15 @@ var templateManager = (function(folder) {
 
       data.URI = String(request.absoluteURI());
       data.token = request.session.getPersonToken();
+      if(request.session.loggedIn()) {
+        data.loggedIn = true;
+        data.user = request.session.loggedIn();
+      }
+      else {
+        data.loggedIn = false;
+      }
 
-      // console.log(JSON.stringify(data));
+      console.log(JSON.stringify(data));
 
       if (!isLoaded || DEBUG) {
         this.load_template(templateName);
