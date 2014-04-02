@@ -17,8 +17,9 @@ function _hashPassword(password) {
 
 var mongoHandler = {
   mongoAddress: "vertx.mongo-persistor",
-  test: function(){
-    console.log("This is a test");
+  init: function(){
+    this.setIndexes();
+    this.ensureAdmin();
   },
 
   getExperiment: function(id, response) {
@@ -247,6 +248,19 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
         console.log("Setting user index");
         console.log(JSON.stringify(reply));
       })
+  },
+
+  ensureAdmin: function() {
+
+    var pass = _hashPassword("admin")
+    vertx.eventBus.send(this.mongoAddress, {"action":"save",
+    "collection":"users", "document":{"_id": 1,
+                                      "username":"admin",
+                                      "password": pass,
+                                      "admin":true }},
+    function(reply) {
+      console.log("Generated admin");
+    });
   }
 
   // _hashPassword: function(password) {
