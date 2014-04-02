@@ -136,6 +136,17 @@ var utils = (function(conf) {
 
     'getRandomInt': function(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    'getUrlParams': function(params) {
+      var paramsObject = {};
+
+      params = params.split('&');
+      for(var i = 0; i<params.length;i++) {
+        var datapart = params[i].split('=');
+        paramsObject[datapart[0]] = datapart[1];
+      }
+
+      return paramsObject;
     }
   };
 
@@ -144,7 +155,7 @@ var utils = (function(conf) {
 
 var queryMongo = require('mongoHandler');
 
-queryMongo.setIndexes();
+queryMongo.init();
 
 var templateManager = (function(folder) {
   var templates = [];
@@ -422,20 +433,42 @@ customMatcher.post("/signup", function(request) {
 
     data = data.getString(0, data.length());
 
-    data = data.split('&');
-    for(var i = 0; i<data.length;i++) {
-      datapart = data[i].split('=');
-      params[datapart[0]] = datapart[1];
-    }
+    // data = data.split('&');
+    // for(var i = 0; i<data.length;i++) {
+    //   datapart = data[i].split('=');
+    //   params[datapart[0]] = datapart[1];
+    // }
+
+    params = utils.getUrlParams(data);
+
+    var email = params.email;
+    var passwd = params.passwd;
+
+    var templateVars = {}
+    templateVars.username = email;
 
     //console.log(data);
     console.log(JSON.stringify(params));
 
-    var templateVars = {}
-    templateVars.username = params.email;
-    templateVars.errors = "Errorszzzz"
+    if(!(email&&passwd)) {
+      templateVars.errors = "Both fields are required";
+      templateManager.render_template('signup', templateVars,request);
+      return;
+    }
 
-    templateManager.render_template('signup', templateVars,request);
+    queryMongo.newUser(email, passwd, function(r) {
+      console.log("Trying to create new user");
+      console.log(JSON.stringify(r));
+      if (r.status==="ok") {
+        templateManager.render_template('landing', {}, request);
+      }
+      else {
+        templateVars.errors = "Username already exists!"
+        templateManager.render_template('signup', templateVars, request);
+      }
+    })
+
+
   });
 });
 
