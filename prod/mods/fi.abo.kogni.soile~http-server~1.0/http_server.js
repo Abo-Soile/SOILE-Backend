@@ -61,6 +61,18 @@ function sessionTest(func) {
 }
 
 
+//Decorator ish function to ensure that the user is admin
+function requireAdmin(func) {
+  return function(request) {
+    console.log("Require Admin running " + request.session.isAdmin())
+    if (!request.session.isAdmin()) {
+      request.unauthorized();
+    }else {
+      func(request);
+    }
+  }
+}
+
 
 function customMatcher() {
   var test = "6";
@@ -536,7 +548,7 @@ customMatcher.post("/signup", function(request) {
 });
 
 
-customMatcher.get("/a", function(request){
+customMatcher.get("/a", requireAdmin(function(request){
   console.log(JSON.stringify(container.config));
 
   vertx.eventBus.send("vertx.mongo-persistor",{"action":"save", 
@@ -550,7 +562,7 @@ customMatcher.get("/a", function(request){
       });
 
   templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
-});
+}));
 
 customMatcher.get("/aa", function(request){
 
@@ -647,52 +659,51 @@ customMatcher.get('/experiment/:id', function(request){
 
 
 
-customMatcher.get('/experiment/:id/edit', function(request){
-  if(request.session.isAdmin()) {
-    var id = request.params().get('id');
-    console.log(id);
+customMatcher.get('/experiment/:id/edit', requireAdmin(function(request){
 
-    queryMongo.getExperiment(id,function(r){
-      var experiment = r.result;
-      console.log(JSON.stringify(r));
-      templateManager.render_template("editexperiment", {"exp":experiment},request);
-    });
-  } else {
-    return request.unauthorized();
-  }
-});
+  var id = request.params().get('id');
+  console.log(id);
 
-customMatcher.post('/experiment/:id/edit', function(request){
-  var data = new vertx.Buffer();
-
-  request.dataHandler(function(buffer){
-    data.appendBuffer(buffer);
+  queryMongo.getExperiment(id,function(r){
+    var experiment = r.result;
+    console.log(JSON.stringify(r));
+    templateManager.render_template("editexperiment", {"exp":experiment},request);
   });
+ 
+}));
 
-  request.endHandler(function() {
+customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
+    var data = new vertx.Buffer();
 
-    var id = request.params().get('id');
-    var jsonData = JSON.parse(data.getString(0, data.length()));
-    console.log(data.getString(0, data.length())); 
-
-    var sDate = new Date(jsonData.startDate);
-    var eDate = new Date(jsonData.endDate);
-
-
-    console.log(sDate.toString());
-
-    queryMongo.updateExperiment(jsonData, id,function(r){
-      console.log(JSON.stringify(r));
-      var resp = r;
-      request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
-      request.response.end(JSON.stringify(resp));
-
+    request.dataHandler(function(buffer){
+      data.appendBuffer(buffer);
     });
-    //request.response.end({"status":"ok","id":id});
-  });
-});
 
-customMatcher.post('/experiment/:id/addform', function(request){
+    request.endHandler(function() {
+
+      var id = request.params().get('id');
+      var jsonData = JSON.parse(data.getString(0, data.length()));
+      console.log(data.getString(0, data.length())); 
+
+      var sDate = new Date(jsonData.startDate);
+      var eDate = new Date(jsonData.endDate);
+
+
+      console.log(sDate.toString());
+
+      queryMongo.updateExperiment(jsonData, id,function(r){
+        console.log(JSON.stringify(r));
+        var resp = r;
+        request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+        request.response.end(JSON.stringify(resp));
+
+      });
+      //request.response.end({"status":"ok","id":id});
+    });
+}));
+
+customMatcher.post('/experiment/:id/addform', requireAdmin(function(request){
+
   var address = utils.get_address('questionnaire_render');
   var expId = request.params().get('id');
 
@@ -713,9 +724,9 @@ customMatcher.post('/experiment/:id/addform', function(request){
       request.response.end(JSON.stringify(response));
     });
   });
-});
+}));
 
-customMatcher.post('/experiment/:id/editformname', function(request){
+customMatcher.post('/experiment/:id/editformname', requireAdmin(function(request){
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -735,9 +746,9 @@ customMatcher.post('/experiment/:id/editformname', function(request){
       request.response.end(JSON.stringify(r.result));
     });
   });
-});
+}));
 
-customMatcher.post("/experiment/:id/addtest", function(request) {
+customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -760,9 +771,9 @@ customMatcher.post("/experiment/:id/addtest", function(request) {
     })
 
   });
-});
+}));
 
-customMatcher.post('/experiment/:id/deletecomponent', function(request) {
+customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -781,7 +792,7 @@ customMatcher.post('/experiment/:id/deletecomponent', function(request) {
     })
 
   });
-});
+}));
 
 customMatcher.get('/experiment/:id/json', function(request){
   var expId = request.params().get('id');
@@ -892,7 +903,7 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
 });
 
 
-customMatcher.get('/experiment/:id/data', function(request) {
+customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {
     data = r.results;
@@ -965,7 +976,7 @@ customMatcher.get('/experiment/:id/data', function(request) {
      
      //request.response.end(JSON.stringify(r.results));
   });
-})
+}))
 
 customMatcher.get('/test/demo', function(request) {
   var file = 'demo.html';
@@ -1067,7 +1078,7 @@ customMatcher.get('/questionnaire/generated/:id', function(request) {
 
 });
 
-customMatcher.get('/questionnaire/mongo/:id', function(request){
+customMatcher.get('/questionnaire/mongo/:id', requireAdmin(function(request){
   var id = request.params().get('id');
   queryMongo.getForm(id, function(r){
     //console.log(JSON.stringify(r))
@@ -1075,9 +1086,9 @@ customMatcher.get('/questionnaire/mongo/:id', function(request){
     var markup = r.result.markup;
     templateManager.render_template('displayForm', {"form":form,"markup":markup},request);
   });
-});
+}));
 
-customMatcher.post('/questionnaire/mongo/:id', function(request) {
+customMatcher.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
   var postdata = new vertx.Buffer();
   var id = request.params().get("id");
 
@@ -1111,7 +1122,7 @@ customMatcher.post('/questionnaire/mongo/:id', function(request) {
     });
   
   });
-});
+}));
 
 customMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
   var id = request.params().get('id');
@@ -1140,7 +1151,7 @@ customMatcher.get('/test/json', function(request) {
 })
 
 
-customMatcher.post("/test", function(request) {
+customMatcher.post("/test", requireAdmin(function(request) {
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -1160,19 +1171,19 @@ customMatcher.post("/test", function(request) {
       
     })
   });
-});
+}));
 
 
-customMatcher.get('/test/:id', function(request) {
+customMatcher.get('/test/:id', requireAdmin(function(request) {
   var id = request.params().get('id');
   var code = "sadas";
   queryMongo.getTest(id, function(r) {
     templateManager.render_template('testEditor', {"code":code,"test":r.result}, request);
   })
-});
+}));
 
 
-customMatcher.post("/test/:id", function(request) {
+customMatcher.post("/test/:id", requireAdmin(function(request) {
   var data = new vertx.Buffer();
   var id = request.params().get('id');
 
@@ -1220,7 +1231,7 @@ customMatcher.post("/test/:id", function(request) {
     //send to compiler -> send to mongo
 
   });
-});
+}));
 
 customMatcher.get('/', function(request) {
   templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
