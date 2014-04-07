@@ -817,7 +817,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         var url = request.absoluteURI().toString();
         var cut = url.indexOf("/phase/");
         console.log(cut)
-        url = url.substr(0,cut);
+        url = url.substr(0,cut) + "/end";
 
         console.log(url);
 
@@ -900,6 +900,17 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
       request.response.end("Data \n" + postData);
     });
   });
+});
+
+customMatcher.get('/experiment/:id/end', function(request) {
+  var expID = request.params().get('id');
+
+  queryMongo.getExperiment(expID, function(r) {
+
+
+    templateManager.render_template('end', {},request);
+  });
+
 });
 
 
