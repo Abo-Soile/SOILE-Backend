@@ -40,6 +40,16 @@ function sessionTest(func) {
       this.response.end();
     }
 
+    request.unauthorized = function() {
+      this.response.statusCode(401);
+      this.response.end("401, Unauthorized");
+    }
+
+    request.notfound = function() {
+      this.response.statusCode(404);
+      this.response.end("404, Not Found");
+    }
+
     var session = sessionManager.loadManager(request);
     session.setPersonToken();
 
@@ -355,6 +365,16 @@ var sessionManager =  {
       
   },
 
+  isAdmin: function() {
+    var sessionData = sessionMap.get(this.getSessionCookie());
+    if(sessionData == null) {
+      return false;
+    }
+    else {
+      return JSON.parse(sessionData).admin;
+    }
+  },
+
   logout: function() {
     var data = this.loggedIn();
     if(data) {
@@ -374,6 +394,8 @@ var sessionManager =  {
 //Injects session code that is run before the actual request
 //It would probably be best to generalize this abit more to make it extendable
 //with other functionality as well
+
+//DEPRECATED, see sessiontest instead
 function session(func) {
   console.log("test");
   return function (request) {
@@ -626,14 +648,18 @@ customMatcher.get('/experiment/:id', function(request){
 
 
 customMatcher.get('/experiment/:id/edit', function(request){
-  var id = request.params().get('id');
-  console.log(id);
+  if(request.session.isAdmin()) {
+    var id = request.params().get('id');
+    console.log(id);
 
-  queryMongo.getExperiment(id,function(r){
-    var experiment = r.result;
-    console.log(JSON.stringify(r));
-    templateManager.render_template("editexperiment", {"exp":experiment},request);
-  });
+    queryMongo.getExperiment(id,function(r){
+      var experiment = r.result;
+      console.log(JSON.stringify(r));
+      templateManager.render_template("editexperiment", {"exp":experiment},request);
+    });
+  } else {
+    return request.unauthorized();
+  }
 });
 
 customMatcher.post('/experiment/:id/edit', function(request){

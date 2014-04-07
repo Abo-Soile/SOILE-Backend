@@ -1,7 +1,11 @@
 {>header /}
 <div id="main" class="container">
 	<div class="row">
+
+
 		<div class="span10"> 
+		{#user.admin}
+
 			<h1>{exp.name}   <h4><a href="{URI}/edit">Edit</a></h1>
 			<p> {exp.description}</p>
 			<ul>
@@ -10,6 +14,16 @@
 				{/exp.components}
 			</ul>
 			<h2><a href="{URI}/data">Show gathered data</a></h2>
+
+		{:else}
+
+			<h1>{exp.name}  </h1>
+			<p> {exp.description}</p>
+			
+			<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start test!</a>
+
+		{/user.admin}
+
 		</div>
 	</div>
 </div>
