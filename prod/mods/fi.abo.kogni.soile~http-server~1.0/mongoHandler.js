@@ -213,6 +213,29 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     })
   },
 
+  getUserPosition: function(userid, experimentid, response) {
+
+    vertx.eventBus.send(this.mongoAddress, {
+      "action":"find",
+      "collection":"formdata",
+      "matcher":{
+        "userid":userid,
+        "expId":experimentid
+      },
+      "sort":{"phase":-1},
+      "limit":1},
+      function(reply) {
+        console.log(JSON.stringify(reply));
+        phase = reply.results[0].phase;
+        if(phase) {
+          response(phase)
+        }else {
+          response(-1);
+        }
+
+      })
+  },
+
   confirmExperimentData: function(expId, userid, response) {
 
     vertx.eventBus.send(this.mongoAddress, {"action":"update",

@@ -653,24 +653,37 @@ customMatcher.post("/experiment/new", function(request) {
 
 customMatcher.get('/experiment/:id', function(request){
   var id = request.params().get('id');
-    // eb.send("vertx.mongo-persistor",{"action":"findone", 
-  //  "collection":"experiment","matcher":{"name":id}},function(reply){
-  //     console.log(JSON.stringify(reply));
-  //     var expname = reply.result.name
-  //     
 
-  //   });
-  queryMongo.getExperiment(id,function(r){
-    if(!r.result) {
-      return request.notfound();
-    }
+  //Keeping stuff DRY
+  function renderExp(r) {
     var expname = r.result.name;
     var experiment = r.result;
     console.log(JSON.stringify(r));
     templateManager.render_template("experiment", {"exp":experiment},request);
+  }
+
+  queryMongo.getExperiment(id,function(r){
+    //404 if experiment doesn't exist
+    if(!r.result) {
+      return request.notfound();
+    }
+
+    //If normal user, check if user has filled in something before
+    if(!request.session.isAdmin()) {
+      queryMongo.getUserPosition(request.session.getPersonToken(), id, function(re) {
+        console.log("Position = " + re);
+
+        if(re > 0) {
+          request.redirect(request.absoluteURI() + "/phase/"+(re+1));
+        } 
+        else { renderExp(r); }
+      })
+    } 
+
+    //Admin, navigation controls dont apply here, just show the view
+    else { renderExp(r); }
   });
 });
-
 
 
 customMatcher.get('/experiment/:id/edit', requireAdmin(function(request){
@@ -685,6 +698,7 @@ customMatcher.get('/experiment/:id/edit', requireAdmin(function(request){
   });
  
 }));
+
 
 customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
     var data = new vertx.Buffer();
@@ -919,8 +933,6 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
 
 customMatcher.get('/experiment/:id/end', function(request) {
   var expID = request.params().get('id');
-
-
 
   queryMongo.confirmExperimentData(expID, request.session.getPersonToken(), function(r) {
     console.log("confirmed submitted data")
