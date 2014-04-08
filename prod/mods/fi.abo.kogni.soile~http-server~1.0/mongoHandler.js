@@ -226,14 +226,13 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       "limit":1},
       function(reply) {
         console.log(JSON.stringify(reply));
-        phase = reply.results[0].phase;
-        if(phase) {
-          response(phase)
+
+        if(reply.number == 1) {
+          response(parseInt(reply.results[0].phase));
         }else {
           response(-1);
         }
-
-      })
+    });
   },
 
   confirmExperimentData: function(expId, userid, response) {

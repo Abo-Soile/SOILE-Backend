@@ -673,8 +673,8 @@ customMatcher.get('/experiment/:id', function(request){
       queryMongo.getUserPosition(request.session.getPersonToken(), id, function(re) {
         console.log("Position = " + re);
 
-        if(re > 0) {
-          request.redirect(request.absoluteURI() + "/phase/"+(re+1));
+        if(re >= 0) {
+          request.redirect(request.absoluteURI() + "/phase/" + (re+1));
         } 
         else { renderExp(r); }
       })
