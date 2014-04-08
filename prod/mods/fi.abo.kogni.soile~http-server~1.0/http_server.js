@@ -42,12 +42,23 @@ function sessionTest(func) {
 
     request.unauthorized = function() {
       this.response.statusCode(401);
-      this.response.end("401, Unauthorized");
+
+      var context = {};
+      context.short = "Not authorized";
+      context.long =  "You're not authorized to view this content. Try logging in";
+
+      templateManager.render_template("error", context, this);
+      //this.response.end("401, Unauthorized");
     }
 
     request.notfound = function() {
       this.response.statusCode(404);
-      this.response.end("404, Not Found");
+      
+      var context = {};
+      context.short = "404, not found" ;
+      context.long =  "The content you're looking for couldn't be found.";
+
+      templateManager.render_template("error", context, this);
     }
 
     var session = sessionManager.loadManager(request);
@@ -650,6 +661,9 @@ customMatcher.get('/experiment/:id', function(request){
 
   //   });
   queryMongo.getExperiment(id,function(r){
+    if(!r.result) {
+      return request.notfound();
+    }
     var expname = r.result.name;
     var experiment = r.result;
     console.log(JSON.stringify(r));
@@ -813,6 +827,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   queryMongo.getExperiment(expID, function(r) {
     phase = r.result.components[phaseNo];
 
+    //Redirecting to experiment end
     if(phase===undefined) {
         var url = request.absoluteURI().toString();
         var cut = url.indexOf("/phase/");
@@ -827,8 +842,8 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         return;
       }
 
+    //Calculating how much of the experiment is completed
     var noOfPhases = r.result.components.length;
-
     var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases}
 
     if(phase.type === "form") {
