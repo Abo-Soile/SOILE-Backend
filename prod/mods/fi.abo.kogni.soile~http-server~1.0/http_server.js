@@ -920,11 +920,14 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
 customMatcher.get('/experiment/:id/end', function(request) {
   var expID = request.params().get('id');
 
-  queryMongo.getExperiment(expID, function(r) {
 
 
+  queryMongo.confirmExperimentData(expID, request.session.getPersonToken(), function(r) {
+    console.log("confirmed submitted data")
+    console.log(JSON.stringify(r));
     templateManager.render_template('end', {},request);
-  });
+  })
+
 
 });
 

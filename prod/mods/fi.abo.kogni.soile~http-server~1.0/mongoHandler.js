@@ -213,6 +213,19 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     })
   },
 
+  confirmExperimentData: function(expId, userid, response) {
+
+    vertx.eventBus.send(this.mongoAddress, {"action":"update",
+    "collection":"formdata", "criteria":{"expId":expId, "userid":userid}, 
+    "objNew":{"$set":{
+        "confirmed":true
+      }},
+    "multi":true
+    }, function(reply) {
+      response(reply);
+    })
+  },
+
   authUser: function(username, password, response) {
 
     var pass = _hashPassword(password);
