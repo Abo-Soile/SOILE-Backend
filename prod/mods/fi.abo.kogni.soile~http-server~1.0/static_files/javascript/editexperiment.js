@@ -47,6 +47,38 @@ function(dom,
 		var experimentStore = null;
 		var filteringSelect = null;
 
+
+		startDate.oldValid = startDate.validator;
+		startDate.validator = function(value, constraints) {
+			if(this.oldValid(value, constraints)) {
+				return true
+			}
+			return false
+		}
+
+		/*Overriding the standard validator to check if the enddate is later than
+		the startdate */
+		endDate.oldValid = endDate.validator;
+		endDate.validator = function(value, constraints) {
+			if(this.oldValid(value, constraints)) {
+				sDate = new Date(startDate.get('value'));
+				eDate = new Date(value);
+
+				if(sDate > eDate) {
+					this.set('invalidMessage', "End date must be after startdate");
+					return false;
+				}
+				// currentDate = new Date();
+				// if(endDate > currentDate) {
+				// 	this.set('invalidMessage', "End date should be in the future");
+				// 	return false;
+				// }
+				return true
+			}
+
+			return false
+		}
+
 		xhr.get("/test/json").then(function(jsonData) {
 			var experimentList = json.parse(jsonData);
 			experimentStore = new Memory({
@@ -62,6 +94,7 @@ function(dom,
 			filteringSelect = new FilteringSelect({
 				id:"testSelector",
 				name: "test",
+				required:false,
 				store: experimentStore,
 				searchAttr: "name",
 				value: experimentList[0]._id},
@@ -123,11 +156,13 @@ function(dom,
 
 		on(submitButton, "click", function() {
 			var isValid = true;
+			isValid = expForm.validate();
 
 			sDate = new Date(startDate.get("value"));
 			eDate = new Date(endDate.get("value"));
 
 			startDate.get("value");
+
 
 			console.log(eDate.toString())
 
