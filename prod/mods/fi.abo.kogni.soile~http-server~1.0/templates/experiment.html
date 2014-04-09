@@ -20,7 +20,14 @@
 			<h1>{exp.name}  </h1>
 			<p> {exp.description}</p>
 			
+			{?exp.active}
 			<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start test!</a>
+			{:else}
+			<button class="btn btn-primary btn-lg" disabled="disabled" role="button">Start test!</button>
+
+			<p> This experiment hasn't started yet</p>
+
+			{/exp.active}
 
 		{/user.admin}
 

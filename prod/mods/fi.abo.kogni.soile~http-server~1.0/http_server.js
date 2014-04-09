@@ -672,7 +672,7 @@ customMatcher.get('/experiment/:id', function(request){
     if(!request.session.isAdmin()) {
       queryMongo.getUserPosition(request.session.getPersonToken(), id, function(re) {
         console.log("Position = " + re);
-
+        
         if(re >= 0) {
           request.redirect(request.absoluteURI() + "/phase/" + (re+1));
         } 

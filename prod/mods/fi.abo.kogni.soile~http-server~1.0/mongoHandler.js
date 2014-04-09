@@ -23,9 +23,23 @@ var mongoHandler = {
   },
 
   getExperiment: function(id, response) {
+    var active;
+
+    currentDate = new Date();
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"findone", 
    "collection":"experiment","matcher":{"_id":id}},function(reply){
+
+      if(reply.result) {
+        sDate = new Date(reply.result.startDate);
+        eDate = new Date(reply.result.endDate);
+
+        if((sDate < currentDate)&& (currentDate < eDate)) {
+          reply.result.active = true;
+        } else { reply.result.active = false}
+      }
+
       response(reply);
+
     });
   },
 
