@@ -93,6 +93,10 @@ body > .container {
 	font-size: x-large;
 }
 
+#toolButtons .btn {
+	margin-right:7px;
+}
+
 /*Bootstrap sticky footer http://getbootstrap.com/examples/sticky-footer-navbar/*/
 html {
 	position: relative;

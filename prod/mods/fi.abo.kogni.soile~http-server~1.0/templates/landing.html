@@ -1,7 +1,15 @@
 {>header /}
 <div id="main" class="container">
+	{#user.admin}
 	<div class="row">
-		<div class="span10"> 
+		<div class="col-md-10"> 
+			<div id="toolButtons">
+				<span><a class="btn btn-primary" href="experiment/new">New Experiment</a></span>
+				<a class="btn btn-primary" href="experiment">Experiment list</a>
+				<a class="btn btn-primary" href="experiment/new">Tests</a>
+				<a class="btn btn-info" href="experiment/new">Questioneer guide</a>
+				<a class="btn btn-info" href="experiment/new">Test Guide</a>
+			</div>
 			<ul>
 				<li><a href="experiment">Experimentlist</a></li>
 				<li><a href="experiment/new">New experiment</a></li>
@@ -11,6 +19,48 @@
 			</ul>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<h4>Ongoing experiments</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<td>Experi</td>
+							<td>Table</td>
+							<td>Table</td>
+						</tr>
+					</thead>
+					<tr>
+						<td>Flanker</td>
+						<td>Table</td>
+						<td>Table</td>
+					</tr>
+					<tr>
+						<td>Nback</td>
+						<td>table</td>
+						<td>table</td>
+					</tr>
+					<tr>
+						<td>anotyher one</td>
+						<td>table</td>
+						<td>table</td>
+					</tr>
+				</td>
+
+
+
+				<ul>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</table>
+		</div>
+	</div>
+
+	{:else}
+	<p> Nothing to see here</p>
+	{/user.admin}
 </div>
 
 {>footer /}

@@ -15,6 +15,28 @@ function _hashPassword(password) {
   return hexString;
 }
 
+var currentDate = new Date();
+var millisecondsPerDay = 1000*3600*24
+
+function _isActive(experiment) {
+  sDate = new Date(experiment.startDate)
+  eDate = new Date(experiment.endDate)
+
+  if((sDate < currentDate)&&(currentDate<eDate)) {
+    experiment.active = true;
+    experiment.timedata = Math.ceil((eDate - currentDate)/millisecondsPerDay);
+  }
+  else{
+    experiment.active = false;
+
+    if(sDate > currentDate) {
+      experiment.timedata = Math.ceil((sDate - currentDate)/millisecondsPerDay);
+    }
+  }
+
+  return experiment;
+}
+
 var mongoHandler = {
   mongoAddress: "vertx.mongo-persistor",
   init: function(){
@@ -23,8 +45,6 @@ var mongoHandler = {
   },
 
   getExperiment: function(id, response) {
-    var active;
-
     currentDate = new Date();
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"findone", 
    "collection":"experiment","matcher":{"_id":id}},function(reply){
@@ -147,6 +167,11 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   getExperimentList: function(response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"find",
     "collection":"experiment"},function(reply){
+      if(reply.results) {
+        for(var i =0; i<reply.results.length;i++) {
+          reply.results[i] = _isActive(reply.results[i]);
+        }
+      }
       response(reply);
     })
   },
