@@ -10,51 +10,35 @@
 				<a class="btn btn-info" href="experiment/new">Questioneer guide</a>
 				<a class="btn btn-info" href="experiment/new">Test Guide</a>
 			</div>
-			<ul>
+<!-- 			<ul>
 				<li><a href="experiment">Experimentlist</a></li>
 				<li><a href="experiment/new">New experiment</a></li>
 				<li><a href="test">Test List</a></li>
 				<li><a href="http://localhost:8081/questionnaire/guide">Questioneer guide</a></li>
 
-			</ul>
+			</ul> -->
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h4>Ongoing experiments</h4>
+			<h4>Experiments</h4>
 				<table class="table">
-					<thead>
-						<tr>
-							<td>Experi</td>
-							<td>Table</td>
-							<td>Table</td>
-						</tr>
-					</thead>
+				{#experiments uri=URI}
 					<tr>
-						<td>Flanker</td>
-						<td>Table</td>
-						<td>Table</td>
+						<td><a href="{uri}/experiment/{_id}">{name}</td>
+						{#timedata}
+							{?active}
+							<td>Closes in {timedata} days</td>
+							{:else}
+							<td>Opens in {timedata} days</td>
+							{/active}
+						{:else}
+						<td>Closed</td>
+						{/timedata}
 					</tr>
-					<tr>
-						<td>Nback</td>
-						<td>table</td>
-						<td>table</td>
-					</tr>
-					<tr>
-						<td>anotyher one</td>
-						<td>table</td>
-						<td>table</td>
-					</tr>
-				</td>
-
-
-
-				<ul>
-					<li></li>
-					<li></li>
-					<li></li>
-				</ul>
-			</table>
+				{/experiments}
+					
+				</table>
 		</div>
 	</div>
 

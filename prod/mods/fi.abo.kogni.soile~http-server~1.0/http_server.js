@@ -672,7 +672,7 @@ customMatcher.get('/experiment/:id', function(request){
     if(!request.session.isAdmin()) {
       queryMongo.getUserPosition(request.session.getPersonToken(), id, function(re) {
         console.log("Position = " + re);
-        
+
         if(re >= 0) {
           request.redirect(request.absoluteURI() + "/phase/" + (re+1));
         } 
@@ -1275,8 +1275,11 @@ customMatcher.post("/test/:id", requireAdmin(function(request) {
 }));
 
 customMatcher.get('/', function(request) {
-  templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
 
+  queryMongo.getExperimentList(function(r) {
+
+    templateManager.render_template('landing', {"experiments":r.results,"test":"This is a test"},request);
+  });
 });
 
 /* This will match static files. ('Static files' are files which 
