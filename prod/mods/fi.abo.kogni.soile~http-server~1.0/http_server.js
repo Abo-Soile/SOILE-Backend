@@ -482,7 +482,7 @@ customMatcher.post("/login", function(request) {
 
     var templateVars = {};
 
-    templateVars.origin = origin;
+    templateVars.origin = decodeURIComponent(origin);
 
     queryMongo.authUser(username, password, function(r) {
       
@@ -498,6 +498,7 @@ customMatcher.post("/login", function(request) {
       else {
 
         templateVars.errors = "Wrong username or password";
+        console.log(JSON.stringify(templateVars));
         templateManager.render_template('login', templateVars, request);
       }
 

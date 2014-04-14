@@ -41,10 +41,10 @@
 
         <ul class="nav navbar-nav navbar-right">
         {?loggedIn}
-         {?user.admin} 
            <li><p class="navbar-text">Signed in as <a href="#" class="navbar-link">{user.username}</a></p></li>
            <li>
             <form action="/logout">
+         {?user.admin} 
              <button type="submit" class="btn btn-danger navbar-btn">Logout</button>
             {:else}
              <button type="submit" class="btn btn-warning navbar-btn">Logout</button>
