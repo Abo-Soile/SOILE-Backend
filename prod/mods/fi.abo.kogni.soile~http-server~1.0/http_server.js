@@ -451,8 +451,16 @@ function session(func) {
 customMatcher.get("/login", function(request) {
  // request.response.putHeader("Set-Cookie","MySessionToken");
  // request.response.putHeader("Set-Cookie","MyAuthToken");
+
+  //var previous = utils.getUrlParams(request.query()).url;
+
+  //console.log(previous);
+
+  //Saving refere/previous url to enable redirects
+  console.log(request.headers().get("Referer"));
+  var previous = request.headers().get("Referer")
   
-  templateManager.render_template('login', "",request);
+  templateManager.render_template('login', {"origin":previous},request);
 });
 
 
@@ -470,15 +478,19 @@ customMatcher.post("/login", function(request) {
 
     var username = params.uername;
     var password = params.password;
+    var origin = params.origin;
 
     var templateVars = {};
+
+    templateVars.origin = origin;
 
     queryMongo.authUser(username, password, function(r) {
       
       console.log(JSON.stringify(r));
       if (r.status==="ok") {
         request.session.login(r.result._id, r.result.username,r.result.admin);
-        request.redirect("/");
+        request.redirect(decodeURIComponent(origin));
+        //request.redirect("/");
         return 
       }
       else {
@@ -501,6 +513,8 @@ customMatcher.get("/logout", function(request) {
 });
 
 customMatcher.get('/signup', function(request) {
+
+
 
   templateManager.render_template('signup', {},request);
 
@@ -549,7 +563,7 @@ customMatcher.post("/signup", function(request) {
         templateManager.render_template('landing', {}, request);
       }
       else {
-        templateVars.errors = "Username already exists!"
+        templateVars.errors = "Username already exists!, try logging in"
         templateManager.render_template('signup', templateVars, request);
       }
     })
