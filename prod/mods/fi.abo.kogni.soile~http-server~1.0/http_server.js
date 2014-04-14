@@ -363,7 +363,7 @@ var sessionManager =  {
   },
 
 
-  login: function(username, admin) {
+  login: function(id,username, admin) {
       console.log("----Logging in-----")
       //console.log(JSON.stringify(r));
 
@@ -376,7 +376,7 @@ var sessionManager =  {
       });
 
       sessionMap.put(sessionKey, JSON.stringify({"username":username, "timerID": timerID,
-                                                 "admin":admin}));
+                                                 "admin":admin,"id":id}));
   },
 
   loggedIn: function() {
@@ -477,7 +477,7 @@ customMatcher.post("/login", function(request) {
       
       console.log(JSON.stringify(r));
       if (r.status==="ok") {
-        request.session.login(r.result.username,r.result.admin);
+        request.session.login(r.result._id, r.result.username,r.result.admin);
         request.redirect("/");
         return 
       }
@@ -670,7 +670,11 @@ customMatcher.get('/experiment/:id', function(request){
 
     //If normal user, check if user has filled in something before
     if(!request.session.isAdmin()) {
-      queryMongo.getUserPosition(request.session.getPersonToken(), id, function(re) {
+      var userID = request.session.getPersonToken();
+      if(request.session.loggedIn()) {
+        userID = request.session.loggedIn().id;
+      }
+      queryMongo.getUserPosition(userID, id, function(re) {
         console.log("Position = " + re);
 
         if(re >= 0) {
@@ -860,6 +864,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
     var noOfPhases = r.result.components.length;
     var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases}
 
+    //Formphase, rendering form template
     if(phase.type === "form") {
       console.log("Form ");
 
@@ -872,6 +877,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
        // request.response.end(form);
       });
     }
+    //Testphases, rendering test template
     if(phase.type === "test") {
       console.log("test");
 
@@ -912,6 +918,9 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
   var phase = request.params().get('phase');
 
   var userID = request.session.getPersonToken();
+  if(request.session.loggedIn()) {
+    userID = request.session.loggedIn().id;
+  }
 
   var data = new vertx.Buffer();
 
