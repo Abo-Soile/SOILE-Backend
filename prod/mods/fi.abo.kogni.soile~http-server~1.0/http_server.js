@@ -25,9 +25,9 @@ function sessionTest(func) {
   return function(request) {
     //console.log("this should be seen before the request")
 
-    request.headers().forEach(function(key,value){
+    //request.headers().forEach(function(key,value){
       //console.log(key + " - " + value);
-    });
+    //});
 
     //console.log("Cookies:: " + request.headers().get("Cookie"));
 
@@ -38,7 +38,7 @@ function sessionTest(func) {
       this.response.statusCode(302);
       this.response.putHeader('Location', url);
       this.response.end();
-    }
+    };
 
     request.unauthorized = function() {
       this.response.statusCode(401);
@@ -49,7 +49,7 @@ function sessionTest(func) {
 
       templateManager.render_template("error", context, this);
       //this.response.end("401, Unauthorized");
-    }
+    };
 
     request.notfound = function() {
       this.response.statusCode(404);
@@ -59,7 +59,7 @@ function sessionTest(func) {
       context.long =  "The content you're looking for couldn't be found.";
 
       templateManager.render_template("error", context, this);
-    }
+    };
 
     var session = sessionManager.loadManager(request);
     session.setPersonToken();
@@ -68,25 +68,25 @@ function sessionTest(func) {
     request.session = session;
 
     func(request);
-  }
+  };
 }
 
 
 //Decorator ish function to ensure that the user is admin
 function requireAdmin(func) {
   return function(request) {
-    console.log("Require Admin running " + request.session.isAdmin())
+    console.log("Require Admin running " + request.session.isAdmin());
     if (!request.session.isAdmin()) {
       request.unauthorized();
     }else {
       func(request);
     }
-  }
+  };
 }
 
 
 function customMatcher() {
-  var test = "6";
+  return;
 }
 
 customMatcher.prototype = new vertx.RouteMatcher();
@@ -94,19 +94,19 @@ customMatcher.prototype = new vertx.RouteMatcher();
 //more methods from the routematcher should be implementd as needed.
 customMatcher.get = function(pattern, handler) {
   routeMatcher.get(pattern, sessionTest(handler));
-}
+};
 
 customMatcher.post = function(pattern, handler) {
   routeMatcher.post(pattern, sessionTest(handler));
-}
+};
 
 customMatcher.allWithRegEx = function(pattern, handler) {
   routeMatcher.allWithRegEx(pattern, sessionTest(handler));
-}
+};
 
 customMatcher.noMatch = function(pattern, handler) {
   routeMatcher.noMatch(pattern, sessionTest(handler));
-}
+};
 
 
 // Generates  a new customMatcher and sets it to routmatcher
@@ -181,10 +181,12 @@ var utils = (function(conf) {
     },
     'getUrlParams': function(params) {
       var paramsObject = {};
+      var datapart;
+      var i;
 
       params = params.split('&');
-      for(var i = 0; i<params.length;i++) {
-        var datapart = params[i].split('=');
+      for(i = 0; i<params.length;i++) {
+        datapart = params[i].split('=');
         paramsObject[datapart[0]] = datapart[1];
       }
 
@@ -208,6 +210,11 @@ var templateManager = (function(folder) {
     for (i = 0; i < res.length; i++) {
       sp = res[i].lastIndexOf("/") + 1;
       //console.log(res[i].slice(sp).replace(".html",""));
+
+      if(err) {
+        console.log("Error in templatemanager: " + err);
+      }
+
       templates.push(res[i].slice(sp).replace(".html", ""));
     }
     console.log(JSON.stringify(templates));
@@ -305,34 +312,38 @@ var sessionManager =  {
   request: null,
 
   loadManager: function(request) {
-    this.cookies = request.headers().get("Cookie")
+    this.cookies = request.headers().get("Cookie");
     this.request = request;
     return this;
   },
 
   createCookie: function(name, value, days) {
+    var expires = "";
+
     if(days) {
       var date = new Date();
       date.setTime(date.getTime()+(days*24*60*60*1000));
-      var expires = "; expires="+date.toGMTString();
+      expires = "; expires="+date.toGMTString();
     }
-    else var expires = "";
 
     return name+"="+value+expires+"; path=/";
   },
 
   readCookie: function(name) {
     var nameEQ = name + "=";
+    var i;
     
     //Dont do anything if no cookies exist
-    if(!this.cookies) return 0;
+    if(!this.cookies) {
+      return 0; 
+    }
     
     var ca = this.cookies.split(';');
 
-    for(var i=0;i < ca.length;i++) {
+    for(i=0;i < ca.length;i++) {
       var c = ca[i];
-      while (c.charAt(0)==' ') c = c.substring(1,c.length);
-      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+      while (c.charAt(0)==' ') {c = c.substring(1,c.length);}
+      if (c.indexOf(nameEQ) == 0) {return c.substring(nameEQ.length,c.length);}
     }
     return 0;
   },
@@ -364,7 +375,7 @@ var sessionManager =  {
 
 
   login: function(id,username, admin) {
-      console.log("----Logging in-----")
+      console.log("----Logging in-----");
       //console.log(JSON.stringify(r));
 
       var sessionKey = java.util.UUID.randomUUID().toString();
@@ -412,7 +423,7 @@ var sessionManager =  {
     }   
   }
 
-}
+};
 
 //Injects session code that is run before the actual request
 //It would probably be best to generalize this abit more to make it extendable
@@ -423,9 +434,9 @@ function session(func) {
   console.log("test");
   return function (request) {
     console.log("Before returnfunction");
-    request.headers().forEach(function(key,value){
-      //console.log(key + " - " + value);
-    });
+    // request.headers().forEach(function(key,value){
+    //   console.log(key + " - " + value);
+    // });
 
     console.log("Cookies:: " + request.headers().get("Cookie"));
 
@@ -439,13 +450,13 @@ function session(func) {
       this.response.statusCode(302);
       this.response.putHeader('Location', url);
       this.response.end();
-    }
+    };
 
     //Sending the session manager with the request
     request.session = session;
 
-    func(request)
-  }
+    func(request);
+  };
 }
 
 customMatcher.get("/login", function(request) {
@@ -458,7 +469,7 @@ customMatcher.get("/login", function(request) {
 
   //Saving refere/previous url to enable redirects
   //console.log(request.headers().get("Referer"));
-  var previous = request.headers().get("Referer")
+  var previous = request.headers().get("Referer");
   
   templateManager.render_template('login', {"origin":previous},request);
 });
@@ -503,7 +514,7 @@ customMatcher.post("/login", function(request) {
       }
 
       //request.response.end("Returning testpost");
-    })
+    });
   });
 });
 
@@ -547,7 +558,7 @@ customMatcher.post("/signup", function(request) {
     var email = params.email;
     var passwd = params.passwd;
 
-    var templateVars = {}
+    var templateVars = {};
     templateVars.username = email;
 
     //console.log(data);
@@ -566,12 +577,10 @@ customMatcher.post("/signup", function(request) {
         templateManager.render_template('landing', {}, request);
       }
       else {
-        templateVars.errors = "Username already exists!, try logging in"
+        templateVars.errors = "Username already exists!, try logging in";
         templateManager.render_template('signup', templateVars, request);
       }
-    })
-
-
+    });
   });
 });
 
@@ -642,7 +651,6 @@ customMatcher.post("/experiment/new", function(request) {
 
   request.endHandler(function() {
 
-    var id = "sdfj2834dfGER";
     var jsonData = JSON.parse(data.getString(0, data.length()));
     console.log(data.getString(0, data.length())); 
 
@@ -673,7 +681,6 @@ customMatcher.get('/experiment/:id', function(request){
 
   //Keeping stuff DRY
   function renderExp(r) {
-    var expname = r.result.name;
     var experiment = r.result;
     console.log(JSON.stringify(r));
     templateManager.render_template("experiment", {"exp":experiment},request);
@@ -813,12 +820,11 @@ customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
     queryMongo.addTestToExperiment(expId, data.testId, data.name, function(r) {
       
       var resp = r;
-      resp.name = data.name,
-      resp.id = data.testId
-      console.log(JSON.stringify(resp))
+      resp.name = data.name;
+      resp.id = data.testId;
+      console.log(JSON.stringify(resp));
       request.response.end(JSON.stringify(resp));
-    })
-
+    });
   });
 }));
 
@@ -838,7 +844,7 @@ customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(requ
       console.log(JSON.stringify(r));
 
       request.response.end(JSON.stringify(r.result));
-    })
+    });
 
   });
 }));
@@ -858,6 +864,7 @@ customMatcher.get('/experiment/:id/json', function(request){
 customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phaseNo = request.params().get('phase');
+  var phase;
 
   queryMongo.getExperiment(expID, function(r) {
     phase = r.result.components[phaseNo];
@@ -866,7 +873,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
     if(phase===undefined) {
         var url = request.absoluteURI().toString();
         var cut = url.indexOf("/phase/");
-        console.log(cut)
+        console.log(cut);
         url = url.substr(0,cut) + "/end";
 
         console.log(url);
@@ -879,7 +886,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
     //Calculating how much of the experiment is completed
     var noOfPhases = r.result.components.length;
-    var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases}
+    var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
 
     //Formphase, rendering form template
     if(phase.type === "form") {
@@ -903,7 +910,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         context.experiment = experimentJs.replace(/(\r\n|\n|\r)/gm,"");
 
         templateManager.render_template("testphase", context, request);
-      })
+      });
     }
     
     else {
@@ -916,13 +923,14 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 customMatcher.get('/experiment/:id/phase/:phase/json', function(request) {
   var expID = request.params().get('id');
   var phaseNo = request.params().get('phase'); 
+  var phase;
 
   queryMongo.getExperiment(expID, function(r) {
     phase = r.result.components[phaseNo];
 
     queryMongo.getTest(phase.id, function(r2) {
 
-      request.response.end(r2.result.js)
+      request.response.end(r2.result.js);
     });
   });
 
@@ -961,11 +969,10 @@ customMatcher.get('/experiment/:id/end', function(request) {
   var expID = request.params().get('id');
 
   queryMongo.confirmExperimentData(expID, request.session.getPersonToken(), function(r) {
-    console.log("confirmed submitted data")
+    console.log("confirmed submitted data");
     console.log(JSON.stringify(r));
     templateManager.render_template('end', {},request);
-  })
-
+  });
 
 });
 
@@ -973,7 +980,7 @@ customMatcher.get('/experiment/:id/end', function(request) {
 customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {
-    data = r.results;
+    var data = r.results;
 
     var sep = "; ";
 
@@ -985,9 +992,10 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
     var userData = {};
 
     //finding max phase an
-    for(var i in data) {
+    var i;
+    for(i in data) {
       var item = data[i];
-      phase = parseInt(item.phase)
+      phase = parseInt(item.phase);
 
       if(!("userid" in item)) {
         item.userid = "Missing";
@@ -1000,9 +1008,10 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 
       if (!fields[phase]) {
         // console.log("newPhase");
-        fields[phase] = []
+        fields[phase] = [];
 
-        for (var prop in item) {
+        var prop;
+        for (prop in item) {
           //console.log(prop);
           if(!(prop=="_id"||prop=="phase"||prop=="userid"||prop=="expId")) {
             fields[phase].push(prop.slice(17, prop.length));
@@ -1013,7 +1022,8 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
         userData[item.userid] = [];
       }
       userData[item.userid][phase] = [];
-      for( j in item) {
+      var j;
+      for(j in item) {
         if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
           userData[item.userid][phase].push(item[j]);
         }
