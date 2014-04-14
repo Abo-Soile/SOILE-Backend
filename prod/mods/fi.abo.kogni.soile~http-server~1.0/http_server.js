@@ -487,7 +487,7 @@ customMatcher.post("/login", function(request) {
     var params = data.getString(0, data.length());
     params = utils.getUrlParams(params);
 
-    var username = params.uername;
+    var username = params.username;
     var password = params.password;
     var origin = params.origin;
 
@@ -500,10 +500,13 @@ customMatcher.post("/login", function(request) {
       console.log(JSON.stringify(r));
       if (r.status==="ok") {
         request.session.login(r.result._id, r.result.username,r.result.admin);
-        if(origin){
-          return request.redirect(decodeURIComponent(origin));
-        }
-        return request.redirect("/");
+        queryMongo.updateExpData(r.result._id, 
+          request.session.getPersonToken(), function(s) {
+          if(origin){
+            return request.redirect(decodeURIComponent(origin));
+          }
+          return request.redirect("/");
+        })
         
       }
       else {

@@ -249,6 +249,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     data.phase = phase;
     data.expId = experimentid;
     data.userid = userid
+    data.confirmed = false;
     vertx.eventBus.send(this.mongoAddress, {"action":"save",
     "collection":"formdata", "document":doc}, function(reply) {
       response(reply);
@@ -342,6 +343,27 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     function(reply) {
       console.log("Generated admin");
     });
+  },
+
+  updateExpData: function(userid, personToken,response) {
+
+    vertx.eventBus.send(this.mongoAddress, {"action":"update",
+      "collection":"formdata",
+      "criteria": {
+        "userid":personToken,
+        "confirmed":false
+      },
+      "objNew": {
+        "$set":{
+          "userid":userid
+        }
+      },
+      "multi": true
+    },
+    function(reply) {
+      console.log(reply);
+      response(reply);
+    })
   }
 
   // _hashPassword: function(password) {
