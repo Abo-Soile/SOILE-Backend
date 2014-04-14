@@ -967,8 +967,12 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
 
 customMatcher.get('/experiment/:id/end', function(request) {
   var expID = request.params().get('id');
+  var userID = request.session.getPersonToken();
+  if(request.session.loggedIn()) {
+    userID = request.session.loggedIn().id;
+  }
 
-  queryMongo.confirmExperimentData(expID, request.session.getPersonToken(), function(r) {
+  queryMongo.confirmExperimentData(expID, userID, function(r) {
     console.log("confirmed submitted data");
     console.log(JSON.stringify(r));
     templateManager.render_template('end', {},request);
@@ -977,6 +981,7 @@ customMatcher.get('/experiment/:id/end', function(request) {
 });
 
 
+//Performs a custom crafted join on gathered data.
 customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {

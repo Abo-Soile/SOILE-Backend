@@ -65,7 +65,10 @@ var mongoHandler = {
 
   getExperimentFormData: function(id, response) {
     vertx.eventBus.send(this.mongoAddress, {"action":"find",
-    "collection":"formdata","matcher":{"expId":id}}, function(reply) {
+    "collection":"formdata",
+    "matcher":{"expId":id, "confirmed":true},
+    "keys": {"confirmed":0}},
+     function(reply) {
       response(reply);
     })
   }
