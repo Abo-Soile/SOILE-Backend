@@ -457,7 +457,7 @@ customMatcher.get("/login", function(request) {
   //console.log(previous);
 
   //Saving refere/previous url to enable redirects
-  console.log(request.headers().get("Referer"));
+  //console.log(request.headers().get("Referer"));
   var previous = request.headers().get("Referer")
   
   templateManager.render_template('login', {"origin":previous},request);
@@ -489,9 +489,11 @@ customMatcher.post("/login", function(request) {
       console.log(JSON.stringify(r));
       if (r.status==="ok") {
         request.session.login(r.result._id, r.result.username,r.result.admin);
-        request.redirect(decodeURIComponent(origin));
-        //request.redirect("/");
-        return 
+        if(origin){
+          return request.redirect(decodeURIComponent(origin));
+        }
+        return request.redirect("/");
+        
       }
       else {
 
