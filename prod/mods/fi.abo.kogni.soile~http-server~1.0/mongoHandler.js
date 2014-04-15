@@ -211,6 +211,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   },
 
   saveTest: function(test,response) {
+    test.compiled = false;
     vertx.eventBus.send(this.mongoAddress, {"action":"save",
     "collection":"tests","document":test}, function(reply) {
       response(reply)
