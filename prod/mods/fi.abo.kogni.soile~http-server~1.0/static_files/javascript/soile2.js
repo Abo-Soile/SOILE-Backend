@@ -18,6 +18,8 @@ SOILE2 = (function(){
   soile2.bin = bin;
   soile2.util = util;
 
+  //The args call basically converts a functions arguments object to
+  //a real array so that we can expect it to behave like an array.
   bin.onmouseclick = function(id, conf){
     var args = Array.prototype.slice.call(arguments);
     var _resettimer, _inputid, _id, action;
@@ -78,6 +80,10 @@ SOILE2 = (function(){
     return null;
   };
 
+  /*
+  The message is a static object that is displayed starting from the top left 
+  corner that is used to easily display text, for example instructions.
+  */
   bin.emptymsg = function(){
     var id = soile2.util.getid('message');
     jQuery(id).text('');
