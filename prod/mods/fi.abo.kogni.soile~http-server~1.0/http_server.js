@@ -23,7 +23,7 @@ console.log(a.hashCode());
 // which makes it possible to run arbitrary code before the request
 function sessionTest(func) {
   return function(request) {
-    //console.log("this should be seen before the request")
+    // console.log("this should be seen before the request")
 
     //request.headers().forEach(function(key,value){
       //console.log(key + " - " + value);
@@ -104,8 +104,8 @@ customMatcher.allWithRegEx = function(pattern, handler) {
   routeMatcher.allWithRegEx(pattern, sessionTest(handler));
 };
 
-customMatcher.noMatch = function(pattern, handler) {
-  routeMatcher.noMatch(pattern, sessionTest(handler));
+customMatcher.noMatch = function(handler) {
+  routeMatcher.noMatch(sessionTest(handler));
 };
 
 
@@ -1345,16 +1345,16 @@ customMatcher.allWithRegEx('.*/', function(req) {
   req.response.end();
 });
 
-customMatcher.noMatch(function(req) {
-  req.response.end("404");
+customMatcher.noMatch(function(request) {
+  return request.notfound();
 });
 
 /* Let this be the last specified match. */
-customMatcher.allWithRegEx('.+', function(req) {
-  var file = http_directory.concat('/questionnaire.html');
+// customMatcher.allWithRegEx('.+', function(req) {
+//   var file = http_directory.concat('/questionnaire.html');
 
-  req.response.sendFile(file);
-});
+//   req.response.sendFile(file);
+// });
 
 server.requestHandler(routeMatcher).listen(port, host);
 
