@@ -1,18 +1,55 @@
 {>header /}
 <div id="main" class="container">
 	<div class="row">
-		<div class="col-md-10"> 
+		<div class="col-md-8"> 
 			<form action="/test", method="POST">
-				Experiment Name: <input type="text" name="name">
+				Test Name: <input type="text" name="name">
 
 				<input type="submit" value="newTest">
 			</form>
-			<ul>
-				{#tests uri=URI}
-					<li><a href="{uri}/{_id}">{_id}  {name}</a></li>
-				{/tests}
-			</ul>
 		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6"> 
+			<br><br>
+
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>TestName</th>
+						<th>status</th>
+					</tr>
+				</thead>
+				<tbody>
+				{#tests uri=URI}
+				{?compiled} 
+					<tr>
+						<td><a href="{uri}/{_id}">{name}</a> </td>
+						<td>Compiled</td>
+				{:else}
+					<tr class="danger">
+						<td><a href="{uri}/{_id}">{name}</a> </td>
+						<td>Errors</td>
+				{/compiled}
+
+				
+				{/tests}
+					</tr>
+				</tbody>
+			</table>
+			<!-- <ul>
+				{#tests uri=URI}
+					<li><a href="{uri}/{_id}">{name}</a> 
+					{?compiled} Compiled
+					{:else} Contains errors
+					{/compiled}
+
+					</li>
+				{/tests}
+			</ul> -->
+		</div>
+	</div>
+
 	</div>
 </div>
 
