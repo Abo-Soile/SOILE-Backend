@@ -1246,13 +1246,15 @@ customMatcher.post("/test", requireAdmin(function(request) {
   request.endHandler(function() {
 
     data = data.getString(0, data.length());
-    var name = data.split("=")[1];
+    var params = utils.getUrlParams(data);
+    var name = decodeURIComponent(params.name).split("+").join(" ");
+
+    console.log("name1: " + name);
 
     queryMongo.saveTest({"name":name}, function(r) {
       console.log(JSON.stringify(r));
 
-      request.response.putHeader("Location", request.absoluteURI + name)
-      request.response.end("");
+      return request.redirect("/test/"+r._id);
       
     })
   });
