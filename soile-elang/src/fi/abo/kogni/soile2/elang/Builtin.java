@@ -65,5 +65,6 @@ public class Builtin {
         builtinFunctions.add("tag");
         builtinFunctions.add("timeout");
         builtinFunctions.add("wait");
+        builtinFunctions.add("resume");
     }
 }

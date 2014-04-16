@@ -7,7 +7,7 @@
 #   * http://stas-blogspot.blogspot.fi/2011/07/most-complete-list-of-xx-options-for.html
 #   * http://www.curiousmentality.co.uk/2011/11/tuning-jvm-memory-settings/
 #   * http://www.umbrant.com/blog/2012/twitter_jvm_tuning.html
-export VERTX_OPTS=" -server -Xms1g -Xmx1g -XX:MaxPermSize=64m -XX:NewRatio=2 -XX:SurvivorRatio=10 "
+export VERTX_OPTS=" -server -Xms512m -Xmx1g -XX:MaxPermSize=64m -XX:NewRatio=2 -XX:SurvivorRatio=10 "
 
 echo "Running vertx..."
 vertx runmod "fi.abo.kogni.soile~system-startup~1.0" -conf ./deployment.json 

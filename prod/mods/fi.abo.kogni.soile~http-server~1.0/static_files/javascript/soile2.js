@@ -216,6 +216,12 @@ SOILE2 = (function(){
     }
     return 0;
   };
+
+  bin.resume = function() {
+    console.log("Running resume");
+    rt.schd.cancel();
+    rt.schd.resume();
+  }
   
   bin.position = function(){
     var arr = Array.prototype.slice.call(arguments);
