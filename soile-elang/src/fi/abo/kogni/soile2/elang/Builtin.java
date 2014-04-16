@@ -7,6 +7,13 @@ import java.util.Set;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
+/*
+
+Afaik this is used to check if something is a builtin function
+so this should be changed when a function is added/removed
+from the soile VM.
+ */
+
 public class Builtin {
     public static boolean isBuiltinFunction(String name) {
         return builtinFunctions.contains(name);
