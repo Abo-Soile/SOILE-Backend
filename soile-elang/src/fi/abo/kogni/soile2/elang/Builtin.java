@@ -77,5 +77,7 @@ public class Builtin {
         builtinFunctions.add("randominteger");
         builtinFunctions.add("randomnumber");
         builtinFunctions.add("seedrandom");
+
+        builtinFunctions.add("onkeypress");
     }
 }

@@ -1,6 +1,8 @@
 var vertx = require('vertx');
 var console = require('vertx/console');
 
+
+//Password hashing using SHA-256
 function _hashPassword(password) {
 
   var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
@@ -18,6 +20,9 @@ function _hashPassword(password) {
 var currentDate = new Date();
 var millisecondsPerDay = 1000*3600*24
 
+/*
+Comparing start and end dates to calculate if an experiment 
+should be active or not */
 function _isActive(experiment) {
   sDate = new Date(experiment.startDate)
   eDate = new Date(experiment.endDate)

@@ -18,9 +18,10 @@ SOILE2 = (function(){
   soile2.bin = bin;
   soile2.util = util;
 
-  //The args call basically converts a functions arguments object to
-  //a real array so that we can expect it to behave like an array.
   bin.onmouseclick = function(id, conf){
+
+    //The args call basically converts a functions arguments object to
+    //a real array so that we can expect it to behave like an array.
     var args = Array.prototype.slice.call(arguments);
     var _resettimer, _inputid, _id, action;
 
@@ -47,7 +48,21 @@ SOILE2 = (function(){
       }
     }
   };
+
+  // bin.onkeyclick = function(key, conf) {
+  //   var args = Array.prototype.slice.call(arguments);
+  //   var _resettimer, _inputid, _key, action
+
+  //   if(_.isString(key)) {
+
+  //   }
+  // }
   
+  bin.onkeypress = function(key, func) {
+    var keycode = soile2.rt.kbd.keycode(key);
+    rt.keyhandler.add(keycode, func)
+  }
+
   /*
    * Copy data -- numbers, strings, arrays or objects but NO
    * functions.
@@ -342,7 +357,7 @@ SOILE2 = (function(){
       return rt.random.get()*(max-min+1)+min;
     }
     else {
-      return rt.random.get(1, 1000000):
+      return rt.random.get(1, 1000000);
     }
   }
 
@@ -522,6 +537,28 @@ SOILE2 = (function(){
       }
     };
     
+  })();
+
+  rt.keyhandler = (function() {
+    var keyfunctions = {}
+
+    var keyFunction = function(e) {
+      console.log(e.keyCode);
+      if(keyfunctions[e.keyCode]) {
+        keyfunctions[e.keyCode].call();
+      }
+    }
+    document.onkeydown = keyFunction;
+
+    return {
+      'add': function(keycode, func) {
+        keyfunctions[keycode] = func;
+      },
+
+      'remove': function(keycode, func) {
+        keyfunctions[keycode] = null;
+      }
+    }
   })();
 
   // Seedable randomfunction based on Math.sin. appears to produce sufficienlty
