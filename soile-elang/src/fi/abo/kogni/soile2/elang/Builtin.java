@@ -73,5 +73,9 @@ public class Builtin {
         builtinFunctions.add("timeout");
         builtinFunctions.add("wait");
         builtinFunctions.add("resume");
+
+        builtinFunctions.add("randominteger");
+        builtinFunctions.add("randomnumber");
+        builtinFunctions.add("seedrandom");
     }
 }

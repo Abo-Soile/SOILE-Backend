@@ -327,6 +327,28 @@ SOILE2 = (function(){
   bin.tag = function(){
     return {};
   };
+
+  bin.randominteger = function(min, max) {
+    if(_.isNumber(min) && _.isNumber(max)) {
+      return Math.floor(rt.random.get()*(max-min+1)+min)
+    } 
+    else {
+      return Math.floor(rt.random.get(1,1000000));
+    }
+  }
+
+  bin.randomnumber = function(min, max) {
+    if(_.isNumber(min) && _.isNumber(max)) {
+      return rt.random.get()*(max-min+1)+min;
+    }
+    else {
+      return rt.random.get(1, 1000000):
+    }
+  }
+
+  bin.seedrandom = function(seed) {
+    rt.random.seed(seed);
+  }
   
   bin.timeout = function(dur){
     soile2.rt.schd.suspend(dur);
@@ -500,6 +522,27 @@ SOILE2 = (function(){
       }
     };
     
+  })();
+
+  // Seedable randomfunction based on Math.sin. appears to produce sufficienlty
+  // random numbers for this use. 
+  // http://stackoverflow.com/questions/521295/javascript-random-seeds
+  rt.random = (function() {
+    var _seed = Math.random();
+
+    var _randomFunction = function() {
+      var x = Math.sin(_seed++) * 10000;
+      return x - Math.floor(x);
+    }
+
+    return {
+      'seed': function(seed) {
+        _seed = seed;
+      },
+      'get': function() {
+        return _randomFunction();
+      }
+    }
   })();
   
   rt.stimuli = (function(){

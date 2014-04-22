@@ -10,6 +10,8 @@ This document contains documentation for the experiment language.
 
 Builtin functions are functions that are called and executed from a experiment by the user. 
 
+### Input
+
 ### onmouseclick
 
 **onmouseclick(imagefile, {action: function, inputid: number, resettimer: bool})**
@@ -40,9 +42,20 @@ Removes and deletes the clicklistener from the specified object.
 
 **lessthan(number1 number2 _or_ lt(number1 number2))** number1 < number2
 
-**greaterthan(number1 number2) _o_r gt(number1 number2)** number1 > number2
+**greaterthan(number1 number2) _or_ gt(number1 number2)** number1 > number2
 
 **equal(number1 number2) _or_ eq(number1 number2)** number1 == number2
+
+### Functions
+
+#### Random numbers
+
+**randominteger(min, max)**
+
+**randomnumber(min, max)**
+
+**seedrandom(seed)**
+
 
 
 
