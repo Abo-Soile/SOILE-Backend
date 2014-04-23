@@ -60,7 +60,12 @@ SOILE2 = (function(){
   
   bin.onkeypress = function(key, func) {
     var keycode = soile2.rt.kbd.keycode(key);
-    rt.keyhandler.add(keycode, func)
+    if(func) {
+      rt.keyhandler.add(keycode, func)
+      }
+    else {
+      rt.keyhandler.remove(keycode);
+    }
   }
 
   /*
