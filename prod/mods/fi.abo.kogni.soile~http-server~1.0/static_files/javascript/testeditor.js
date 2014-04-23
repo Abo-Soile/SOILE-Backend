@@ -1,3 +1,4 @@
+
 require(["dojo/dom",
 		"dojo/dom-construct",
 		"dojo/dom-style",
@@ -12,6 +13,7 @@ require(["dojo/dom",
 		"dojo/json",
 		"dojox/layout/ContentPane",
 		"dojox/widget/DialogSimple",
+		"dojox/form/Uploader",
 		"dojo/ready"],
 function(dom,
 		construct,
@@ -27,9 +29,26 @@ function(dom,
 		json,
 		contentPane,
 		Dialog,
+		Upload,
 		ready) {
 	ready(function() {
 		parser.parse();
+
+		var uploadUrl = document.URL + "/imageupload"
+		var upbutton = registry.byId("uploadButton");
+
+		var uploader = new dojox.form.Uploader({
+			label:"Select images",
+			multiple: true,
+			url:uploadUrl,
+		}).placeAt("uploader");
+		uploader.startup();
+
+		on(upbutton, "click", function() {
+			uploader.upload();
+		})
+
+		// dojo.byId("uploader").appendChild(uploader.domNode);
 
 		var submitButton = registry.byId("compileButton");
 		var runButton = registry.byId("runButton");

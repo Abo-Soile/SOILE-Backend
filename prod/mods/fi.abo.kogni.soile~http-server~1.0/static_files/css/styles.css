@@ -118,3 +118,11 @@ body {
 #foot {
 	min-height: 100px;
 }
+
+/* Ace editor styling */
+#editor {
+	border: 2px solid #DDD;
+	border-radius: 4px;
+	border-bottom-right-radius: 0px;
+	margin-top: 5px;
+}

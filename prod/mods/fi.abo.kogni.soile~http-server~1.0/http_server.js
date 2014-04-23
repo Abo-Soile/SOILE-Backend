@@ -1320,6 +1320,21 @@ customMatcher.post("/test/:id", requireAdmin(function(request) {
   });
 }));
 
+customMatcher.post("/test/:id/imageupload", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    data = data.getString(0, data.length());
+
+    request.response.end("Returning testpost");
+  });
+});
+
 customMatcher.get('/', function(request) {
 
   queryMongo.getExperimentList(function(r) {
