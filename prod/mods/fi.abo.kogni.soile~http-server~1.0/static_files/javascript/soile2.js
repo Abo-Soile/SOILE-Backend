@@ -544,6 +544,8 @@ SOILE2 = (function(){
     
   })();
 
+  // The keyhandler captures all keystrokes and executes a callback
+  // function if a key is bound to one.
   rt.keyhandler = (function() {
     var keyfunctions = {}
 
@@ -709,7 +711,10 @@ SOILE2 = (function(){
       idx = soile2.rt.pi_index.get();
       pi = soile2.rt.get_pi(idx);
       opcode = soile2.rt.pi_opcode(pi);
+
       if (opcode < 0){
+        // TODO
+        // Program is over, remove listeners send data and navigate to next view
         break;
       }
       if (opcode == opcodes.Assign){
