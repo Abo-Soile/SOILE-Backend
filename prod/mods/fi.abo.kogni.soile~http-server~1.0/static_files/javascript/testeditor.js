@@ -33,15 +33,19 @@ function(dom,
 
 		var submitButton = registry.byId("compileButton");
 		var runButton = registry.byId("runButton");
-		var codeBox = registry.byId("code");
+		// var codeBox = registry.byId("code");
 		var errorBox = dom.byId("errorbox");
 
 		var compiledCode = "";
 
+		var editor = ace.edit("editor");
+		editor.setTheme("ace/theme/dawn");
+
 		on(compileButton, "click", function() {
 			console.log("compile");
-
-			var code = {"code":codeBox.get("value")};
+			
+			//var code = {"code":codeBox.get("value")};
+			var code = editor.getValue();
 			xhr.post("", {
 				data: json.stringify(code)
 			}).then(function(data) {
