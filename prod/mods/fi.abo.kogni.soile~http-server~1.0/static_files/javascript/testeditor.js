@@ -45,7 +45,8 @@ function(dom,
 			console.log("compile");
 			
 			//var code = {"code":codeBox.get("value")};
-			var code = editor.getValue();
+			var code = {"code":editor.getValue()};
+
 			xhr.post("", {
 				data: json.stringify(code)
 			}).then(function(data) {
