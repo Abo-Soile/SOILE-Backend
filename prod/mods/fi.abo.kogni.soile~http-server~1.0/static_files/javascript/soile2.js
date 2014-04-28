@@ -325,6 +325,16 @@ SOILE2 = (function(){
   bin.recordts = function(){
   };
 
+  bin.starttimer = function() {
+    console.log("STARTING TIMER");
+    soile2.rt.timer.start();
+  }
+
+  bin.elapsedtime = function() {
+    console.log(soile2.rt.timer.elapsedTime());
+    return soile2.rt.timer.elapsedTime();
+  }
+
   bin.stimulus = function(){
     return soile2.rt.stimuli.get();
   };
@@ -593,6 +603,24 @@ SOILE2 = (function(){
         return _randomFunction();
       }
     }
+  })();
+
+  // Simple single timer function.
+  rt.timer = (function() {
+    var startTime = null;
+
+    return {
+      'start': function() {
+        startTime = soile2.rt.timestamp();
+      },
+      'elapsedTime': function() {
+        if(startTime) {
+          var elapsed = soile2.rt.timestamp() - startTime
+          return elapsed
+        }else {return 0}
+      }
+    }
+
   })();
   
   rt.stimuli = (function(){

@@ -64,6 +64,8 @@ public class Builtin {
         builtinFunctions.add("plus");
         builtinFunctions.add("position");
         builtinFunctions.add("recordts");
+        builtinFunctions.add("starttimer");
+        builtinFunctions.add("elapsedtime");
         builtinFunctions.add("seconds");
         builtinFunctions.add("setstimuli");
         builtinFunctions.add("show");
