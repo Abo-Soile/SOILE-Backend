@@ -585,6 +585,59 @@ SOILE2 = (function(){
     }
   })();
 
+  /*
+  Methods for storing testdata.
+  Single non repeating values should be stored with store single,
+  these will simply be sent and stored with the other summarty values. 
+
+  Repeating values, eg data from iterations in a test are stored, should be stored
+  in a row as a key value pair. Summary operations can be performed on row data, where a
+  field will be included if it exists or fills a certain criteria. The results are stored
+  using key:values and are sent to the backend together with the single values.
+
+  Row values should also be stored in the backend if further analysis is neeeded.  
+  */
+  rt.dataHandler = (function() {
+    var data = {};
+    var currentRow = 0;
+    
+    data.single = {};
+    data.rows = [];
+    data.rows.push({});
+
+    var _iterateRows = function(f) {
+      var len = data.rows.length;
+      for(var i =0; i<len;i++) {
+        f(data.rows[i]);
+      }
+    }
+
+    return {
+      'storeSingle': function(field, value) {
+        data.single[field] = value;
+      },
+      'storeRow': function(field, value) {
+        data.rows[currentRow][field] = value;
+      },
+      'newRow': function() {
+        currentRow += 1;
+      },
+
+      'average': function(field) {
+        var noOfvalues = 0;
+        var sum = 0;
+
+        _iterateRows(function(row) {
+          if(row[field]) {
+            sum += row[field];
+            noOfvalues += 1;
+          }
+        });
+      }
+
+    }
+  })();
+
   // Seedable randomfunction based on Math.sin. appears to produce sufficienlty
   // random numbers for this use. 
   // http://stackoverflow.com/questions/521295/javascript-random-seeds
