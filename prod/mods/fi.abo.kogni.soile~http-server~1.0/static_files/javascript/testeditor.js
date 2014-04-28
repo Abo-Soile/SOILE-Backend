@@ -60,6 +60,10 @@ function(dom,
 		var editor = ace.edit("editor");
 		editor.setTheme("ace/theme/dawn");
 
+		function end() {
+			console.log("it's over");
+		}
+
 		on(compileButton, "click", function() {
 			console.log("compile");
 			
@@ -88,6 +92,7 @@ function(dom,
 			console.log(compiledCode);
 			console.log("Executing soile");
 			SOILE2.util.eval(compiledCode);
+			SOILE2.util.setEndFunction(end)
 			setTimeout(function() {
 				SOILE2.rt.exec_pi();
 			}, 1500);

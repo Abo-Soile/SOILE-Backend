@@ -12,6 +12,9 @@ SOILE2 = (function(){
   var rt = {};         // runtime
   var defs = {};       // definitions (gvars; vals; functions)
   var util = {};       // miscellaneous utility functions
+
+  var endFunc = null;  // function run when the program ends.
+  var collectedData = {};
   
   soile2.defs = defs;
   soile2.rt = rt;
@@ -561,9 +564,12 @@ SOILE2 = (function(){
       'add': function(keycode, func) {
         keyfunctions[keycode] = func;
       },
-
       'remove': function(keycode, func) {
         keyfunctions[keycode] = null;
+      },
+      'reset': function() {
+        keyfunctions = {};
+        // document.onkeydown = null;
       }
     }
   })();
@@ -714,6 +720,7 @@ SOILE2 = (function(){
 
       if (opcode < 0){
         // TODO
+        rt.finish();
         // Program is over, remove listeners send data and navigate to next view
         break;
       }
@@ -883,6 +890,15 @@ SOILE2 = (function(){
       'wait': wait,
     };
   })();
+
+  rt.finish = function() {
+    console.log("Test over");
+
+    rt.keyhandler.reset();      // Removing all keyhandlers
+    $(document).add('*').off(); // Removing all clickhandlers
+
+    endFunc(collectedData);
+  }
   
   rt.seal = (function(){
     if (Object.seal !== undefined || typeof Object.seal === 'function') {
@@ -976,6 +992,10 @@ SOILE2 = (function(){
     jQuery.globalEval(code);
   };
   
+  util.setEndFunction = function(f) {
+    endFunc = f;
+  }
+
   util.getid = function(s) {
     if (typeof s === 'string') {
       if (s.charAt(0) === '#') {
