@@ -67,6 +67,19 @@ Starts the timer.
 **elapsedtime()**
 Returns time elapsed, in ms, since the last call top starttimer. Returns 0 if no timer has been started. 
 
+#### Result storage
+
+storeSingle("field", data)
+storeRow("field", data)
+newRow() new row to work on
+
+summary
+count(field)
+count(field, value)
+average(field)
+median(field)
+sum(field)
+
 
 
 ## RT - Runtime functions
