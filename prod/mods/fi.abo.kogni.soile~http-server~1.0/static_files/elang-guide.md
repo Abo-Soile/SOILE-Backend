@@ -56,6 +56,16 @@ Removes and deletes the clicklistener from the specified object.
 
 **seedrandom(seed)**
 
+#### Time and timers
+
+**recordts()**
+Returns a timestamp with the current time with m,illisecond precision. Timestamps can easily be compared with basic arithmetic operations.  
+
+**starttimer()**
+Starts the timer.
+
+**elapsedtime()**
+Returns time elapsed, in ms, since the last call top starttimer. Returns 0 if no timer has been started. 
 
 
 

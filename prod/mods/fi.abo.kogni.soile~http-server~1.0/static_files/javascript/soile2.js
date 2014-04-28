@@ -323,6 +323,7 @@ SOILE2 = (function(){
   };
 
   bin.recordts = function(){
+    return soile2.rt.timestamp();
   };
 
   bin.starttimer = function() {
