@@ -62,6 +62,7 @@ function(dom,
 
 		function end(data) {
 			console.log("it's over");
+			console.log(data);
 		}
 
 		on(compileButton, "click", function() {

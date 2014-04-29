@@ -14,7 +14,6 @@ SOILE2 = (function(){
   var util = {};       // miscellaneous utility functions
 
   var endFunc = null;  // function run when the program ends.
-  var collectedData = {};
   
   soile2.defs = defs;
   soile2.rt = rt;
@@ -1078,7 +1077,7 @@ SOILE2 = (function(){
 
     var d = soile2.rt.dataHandler.getData();
 
-    endFunc(collectedData);
+    endFunc(soile2.rt.dataHandler.getData());
   }
   
   rt.seal = (function(){

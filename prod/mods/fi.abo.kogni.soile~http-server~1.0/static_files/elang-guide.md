@@ -51,10 +51,13 @@ Removes and deletes the clicklistener from the specified object.
 #### Random numbers
 
 **randominteger(min, max)**
+returns a pseudorandom non decimal number within the range.
 
 **randomnumber(min, max)**
+Returns a pseudorandom number value within the range
 
 **seedrandom(seed)**
+Seeds the random generator with  a value. A certain seed will always produce the same sequence of random values. 
 
 #### Time and timers
 
@@ -69,16 +72,25 @@ Returns time elapsed, in ms, since the last call top starttimer. Returns 0 if no
 
 #### Result storage
 
-storeSingle("field", data)
-storeRow("field", data)
-newRow() new row to work on
+**storeSingle(string field data)**
+Store a value
+**storeRow(string field data)**
+Store a value in the current row
+**newRow()**
+Create a new row to write data to
 
-summary
-count(field)
-count(field, value)
-average(field)
-median(field)
-sum(field)
+##### summary
+
+**count(field)**
+Counts how many rows contain the specific field.
+**count(field, value)**
+Counts how many rows contain a specific field with a specific value
+**average(field)**
+Computes the average value from all rows containing this field.
+
+	Not implemented yet
+	median(field)
+	sum(field)
 
 
 
