@@ -598,12 +598,8 @@ SOILE2 = (function(){
   Row values should also be stored in the backend if further analysis is neeeded.  
   */
   rt.dataHandler = (function() {
-    var data = {};
-    var currentRow = 0;
-    
-    data.single = {};
-    data.rows = [];
-    data.rows.push({});
+    var data;
+    var currentRow;
 
     var _iterateRows = function(f) {
       var len = data.rows.length;
@@ -612,7 +608,19 @@ SOILE2 = (function(){
       }
     }
 
+    var _setData = function() {
+      data = {};
+      currentRow = 0;
+
+      data.single = {};
+      data.rows = [];
+      data.rows.push({});
+    }
+
+    _setData();
+
     return {
+      //Storage methods
       'storeSingle': function(field, value) {
         data.single[field] = value;
       },
@@ -621,18 +629,53 @@ SOILE2 = (function(){
       },
       'newRow': function() {
         currentRow += 1;
+        data.rows.push({});
       },
 
+      //Aggregation methods
       'average': function(field) {
         var noOfvalues = 0;
         var sum = 0;
 
         _iterateRows(function(row) {
-          if(row[field]) {
+          if(row.hasOwnProperty(field)&& util.is_number(row[field])) {
             sum += row[field];
             noOfvalues += 1;
           }
         });
+        console.log("average is " + sum/noOfvalues);
+        data.single["average_"+field] = sum/noOfvalues;
+      },
+      'count': function(field) {
+        var count = 0;
+
+        _iterateRows(function(row) {
+          if(row.hasOwnProperty(field)) {
+            count += 1;
+          }
+        });
+        data.single["count_"+field] = count;
+      },
+      'countValue': function(field, value) {
+        var count = 0;
+
+        _iterateRows(function(row) {
+          //hum borde kanske ge en function åt denhär?
+          if(row.hasOwnProperty(field) && row[field]===value) {
+            count += 1;
+          }
+        });
+
+        data.single["count_"+field+"_"+value] = count;
+      },
+
+      //Getters and setters
+      'getData': function() {
+        return(data);
+      },
+      //Return data to initial state, used when debugging tests
+      'reset': function() {
+        _setData();
       }
 
     }
@@ -976,8 +1019,33 @@ SOILE2 = (function(){
   rt.finish = function() {
     console.log("Test over");
 
-    rt.keyhandler.reset();      // Removing all keyhandlers
+    soile2.rt.keyhandler.reset();      // Removing all keyhandlers
     $(document).add('*').off(); // Removing all clickhandlers
+
+    soile2.rt.dataHandler.storeSingle("field", 123456);
+    soile2.rt.dataHandler.storeRow("a", 5);
+    soile2.rt.dataHandler.storeRow("t", true);
+    soile2.rt.dataHandler.newRow();
+    soile2.rt.dataHandler.storeRow("a",20);
+    soile2.rt.dataHandler.storeRow("b",555);
+    soile2.rt.dataHandler.storeRow("c",9999);
+    soile2.rt.dataHandler.storeRow("t", false);
+    soile2.rt.dataHandler.newRow();
+    soile2.rt.dataHandler.storeRow("b", 1000);
+    soile2.rt.dataHandler.storeRow("a", 5);
+    soile2.rt.dataHandler.storeRow("t", true);
+
+    soile2.rt.dataHandler.average("a");
+    soile2.rt.dataHandler.average("b");
+
+    soile2.rt.dataHandler.count("a");
+    soile2.rt.dataHandler.count("c");
+
+    soile2.rt.dataHandler.countValue("a", 5);
+    soile2.rt.dataHandler.countValue("t", true);
+    soile2.rt.dataHandler.countValue("t", false);
+
+    var d = soile2.rt.dataHandler.getData();
 
     endFunc(collectedData);
   }
@@ -1076,6 +1144,12 @@ SOILE2 = (function(){
   
   util.setEndFunction = function(f) {
     endFunc = f;
+  }
+
+  //Resets collected data, should be when a test is rerun when
+  //debugging
+  util.resetData = function() {
+    soile2.rt.dataHandler.reset();
   }
 
   util.getid = function(s) {

@@ -59,7 +59,7 @@ Removes and deletes the clicklistener from the specified object.
 #### Time and timers
 
 **recordts()**
-Returns a timestamp with the current time with m,illisecond precision. Timestamps can easily be compared with basic arithmetic operations.  
+Returns a timestamp with the current time with m,illisecond precision. Timestamps can easily be compared with basic arithmetic operations.
 
 **starttimer()**
 Starts the timer.
