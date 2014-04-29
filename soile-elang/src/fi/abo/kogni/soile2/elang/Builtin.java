@@ -76,9 +76,17 @@ public class Builtin {
         builtinFunctions.add("wait");
         builtinFunctions.add("resume");
 
+        //time
         builtinFunctions.add("randominteger");
         builtinFunctions.add("randomnumber");
         builtinFunctions.add("seedrandom");
+
+        //Data logging
+        builtinFunctions.add("storesingle");
+        builtinFunctions.add("storerow");
+        builtinFunctions.add("newrow");
+        builtinFunctions.add("average");
+        builtinFunctions.add("count");
 
         builtinFunctions.add("onkeypress");
     }

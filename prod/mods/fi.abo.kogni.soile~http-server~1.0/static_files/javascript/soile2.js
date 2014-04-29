@@ -322,6 +322,37 @@ SOILE2 = (function(){
     }, 0);
   };
 
+  /*
+  Datahandling
+  */
+  bin.storesingle = function(field, value) {
+    soile2.rt.dataHandler.storeSingle(field, value);
+  }
+
+  bin.storerow =function(field, value) {
+    soile2.rt.dataHandler.storeRow(field,value)
+  };
+
+  bin.newrow = function() {
+    soile2.rt.dataHandler.newRow();
+  };
+
+  bin.average = function(field) {
+    soile2.rt.dataHandler.average(field);
+  }
+
+  bin.count = function(field, value) {
+    if(typeof value !== 'undefined') {
+      soile2.rt.dataHandler.countValue(field, value);
+    } else {
+      soile2.rt.dataHandler.count(field);
+    }
+  }
+
+  /*
+  Functions related to time and timing
+  */
+
   bin.recordts = function(){
     return soile2.rt.timestamp();
   };
@@ -329,12 +360,12 @@ SOILE2 = (function(){
   bin.starttimer = function() {
     console.log("STARTING TIMER");
     soile2.rt.timer.start();
-  }
+  };
 
   bin.elapsedtime = function() {
     console.log(soile2.rt.timer.elapsedTime());
     return soile2.rt.timer.elapsedTime();
-  }
+  };
 
   bin.stimulus = function(){
     return soile2.rt.stimuli.get();
@@ -1022,28 +1053,28 @@ SOILE2 = (function(){
     soile2.rt.keyhandler.reset();      // Removing all keyhandlers
     $(document).add('*').off(); // Removing all clickhandlers
 
-    soile2.rt.dataHandler.storeSingle("field", 123456);
-    soile2.rt.dataHandler.storeRow("a", 5);
-    soile2.rt.dataHandler.storeRow("t", true);
-    soile2.rt.dataHandler.newRow();
-    soile2.rt.dataHandler.storeRow("a",20);
-    soile2.rt.dataHandler.storeRow("b",555);
-    soile2.rt.dataHandler.storeRow("c",9999);
-    soile2.rt.dataHandler.storeRow("t", false);
-    soile2.rt.dataHandler.newRow();
-    soile2.rt.dataHandler.storeRow("b", 1000);
-    soile2.rt.dataHandler.storeRow("a", 5);
-    soile2.rt.dataHandler.storeRow("t", true);
+    // soile2.rt.dataHandler.storeSingle("field", 123456);
+    // soile2.rt.dataHandler.storeRow("a", 5);
+    // soile2.rt.dataHandler.storeRow("t", true);
+    // soile2.rt.dataHandler.newRow();
+    // soile2.rt.dataHandler.storeRow("a",20);
+    // soile2.rt.dataHandler.storeRow("b",555);
+    // soile2.rt.dataHandler.storeRow("c",9999);
+    // soile2.rt.dataHandler.storeRow("t", false);
+    // soile2.rt.dataHandler.newRow();
+    // soile2.rt.dataHandler.storeRow("b", 1000);
+    // soile2.rt.dataHandler.storeRow("a", 5);
+    // soile2.rt.dataHandler.storeRow("t", true);
 
-    soile2.rt.dataHandler.average("a");
-    soile2.rt.dataHandler.average("b");
+    // soile2.rt.dataHandler.average("a");
+    // soile2.rt.dataHandler.average("b");
 
-    soile2.rt.dataHandler.count("a");
-    soile2.rt.dataHandler.count("c");
+    // soile2.rt.dataHandler.count("a");
+    // soile2.rt.dataHandler.count("c");
 
-    soile2.rt.dataHandler.countValue("a", 5);
-    soile2.rt.dataHandler.countValue("t", true);
-    soile2.rt.dataHandler.countValue("t", false);
+    // soile2.rt.dataHandler.countValue("a", 5);
+    // soile2.rt.dataHandler.countValue("t", true);
+    // soile2.rt.dataHandler.countValue("t", false);
 
     var d = soile2.rt.dataHandler.getData();
 
