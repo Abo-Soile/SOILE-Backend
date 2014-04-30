@@ -888,7 +888,8 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
       }
 
     //Calculating how much of the experiment is completed
-    var noOfPhases = r.result.components.length;
+    var noOfPhases = parseInt(r.result.components.length);
+    phaseNo = parseInt(phaseNo);
     var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
 
     //Formphase, rendering form template
