@@ -250,16 +250,32 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     });
   },
 
-  saveFormData: function(phase, experimentid ,data, userid,response) {
+  saveData: function(phase, experimentid ,data, userid,response) {
     var doc = data;
     data.phase = phase;
     data.expId = experimentid;
     data.userid = userid
     data.confirmed = false;
-    vertx.eventBus.send(this.mongoAddress, {"action":"save",
-    "collection":"formdata", "document":doc}, function(reply) {
-      response(reply);
-    })
+    
+  this.getExperiment(experimentid, function(r) {
+      var type = r.result.components[phase].type;
+      data.type = type;
+
+      console.log(mongoHandler.mongoAddress);
+
+      if(type === "form"){
+        vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"save",
+        "collection":"formdata", "document":doc}, function(reply) {
+          response(reply);
+        });
+      }
+      if(type==="test") {
+        vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"save",
+        "collection":"testdata", "document":doc}, function(reply) {
+          response(reply);
+        });
+      }
+    });
   },
 
   getUserPosition: function(userid, experimentid, response) {
@@ -284,8 +300,25 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     });
   },
 
+  // Setting a confirmed flag on submitted data. 
+  // This is run when an user successfully reaches the end
+  // of an experiment.
+
   confirmExperimentData: function(expId, userid, response) {
 
+    //Confirming testdata.
+    vertx.eventBus.send(this.mongoAddress, {"action":"update",
+    "collection":"testdata", "criteria":{"expId":expId, "userid":userid}, 
+    "objNew":{"$set":{
+        "confirmed":true
+      }},
+    "multi":true
+    }, function(reply) {
+      console.log("confirming testdata");
+      console.log(JSON.stringify(reply));
+    });
+
+    //Confirming formdata
     vertx.eventBus.send(this.mongoAddress, {"action":"update",
     "collection":"formdata", "criteria":{"expId":expId, "userid":userid}, 
     "objNew":{"$set":{
