@@ -33,6 +33,8 @@ function(dom,
 	ready(function() {
 		parser.parse();
 
+		var baseTable = "<thead><tr><th>Timestamp</th><th>Message</th></tr></thead>"
+
 		var uploadUrl = document.URL + "/imageupload"
 		var upbutton = registry.byId("uploadButton");
 
@@ -55,6 +57,8 @@ function(dom,
 		var errorBox = dom.byId("errorbox");
 		var logger = document.getElementById('log');
 
+		var soileStartTime = 0;
+
 		var compiledCode = "";
 
 		var editor = ace.edit("editor");
@@ -66,11 +70,20 @@ function(dom,
 		}
 
 		var logfunc = function (message) {
+			var row = logger.insertRow(1);
+			var timestamp = Date.now() - soileStartTime;
+
+			var timeCell = row.insertCell(0);
+			timeCell.innerHTML = timestamp/1000 + " s  ";
+			var messageCell = row.insertCell(1);
 		    if (typeof message == 'object') {
-		        logger.innerHTML += (JSON && JSON.stringify ? JSON.stringify(message) : message) + '<br />';
+		    	var msg = (JSON && JSON.stringify ? JSON.stringify(message) : message);
+		    	messageCell.innerHTML = msg;
+		        
 		    } else {
-		        logger.innerHTML += message + '<br />';
+		        messageCell.innerHTML = message;
 		    }
+
 		}
 
 		on(compileButton, "click", function() {
@@ -98,6 +111,10 @@ function(dom,
 		})
 
 		on(runButton, "click", function() {
+			logger.innerHTML = baseTable;
+
+			soileStartTime = Date.now();
+
 			console.log(compiledCode);
 			console.log("Executing soile");
 			SOILE2.util.eval(compiledCode);

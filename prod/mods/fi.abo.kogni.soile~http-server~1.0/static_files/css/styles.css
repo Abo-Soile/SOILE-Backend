@@ -98,6 +98,20 @@ body > .container {
 	margin-right:7px;
 }
 
+/*Logger styles */
+#logdiv {
+	height: 200px !important;
+    overflow: scroll;
+}
+
+#log td:first-child {
+	width: 100px;
+}
+
+#log th:first-child {
+	width: 100px;
+}
+
 /*Bootstrap sticky footer http://getbootstrap.com/examples/sticky-footer-navbar/*/
 html {
 	position: relative;
