@@ -76,8 +76,18 @@ var mongoHandler = {
      function(reply) {
       response(reply);
     })
+  },
+
+  getExperimentTestData: function(id, respons) {
+    vertx.eventBus.send(this.mongoAddress, {"action":"find", 
+      "collection":"testdata",
+      "matcher": {"expId":id, "confirmed":true},
+      "keys": {"confirmed"; 0}},
+      function(reply) {
+        response(reply);
+      }
+    })
   }
-  ,
 
   addFormToExperiment: function(expid,formid, name,response) {
     vertx.eventBus.send(this.mongoAddress, {

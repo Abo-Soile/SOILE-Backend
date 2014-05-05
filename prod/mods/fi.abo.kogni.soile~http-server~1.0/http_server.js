@@ -1064,6 +1064,17 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   });
 }))
 
+
+//TODO
+customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
+  var expID = request.params().get('id');
+
+  queryMongo.getExperimentTestData(expId, function(r) {
+
+  })
+ 
+}));
+
 customMatcher.get('/test/demo', function(request) {
   var file = 'demo.html';
   request.response.sendFile(utils.file_from_serverdir(file));
