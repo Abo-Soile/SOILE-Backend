@@ -1,4 +1,3 @@
-
 require(["dojo/dom",
 		"dojo/dom-construct",
 		"dojo/dom-style",
@@ -54,6 +53,7 @@ function(dom,
 		var runButton = registry.byId("runButton");
 		// var codeBox = registry.byId("code");
 		var errorBox = dom.byId("errorbox");
+		var logger = document.getElementById('log');
 
 		var compiledCode = "";
 
@@ -63,6 +63,14 @@ function(dom,
 		function end(data) {
 			console.log("it's over");
 			console.log(data);
+		}
+
+		var logfunc = function (message) {
+		    if (typeof message == 'object') {
+		        logger.innerHTML += (JSON && JSON.stringify ? JSON.stringify(message) : message) + '<br />';
+		    } else {
+		        logger.innerHTML += message + '<br />';
+		    }
 		}
 
 		on(compileButton, "click", function() {
@@ -93,7 +101,8 @@ function(dom,
 			console.log(compiledCode);
 			console.log("Executing soile");
 			SOILE2.util.eval(compiledCode);
-			SOILE2.util.setEndFunction(end)
+			SOILE2.util.setEndFunction(end);
+			SOILE2.util.setLogFunction(logfunc);
 			SOILE2.util.resetData();
 			setTimeout(function() {
 				SOILE2.rt.exec_pi();

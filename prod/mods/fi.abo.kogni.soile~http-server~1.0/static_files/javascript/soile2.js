@@ -14,6 +14,7 @@ SOILE2 = (function(){
   var util = {};       // miscellaneous utility functions
 
   var endFunc = null;  // function run when the program ends.
+  var logFunc = null;  // function used for logging
   
   soile2.defs = defs;
   soile2.rt = rt;
@@ -126,7 +127,13 @@ SOILE2 = (function(){
   };
   
   bin.helptext = function(msg){
-    console.log(msg);
+    if(msg.length > 0) {
+        if(logFunc) {
+          logFunc(msg);
+        } else {
+          console.log(msg);
+        }
+      }
   };
   
   bin.not = function(arg){
@@ -594,7 +601,7 @@ SOILE2 = (function(){
     var keyfunctions = {}
 
     var keyFunction = function(e) {
-      console.log(e.keyCode);
+      //console.log(e.keyCode);
       if(keyfunctions[e.keyCode]) {
         keyfunctions[e.keyCode].call();
       }
@@ -1174,6 +1181,10 @@ SOILE2 = (function(){
   
   util.setEndFunction = function(f) {
     endFunc = f;
+  }
+
+  util.setLogFunction = function(f) {
+    logFunc = f;
   }
 
   //Resets collected data, should be when a test is rerun when
