@@ -994,8 +994,6 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 
     var sep = "; ";
 
-    var phases = data.data.length();
-
     var fields = [];
     //fields.push("userid");
 
@@ -1011,32 +1009,27 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
         item.userid = "Missing";
       }
 
-      if ((phase+1) > phases) {
-        phases = parseInt(item.phase);
-        // console.log(phases);
-      }
-
+      //Writing table headers
       if (!fields[phase]) {
-        // console.log("newPhase");
         fields[phase] = [];
-
         var prop;
-        for (prop in item) {
+        for (prop in item.data) {
           //console.log(prop);
-          if(!(prop=="_id"||prop=="phase"||prop=="userid"||prop=="expId")) {
+       //   if(!(prop=="_id"||prop=="phase"||prop=="userid"||prop=="expId")) {
             fields[phase].push(prop.slice(17, prop.length));
-          }
+        //  }
         }
       }
       if(!userData[item.userid]) {
         userData[item.userid] = [];
       }
+      //Writing table data for each 
       userData[item.userid][phase] = [];
       var j;
-      for(j in item) {
-        if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
-          userData[item.userid][phase].push(item[j]);
-        }
+      for(j in item.data) {
+        //if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
+          userData[item.userid][phase].push(item.data[j]);
+       // }
       }
     }
     var mergedFields = [];
