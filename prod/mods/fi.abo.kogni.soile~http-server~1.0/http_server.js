@@ -995,8 +995,6 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
     var sep = "; ";
 
     var fields = [];
-    //fields.push("userid");
-
     var userData = {};
 
     //finding max phase an
@@ -1044,8 +1042,6 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 
       userFields += mergedUserData.join(sep);
       userFields += "\n";
-
-
     }
     request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
     request.response.putHeader("Content-Disposition", "attachment; filename=questioneerdata.csv");
@@ -1055,13 +1051,68 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 }))
 
 
-// TODO
-// Kolla på 
+// Does pretty much the same as the form data method, 
+// Might generate empty fields when using phase no as array index
 customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
   var expID = request.params().get('id');
 
-  queryMongo.getExperimentTestData(expId, function(r) {
+  queryMongo.getExperimentTestData(expID, function(r) {
     var data = r.results;
+    var sep =";"
+
+    var fields = [];
+    var userData = {};
+
+    for(i in data) {
+      var item = data[i];
+      item.single = item.data.single;
+      var phase = parseInt(item.phase);
+
+      if(!("userid" in item)) {
+        item.userid = "Missing";
+      }
+
+      //Writing headers
+      if(!fields[phase]) {
+
+        //indexes before phase will be set to null
+        fields[phase] = [];
+
+        var prop;
+        for (prop in item.single) {
+          fields[phase].push(prop);
+        }
+      }
+
+      if(!userData[item.userid]) {
+        userData[item.userid] = [];
+      }
+
+      userData[item.userid][phase] = [];
+      var j;
+      for(j in item.single) {
+        userData[item.userid][phase].push(item.single[j]);
+      }
+    }
+
+    var mergedFields = [];
+    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
+    
+    var stringFields = mergedFields.join(sep);
+
+    var userFields = ""
+    for(id in userData) {
+      var mergedUserData = [];
+      mergedUserData = ([id]).concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
+
+      userFields += mergedUserData.join(sep);
+      userFields += "\n";
+    }
+
+    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+    request.response.putHeader("Content-Disposition", "attachment; filename=testdata.csv");
+
+    request.response.end("\ufeff " + stringFields+"\n"+ userFields);
   })
  
 }));

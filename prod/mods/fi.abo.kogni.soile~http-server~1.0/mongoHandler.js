@@ -111,7 +111,7 @@ var mongoHandler = {
     })
   },
 
-  getExperimentTestData: function(id, respons) {
+  getExperimentTestData: function(id, response) {
     vertx.eventBus.send(this.mongoAddress, {"action":"find", 
       "collection":"testdata",
       "matcher": {"expId":id, "confirmed":true},
