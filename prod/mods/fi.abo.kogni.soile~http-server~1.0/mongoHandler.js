@@ -82,12 +82,13 @@ var mongoHandler = {
     vertx.eventBus.send(this.mongoAddress, {"action":"find", 
       "collection":"testdata",
       "matcher": {"expId":id, "confirmed":true},
-      "keys": {"confirmed"; 0}},
+      "keys": {"confirmed": 0}},
       function(reply) {
         response(reply);
       }
-    })
-  }
+    )
+  },
+  
 
   addFormToExperiment: function(expid,formid, name,response) {
     vertx.eventBus.send(this.mongoAddress, {
@@ -288,6 +289,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     });
   },
 
+  // Returns the users current position in the experiment,
   getUserPosition: function(userid, experimentid, response) {
 
     vertx.eventBus.send(this.mongoAddress, {
@@ -299,14 +301,31 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       },
       "sort":{"phase":-1},
       "limit":1},
-      function(reply) {
-        console.log(JSON.stringify(reply));
+      function userFormData(replyForm) {
 
-        if(reply.number == 1) {
-          response(parseInt(reply.results[0].phase));
-        }else {
-          response(-1);
-        }
+        vertx.eventBus.send(mongoHandler.mongoAddress, {
+          "action":"find",
+          "collection":"testdata",
+          "matcher":{
+            "userid":userid,
+            "expId":experimentid
+          },
+          "sort":{"phase":-1},
+          "limit":1},
+          function userTestData(replyTest) {
+
+            var formPhase = -1;
+            var testPhase = -1;
+
+            if(replyForm.number == 1) {
+              formPhase = (parseInt(replyForm.results[0].phase));
+            }
+            if(replyTest.number == 1) {
+              testPhase = parseInt(testForm.results[0].phase);
+            }
+              response(Math.max(formPhase, testPhase));
+          }
+        )
     });
   },
 
