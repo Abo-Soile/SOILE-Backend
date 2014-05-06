@@ -68,13 +68,46 @@ var mongoHandler = {
     });
   },
 
+  getPhaseCount: function(id, collection,response) {
+    //{ distinct: "orders", key: "item.sku" }
+    var formCommand = "{distinct:'formdata', key:'phase', query: {expId:'"+id+"'}}";
+    var testCommand = "{distinct:'formdata', key:'phase', query: {expId:'"+id+"'}}";
+    console.log(formCommand);
+    if (collection==="form") {
+      vertx.eventBus.send(this.mongoAddress, {"action":"command",
+        "command":formCommand}, function(reply) {
+          response(reply);
+        }
+      );
+    }
+
+    else if (collection==="test") {
+      vertx.eventBus.send(this.mongoAddress, {"action":"command",
+        "command":testCommand}, function(reply) {
+          response(reply);
+        }
+      );
+    }
+
+    else {
+      return 0;
+    }
+  },
+
+  // Returns all confirmed experiment data, without the confirmed 
+  // field
   getExperimentFormData: function(id, response) {
     vertx.eventBus.send(this.mongoAddress, {"action":"find",
     "collection":"formdata",
     "matcher":{"expId":id, "confirmed":true},
-    "keys": {"confirmed":0}},
+    "keys": {"confirmed":0}},  // Projection
      function(reply) {
-      response(reply);
+      mongoHandler.getPhaseCount(id, "form", function(phases) {
+        console.log(JSON.stringify(reply))
+        console.log(JSON.stringify(phases));
+        reply.phases = phases.result.values;
+        response(reply);
+      })
     })
   },
 
@@ -82,7 +115,7 @@ var mongoHandler = {
     vertx.eventBus.send(this.mongoAddress, {"action":"find", 
       "collection":"testdata",
       "matcher": {"expId":id, "confirmed":true},
-      "keys": {"confirmed": 0}},
+      "keys": {"confirmed": 0}},   // Projection
       function(reply) {
         response(reply);
       }
@@ -262,15 +295,16 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   },
 
   saveData: function(phase, experimentid ,data, userid,response) {
-    var doc = data;
-    data.phase = phase;
-    data.expId = experimentid;
-    data.userid = userid
-    data.confirmed = false;
+    var doc = {};
+    doc.phase = phase;
+    doc.expId = experimentid;
+    doc.userid = userid
+    doc.confirmed = false;
+    doc.data = data;
     
   this.getExperiment(experimentid, function(r) {
       var type = r.result.components[phase].type;
-      data.type = type;
+      doc.type = type;
 
       console.log(mongoHandler.mongoAddress);
 
@@ -332,7 +366,6 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   // Setting a confirmed flag on submitted data. 
   // This is run when an user successfully reaches the end
   // of an experiment.
-
   confirmExperimentData: function(expId, userid, response) {
 
     //Confirming testdata.

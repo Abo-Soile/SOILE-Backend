@@ -685,7 +685,7 @@ customMatcher.get('/experiment/:id', function(request){
   //Keeping stuff DRY
   function renderExp(r) {
     var experiment = r.result;
-    console.log(JSON.stringify(r));
+    //console.log(JSON.stringify(r));
     templateManager.render_template("experiment", {"exp":experiment},request);
   }
 
@@ -990,10 +990,11 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {
     var data = r.results;
+    console.log(JSON.stringify(r));
 
     var sep = "; ";
 
-    var phases = 0;
+    var phases = data.data.length();
 
     var fields = [];
     //fields.push("userid");
@@ -1057,20 +1058,17 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
     request.response.putHeader("Content-Disposition", "attachment; filename=questioneerdata.csv");
 
     request.response.end("\ufeff " + stringFields+"\n"+ userFields);
-
-     // request.response.end(JSON.stringify(fields) + "\n\n\n" +JSON.stringify(userData));
-     
-     //request.response.end(JSON.stringify(r.results));
   });
 }))
 
 
-//TODO
-customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
+// TODO
+// Kolla på 
+customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
   var expID = request.params().get('id');
 
   queryMongo.getExperimentTestData(expId, function(r) {
-
+    var data = r.results;
   })
  
 }));
