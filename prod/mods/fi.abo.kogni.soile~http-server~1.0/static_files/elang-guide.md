@@ -2,17 +2,48 @@
 
 This document contains documentation for the experiment language.
 
-## Phases
+## Structure
 
 
 
-## Bin - builtin functions
+Val and gvar definitons
+
+function definitons
+
+phase definitions
+
+phase transitions
+
+
+## Variables
+**gvar** Global variable, useable everywhere
+
+**val** static global value, cannot be modified after definition
+
+**var** Normal variable, visible only in the current function/phase.
+
+A variable definition contains: "variabletype" "variable name" <- "value". Also note that variable definitions must be done in the beginning of the program (gvar and val) or in the beginning of a function/phase definition (var). 
+	
+	# Creates a variable named a and assigns it's value to the string "asdf"
+	var a <- "asdf"
+
+	# Changes a's value from "asdf" to "qwerty"
+	a <- "qwerty"
+
+## Phases and transitions
+
+intermezzo-phase
+information-phase
+intraction-phase
+
+
+## Builtin functions
 
 Builtin functions are functions that are called and executed from a experiment by the user. 
 
 ### Input
 
-### onmouseclick
+#### Mouse
 
 **onmouseclick(imagefile, {action: function, inputid: number, resettimer: bool})**
 
@@ -20,7 +51,24 @@ Creates a mouseclick listener for the object/image, which will be triggered when
 
 **onmouseclick(imagefile, false)**
 
-Removes and deletes the clicklistener from the specified object.
+Removes all mouseclick functions bound to the specified object.
+
+####Keyboard
+
+**onkeypress(key, func)**
+Binds the specified key to a function so that the function is run every time when the key is pressed.
+
+**onkeypress(key)**
+Removes all actionss bound to the specified key.
+
+	function leftclick()
+		showmsg("left was clicked")
+	end
+
+	onkeypress("left", leftclick)
+Example: the function leftclick is run each time when the left arrow is clicked on the keyboard.
+
+
 
 ### Arithmetic
 
@@ -72,20 +120,34 @@ Returns time elapsed, in ms, since the last call top starttimer. Returns 0 if no
 
 #### Result storage
 
-**storeSingle(string field data)**
-Store a value
-**storeRow(string field data)**
-Store a value in the current row
-**newRow()**
-Create a new row to write data to
+Results are stored in two tables, raw data and aggregated data. The aggregated data will only produce one row per user while any number of rows can be used for raw data. 
 
-##### summary
+**storeSingle(field data)**
+
+Stores a single value with the specified fieldname in the aggregated datatable. 
+
+**storeRow(string field data)**
+
+Stores a value with the given fieldname in the current raw datarow. 
+
+**newRow()**
+Creates a new empty row to write raw data to.
+
+
+##### Data processing and aggregation
+
+Raw data can be processed to something more usable. An aggregation function loops through the whole raw data table and performs the specified function on every field that it finds. Rows that don't have any value in the specific field are simply omitted. Results are stored in the processed data table in the fi
 
 **count(field)**
+
 Counts how many rows contain the specific field.
+
 **count(field, value)**
-Counts how many rows contain a specific field with a specific value
+
+Counts how many rows contain a specific field with a specific value.
+
 **average(field)**
+
 Computes the average value from all rows containing this field.
 
 	Not implemented yet

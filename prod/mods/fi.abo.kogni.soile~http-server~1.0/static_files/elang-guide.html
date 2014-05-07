@@ -122,14 +122,46 @@ body{font-size:16px;}
 }
 </style><title>elang-guide</title></head><body><h1 id="elang-documentation">Elang Documentation</h1>
 <p>This document contains documentation for the experiment language.</p>
-<h2 id="phases">Phases</h2>
-<h2 id="bin-builtin-functions">Bin - builtin functions</h2>
+<h2 id="structure">Structure</h2>
+<p>Val and gvar definitons</p>
+<p>function definitons</p>
+<p>phase definitions</p>
+<p>phase transitions</p>
+<h2 id="variables">Variables</h2>
+<p><strong>gvar</strong> Global variable, useable everywhere</p>
+<p><strong>val</strong> static global value, cannot be modified after definition</p>
+<p><strong>var</strong> Normal variable, visible only in the current function/phase.</p>
+<p>A variable definition contains: "variabletype" "variable name" &lt;- "value". Also note that variable definitions must be done in the beginning of the program (gvar and val) or in the beginning of a function/phase definition (var). </p>
+<pre><code># Creates a variable named a and assigns it's value to the string "asdf"
+var a &lt;- "asdf"
+
+# Changes a's value from "asdf" to "qwerty"
+a &lt;- "qwerty"
+</code></pre>
+<h2 id="phases-and-transitions">Phases and transitions</h2>
+<p>intermezzo-phase
+information-phase
+intraction-phase</p>
+<h2 id="builtin-functions">Builtin functions</h2>
 <p>Builtin functions are functions that are called and executed from a experiment by the user. </p>
-<h3 id="onmouseclick">onmouseclick</h3>
+<h3 id="input">Input</h3>
+<h4 id="mouse">Mouse</h4>
 <p><strong>onmouseclick(imagefile, {action: function, inputid: number, resettimer: bool})</strong></p>
 <p>Creates a mouseclick listener for the object/image, which will be triggered when the image is clicked. The function specified in "action" is executed on each click. </p>
 <p><strong>onmouseclick(imagefile, false)</strong></p>
-<p>Removes and deletes the clicklistener from the specified object.</p>
+<p>Removes all mouseclick functions bound to the specified object.</p>
+<h4 id="keyboard">Keyboard</h4>
+<p><strong>onkeypress(key, func)</strong>
+Binds the specified key to a function so that the function is run every time when the key is pressed.</p>
+<p><strong>onkeypress(key)</strong>
+Removes all actionss bound to the specified key.</p>
+<pre><code>function leftclick()
+    showmsg("left was clicked")
+end
+
+onkeypress("left", leftclick)
+</code></pre>
+<p>Example: the function leftclick is run each time when the left arrow is clicked on the keyboard.</p>
 <h3 id="arithmetic">Arithmetic</h3>
 <h4 id="basic">Basic</h4>
 <p><strong>plus(number1 number2)</strong> number1 + number2</p>
@@ -141,7 +173,42 @@ body{font-size:16px;}
 <p><strong>and(bool1 bool2)</strong></p>
 <p><strong>or(bool1 bool2)</strong></p>
 <p><strong>lessthan(number1 number2 <em>or</em> lt(number1 number2))</strong> number1 &lt; number2</p>
-<p><strong>greaterthan(number1 number2) _o_r gt(number1 number2)</strong> number1 &gt; number2</p>
+<p><strong>greaterthan(number1 number2) <em>or</em> gt(number1 number2)</strong> number1 &gt; number2</p>
 <p><strong>equal(number1 number2) <em>or</em> eq(number1 number2)</strong> number1 == number2</p>
+<h3 id="functions">Functions</h3>
+<h4 id="random-numbers">Random numbers</h4>
+<p><strong>randominteger(min, max)</strong>
+returns a pseudorandom non decimal number within the range.</p>
+<p><strong>randomnumber(min, max)</strong>
+Returns a pseudorandom number value within the range</p>
+<p><strong>seedrandom(seed)</strong>
+Seeds the random generator with  a value. A certain seed will always produce the same sequence of random values. </p>
+<h4 id="time-and-timers">Time and timers</h4>
+<p><strong>recordts()</strong>
+Returns a timestamp with the current time with m,illisecond precision. Timestamps can easily be compared with basic arithmetic operations.</p>
+<p><strong>starttimer()</strong>
+Starts the timer.</p>
+<p><strong>elapsedtime()</strong>
+Returns time elapsed, in ms, since the last call top starttimer. Returns 0 if no timer has been started. </p>
+<h4 id="result-storage">Result storage</h4>
+<p>Results are stored in two tables, raw data and aggregated data. The aggregated data will only produce one row per user while any number of rows can be used for raw data. </p>
+<p><strong>storeSingle(field data)</strong></p>
+<p>Stores a single value with the specified fieldname in the aggregated datatable. </p>
+<p><strong>storeRow(string field data)</strong></p>
+<p>Stores a value with the given fieldname in the current raw datarow. </p>
+<p><strong>newRow()</strong>
+Creates a new empty row to write raw data to.</p>
+<h5 id="data-processing-and-aggregation">Data processing and aggregation</h5>
+<p>Raw data can be processed to something more usable. An aggregation function loops through the whole raw data table and performs the specified function on every field that it finds. Rows that don't have any value in the specific field are simply omitted. Results are stored in the processed data table in the fi</p>
+<p><strong>count(field)</strong></p>
+<p>Counts how many rows contain the specific field.</p>
+<p><strong>count(field, value)</strong></p>
+<p>Counts how many rows contain a specific field with a specific value.</p>
+<p><strong>average(field)</strong></p>
+<p>Computes the average value from all rows containing this field.</p>
+<pre><code>Not implemented yet
+median(field)
+sum(field)
+</code></pre>
 <h2 id="rt-runtime-functions">RT - Runtime functions</h2>
 <p>Rt functions operate within the vm and should not be called by users. They are only used to manage and run the vm.</p></body></html>
