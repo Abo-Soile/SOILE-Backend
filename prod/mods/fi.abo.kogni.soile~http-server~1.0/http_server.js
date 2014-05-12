@@ -560,17 +560,33 @@ customMatcher.post("/signup", function(request) {
 
     var email = params.email;
     var passwd = params.passwd;
+    var passwdAgain = params.passwdAgain;
+
+    var origin = params.origin
 
     var templateVars = {};
     templateVars.username = email;
+    templateVars.origin = decodeURIComponent(origin);
 
     //console.log(data);
     console.log(JSON.stringify(params));
+    console.log(passwd + "===" + passwdAgain);
 
-    if(!(email&&passwd)) {
-      templateVars.errors = "Both fields are required";
-      templateManager.render_template('signup', templateVars,request);
+
+    if(!(email && passwd && passwdAgain)) {
+      templateVars.registererrors = "All fields are required";
+      //templateManager.render_template('signup', templateVars,request);
+      templateManager.render_template('login', templateVars,request);
+
       return;
+    }
+
+    if(!(passwd===passwdAgain)) {
+      templateVars.registererrors = "Password didn't match";
+      //templateManager.render_template('signup', templateVars,request);
+      templateManager.render_template('login', templateVars,request);
+
+      return
     }
 
     queryMongo.newUser(email, passwd, function(r) {
@@ -580,8 +596,10 @@ customMatcher.post("/signup", function(request) {
         templateManager.render_template('landing', {}, request);
       }
       else {
-        templateVars.errors = "Username already exists!, try logging in";
-        templateManager.render_template('signup', templateVars, request);
+        templateVars.registererrors = "Username already exists!, try logging in";
+        //templateManager.render_template('signup', templateVars, request);
+        templateManager.render_template('login', templateVars, request);
+
       }
     });
   });
