@@ -69,7 +69,15 @@ SOILE2 = (function(){
     else {
       rt.keyhandler.remove(keycode);
     }
-  }
+  };
+
+  bin.resumeonkey = function(key) {
+    if (key) {
+      rt.keyhandler.resume(key);
+    }else {
+      console.log("No key specified");
+    }
+  };
 
   /*
    * Copy data -- numbers, strings, arrays or objects but NO
@@ -599,13 +607,20 @@ SOILE2 = (function(){
   // function if a key is bound to one.
   rt.keyhandler = (function() {
     var keyfunctions = {}
+    var anykeyfunctions = []
 
     var keyFunction = function(e) {
       //console.log(e.keyCode);
       if(keyfunctions[e.keyCode]) {
         keyfunctions[e.keyCode].call();
       }
+
+      for(var i = 0; i<anykeyfunctions.length; i++) {
+        anykeyfunctions[i].call();
+      }
+
     }
+
     document.onkeydown = keyFunction;
 
     return {
@@ -618,6 +633,16 @@ SOILE2 = (function(){
       'reset': function() {
         keyfunctions = {};
         // document.onkeydown = null;
+      },
+      'resume': function(key) {
+
+        var keycode = soile2.rt.kbd.keycode(key);
+        
+        var onkey = function() {
+          soile2.bin.resume();
+          keyfunctions[keycode] = null;
+        }
+        keyfunctions[keycode] = onkey;
       }
     }
   })();

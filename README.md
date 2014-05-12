@@ -7,14 +7,19 @@ Tech used:
 - StringTemplate for building the forms
 - Vertx.io links everything together and serves the website
 - Html templates by dustjs
+- Mongodb
 
-- Some javascript library to handle the client side stuff.
+- Some javascript library to handle the client side stuff, dojo, underscore.
+
+
+
+## Mongo Collections and Fields
+
+#### User:
+	- email/username
+	- password hashed
+	-  
 
 
 ### Dev history in gitlog
 
-## TODO:
-- Authentification - vertx-mod-auth?
-- Modify the form builder to ommit useless extra html tags, like <html>
-- Figure out how to store stuff  - Mongodb - vertx mongo persistor?
-- Define how an experiment should work.

@@ -89,5 +89,6 @@ public class Builtin {
         builtinFunctions.add("count");
 
         builtinFunctions.add("onkeypress");
+        builtinFunctions.add("resumeonkey");
     }
 }
