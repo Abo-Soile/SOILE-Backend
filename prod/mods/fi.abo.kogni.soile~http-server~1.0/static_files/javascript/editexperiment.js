@@ -39,6 +39,8 @@ function(dom,
 
 		var name = registry.byId("name");
 		var description = registry.byId("description");
+		var loginRequired = registry.byId("loginrequired")
+
 		var startDate = registry.byId("startDate");
 		var endDate = registry.byId("endDate");
 
@@ -141,17 +143,32 @@ function(dom,
 		on(newTest, "click", function() {
 			var testId = filteringSelect.get('value');
 			var testName = filteringSelect.get('displayedValue');
+			filteringSelect.set("invalidMessage","Couldn't find experiment");
 
-			console.log("Adding test");
-			xhr.post("addtest", {
-				data: json.stringify({"testId":testId,"name":testName})
-			}).then(function(data) {
-				data = json.parse(data);
-				console.log("Creating test row" + data);
 
-				createComponentRow(data.id, {"type":"test", 
-											 "name":data.name})
-			});
+			if (filteringSelect.validate() && filteringSelect.get('value')) {
+	
+				console.log("Adding test");
+				xhr.post("addtest", {
+					data: json.stringify({"testId":testId,"name":testName})
+				}).then(function(data) {
+					data = json.parse(data);
+					if(data.error) {
+						console.log("Couldn't find experiment");
+
+						// var oldValidator = filteringSelect.validator;
+						// filteringSelect.validator = function() {return false;}
+						// filteringSelect.validate();
+						// filteringSelect.validator = oldValidator;
+					}
+					else{
+						console.log("Creating test row" + data);
+	
+						createComponentRow(data.id, {"type":"test", 
+													 "name":data.name})
+					}
+				});
+			}
 		});
 
 		on(submitButton, "click", function() {
@@ -171,6 +188,13 @@ function(dom,
 				var resp= {};
 				resp.name = name.get("value");
 				resp.description = description.get("value");
+				//resp.loginrequired = loginRequired.get("value");
+				resp.loginrequired = false;
+				if (loginRequired.get("value")) {
+					resp.loginrequired = true;
+				}
+				console.log(resp.loginrequired)
+
 				resp.startDate = sDate.toISOString();
 				resp.endDate = eDate.toISOString();
 

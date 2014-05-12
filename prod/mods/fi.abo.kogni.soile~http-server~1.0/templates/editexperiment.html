@@ -15,9 +15,19 @@
 				<input type="text" name="startDate" id="startDate" data-dojo-type="dijit/form/DateTextBox" value="{exp.startDate}" required="true"/> <br>
 
 				<label for="endDate">EndDate</label> <br>
-				<input type="text" name="endDate" id="endDate" data-dojo-type="dijit/form/DateTextBox" value="{exp.endDate}" required="true"/>
+				<input type="text" name="endDate" id="endDate" data-dojo-type="dijit/form/DateTextBox" value="{exp.endDate}" required="true"/><br>
+
+				<label for="loginrequired">Require Login</label>
+				<input type="text" name="loginrequired" id="loginrequired" data-dojo-type="dijit/form/CheckBox" 
+				 {#exp.loginrequired}
+				 	data-dojo-props="checked: true"
+				 {:else}
+				 	data-dojo-props="checked: false"
+				 {/exp.loginrequired}
+				 />
 				<br>
 
+				<br>
 				<div id="components">
 					<ul id="componentlist">
 					</ul>

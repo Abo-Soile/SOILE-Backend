@@ -747,6 +747,7 @@ customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
       var sDate = new Date(jsonData.startDate);
       var eDate = new Date(jsonData.endDate);
 
+      var loginRequired = jsonData.loginrequired
 
       console.log(sDate.toString());
 
@@ -820,11 +821,16 @@ customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
     data = data.getString(0, data.length());
     data = JSON.parse(data);
 
+    if (data.name === "" || data.testId === "") {
+      return request.response.end(JSON.stringify({error:"No experiment specified"}))
+    }
+
     queryMongo.addTestToExperiment(expId, data.testId, data.name, function(r) {
       
       var resp = r;
       resp.name = data.name;
       resp.id = data.testId;
+     
       console.log(JSON.stringify(resp));
       request.response.end(JSON.stringify(resp));
     });
@@ -1055,6 +1061,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 // Might generate empty fields when using phase no as array index
 customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
   var expID = request.params().get('id');
+  console.log("Testing testdata");
 
   queryMongo.getExperimentTestData(expID, function(r) {
     var data = r.results;
@@ -1062,7 +1069,6 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
 
     var fields = [];
     var userData = {};
-
     for(i in data) {
       var item = data[i];
       item.single = item.data.single;
@@ -1115,6 +1121,15 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
     request.response.end("\ufeff " + stringFields+"\n"+ userFields);
   })
  
+}));
+
+customMatcher.get('/experiment/:id/rawdata', requireAdmin(function(request) {
+  var expID = request.params().get('id');
+  queryMongo.getExperimentTestData(expID, function(r) {
+    var data = r.results;
+
+    request.response.end(JSON.stringify(data));
+  });
 }));
 
 customMatcher.get('/test/demo', function(request) {
