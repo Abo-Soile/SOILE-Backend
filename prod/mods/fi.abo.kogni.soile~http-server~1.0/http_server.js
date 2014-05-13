@@ -9,10 +9,11 @@ var shared_config = config.shared;
 var port = http_config.port;
 var host = http_config.host;
 var http_directory = http_config.directory;
+//var testImages = http_config.directory + "/testimages/";
+var testImages = http_config.directory;
 //var routeMatcher = new vertx.RouteMatcher();
 
 var sessionMap = vertx.getMap("soile.session.map");
-
 
 messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 
@@ -905,10 +906,10 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
       console.log(url);
 
-      request.response.statusCode(302);
-      request.response.putHeader('Location', url);
-      request.response.end();
-      return;
+      //request.response.statusCode(302);
+      //request.response.putHeader('Location', url);
+      //request.response.end();
+      return request.redirect(url);
     }
 
     if(r.result.loginrequired && !request.session.loggedIn()) {
@@ -1413,15 +1414,20 @@ customMatcher.post("/test/:id", requireAdmin(function(request) {
 }));
 
 customMatcher.post("/test/:id/imageupload", function(request) {
-  var data = new vertx.Buffer();
 
-  request.dataHandler(function(buffer) {
-    data.appendBuffer(buffer);
+  request.expectMultiPart(true);
+  var id = request.params().get('id');
+
+  request.uploadHandler(function(upload) {
+      //var path = testImages + id + "/" + upload.filename()
+      var path = testImages + "/" + upload.filename()
+      console.log("Uploading image to "+ path);
+      upload.streamToFileSystem(path);
   });
 
   request.endHandler(function() {
 
-    data = data.getString(0, data.length());
+    console.log("Uploading");
 
     request.response.end("Returning testpost");
   });
