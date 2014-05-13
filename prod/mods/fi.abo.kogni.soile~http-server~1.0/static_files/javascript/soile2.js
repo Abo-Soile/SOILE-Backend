@@ -76,6 +76,7 @@ SOILE2 = (function(){
       rt.keyhandler.resume(key);
     }else {
       console.log("No key specified");
+      rt.keyhandler.resume();
     }
   };
 
@@ -615,8 +616,9 @@ SOILE2 = (function(){
         keyfunctions[e.keyCode].call();
       }
 
+      console.log(anykeyfunctions);
       for(var i = 0; i<anykeyfunctions.length; i++) {
-        anykeyfunctions[i].call();
+        anykeyfunctions[i].call(soile2.rt.kbd.name(e.keyCode));
       }
 
     }
@@ -635,14 +637,24 @@ SOILE2 = (function(){
         // document.onkeydown = null;
       },
       'resume': function(key) {
+        if(key) {
+          var keycode = soile2.rt.kbd.keycode(key);
+          
+          var onkey = function() {
+            soile2.bin.resume();
+            keyfunctions[keycode] = null;
+          }
+          keyfunctions[keycode] = onkey;
+        } else {
+          var onkey = null
+          onkey = function(key) {
+            soile2.bin.resume()
+            var index = anykeyfunctions.indexOf(onkey);
+            anykeyfunctions.splice(index, 1);
+          }
 
-        var keycode = soile2.rt.kbd.keycode(key);
-        
-        var onkey = function() {
-          soile2.bin.resume();
-          keyfunctions[keycode] = null;
+          anykeyfunctions.push(onkey);
         }
-        keyfunctions[keycode] = onkey;
       }
     }
   })();
