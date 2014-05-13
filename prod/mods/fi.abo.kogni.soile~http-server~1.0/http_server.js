@@ -898,18 +898,23 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
     //Redirecting to experiment end
     if(phase===undefined) {
-        var url = request.absoluteURI().toString();
-        var cut = url.indexOf("/phase/");
-        console.log(cut);
-        url = url.substr(0,cut) + "/end";
+      var url = request.absoluteURI().toString();
+      var cut = url.indexOf("/phase/");
+      console.log(cut);
+      url = url.substr(0,cut) + "/end";
 
-        console.log(url);
+      console.log(url);
 
-        request.response.statusCode(302);
-        request.response.putHeader('Location', url);
-        request.response.end();
-        return;
-      }
+      request.response.statusCode(302);
+      request.response.putHeader('Location', url);
+      request.response.end();
+      return;
+    }
+
+    if(r.result.loginrequired && !request.session.loggedIn()) {
+      var url = "/experiment/"+expID
+      return request.redirect(url);
+    }
 
     //Calculating how much of the experiment is completed
     var noOfPhases = parseInt(r.result.components.length);
