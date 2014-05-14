@@ -12,6 +12,8 @@ generated/
 *soile-verticle/jar
 *soile-qmarkup/jar
 
+*prod/mods/fi.abo.kogni.soile~http-server~1.0/static_files/testimages
+
 prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-elang.jar
 prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-qmarkup.jar
 prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-utils.jar
