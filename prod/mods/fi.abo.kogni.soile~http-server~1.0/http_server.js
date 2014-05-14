@@ -9,8 +9,8 @@ var shared_config = config.shared;
 var port = http_config.port;
 var host = http_config.host;
 var http_directory = http_config.directory;
-//var testImages = http_config.directory + "/testimages/";
-var testImages = http_config.directory;
+var testImages = http_config.directory + "/testimages";
+//var testImages = http_config.directory;
 //var routeMatcher = new vertx.RouteMatcher();
 
 var sessionMap = vertx.getMap("soile.session.map");
@@ -1347,7 +1347,16 @@ customMatcher.post("/test", requireAdmin(function(request) {
     queryMongo.saveTest({"name":name}, function(r) {
       console.log(JSON.stringify(r));
 
-      return request.redirect("/test/"+r._id);
+      var dirName = testImages + "/" + r._id
+
+      vertx.fileSystem.mkDir(dirName, true, function(err, res) {
+        console.log(err + "  " + res);
+        if (!err) {
+          console.log('Directory created ok');
+          return request.redirect("/test/"+r._id);
+        }
+      });
+
       
     })
   });
@@ -1357,9 +1366,25 @@ customMatcher.post("/test", requireAdmin(function(request) {
 customMatcher.get('/test/:id', requireAdmin(function(request) {
   var id = request.params().get('id');
   var code = "sadas";
-  queryMongo.getTest(id, function(r) {
-    templateManager.render_template('testEditor', {"code":code,"test":r.result}, request);
-  })
+  var files = [];
+  vertx.fileSystem.readDir(testImages + "/" + id, function(err, res) {
+    if (!err) {
+      //files = res;
+       for (var i = 0; i < res.length; i++) { 
+          var img = res[i].toString();
+          var file = {}
+          file.url = img.substring(img.indexOf("testimages"));
+          file.name = img.substring(img.lastIndexOf("/")+1);
+          files.push(file);
+        }
+        console.log(JSON.stringify(files));
+        console.log("\n\n\n");
+    }
+    queryMongo.getTest(id, function(r) {
+      templateManager.render_template('testEditor', 
+        {"code":code, "test":r.result, "files":files}, request);
+    })
+  });
 }));
 
 
@@ -1420,7 +1445,7 @@ customMatcher.post("/test/:id/imageupload", function(request) {
 
   request.uploadHandler(function(upload) {
       //var path = testImages + id + "/" + upload.filename()
-      var path = testImages + "/" + upload.filename()
+      var path = testImages + "/" + id +"/" + upload.filename()
       console.log("Uploading image to "+ path);
       upload.streamToFileSystem(path);
   });
@@ -1429,9 +1454,31 @@ customMatcher.post("/test/:id/imageupload", function(request) {
 
     console.log("Uploading");
 
-    request.response.end("Returning testpost");
+    request.response.end(200);
   });
 });
+
+customMatcher.get('/test/:id/imagelist', function(request) {
+  var id = request.params().get('id');
+  var files = [];
+
+  vertx.fileSystem.readDir(testImages + "/" + id, function(err, res) {
+    if (!err) {
+      //files = res;
+       for (var i = 0; i < res.length; i++) { 
+          var img = res[i].toString();
+          var file = {}
+          file.url = img.substring(img.indexOf("testimages"));
+          file.name = img.substring(img.lastIndexOf("/")+1);
+          files.push(file);
+        }
+        var fileJSON = JSON.stringify(files);
+
+        request.response.end(fileJSON);
+    }
+  });
+});
+
 
 customMatcher.get('/', function(request) {
 

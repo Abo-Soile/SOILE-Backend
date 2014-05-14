@@ -97,7 +97,10 @@ body > .container {
 #toolButtons .btn {
 	margin-right:7px;
 }
+/*
+testeditor styles
 
+*/
 /*Logger styles */
 #logdiv {
 	height: 200px !important;
@@ -111,6 +114,29 @@ body > .container {
 #log th:first-child {
 	width: 100px;
 }
+
+/*Image uploading and handling*/
+#uploader {
+
+}
+
+.imgname {
+	display: inline-block;
+	width: 40%; 
+}
+
+#images ul {
+	list-style-type: none;
+	list-style-position: outside;
+	padding-left: 0;
+}
+
+
+#imagelist img {
+	height: 30px;
+	width: 30px;
+}
+
 
 /*Bootstrap sticky footer http://getbootstrap.com/examples/sticky-footer-navbar/*/
 html {

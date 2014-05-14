@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#DIRECTORY = mods/fi.abo.kogni.soile~http-server~1.0/static_files/testimages
+#if [ ! -d "$DIRECTORY" ]; then
+  # Control will enter here if $DIRECTORY doesn't exist.
+#  echo "Directory doesn't exist"
+#  mkdir mods/fi.abo.kogni.soile~http-server~1.0/static_files/testimages
+#fi
+
+
 # For adding certain parameters to the JVM.
 # Consult the following web pages in order to fine-tune the JVM.
 #   * http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
