@@ -92,6 +92,7 @@ body > .container {
 	display: none;
 	position: absolute;
 	font-size: x-large;
+	width: 90%;
 }
 
 #toolButtons .btn {
