@@ -99,8 +99,12 @@ body > .container {
 }
 /*
 testeditor styles
-
 */
+
+#mouseposition {
+	position: absolute;
+}
+
 /*Logger styles */
 #logdiv {
 	height: 200px !important;
@@ -114,6 +118,7 @@ testeditor styles
 #log th:first-child {
 	width: 100px;
 }
+
 
 /*Image uploading and handling*/
 #uploader {

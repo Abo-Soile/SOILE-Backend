@@ -197,3 +197,28 @@ function(dom,
 		})
 	});
 });
+
+var mousePos = document.getElementById("mouseposition")
+
+var mouseMove = function (e){
+	var displayRect = display.getBoundingClientRect()
+    x=e.clientX - displayRect.left + 0.5;
+    y=e.clientY - displayRect.bottom + displayRect.height;
+    cursor="Mouse Position: Top " + y + " Left: " + x ;
+    mousePos.innerHTML=cursor
+}
+
+function stopTracking(){
+    mousePos.innerHTML="";
+}
+
+var display = document.getElementById("display")
+var displayRect = display.getBoundingClientRect()
+
+//display.onmouseover = mousePos;
+// display.onmousemove = function(e) {
+// 	console.log(e);
+// }
+
+display.onmousemove = mouseMove;
+display.onmouseout = stopTracking;
