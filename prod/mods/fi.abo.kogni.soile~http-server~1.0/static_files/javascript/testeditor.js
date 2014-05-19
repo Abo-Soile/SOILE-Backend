@@ -198,6 +198,7 @@ function(dom,
 	});
 });
 
+//Showing mouse coordinates when hovering over the test display
 var mousePos = document.getElementById("mouseposition")
 
 var mouseMove = function (e){
@@ -214,11 +215,6 @@ function stopTracking(){
 
 var display = document.getElementById("display")
 var displayRect = display.getBoundingClientRect()
-
-//display.onmouseover = mousePos;
-// display.onmousemove = function(e) {
-// 	console.log(e);
-// }
 
 display.onmousemove = mouseMove;
 display.onmouseout = stopTracking;
