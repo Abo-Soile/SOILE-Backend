@@ -125,8 +125,23 @@ function(dom,
 						label:"",
 						iconClass:'dijitCommonIcon dijitIconDelete',
 						onClick: function() {
-							console.log("deleteing image");
-							construct.destroy(li);
+							var url = window.location.href + "/imageupload/"+name 
+							var xhrArgs = {
+							    url: url,
+							    handleAs: "text",
+							}
+							var deferred = dojo.xhrDelete(xhrArgs);
+
+							deferred.then(function(data) {
+								console.log("deleteing image " + data);
+								construct.destroy(li);
+
+							},
+							function(error) {
+								console.log(error);
+							});
+							// xhr.delete(url).then(function(data) {
+							// })
 						}
 					})
 					console.log(insertButton.domNode);

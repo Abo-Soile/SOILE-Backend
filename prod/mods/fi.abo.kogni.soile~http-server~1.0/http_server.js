@@ -101,6 +101,10 @@ customMatcher.post = function(pattern, handler) {
   routeMatcher.post(pattern, sessionTest(handler));
 };
 
+customMatcher.delete = function(pattern, handler) {
+  routeMatcher.delete(pattern, sessionTest(handler));
+}
+
 customMatcher.allWithRegEx = function(pattern, handler) {
   routeMatcher.allWithRegEx(pattern, sessionTest(handler));
 };
@@ -1455,6 +1459,25 @@ customMatcher.post("/test/:id/imageupload", function(request) {
     console.log("Uploading");
 
     request.response.end(200);
+  });
+});
+
+customMatcher.delete("/test/:id/imageupload/:imageName", function(request) {
+  var id = request.params().get('id');
+  var imgName = request.params().get('imageName');
+
+  console.log("DELETING IMAGE");
+
+  request.endHandler(function() {
+    var filename = testImages + "/" + id + "/" + imgName;
+    vertx.fileSystem.delete(filename, function(err, res) {
+      if(!err) {
+            request.response.end(200);
+          }
+      else {
+        request.response.end(400);
+      }
+    })
   });
 });
 
