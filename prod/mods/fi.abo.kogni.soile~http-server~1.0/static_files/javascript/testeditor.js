@@ -109,6 +109,7 @@ function(dom,
 					var name = imageJson[i].name;
 					var humanName = name.substring(0, name.lastIndexOf("."));
 					var url = "/"+imageJson[i].url
+					var fullUrl = window.location.origin + url
 					var li = construct.create("li", null,imageList,"last");
 
 					console.log("insering " + name);
@@ -116,7 +117,7 @@ function(dom,
 						label:"Use",
 						// id:"insert_"+imageJson[i].name,
 						onClick:function() {
-							var str = "var"+name+" <- imagefile(" + url+ ") \n"
+							var str = "var "+ humanName +' <- imagefile("'+ fullUrl+ '") \n'
 							editor.insert(str);
 						}
 					});
@@ -140,8 +141,6 @@ function(dom,
 							function(error) {
 								console.log(error);
 							});
-							// xhr.delete(url).then(function(data) {
-							// })
 						}
 					})
 					console.log(insertButton.domNode);
