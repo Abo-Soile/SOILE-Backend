@@ -91,67 +91,67 @@ function(dom,
 		    } else {
 		        messageCell.innerHTML = message;
 		    }
-
 		}
 
 		var buildImageList = function () {
 			var imageList = dom.byId("imagelist");
 
-			//construct.destry(imageList)
+			//might be better to "destroy" the object.
 			imageList.innerHTML = "";
+
 			xhr.get(window.location.href+"/imagelist").then(function(data) {
 				var imageJson = JSON.parse(data);
 				console.log("Updating filelist");
 				console.log(imageJson);
 
 				for(var i = 0; i<imageJson.length; i++) {
-
-					var name = imageJson[i].name;
-					var humanName = name.substring(0, name.lastIndexOf("."));
-					var url = "/"+imageJson[i].url
-					var fullUrl = window.location.origin + url
-					var li = construct.create("li", null,imageList,"last");
-
-					console.log("insering " + name);
-					var insertButton = new dijit.form.Button({
-						label:"Use",
-						// id:"insert_"+imageJson[i].name,
-						onClick:function() {
-							var str = "var "+ humanName +' <- imagefile("'+ fullUrl+ '") \n'
-							editor.insert(str);
-						}
-					});
-
-					var deleteButton = new dijit.form.Button({
-						label:"",
-						iconClass:'dijitCommonIcon dijitIconDelete',
-						onClick: function() {
-							var url = window.location.href + "/imageupload/"+name 
-							var xhrArgs = {
-							    url: url,
-							    handleAs: "text",
-							}
-							var deferred = dojo.xhrDelete(xhrArgs);
-
-							deferred.then(function(data) {
-								console.log("deleteing image " + data);
-								construct.destroy(li);
-
-							},
-							function(error) {
-								console.log(error);
-							});
-						}
-					})
-					console.log(insertButton.domNode);
-					construct.place("<img src="+url+">", li)
-					construct.place("<span class='imgname'>" + humanName + "</span>", li);
-					construct.place(insertButton.domNode, li);
-					construct.place(deleteButton.domNode, li);
-
-					console.log("insert complete");
+					buildListElement(imageJson[i], imageList);
 				}
 			});
+		}
+
+		// Building buttons and inserting elemt into image list
+		function buildListElement(image, imageList) {
+
+			var name = image.name;
+			var humanName = name.substring(0, name.lastIndexOf("."));
+			var url = "/"+image.url 	//Relative
+			var absoluteUrl = window.location.origin + url
+			var li = construct.create("li", null,imageList,"last");
+
+			var insertButton = new dijit.form.Button({
+				label:"Use",
+				onClick:function() {
+					var str = "var "+ humanName +' <- imagefile("'+ absoluteUrl+ '") \n'
+					editor.insert(str);
+				}
+			});
+
+			var deleteButton = new dijit.form.Button({
+				label:"",
+				iconClass:'dijitCommonIcon dijitIconDelete',
+				onClick: function() {
+					var url = window.location.href + "/imageupload/"+name 
+					var xhrArgs = {
+					    url: url,
+					    handleAs: "text",
+					}
+					var deferred = dojo.xhrDelete(xhrArgs);
+
+					deferred.then(function(data) {
+						console.log("deleteing image " + data);
+						construct.destroy(li);
+					},
+					function(error) {
+						console.log(error);
+					});
+				}
+			})
+
+			construct.place("<img src="+url+">", li)
+			construct.place("<span class='imgname'>" + humanName + "</span>", li);
+			construct.place(insertButton.domNode, li);
+			construct.place(deleteButton.domNode, li);
 		}
 
 		buildImageList();
