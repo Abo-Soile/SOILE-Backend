@@ -10,6 +10,14 @@ function(
 	) {
 	ready(function() {
 		console.log("Ready");
+
+		//Preventing scroll on arrowkeys
+		document.addEventListener("keydown", function (e) {
+			if([37,38,39,40].indexOf(e.keyCode) > -1){
+				e.preventDefault();
+				// Do whatever else you want with the keydown event (i.e. your navigation).
+			}
+		}, false);
 		//console.log(window.testJS);
 
 		function end(expdata) {

@@ -73,6 +73,7 @@ SOILE2 = (function(){
 
   bin.resumeonkey = function(key) {
     if (key) {
+      console.log("Adding keyfunction " + key);
       rt.keyhandler.resume(key);
     }else {
       console.log("No key specified");
@@ -616,7 +617,7 @@ SOILE2 = (function(){
         keyfunctions[e.keyCode].call();
       }
 
-      console.log(anykeyfunctions);
+      //console.log(anykeyfunctions);
       for(var i = 0; i<anykeyfunctions.length; i++) {
         anykeyfunctions[i].call(soile2.rt.kbd.name(e.keyCode));
       }
@@ -639,7 +640,7 @@ SOILE2 = (function(){
       'resume': function(key) {
         if(key) {
           var keycode = soile2.rt.kbd.keycode(key);
-          
+
           var onkey = function() {
             soile2.bin.resume();
             keyfunctions[keycode] = null;
