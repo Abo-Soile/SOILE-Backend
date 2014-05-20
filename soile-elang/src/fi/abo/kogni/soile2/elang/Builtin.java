@@ -70,6 +70,7 @@ public class Builtin {
         builtinFunctions.add("setstimuli");
         builtinFunctions.add("show");
         builtinFunctions.add("showmsg");
+        builtinFunctions.add("msgbox");
         builtinFunctions.add("stimulus");
         builtinFunctions.add("tag");
         builtinFunctions.add("timeout");
