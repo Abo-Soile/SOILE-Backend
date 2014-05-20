@@ -36,6 +36,34 @@ intermezzo-phase
 information-phase
 intraction-phase
 
+	interaction-phase MainPhase
+
+	  enterphase
+	    helptext("enterphase")
+	    reacted <- 0
+	    setstimuli([randomnumber(2 3)])
+	  end
+	  
+	  leavephase
+	    helptext("Leaving phase")
+	  end
+	  
+	  beforeiteration
+	    helptext("Before stimuli iteration")
+	  end
+	  
+	  afteriteration
+	    helptext("After stimuli iteration")
+	  end
+	  
+	  iteration
+	    var i <- 0
+	    var s <- 2
+	    
+	    s <- stimulus()
+	  end
+	end
+
 
 ## Builtin functions
 

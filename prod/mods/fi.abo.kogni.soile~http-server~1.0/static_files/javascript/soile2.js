@@ -145,7 +145,29 @@ SOILE2 = (function(){
         }
       }
   };
-  
+
+  bin.msgbox = function(msg, _size){
+    var id = soile2.rt.uniqueid(); 
+    var size;
+
+    if(!_size && !_.isNumber(_size)) {
+      size = 20;
+    }else {
+      size = _size;
+    }
+
+    var props = {
+      "id": id,
+      "class": "hiddenelem",
+      "style": "font-size:"+size+"px",
+      "text": msg
+      //"src": url
+    };
+    jQuery("<p/>", props).appendTo(soile2.util.getid("display"));
+    soile2.rt.dyn.add(id);
+    return id;
+  };
+
   bin.not = function(arg){
     var args = Array.prototype.slice.call(arguments);
     if (args.length == 0){
