@@ -71,6 +71,19 @@ SOILE2 = (function(){
     }
   };
 
+  bin.onanykey = function(func) {
+    if(func) {
+      rt.keyhandler.addAny(func)
+    }else {
+      rt.keyhandler.removeAny();
+    }
+  }
+
+  bin.getlastkey = function() {
+    var key = rt.keyhandler.lastkey();
+    return key;
+  }
+
   bin.resumeonkey = function(key) {
     if (key) {
       console.log("Adding keyfunction " + key);
@@ -472,7 +485,23 @@ SOILE2 = (function(){
       }
     }
   }
-  
+
+  bin.elementatindex = function(value, index) {
+    if(typeof value != 'undefined' && _.isNumber(index)) {
+      if(index>value.length) {
+        return false;
+      }
+      if(value instanceof Array) {
+        return value[index];
+      }
+      else {
+        return value.toString()[index];
+      }
+    }
+  }
+  /*
+  ---------------------------------------------
+  */
   // For dynamically added elements. (For instance, a call to 'imagefile' adds an element.)
   rt.dyn = (function(){
     var ids = [];
@@ -648,8 +677,10 @@ SOILE2 = (function(){
   rt.keyhandler = (function() {
     var keyfunctions = {}
     var anykeyfunctions = []
+    var lastKey = ""
 
     var keyFunction = function(e) {
+      lastKey = soile2.rt.kbd.name(e.keyCode);
       //console.log(e.keyCode);
       if(keyfunctions[e.keyCode]) {
         keyfunctions[e.keyCode].call();
@@ -657,9 +688,9 @@ SOILE2 = (function(){
 
       //console.log(anykeyfunctions);
       for(var i = 0; i<anykeyfunctions.length; i++) {
-        anykeyfunctions[i].call(soile2.rt.kbd.name(e.keyCode));
+        var key = soile2.rt.kbd.name(e.keyCode)
+        anykeyfunctions[i].call("key");
       }
-
     }
 
     document.onkeydown = keyFunction;
@@ -694,6 +725,17 @@ SOILE2 = (function(){
 
           anykeyfunctions.push(onkey);
         }
+      },
+
+      //
+      'addAny': function(func) {
+        anykeyfunctions.push(func)
+      },
+      'removeAny': function() {
+        anykeyfunctions = [];
+      },
+      'lastkey': function() {
+        return lastKey;
       }
     }
   })();

@@ -71,6 +71,7 @@ function(dom,
 
 		var editor = ace.edit("editor");
 		editor.setTheme("ace/theme/dawn");
+		editor.getSession().setTabSize(2);
 
 		function end(data) {
 			console.log("it's over");

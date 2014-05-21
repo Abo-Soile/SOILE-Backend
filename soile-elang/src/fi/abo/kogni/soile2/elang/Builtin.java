@@ -93,5 +93,9 @@ public class Builtin {
 
         builtinFunctions.add("onkeypress");
         builtinFunctions.add("resumeonkey");
+        builtinFunctions.add("onanykey");
+        builtinFunctions.add("getlastkey");
+
+        builtinFunctions.add("elementatindex");
     }
 }
