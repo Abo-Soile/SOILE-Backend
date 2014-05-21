@@ -77,6 +77,8 @@ public class Builtin {
         builtinFunctions.add("wait");
         builtinFunctions.add("resume");
 
+        builtinFunctions.add("append");
+
         //time
         builtinFunctions.add("randominteger");
         builtinFunctions.add("randomnumber");

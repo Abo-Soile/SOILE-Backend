@@ -457,7 +457,7 @@ SOILE2 = (function(){
     soile2.rt.schd.suspend(dur);
   };
 
-  bin.append = function(str1 str2) {
+  bin.append = function(str1, str2) {
     var result = ""
     if(str1 && str2) {
       return str1.toString() + str2.toString();
