@@ -456,6 +456,22 @@ SOILE2 = (function(){
   bin.timeout = function(dur){
     soile2.rt.schd.suspend(dur);
   };
+
+  bin.append = function(str1 str2) {
+    var result = ""
+    if(str1 && str2) {
+      return str1.toString() + str2.toString();
+    }
+    else{
+      if(str1) {
+        return str1.toString();
+      }
+
+      if (str2) {
+        return str2.toString();
+      }
+    }
+  }
   
   // For dynamically added elements. (For instance, a call to 'imagefile' adds an element.)
   rt.dyn = (function(){
