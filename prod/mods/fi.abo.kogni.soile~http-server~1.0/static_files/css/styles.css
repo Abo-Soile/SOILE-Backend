@@ -54,6 +54,10 @@ p {
 	background-color: white;
 }
 
+#display>p  {
+	padding-left: 5px;
+}
+
 #code {
 	width: 100%;
 	min-height: 130px;

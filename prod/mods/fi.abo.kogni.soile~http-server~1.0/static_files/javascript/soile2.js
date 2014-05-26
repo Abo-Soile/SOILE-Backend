@@ -181,18 +181,18 @@ SOILE2 = (function(){
     return id;
   };
 
-  bin.rectangle = function(x, y, _width) {
+  bin.rectangle = function(width, height, _borderWidth) {
     var id = soile2.rt.uniqueid();
-    var width;
+    var borderWidth;
 
-    if(!_width) {
-      width = 2;
+    if(!_borderWidth) {
+      borderWidth = 2;
     }else{
-      width = _width;
+      borderWidth = _borderWidth;
     }
 
-    var styleSize = "width:"+x+"px; " + "height:"+y+"px;";
-    var styleBorder = "border:"+width+"px solid black;"; 
+    var styleSize = "width:"+width+"px; " + "height:"+height+"px;";
+    var styleBorder = "border:"+borderWidth+"px solid black;"; 
 
     var props = {
       "id": id,
