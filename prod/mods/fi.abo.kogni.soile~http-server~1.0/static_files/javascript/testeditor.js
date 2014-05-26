@@ -167,10 +167,14 @@ function(dom,
 				data: json.stringify(code)
 			}).then(function(data) {
 				data = json.parse(data);
-				console.log(data);
 
 				if(data.errors) {
-					errorBox.innerHTML = data.errors;
+					var err = "";
+
+					for(var i=0;i<data.errors.length; i++) {
+						err += "<p>" + data.errors[i] + "</p>"
+					}
+					errorBox.innerHTML = err;
 					domClass.remove(errorBox, "hidden");
 					console.log("errors");
 				}else {

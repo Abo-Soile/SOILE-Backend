@@ -1422,7 +1422,8 @@ customMatcher.post("/test/:id", requireAdmin(function(request) {
       test.code = code;
 
       if (reply.hasOwnProperty('errors') === true) {
-        response.errors = reply.errors;
+        response.errors = reply.errors.split("\n");
+        console.log(reply.errors);
 
         test.js = "";
         test.compiled = false;
