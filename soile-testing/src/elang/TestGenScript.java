@@ -4,10 +4,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.IdentityHashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.stringtemplate.v4.STGroup;
@@ -52,6 +52,9 @@ public class TestGenScript {
         SymbolTable symtab = new SymbolTable();
         IdentityHashMap<ParserRuleContext, NodeData> nodeData = 
                 new IdentityHashMap<>();
+
+        CustomAntlrErrorListener errListener = new CustomAntlrErrorListener();
+
         PhaseData phaseData = new PhaseData();
         TransitionTable transitionTable = new TransitionTable();
         Builtin.addBuiltins(symtab, getTemplate());
@@ -60,7 +63,15 @@ public class TestGenScript {
         ElangLexer lexer = new ElangLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ElangParser parser = new ElangParser(tokens);
+
+
+        parser.addErrorListener(errListener);
+
         ParseTree tree = parser.file();
+
+        System.out.println(errListener.getErrors());
+
+        System.out.println(parser.getErrorListeners());
         ParseTreeWalker walker = new ParseTreeWalker();
         ParseTreeProcessor processor = new ParseTreeProcessor(tree);
         processor.walker(walker);
@@ -129,4 +140,27 @@ public class TestGenScript {
     private STGroup template;
     private String inputFilename;
     
+}
+
+class CustomAntlrErrorListener extends BaseErrorListener {
+    public List<String> errors = new LinkedList<String>();
+    public static final CustomAntlrErrorListener INSTANCE = new CustomAntlrErrorListener();
+
+
+    @Override
+    public void syntaxError(Recognizer<?, ?> recognizer,
+                            Object offendingSymbol,
+                            int line,
+                            int charPositionInLine,
+                            String msg,
+                            RecognitionException e)
+    {
+        //System.err.println("line " + line + ":" + charPositionInLine + " " + msg);
+        System.out.println("sdfklsdglsdkh");
+        errors.add("line " + line + ":" + charPositionInLine + " " + msg +"\n");
+    }
+
+    public String getErrors() {
+        return errors.toString();
+    }
 }
