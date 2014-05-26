@@ -200,8 +200,7 @@ SOILE2 = (function(){
       "style": styleSize + " " + styleBorder
       //"src": url
     };
-    console.log(props);
-
+    
     jQuery("<div/>", props).appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
     return id;
