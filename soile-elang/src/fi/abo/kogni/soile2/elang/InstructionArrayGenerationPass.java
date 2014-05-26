@@ -409,7 +409,7 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
         return template("abspathFns").render();
     }
     
-    private String hostingObject(String name) {
+    private String hostingObject(String name) throws NullPointerException {
         Symbol s = symbolTable().lookup(name);
         if (s.varType == SymbolType.GVAR) {
             return template("abspathGvars").render();

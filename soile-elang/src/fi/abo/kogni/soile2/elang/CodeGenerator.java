@@ -3,10 +3,10 @@ package fi.abo.kogni.soile2.elang;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.IdentityHashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.stringtemplate.v4.STGroup;
@@ -37,7 +37,19 @@ public class CodeGenerator {
             ElangLexer lexer = new ElangLexer(inputStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             ElangParser parser = new ElangParser(tokens);
+
+            //Registering custom error listener
+            CustomErrorListener customErrorListener = new CustomErrorListener();
+            parser.addErrorListener(customErrorListener);
+
             ParseTree tree = parser.file();
+
+            //Potential errors are added to the errorstring
+            for(String err:customErrorListener.getErrors()) {
+                this.errorMessages.append(err);
+                this.errorMessages.append(System.lineSeparator());
+            }
+
             ParseTreeWalker walker = new ParseTreeWalker();
             ParseTreeProcessor processor = new ParseTreeProcessor(tree);
             processor.walker(walker);
@@ -87,6 +99,8 @@ public class CodeGenerator {
             this.errorMessages.append(e.getMessage());
         } catch (IOException e) {
             this.errorMessages.append("Problem opening the template file.");
+        } catch (NullPointerException e) {
+            this.errorMessages.append("Undefined error, make sure that variables are defined correctly before assignments.");
         }
     }
     
@@ -107,4 +121,27 @@ public class CodeGenerator {
     private StringBuilder codeOutput;
     private StringBuilder errorMessages;
 
+}
+
+
+class CustomErrorListener extends BaseErrorListener {
+    public List<String> errors = new LinkedList<String>();
+    public static final CustomErrorListener INSTANCE = new CustomErrorListener();
+
+
+    @Override
+    public void syntaxError(Recognizer<?, ?> recognizer,
+                            Object offendingSymbol,
+                            int line,
+                            int charPositionInLine,
+                            String msg,
+                            RecognitionException e)
+    {
+        //System.err.println("line " + line + ":" + charPositionInLine + " " + msg);
+        errors.add("line " + line + ":" + charPositionInLine + " " + msg);
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
 }
