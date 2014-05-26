@@ -181,6 +181,32 @@ SOILE2 = (function(){
     return id;
   };
 
+  bin.rectangle = function(x, y, _width) {
+    var id = soile2.rt.uniqueid();
+    var width;
+
+    if(!_width) {
+      width = 2;
+    }else{
+      width = _width;
+    }
+
+    var styleSize = "width:"+x+"px; " + "height:"+y+"px;";
+    var styleBorder = "border:"+width+"px solid black;"; 
+
+    var props = {
+      "id": id,
+      "class": "hiddenelem",
+      "style": styleSize + " " + styleBorder
+      //"src": url
+    };
+    console.log(props);
+
+    jQuery("<div/>", props).appendTo(soile2.util.getid("display"));
+    soile2.rt.dyn.add(id);
+    return id;
+  }
+
   bin.not = function(arg){
     var args = Array.prototype.slice.call(arguments);
     if (args.length == 0){

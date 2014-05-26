@@ -97,5 +97,7 @@ public class Builtin {
         builtinFunctions.add("getlastkey");
 
         builtinFunctions.add("elementatindex");
+
+        builtinFunctions.add("rectangle");
     }
 }
