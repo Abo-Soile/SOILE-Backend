@@ -354,7 +354,9 @@ var sessionManager =  {
   },
 
   eraseCookie: function(name) {
-    this.createCookie(name,"", -1);
+    var c = this.createCookie(name,"", -1);
+    this.request.response.putHeader("Set-Cookie", c);
+    //this.request.response.headers().set("Set-Cookie", c);
   },
 
   setPersonToken: function() {
@@ -372,6 +374,7 @@ var sessionManager =  {
   setSessionCookie: function(key) {
     var c = this.createCookie("Session", key, 1);
     this.request.response.putHeader("Set-Cookie", c);
+    //this.request.response.headers().set("Set-Cookie", c);
   },
 
   getSessionCookie: function() {
@@ -386,6 +389,13 @@ var sessionManager =  {
       var sessionKey = java.util.UUID.randomUUID().toString();
       console.log(this.getPersonToken());
       this.setSessionCookie(sessionKey);
+
+      //Setting a new persontoken to avoid problems with clashing
+      //tokens, doesn't work yet, only one cookie is set for some
+      //reason
+      
+      //this.eraseCookie("PersonToken");
+      //this.setPersonToken();
 
       var timerID = vertx.setTimer(1000*60*60*24, function(timerID) {
         sessionMap.put(sessionKey, null);
@@ -422,7 +432,9 @@ var sessionManager =  {
       vertx.cancelTimer(data.timerID);
       sessionMap.put(this.getSessionCookie(), "");
 
+      this.eraseCookie("PersonToken");
       this.setSessionCookie("");
+
     } else {
       console.log("there was no data");
     }   
@@ -507,6 +519,7 @@ customMatcher.post("/login", function(request) {
         request.session.login(r.result._id, r.result.username,r.result.admin);
         queryMongo.updateExpData(r.result._id, 
           request.session.getPersonToken(), function(s) {
+
           if(origin){
             return request.redirect(decodeURIComponent(origin));
           }
@@ -531,12 +544,11 @@ customMatcher.get("/logout", function(request) {
 
   request.session.logout();
 
-  request.response.end("Logging user out " + JSON.stringify(uname));
+  //request.response.end("Logging user out " + JSON.stringify(uname));
+  request.redirect("/");
 });
 
 customMatcher.get('/signup', function(request) {
-
-
 
   templateManager.render_template('signup', {},request);
 
@@ -598,7 +610,10 @@ customMatcher.post("/signup", function(request) {
       console.log("Trying to create new user");
       console.log(JSON.stringify(r));
       if (r.status==="ok") {
-        templateManager.render_template('landing', {}, request);
+        //templateManager.render_template('landing', {}, request);
+        console.log(origin);
+        request.session.login(r._id, email,false);
+        return request.redirect(decodeURIComponent(origin));
       }
       else {
         templateVars.registererrors = "Username already exists!, try logging in";
