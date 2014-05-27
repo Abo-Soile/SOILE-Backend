@@ -393,7 +393,7 @@ var sessionManager =  {
       //Setting a new persontoken to avoid problems with clashing
       //tokens, doesn't work yet, only one cookie is set for some
       //reason
-      
+
       //this.eraseCookie("PersonToken");
       //this.setPersonToken();
 
@@ -434,6 +434,8 @@ var sessionManager =  {
 
       this.eraseCookie("PersonToken");
       this.setSessionCookie("");
+
+      //console.log(JSON.stringify(this.request.response.headers()));
 
     } else {
       console.log("there was no data");

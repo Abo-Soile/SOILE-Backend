@@ -23,15 +23,14 @@
 			
 			{?exp.active}
 				{?exp.loginrequired}
-					<p>LOGGED IN REQUIRED</p>
+<!-- 					<p>LOGGED IN REQUIRED</p> -->
 					 {?loggedIn}
 					 	<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start test!</a>
 					 {:else}
-					 	<p>You need to login or create an account to participate in this test</p>
-					 	<
+					 	<p><strong>You need to sign in to participate in this test, <a href="/login">click here</a> to login or create an account</strong></p>
 					 {/loggedIn}
 				{:else}
-					<p>NOT LOGGEN IN REQUIRED</p>
+<!-- 					<p">NOT LOGGEN IN REQUIRED</p> -->
 					<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start test!</a>
 				{/exp.loginrequired}
 			{:else}
