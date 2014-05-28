@@ -150,6 +150,20 @@ testeditor styles
 	width: 30px;
 }
 
+/*
+Login
+*/
+
+#registerbox .panel{
+	border-color: #E6BCF1;
+}
+
+#registerbox .panel-heading {
+	background-color: #F7D9F3;
+	color: #80318F;
+	border-color: #E6BCF1;
+}
+
 
 /*Bootstrap sticky footer http://getbootstrap.com/examples/sticky-footer-navbar/*/
 html {
