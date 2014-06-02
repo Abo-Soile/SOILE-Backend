@@ -69,6 +69,39 @@ intraction-phase
 
 Builtin functions are functions that are called and executed from a experiment by the user. 
 
+### Display
+
+Display positions are defined as the number of pixels from the top-left corner of the display. Positions are defined as a json object with two variables; top and left, .e.g. he position {top:50 left:100} is located 100 pixels to the right and 50 pixels below the topleft corner. 
+
+**show(displayobject position)**
+Displays an object at the specified position.
+
+**hide(displayobject)**
+Hides the specified object.
+
+
+#### DisplayObjects
+
+All displayobjects share the same functionality regarding showing and hidning them. And they must be defined and assigned to a varriable before being used. 
+
+**msgbox(message, fontsize=20)**
+Displayobject for displaying text at any location. Fontsize is an optional argument and it defaults to 20
+
+**imagefile(imageurl)**
+Object contianing a image specified by the url, so images can either be uploaded to the testeditor or fetched from the internet. Note that images on the net can disappear or change at any time.  The image is displayed without any scaling so make sure that the image is the right size. 
+
+**rectangle(width height borderwidth=2)**
+Displays a rectangle with the given width height and borderwidth. Borderwidth is an optional argument and defaults to 2. 
+
+
+It's also possible to display simple text messages using showmsg(message) and hidemsg() without any further specifications. This just shows/hides a message at location {top:50 left:50}
+
+**showmsg(message)**
+Displays a message at the standard message location in the top right corner
+
+**hidemsg()**
+Hides the standard message.
+
 ### Input
 
 #### Mouse
@@ -96,7 +129,11 @@ Removes all actionss bound to the specified key.
 	onkeypress("left", leftclick)
 Example: the function leftclick is run each time when the left arrow is clicked on the keyboard.
 
+**onanykey(func)**
+Executes the specified function when any keyboeard key is clicked. 
 
+**getlastkey()**
+Returns the last key clicked by the user. 
 
 ### Arithmetic
 
@@ -122,7 +159,19 @@ Example: the function leftclick is run each time when the left arrow is clicked 
 
 **equal(number1 number2) _or_ eq(number1 number2)** number1 == number2
 
+
 ### Functions
+
+**append(string1 string2)**
+Appends two strings
+
+**lenght(object)**
+Returns the number of elements/letters in a array or string
+
+**elementatindex(object, index)**
+Returns the element at the specified index in the object/string, starting from zero.
+
+
 
 #### Random numbers
 
