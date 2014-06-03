@@ -392,9 +392,10 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     })
   },
 
-  authUser: function(username, password, response) {
+  authUser: function(username, password, remember,response) {
 
     var pass = _hashPassword(password);
+    var token = java.util.UUID.randomUUID().toString();
 
     vertx.eventBus.send(this.mongoAddress, {"action":"findone",
     "collection":"users", "matcher":{"username":username, "password":pass}},
@@ -402,11 +403,40 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
 
       console.log("Finding user");
       console.log(JSON.stringify(reply));
+
+      //No user found, incorrect credentials
       if(reply.result==null) {
         reply.status="notfound";
+        reply.token = false;
+        response(reply);
+      } 
+
+      //Found a user
+      else {
+        //Generating and storing a sessioncookie in the db
+        if(remember){
+          console.log("Logging in with remember me");
+          reply.token = token;
+
+          vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"update",
+            "collection":"users",
+            "criteria": {
+              "_id":reply.result._id
+            },
+            "objNew": {
+              "$set": {
+                "sessiontoken":token
+              }
+            }
+          }, function(replyNested) {
+            console.log(JSON.stringify(replyNested));
+            response(reply);
+          })
+        } 
+        else {
+          response(reply);
+        }
       }
-      
-      response(reply);
     })
   },
 

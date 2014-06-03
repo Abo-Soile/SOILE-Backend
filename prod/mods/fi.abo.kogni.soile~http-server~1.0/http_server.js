@@ -382,11 +382,18 @@ var sessionManager =  {
   },
 
 
-  login: function(id,username, admin) {
+  login: function(id,username, admin, token) {
       console.log("----Logging in-----");
       //console.log(JSON.stringify(r));
+      var sessionKey;
 
-      var sessionKey = java.util.UUID.randomUUID().toString();
+      if(token) {
+        sessionKey = token;
+      }
+      else {
+        sessionKey = java.util.UUID.randomUUID().toString();
+      }
+
       console.log(this.getPersonToken());
       this.setSessionCookie(sessionKey);
 
@@ -507,20 +514,28 @@ customMatcher.post("/login", function(request) {
 
     var username = params.username;
     var password = params.password;
+    var remember = params.remember;
+
+    if (remember) {
+      remember = true;
+    }else {
+      remember = false;
+    }
+
     var origin = params.origin;
 
     var templateVars = {};
 
     templateVars.origin = decodeURIComponent(origin);
 
-    queryMongo.authUser(username, password, function(r) {
+    queryMongo.authUser(username, password, remember, function(r) {
       
       console.log(JSON.stringify(r));
       if (r.status==="ok") {
-        request.session.login(r.result._id, r.result.username,r.result.admin);
+        request.session.login(r.result._id, r.result.username,r.result.admin, r.token);
         queryMongo.updateExpData(r.result._id, 
           request.session.getPersonToken(), function(s) {
-
+            
           if(origin){
             return request.redirect(decodeURIComponent(origin));
           }
