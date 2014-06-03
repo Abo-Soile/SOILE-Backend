@@ -355,7 +355,7 @@ var sessionManager =  {
 
   eraseCookie: function(name) {
     var c = this.createCookie(name,"", -1);
-    this.request.response.putHeader("Set-Cookie", c);
+    this.request.response.headers().add("Set-Cookie", c);
     //this.request.response.headers().set("Set-Cookie", c);
   },
 
@@ -363,7 +363,7 @@ var sessionManager =  {
     //console.log(this.readCookie("PersonToken"));
     if(!this.readCookie("PersonToken")) {
       var c = this.createCookie("PersonToken", utils.getRandomInt(0, 10000000000000000), 900);
-      this.request.response.putHeader("Set-Cookie",c);
+      this.request.response.headers().add("Set-Cookie",c);
     }
   },
 
@@ -373,7 +373,7 @@ var sessionManager =  {
 
   setSessionCookie: function(key) {
     var c = this.createCookie("Session", key, 1);
-    this.request.response.putHeader("Set-Cookie", c);
+    this.request.response.headers().add("Set-Cookie", c);
     //this.request.response.headers().set("Set-Cookie", c);
   },
 
@@ -393,9 +393,8 @@ var sessionManager =  {
       //Setting a new persontoken to avoid problems with clashing
       //tokens, doesn't work yet, only one cookie is set for some
       //reason
-
-      //this.eraseCookie("PersonToken");
-      //this.setPersonToken();
+      this.eraseCookie("PersonToken");
+      this.setPersonToken();
 
       var timerID = vertx.setTimer(1000*60*60*24, function(timerID) {
         sessionMap.put(sessionKey, null);
