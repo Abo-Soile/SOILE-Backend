@@ -1565,10 +1565,25 @@ customMatcher.get('/test/:id/imagelist', function(request) {
 
 customMatcher.get('/', function(request) {
 
-  queryMongo.getExperimentList(function(r) {
+  // Admin showing admin controls
+  if (request.session.isAdmin()) {
+    queryMongo.getExperimentList(function(r) {
 
-    templateManager.render_template('landing', {"experiments":r.results,"test":"This is a test"},request);
-  });
+      templateManager.render_template('admin', {"experiments":r.results,"test":"This is a test"},request);
+    });
+  }
+  else {
+
+    // User logged in showing user controls
+    if (request.session.loggedIn()) {
+      templateManager.render_template('user', {}, request);
+    }
+
+    // Anonymous user, showing ladning page
+    else {
+      templateManager.render_template('landing', {} ,request);
+    }
+  }
 });
 
 /* This will match static files. ('Static files' are files which 
