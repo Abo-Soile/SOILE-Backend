@@ -4,65 +4,153 @@ This document contains documentation for the experiment language.
 
 ## Structure
 
+The following structure is enforced on programs:
+
+-  Val and gvar definiton block
+-  Function definiton block
+-  Phase definition block
+-  Transition block
+	
+**Example**
+
+	#Val and gvar definition block"
+	gvar g1 <- "global var"
+	gvar g2 <- 56
+	val a <- "a"
+	.
+	.
+	.
+	#end of block
+ 
+ 	#Function definition block 
+	function test()
+	  helptext("test")
+	end
+
+	function helloworld()
+	  showmsg("Hello world")
+	 end
+	 .
+	 .
+	 .
+	#end of function block
+
+	#Phase definitions
+	intermezzo-phase phase1
+	  showmsg("In phase1")
+	  wait(5000)
+	end
+
+	information-phase phase2
+	  showmsg("In phase2")
+	  wait(5000)
+	end
+
+	intermezzo-phase phase3
+  	  showmsg("In phase3")
+	  wait(5000)
+	end
+	#End of phase definitionsd
 
 
-Val and gvar definitons
+	#Transition definations
+	transition
+	  start(phase1)
+	  phase1 -> phase2
+	  phase2 -> phase3
+	  final(phase3)
+	end
 
-function definitons
-
-phase definitions
-
-phase transitions
+	##End of program
 
 
 ## Variables
-**gvar** Global variable, useable everywhere
 
-**val** static global value, cannot be modified after definition
-
-**var** Normal variable, visible only in the current function/phase.
-
-A variable definition contains: "variabletype" "variable name" <- "value". Also note that variable definitions must be done in the beginning of the program (gvar and val) or in the beginning of a function/phase definition (var). 
+Variables are containers that can store a value. A variable is created by using the approperiate keyword and assigning a value to it. "val a <- "abc" creates a variable named a that contains the value "abc". The value can then be used by using the variables name. Variable definitions should be in the beginning of a function.
 	
-	# Creates a variable named a and assigns it's value to the string "asdf"
-	var a <- "asdf"
+	var a <- "abc"
+	showmsg(a)  # Displays abc on the screen
 
-	# Changes a's value from "asdf" to "qwerty"
-	a <- "qwerty"
+A existing variable can be given a new value by using the assignment operator <-. 
+	
+	var a <- 41  # a contains the number 41
+	a <- 66 	 # 66 is assign to a, the old value(41) is forgotten
+
+There are three different types of variables; 
+
+-  **gvar** Global variable, useable everywhere
+-  **val** static global value, cannot be modified after definition
+-  **var** Normal variable, usable only inside the function/phase where it's defined.
+
+.
+
+	gvar a <- 55
+
+	information-phase Phase1
+	  var b <- "Variable b" 
+	  #Both  a and b are visible here
+	end
+
+	information-phse Phase2
+	  # A is visible but b isn't
+	end
+	
+## Values
+
 
 ## Phases and transitions
 
-intermezzo-phase
-information-phase
-intraction-phase
+Program flow is contolled with phases and phase trasnsitions. There are two types of phases; intermezzo-phases and interaction phases. The intermezzo phase is more simple and is just run from the beginning to the end while the interaction phase has more support for repeating actions. Phases are defined with the correscponding keyword followed a name, and the phases is anded with the **end** command.
 
-	interaction-phase MainPhase
+    #Simple intermezzo phase definition
+    intermezzo-phase FirstPhase
+      # Doing stuff
+      # Moar stuff
+      # Even moar stuff
+    end
+    
+The interaction phase as some mandatory extra control structures, enterphase, leavephase, beforeiteration, afteriteration and iteration. Commands inside enterphase are run once when the phase starts and leavephase behaves in the same way when the phase ends.
 
-	  enterphase
-	    helptext("enterphase")
-	    reacted <- 0
-	    setstimuli([randomnumber(2 3)])
-	  end
-	  
-	  leavephase
-	    helptext("Leaving phase")
-	  end
-	  
-	  beforeiteration
-	    helptext("Before stimuli iteration")
-	  end
-	  
-	  afteriteration
-	    helptext("After stimuli iteration")
-	  end
-	  
-	  iteration
-	    var i <- 0
-	    var s <- 2
-	    
-	    s <- stimulus()
-	  end
-	end
+A set of stimuli should be defined in each iterationphase, usually in enterphase using the setstimuli() function. The set stimuli function accepts an array with stimuliobjects and iteration is run once for each object. Before and afteriteration are run before/after each iteration and can be used for example tio store data and clean up after an iteration/ prepare for the next iteration. See the stimuli topic for more information.
+    
+    interaction-phase MainPhase
+        enterphase
+            showmsg("Entering phase")
+            # Setting two stimuli, 1 and 2
+            setstimuli([1 2)])  
+        end
+        
+        leavephase
+            showmsg("Leaving phase")
+        end
+        
+        beforeiteration
+            showmsg("Start iteration")
+        end
+        
+        afteriteration
+            showmsg("End iteration")
+        end
+        
+        iteration
+            # Stimulus returns the current stimuli, 1 in the first iteration
+            # and 2 in the second one.
+            showmsg(append("Stimulus nr " stimulus()))
+        end
+    end
+    
+    # Output:
+    # Entering phase
+    # Start iteration
+    # Stimulus nr 1
+    # End iteration
+    # Start iteration
+    # Stimulus nr 2
+    # End iteration
+    # Leaving phase
+    
+    
+## Functions
 
 
 ## Builtin functions
