@@ -64,11 +64,26 @@ function sessionTest(func) {
 
     var session = sessionManager.loadManager(request);
     session.setPersonToken();
-
-    //Sending the session manager with the request
     request.session = session;
 
-    func(request);
+    //Check if a db session exists
+    if((!session.loggedIn()) 
+        && (session.getSessionCookie()) 
+        && request.method()==="GET") {
+      console.log("Checking session");
+      session.checkSession(function callback(r) {
+        //Sending the session manager with the request
+        if(r.result) {
+          console.log("Logging in from token");
+          session.login(r.result._id, r.result.username, r.result.admin, r.result.sessiontoken)
+        }
+        func(request);
+      });
+    }
+    else {
+      console.log("Skipping session check");
+      func(request);
+    }
   };
 }
 
@@ -319,6 +334,7 @@ var sessionManager =  {
   loadManager: function(request) {
     this.cookies = request.headers().get("Cookie");
     this.request = request;
+
     return this;
   },
 
@@ -446,6 +462,16 @@ var sessionManager =  {
     } else {
       console.log("there was no data");
     }   
+  },
+
+  checkSession: function(callback) {
+    var session = this.getSessionCookie();
+
+    queryMongo.findUserWithSession(session, function(r) {
+      console.log("---------Checking session--------");
+      console.log(JSON.stringify(r));
+      callback(r);
+    });
   }
 
 };
@@ -531,11 +557,12 @@ customMatcher.post("/login", function(request) {
     queryMongo.authUser(username, password, remember, function(r) {
       
       console.log(JSON.stringify(r));
+      //Status ok, user found
       if (r.status==="ok") {
         request.session.login(r.result._id, r.result.username,r.result.admin, r.token);
         queryMongo.updateExpData(r.result._id, 
           request.session.getPersonToken(), function(s) {
-            
+
           if(origin){
             return request.redirect(decodeURIComponent(origin));
           }
@@ -543,6 +570,7 @@ customMatcher.post("/login", function(request) {
         })
         
       }
+      //No user was found, error
       else {
 
         templateVars.errors = "Wrong username or password";
