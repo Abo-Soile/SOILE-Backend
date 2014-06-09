@@ -1104,7 +1104,7 @@ SOILE2 = (function(){
     
     var compute_delay = function(ts){
       var delay = msleft(ts);
-      console.log("Delay = " + delay)
+      //console.log("Delay = " + delay)
       if (delay < 10){
         return MINDELAY;
       }
