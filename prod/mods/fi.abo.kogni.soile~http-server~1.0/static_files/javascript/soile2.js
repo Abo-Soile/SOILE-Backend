@@ -1054,6 +1054,7 @@ SOILE2 = (function(){
         continue;
       }
       else if (opcode == opcodes.Def){
+
         pi['func'].call({}, []);
         continue;
       }
@@ -1093,6 +1094,7 @@ SOILE2 = (function(){
     var settimeout_id;
     
     var msleft = function(ts){
+      return ts - soile2.rt.timestamp();	
       return Math.abs(ts - soile2.rt.timestamp());
     };
     
@@ -1102,6 +1104,7 @@ SOILE2 = (function(){
     
     var compute_delay = function(ts){
       var delay = msleft(ts);
+      console.log("Delay = " + delay)
       if (delay < 10){
         return MINDELAY;
       }
