@@ -67,7 +67,8 @@
   },
 
   "dustjs":{
-    "engine":"dustjs-linkedin"
+    "engine":"dustjs-linkedin",
+    "version": "2.0.3"
   },
 
   "mongo": {
