@@ -1209,7 +1209,7 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
   })
  
 }));
-
+// /experiment/:id/phase/:phase/rawdata'
 customMatcher.get('/experiment/:id/rawdata', requireAdmin(function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentTestData(expID, function(r) {
@@ -1217,6 +1217,50 @@ customMatcher.get('/experiment/:id/rawdata', requireAdmin(function(request) {
 
     request.response.end(JSON.stringify(data));
   });
+}));
+
+
+// Returns raw tesdata from a testphase as a csv, data is formatted 
+customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(request) {
+  var expId = request.params().get('id');
+  var phase = request.params().get('phase');
+  queryMongo.getRawExperimentTestData(expId, phase, function(r) {
+    var data = r.results;
+    var sep =";"
+
+    var csvData = "";
+
+    for (var el in data) {
+      var element = data[el];
+      console.log("dataa")
+
+      //Inserting username
+      csvData += "userID:" + sep +  element.userid + sep + "\n";
+
+      //inserting keynames names
+      for (var key in element.data.rows[0]) {
+        csvData += key + sep;
+      }
+
+      csvData += "\n";
+
+      //Inserting values
+      for (var r in element.data.rows) {
+        var row= element.data.rows[r];
+        for (var rowkey in row) {
+          csvData += JSON.stringify(row[rowkey]) + sep;
+        }
+        csvData += "\n";
+      }
+    }
+
+    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+    request.response.putHeader("Content-Disposition", "attachment; filename=phase"+phase+"RawData.csv");
+
+    request.response.end("\ufeff " + csvData);
+  })
+
+
 }));
 
 customMatcher.get('/test/demo', function(request) {
@@ -1602,8 +1646,8 @@ customMatcher.allWithRegEx('.*/', function(req) {
 
   req.response.statusCode(302);
   req.response.putHeader('Location', url);
-  req.response.end();
-});
+  req.response.end()
+;});
 
 customMatcher.noMatch(function(request) {
   return request.notfound();

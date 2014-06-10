@@ -121,7 +121,18 @@ var mongoHandler = {
       }
     )
   },
-  
+
+  getRawExperimentTestData: function(expId, phase, response) {
+    vertx.eventBus.send(this.mongoAddress, {
+        "action":"find",
+        "collection":"testdata",
+        "matcher":{"expId":expId, "phase":phase},
+        "keys": {"data":1, "userid":1}},
+      function(reply) {
+        response(reply);
+      }
+    )
+  },
 
   addFormToExperiment: function(expid,formid, name,response) {
     vertx.eventBus.send(this.mongoAddress, {

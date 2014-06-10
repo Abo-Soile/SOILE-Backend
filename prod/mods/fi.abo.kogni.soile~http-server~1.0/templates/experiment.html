@@ -1,7 +1,15 @@
 {>header /}
 <div id="main" class="container">
 	<div class="row">
+		{@eq key=name value="Reaction Test"}
+		<p>fdgdfgfdgfd</p>
+		{/eq}
+		{@eq key="foo" value="foo"}equal{/eq}
+		
+		{@math key="16" method="add" operand="4"/}
+		{@size key="DFGDFGDFGDFG"/}
 
+		sdfs
 
 		<div class="col-md-10"> 
 		{#user.admin}
@@ -10,7 +18,13 @@
 			<p> {exp.description}</p>
 			<ul>
 				{#exp.components uri=URI}
-				<li><a href="{uri}/phase/{$idx}">phase {$idx} {@idx}{.}{/idx} {type} {name}</a></li>
+				<li><a href="{uri}/phase/{$idx}">phase {$idx} {type} {name}</a>
+					{@eq key=type value="test"}
+					  <span>   ----  <a href="{uri}/phase/{$idx}/rawdata"> Raw data</a> </span>
+					{:else}
+					  <span>  ----  Raw data not available</span>
+					{/eq}
+				</li>
 				{/exp.components}
 			</ul>
 			<h3><a href="{URI}/data">Download form data</a></h3>
