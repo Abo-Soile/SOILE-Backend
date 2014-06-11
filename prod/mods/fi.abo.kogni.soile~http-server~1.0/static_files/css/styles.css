@@ -102,6 +102,19 @@ body > .container {
 #toolButtons .btn {
 	margin-right:7px;
 }
+
+#expview ul {
+	list-style-type: none;
+}
+
+#expview .btn {
+	margin-left:1px;
+	margin-right: 3px;
+}
+
+#expview .phaselistlink {
+	min-width: 200px;
+}
 /*
 testeditor styles
 */
