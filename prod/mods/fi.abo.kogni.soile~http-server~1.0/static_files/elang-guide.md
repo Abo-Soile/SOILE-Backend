@@ -217,8 +217,13 @@ Removes all actionss bound to the specified key.
 	onkeypress("left", leftclick)
 Example: the function leftclick is run each time when the left arrow is clicked on the keyboard.
 
-**onanykey(func)**
-Executes the specified function when any keyboeard key is clicked. 
+*onanykey(func)**
+Executes the specified function when any keyboeard key is clicked.
+
+**onanykey(func ignore="")**
+Executes the specified function when any keyboeard key except keys specified in limit is pressed. Ignored keys should be sent as an array of individual keynames, for example ["a" "enter"] ignores the keys **a** and **enter**, see the keycode table for the correct key names. 
+
+Ignore can also accept a special command "onlyletters" which ignores everything but a-z, for example onanykey(resume(), "onlyletters").
 
 **getlastkey()**
 Returns the last key clicked by the user. 

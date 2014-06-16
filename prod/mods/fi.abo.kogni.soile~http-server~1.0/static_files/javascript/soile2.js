@@ -71,9 +71,13 @@ SOILE2 = (function(){
     }
   };
 
-  bin.onanykey = function(func) {
+  bin.onanykey = function(func, ignore) {
     if(func) {
-      rt.keyhandler.addAny(func)
+      if(ignore) {
+        rt.keyhandler.addAny(func, ignore);
+      } else {
+        rt.keyhandler.addAny(func);
+      }
     }else {
       rt.keyhandler.removeAny();
     }
@@ -704,6 +708,23 @@ SOILE2 = (function(){
     var anykeyfunctions = []
     var lastKey = ""
 
+    // Special ignore case
+    // Nothing ignored
+    var anything = function(keyCode) {
+      return true;
+    }
+
+    // Special ignore case
+    // Checks if keyCode is a letter
+    var lettersOnly = function(keyCode) {
+      if(keyCode<48||keyCode>90) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+
     var keyFunction = function(e) {
       lastKey = soile2.rt.kbd.name(e.keyCode);
       //console.log(e.keyCode);
@@ -714,7 +735,13 @@ SOILE2 = (function(){
       //console.log(anykeyfunctions);
       for(var i = 0; i<anykeyfunctions.length; i++) {
         var key = soile2.rt.kbd.name(e.keyCode)
-        anykeyfunctions[i].call("key");
+
+        //console.log(anykeyfunctions[i].ignoreFunc(e.keyCode));
+        //Check if the click key is ignored before calling
+        // the bound function
+        if(anykeyfunctions[i].ignoreFunc(e.keyCode)) {
+          anykeyfunctions[i].func.call("key");
+        }
       }
     }
 
@@ -729,6 +756,7 @@ SOILE2 = (function(){
       },
       'reset': function() {
         keyfunctions = {};
+        anykeyfunctions = [];
         // document.onkeydown = null;
       },
       'resume': function(key) {
@@ -753,8 +781,31 @@ SOILE2 = (function(){
       },
 
       //
-      'addAny': function(func) {
-        anykeyfunctions.push(func)
+      'addAny': function(func, ignore) {
+        var ignoreFunc = anything;
+
+        if (ignore === "onlyletters"){
+          ignoreFunc = lettersOnly;
+        } 
+        // Ignore case, specific letters
+        if(ignore instanceof Array) {
+          //Converting keynames to keycodes berfore use
+          for(var i in ignore) {
+            ignore[i] = soile2.rt.kbd.keycode(ignore[i]);
+          }
+          console.log(ignore);
+
+          var ignoreFunc = function(keyCode) {
+            if (ignore.indexOf(keyCode) === -1) {
+              return true;
+            }
+            else {
+              return false;
+            }
+          }
+        }
+
+        anykeyfunctions.push({"func":func,"ignoreFunc":ignoreFunc});
       },
       'removeAny': function() {
         anykeyfunctions = [];
@@ -1337,6 +1388,7 @@ SOILE2 = (function(){
   //debugging
   util.resetData = function() {
     soile2.rt.dataHandler.reset();
+    soile2.rt.keyhandler.reset();
   }
 
   util.getid = function(s) {
