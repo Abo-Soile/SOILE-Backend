@@ -1082,13 +1082,28 @@ customMatcher.get('/experiment/:id/end', function(request) {
 customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {
-    var data = r.results;
+   
+	//Move this to a better location, should probably be initialized on start
+	//TODO
+	var cleanArray = function(arr) {
+	    for (var i = 0; i < arr.length; i++) {
+		    if (arr[i] == null) {         
+			      arr.splice(i, 1);
+		        i--;
+	      	}
+  		}
+  		return arr;
+	};  
+		  
+		  
+	var data = r.results;
     console.log(JSON.stringify(r));
 
     var sep = "; ";
 
     var fields = [];
     var userData = {};
+	
 
     //finding max phase an
     var i;
@@ -1123,11 +1138,17 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
        // }
       }
     }
-    var mergedFields = [];
-    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
     
-    var stringFields = mergedFields.join(sep);
+	fields = cleanArray(fields);
+	for(var d in userData) {
+		userData[d] = cleanArray(userData[d]);
+	}
+	var mergedFields = [];
+    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
 
+    var stringFields = mergedFields.join(sep);
+	
+	console.log("\n\n\n" + JSON.stringify(userData));
     var userFields = ""
     for(id in userData) {
       var mergedUserData = [];
@@ -1154,12 +1175,27 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
     var data = r.results;
     var sep =";"
 
+	//Move this to a better location, should probably be initialized on start
+	//TODO
+	var cleanArray = function(arr) {
+	    for (var i = 0; i < arr.length; i++) {
+		    if (arr[i] == null) {         
+			      arr.splice(i, 1);
+		        i--;
+	      	}
+  		}
+  		return arr;
+	};  
+	//console.log(JSON.stringify(data));
+
     var fields = [];
     var userData = {};
     for(i in data) {
       var item = data[i];
-      item.single = item.data.single;
-      var phase = parseInt(item.phase);
+      console.log("\n" + i + " Index\n"  + JSON.stringify(item));
+	  item.single = item.data.single;
+      
+	  var phase = parseInt(item.phase);
 
       if(!("userid" in item)) {
         item.userid = "Missing";
@@ -1187,6 +1223,11 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
         userData[item.userid][phase].push(item.single[j]);
       }
     }
+	
+	fields = cleanArray(fields);
+	for(var d in userData) {
+		userData[d] = cleanArray(userData[d]);
+	}
 
     var mergedFields = [];
     mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
@@ -1230,10 +1271,9 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
 
     var csvData = "";
 
-    for (var el in data) {
+    for (var el in data){
       var element = data[el];
-      console.log("dataa")
-
+      console.log("dataa" + JSON.stringify(element._id))
       //Inserting username
       csvData += "userID:" + sep +  element.userid + sep + "\n";
 
