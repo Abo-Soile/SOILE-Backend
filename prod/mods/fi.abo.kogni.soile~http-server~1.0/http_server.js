@@ -211,6 +211,15 @@ var utils = (function(conf) {
       }
 
       return paramsObject;
+    },
+    'cleanArray':function(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == null) {         
+            arr.splice(i, 1);
+            i--;
+          }
+      }
+      return arr;
     }
   };
 
@@ -1082,19 +1091,7 @@ customMatcher.get('/experiment/:id/end', function(request) {
 customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   queryMongo.getExperimentFormData(expID, function(r) {
-   
-	//Move this to a better location, should probably be initialized on start
-	//TODO
-	var cleanArray = function(arr) {
-	    for (var i = 0; i < arr.length; i++) {
-		    if (arr[i] == null) {         
-			      arr.splice(i, 1);
-		        i--;
-	      	}
-  		}
-  		return arr;
-	};  
-		  
+	  
 		  
 	var data = r.results;
     console.log(JSON.stringify(r));
@@ -1139,9 +1136,9 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
       }
     }
     
-	fields = cleanArray(fields);
+	fields = utils.cleanArray(fields);
 	for(var d in userData) {
-		userData[d] = cleanArray(userData[d]);
+		userData[d] = utils.cleanArray(userData[d]);
 	}
 	var mergedFields = [];
     mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
@@ -1173,19 +1170,8 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
 
   queryMongo.getExperimentTestData(expID, function(r) {
     var data = r.results;
-    var sep =";"
+    var sep = ";"
 
-	//Move this to a better location, should probably be initialized on start
-	//TODO
-	var cleanArray = function(arr) {
-	    for (var i = 0; i < arr.length; i++) {
-		    if (arr[i] == null) {         
-			      arr.splice(i, 1);
-		        i--;
-	      	}
-  		}
-  		return arr;
-	};  
 	//console.log(JSON.stringify(data));
 
     var fields = [];
@@ -1224,9 +1210,9 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
       }
     }
 	
-	fields = cleanArray(fields);
+	fields = utils.cleanArray(fields);
 	for(var d in userData) {
-		userData[d] = cleanArray(userData[d]);
+		userData[d] = utils.cleanArray(userData[d]);
 	}
 
     var mergedFields = [];
