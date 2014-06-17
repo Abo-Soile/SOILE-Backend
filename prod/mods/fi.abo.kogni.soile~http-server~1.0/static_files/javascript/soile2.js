@@ -760,6 +760,7 @@ SOILE2 = (function(){
         // document.onkeydown = null;
       },
       'resume': function(key) {
+        var ignoreFunc = anything;
         if(key) {
           var keycode = soile2.rt.kbd.keycode(key);
 
@@ -776,7 +777,7 @@ SOILE2 = (function(){
             anykeyfunctions.splice(index, 1);
           }
 
-          anykeyfunctions.push(onkey);
+          anykeyfunctions.push({"func":onkey, "ignoreFunc":ignoreFunc});
         }
       },
 
