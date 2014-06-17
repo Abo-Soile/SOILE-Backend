@@ -1262,6 +1262,7 @@ customMatcher.get('/experiment/:id/rawdata', requireAdmin(function(request) {
 
 
 // Returns raw tesdata from a testphase as a csv, data is formatted 
+// Doesn't format correcly if some fields are missing from the data
 customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(request) {
   var expId = request.params().get('id');
   var phase = request.params().get('phase');
