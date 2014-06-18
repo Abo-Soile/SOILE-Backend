@@ -1647,7 +1647,11 @@ customMatcher.get('/', function(request) {
 
     // User logged in showing user controls
     if (request.session.loggedIn()) {
-      templateManager.render_template('user', {}, request);
+      var userid = request.session.loggedIn().id;
+      queryMongo.userStatus(userid, function(r) {
+
+        templateManager.render_template('user', {}, request);
+      })
     }
 
     // Anonymous user, showing ladning page
