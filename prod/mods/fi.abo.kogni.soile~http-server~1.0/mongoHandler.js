@@ -459,8 +459,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
         response(reply);
       }
     );
-  }
-  ,
+  },
 
   newUser: function(username, password, response) {
 
@@ -471,6 +470,106 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
      function(reply) {
       response(reply);
      })
+  },
+  //Userid, completed:true/false
+  _getCompleteOrIncompleteExperiments: function(userID, completed,response) {
+    //TestData
+    console.log("LOADING EXP STATES : " + completed);
+    vertx.eventBus.send(this.mongoAddress, {"action":"find",
+      "collection":"testdata",
+      "matcher": {"userid":userID,
+                  "confirmed": completed,
+                  "phase": "0" }},
+      function(replyTest) {
+        //Formdata
+        vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"find",
+          "collection":"formdata",
+          "matcher": {"userid":userID,
+                      "confirmed": completed,
+                      "phase": "0" }},
+        function(replyForm) {
+          var expIDs = []
+          for(var i = 0; i<replyForm.results.length; i++) {
+            expIDs.push(replyForm.results[i].expId)
+            console.log("Pushing formid: " + replyForm.results[i].expId + " i: " + i)
+          }
+
+          for(var i = 0; i<replyTest.results.length; i++) {
+            expIDs.push(replyForm.results[i].expId)
+            console.log("Pushing formid: " + replyForm.results[i].expId + " i: " + i)
+          }
+          console.log(JSON.stringify(expIDs));
+
+          vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"find",
+            "collection":"experiment",
+            "matcher": {"_id": {"$in":expIDs}}
+            }, function(exps) {
+              response(exps);
+            })
+          }
+        );
+      }
+    );
+  },
+
+  // _getCompletedExperiments: function(userID, response) {
+  //   vertx.eventBus.send(this.mongoAddress, {"action":"find",
+  //     "collection":"testdata",
+  //     "matcher": {"userid":userID,
+  //                 "confirmed": true,
+  //                 "phase": "0" }},
+  //     function(replyTest) {
+  //       //Formdata
+  //       vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"find",
+  //         "collection":"formdata",
+  //         "matcher": {"userid":userID,
+  //                     "confirmed": true,
+  //                     "phase": "0" }},
+  //       function(replyForm) {
+  //         var expIDs = []
+  //         //LoggaLogga
+  //         console.log(JSON.stringify(replyTest));
+  //         console.log(JSON.stringify(replyForm));
+          
+  //         for(var i = 0; i<replyForm.results.length; i++) {
+  //           expIDs.push(replyForm.results[i].expId)
+  //         }
+
+  //         for(var i = 0; i<replyTest.results.length; i++) {
+  //           expIDs.push(replyForm.results[i].expId)
+  //         }
+
+  //         response(expIDs);
+  //         }
+  //       );
+  //     }
+  //   );
+  // },
+
+  _userExperimentStatus: function(userID, res) {
+    this._getCompleteOrIncompleteExperiments(userID, false,function taa(incompleted) {
+      mongoHandler._getCompleteOrIncompleteExperiments(userID, true, function baa(completed) {
+
+        res({completed:completed,incompleted:incompleted});
+      })
+    }) 
+  },
+
+  userStatus: function(userID, response) {
+
+    // vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"find",
+    // "collection":"users",
+    // "matcher": {"username":{"$in":["danno","admin","wqq"]}}
+    // }, function(exps) {
+    //   console.log(JSON.stringify(exps));
+    // })
+
+
+    this._userExperimentStatus(userID, function(r) {
+      console.log(JSON.stringify(r));
+
+      response(r);
+    }) 
   },
 
   //Function that sets all indexes at startup
