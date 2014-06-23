@@ -177,6 +177,33 @@ Login
 	border-color: #E6BCF1;
 }
 
+/*
+User dashboard
+*/
+
+
+#userheader > h3 {
+	background-color: #FFFFFF;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.25);
+}
+
+.userlist {
+	background-color: white;
+	margin-top: 15px;
+	box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.25);
+}
+
+.userlist > h3 {
+	background-color: #464852;
+	padding:10px;
+	color: white;
+	margin-top: 0px;
+}
+
+/* end userdashboard /*
 
 /*Bootstrap sticky footer http://getbootstrap.com/examples/sticky-footer-navbar/*/
 html {
@@ -185,7 +212,8 @@ html {
 }
 
 body {
-	background-color: #F8F8F8;
+	/*background-color: #F8F8F8;*/
+	background-color: #F5F6F7;
 	margin-bottom: 100px;
 }
 

@@ -227,9 +227,12 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     });
   },
 
-  getExperimentList: function(response) {
+  //Returns all active experiments not in the ignore list
+  getExperimentList: function(ignore, response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"find",
-    "collection":"experiment"},function(reply){
+    "collection":"experiment",
+    "matcher": {"_id": {"$nin":ignore}}},
+    function(reply){
       if(reply.results) {
         for(var i =0; i<reply.results.length;i++) {
           reply.results[i] = _isActive(reply.results[i]);
@@ -504,6 +507,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
             "collection":"experiment",
             "matcher": {"_id": {"$in":expIDs}}
             }, function(exps) {
+              exps.list = expIDs;
               response(exps);
             })
           }
@@ -546,11 +550,16 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   //   );
   // },
 
+  //Returns a list of all completed and incompleted experiments for the current user. And a
+  //array with their ID's
   _userExperimentStatus: function(userID, res) {
-    this._getCompleteOrIncompleteExperiments(userID, false,function taa(incompleted) {
-      mongoHandler._getCompleteOrIncompleteExperiments(userID, true, function baa(completed) {
+    //Incomplete experiments
+    this._getCompleteOrIncompleteExperiments(userID, false,function (incompleted) {
 
-        res({completed:completed,incompleted:incompleted});
+      //Completed experiments
+      mongoHandler._getCompleteOrIncompleteExperiments(userID, true, function (completed) {
+        var idList = incompleted.list.concat(completed.list);
+        res({completed:completed.results,incompleted:incompleted.results, expList:idList});
       })
     }) 
   },
@@ -566,10 +575,40 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
 
 
     this._userExperimentStatus(userID, function(r) {
-      console.log(JSON.stringify(r));
+      //console.log(JSON.stringify(r));
+      mongoHandler.getExperimentList(r.expList, function(r2) {
 
-      response(r);
-    }) 
+        response({newExps:r2.results, complete: r.completed, incomplete:r.incompleted});
+      });
+    }); 
+  },
+
+  updateUser: function(userid, firstname, lastname, address1,
+                      address2,postalcode, city, country, response) {
+    vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"update",
+        "collection":"users", "criteria": {"_id":userid},
+        "objNew":{"$set":{
+          "firstname": firstname,
+          "lastname": lastname,
+          "address1":address1,
+          "address2": address2,
+          "postalcode": postalcode,
+          "city": city,
+          "country": country
+        }
+      }
+    },function(reply) {
+      response(reply);
+    });
+  },
+
+  getUser:function(userid, response) {
+    vertx.eventBus.send(mongoHandler.mongoAddress, {"action":"findone",
+      "collection":"users","matcher":{"_id":userid}},
+      function(reply) {
+        console.log(JSON.stringify(reply));
+        response(reply.result);
+      });
   },
 
   //Function that sets all indexes at startup

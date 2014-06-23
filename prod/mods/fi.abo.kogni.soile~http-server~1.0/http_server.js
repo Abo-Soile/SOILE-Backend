@@ -724,7 +724,7 @@ customMatcher.get('/dust2', function(request){
 
 
 customMatcher.get("/experiment", function(request){
-  queryMongo.getExperimentList(function(r){
+  queryMongo.getExperimentList([], function(r){
 
     templateManager.render_template("experimentList", {"experiments":r.results}, request);
   });
@@ -1633,24 +1633,68 @@ customMatcher.get('/test/:id/imagelist', function(request) {
   });
 });
 
+customMatcher.post('/user', function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    var params = {};
+
+    data = data.getString(0, data.length());
+    params = utils.getUrlParams(data);
+
+    var userid = request.session.loggedIn().id
+    var firstname  = params.firstname;
+    var lastname   = params.lastname;
+    var address1   = params.address1;
+    var address2   = params.address2;
+    var postalcode = params.postalcode;
+    var city       = params.city;
+    var country    = params.country;
+
+    queryMongo.updateUser(userid, firstname, lastname, address1, address2,
+      postalcode, city, country, function(r) {
+        console.log(r);
+        return request.redirect("/");
+      })
+  })
+});
+
 
 customMatcher.get('/', function(request) {
 
   // Admin showing admin controls
   if (request.session.isAdmin()) {
-    queryMongo.getExperimentList(function(r) {
+    queryMongo.getExperimentList([], function(r) {
 
       templateManager.render_template('admin', {"experiments":r.results,"test":"This is a test"},request);
     });
   }
   else {
-
     // User logged in showing user controls
     if (request.session.loggedIn()) {
       var userid = request.session.loggedIn().id;
       queryMongo.userStatus(userid, function(r) {
+        console.log(JSON.stringify(r));
+        var openExperiments = [];
+        for (var i = r.newExps.length - 1; i >= 0; i--) {
+          if(r.newExps[i].active) {
+            openExperiments.push(r.newExps[i])
+          }
+        };
+        r.newExps = openExperiments;
+        console.log("\n\h" + userid);
 
-        templateManager.render_template('user', {}, request);
+        queryMongo.getUser(userid, function(userdetails) {
+          r.u = userdetails;
+          console.log(JSON.stringify(r));
+          templateManager.render_template('user', r, request);
+        })
+
       })
     }
 
