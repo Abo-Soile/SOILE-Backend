@@ -225,8 +225,10 @@ var utils = (function(conf) {
 
 })(shared_config);
 
+var user = require('mongoHandler').user;
+var queryMongo = require('mongoHandler').mongoHandler;
 
-var queryMongo = require('mongoHandler');
+var mongo = require('mongoHandler');
 
 queryMongo.init();
 
@@ -476,7 +478,7 @@ var sessionManager =  {
   checkSession: function(callback) {
     var session = this.getSessionCookie();
 
-    queryMongo.findUserWithSession(session, function(r) {
+    mongo.user.fromSession(session, function(r) {
       console.log("---------Checking session--------");
       console.log(JSON.stringify(r));
       callback(r);
@@ -563,13 +565,13 @@ customMatcher.post("/login", function(request) {
 
     templateVars.origin = decodeURIComponent(origin);
 
-    queryMongo.authUser(username, password, remember, function(r) {
+    mongo.user.auth(username, password, remember, function(r) {
       
       console.log(JSON.stringify(r));
       //Status ok, user found
       if (r.status==="ok") {
         request.session.login(r.result._id, r.result.username,r.result.admin, r.token);
-        queryMongo.updateExpData(r.result._id, 
+        mongo.experiment.updateDataIdentifier(r.result._id, 
           request.session.getPersonToken(), function(s) {
 
           if(origin){
@@ -659,7 +661,7 @@ customMatcher.post("/signup", function(request) {
       return
     }
 
-    queryMongo.newUser(email, passwd, function(r) {
+    mongo.user.new(email, passwd, function(r) {
       console.log("Trying to create new user");
       console.log(JSON.stringify(r));
       if (r.status==="ok") {
@@ -724,7 +726,7 @@ customMatcher.get('/dust2', function(request){
 
 
 customMatcher.get("/experiment", function(request){
-  queryMongo.getExperimentList([], function(r){
+  mongo.experiment.list([], function(r){
 
     templateManager.render_template("experimentList", {"experiments":r.results}, request);
   });
@@ -754,7 +756,7 @@ customMatcher.post("/experiment/new", function(request) {
 
     console.log(sDate.toString());
 
-    queryMongo.saveExperiment(jsonData, function(r){
+    mongo.experiment.save(jsonData, function(r){
       console.log(JSON.stringify(r));
       var resp = {
         "status":"ok",
@@ -780,7 +782,7 @@ customMatcher.get('/experiment/:id', function(request){
     templateManager.render_template("experiment", {"exp":experiment},request);
   }
 
-  queryMongo.getExperiment(id,function(r){
+  mongo.experiment.get(id,function(r){
     //404 if experiment doesn't exist
     if(!r.result) {
       return request.notfound();
@@ -792,7 +794,7 @@ customMatcher.get('/experiment/:id', function(request){
       if(request.session.loggedIn()) {
         userID = request.session.loggedIn().id;
       }
-      queryMongo.getUserPosition(userID, id, function(re) {
+      mongo.experiment.userPosition(userID, id, function(re) {
         console.log("Position = " + re);
 
         if(re >= 0) {
@@ -813,7 +815,7 @@ customMatcher.get('/experiment/:id/edit', requireAdmin(function(request){
   var id = request.params().get('id');
   console.log(id);
 
-  queryMongo.getExperiment(id,function(r){
+  mongo.experiment.get(id,function(r){
     var experiment = r.result;
     console.log(JSON.stringify(r));
     templateManager.render_template("editexperiment", {"exp":experiment},request);
@@ -842,7 +844,7 @@ customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
 
       console.log(sDate.toString());
 
-      queryMongo.updateExperiment(jsonData, id,function(r){
+      mongo.experiment.update(jsonData, id,function(r){
         console.log(JSON.stringify(r));
         var resp = r;
         request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
@@ -868,7 +870,7 @@ customMatcher.post('/experiment/:id/addform', requireAdmin(function(request){
   vertx.eventBus.send(address, msg, function(reply) {
     var response = {};
     var id = reply.id;
-    queryMongo.addFormToExperiment(expId,id,"Unnamed Form", function(r){
+    mongo.experiment.addForm(expId,id,"Unnamed Form", function(r){
       response.id = id;
 
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
@@ -892,7 +894,7 @@ customMatcher.post('/experiment/:id/editformname', requireAdmin(function(request
     var name = jsonData.name;
     var formid = jsonData.id; 
 
-    queryMongo.editExperimentFormName(expId, formid, name, function(r){
+    mongo.experiment.editFormName(expId, formid, name, function(r){
       console.log(JSON.stringify(r));
       request.response.end(JSON.stringify(r.result));
     });
@@ -916,7 +918,7 @@ customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
       return request.response.end(JSON.stringify({error:"No experiment specified"}))
     }
 
-    queryMongo.addTestToExperiment(expId, data.testId, data.name, function(r) {
+    mongo.experiment.addTest(expId, data.testId, data.name, function(r) {
       
       var resp = r;
       resp.name = data.name;
@@ -940,7 +942,7 @@ customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(requ
     var jsonData = (JSON.parse(data.getString(0, data.length())));
     console.log(JSON.stringify(jsonData));
 
-    queryMongo.deleteComponentFromExperiment(expId, jsonData.id, function(r) {
+    mongo.experiment.deleteComponent(expId, jsonData.id, function(r) {
       console.log(JSON.stringify(r));
 
       request.response.end(JSON.stringify(r.result));
@@ -952,7 +954,7 @@ customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(requ
 customMatcher.get('/experiment/:id/json', function(request){
   var expId = request.params().get('id');
 
-  queryMongo.getExperiment(expId, function(r){
+  mongo.experiment.get(expId, function(r){
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(r.result));
   });
@@ -966,7 +968,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   var phaseNo = request.params().get('phase');
   var phase;
 
-  queryMongo.getExperiment(expID, function(r) {
+  mongo.experiment.get(expID, function(r) {
     phase = r.result.components[phaseNo];
 
     //Redirecting to experiment end
@@ -998,7 +1000,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
     if(phase.type === "form") {
       console.log("Form ");
 
-      queryMongo.getForm(phase.id, function(r2) {
+      mongo.form.get(phase.id, function(r2) {
         var form = r2.result.form;
         context.form = form;
 
@@ -1011,7 +1013,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
     if(phase.type === "test") {
       console.log("test");
 
-      queryMongo.getTest(phase.id, function(r2) {
+      mongo.test.get(phase.id, function(r2) {
         var experimentJs = r2.result.js;
         context.experiment = experimentJs.replace(/(\r\n|\n|\r)/gm,"");
 
@@ -1031,10 +1033,10 @@ customMatcher.get('/experiment/:id/phase/:phase/json', function(request) {
   var phaseNo = request.params().get('phase'); 
   var phase;
 
-  queryMongo.getExperiment(expID, function(r) {
+  mongo.experiment.get(expID, function(r) {
     phase = r.result.components[phaseNo];
 
-    queryMongo.getTest(phase.id, function(r2) {
+    mongo.test.get(phase.id, function(r2) {
 
       request.response.end(r2.result.js);
     });
@@ -1064,7 +1066,7 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
     var postJson = JSON.parse(postData);
     console.log(postData);
 
-    queryMongo.saveData(phase, expID, postJson, userID, function(r){
+    mongo.experiment.saveData(phase, expID, postJson, userID, function(r){
       console.log(JSON.stringify(r));
       request.response.end("Data \n" + postData);
     });
@@ -1078,7 +1080,7 @@ customMatcher.get('/experiment/:id/end', function(request) {
     userID = request.session.loggedIn().id;
   }
 
-  queryMongo.confirmExperimentData(expID, userID, function(r) {
+  mongo.experiment.confirmData(expID, userID, function(r) {
     console.log("confirmed submitted data");
     console.log(JSON.stringify(r));
     templateManager.render_template('end', {},request);
@@ -1090,8 +1092,7 @@ customMatcher.get('/experiment/:id/end', function(request) {
 //Performs a custom crafted join on gathered data.
 customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
-  queryMongo.getExperimentFormData(expID, function(r) {
-	  
+  mongo.experiment.formData(expID, function(r) {
 		  
 	var data = r.results;
     console.log(JSON.stringify(r));
@@ -1168,7 +1169,7 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
   var expID = request.params().get('id');
   console.log("Testing testdata");
 
-  queryMongo.getExperimentTestData(expID, function(r) {
+  mongo.experiment.testData(expID, function(r) {
     var data = r.results;
     var sep = ";"
 
@@ -1239,7 +1240,7 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
 // /experiment/:id/phase/:phase/rawdata'
 customMatcher.get('/experiment/:id/rawdata', requireAdmin(function(request) {
   var expID = request.params().get('id');
-  queryMongo.getExperimentTestData(expID, function(r) {
+  mongo.experiment.testData(expID, function(r) {
     var data = r.results;
 
     request.response.end(JSON.stringify(data));
@@ -1252,7 +1253,7 @@ customMatcher.get('/experiment/:id/rawdata', requireAdmin(function(request) {
 customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(request) {
   var expId = request.params().get('id');
   var phase = request.params().get('phase');
-  queryMongo.getRawExperimentTestData(expId, phase, function(r) {
+  mongo.experiment.rawTestData(expId, phase, function(r) {
     var data = r.results;
     var sep =";"
 
@@ -1392,7 +1393,7 @@ customMatcher.get('/questionnaire/generated/:id', function(request) {
 
 customMatcher.get('/questionnaire/mongo/:id', requireAdmin(function(request){
   var id = request.params().get('id');
-  queryMongo.getForm(id, function(r){
+  mongo.form.get(id, function(r){
     //console.log(JSON.stringify(r))
     var form = r.result.form;
     var markup = r.result.markup;
@@ -1438,7 +1439,7 @@ customMatcher.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
 
 customMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
   var id = request.params().get('id');
-  queryMongo.getForm(id,function(r) {
+  mongo.form.get(id,function(r) {
     var form = r.result.form;
     form = "<div id='formcol'>".concat(form,"</div>");
     request.response.end(form);
@@ -1450,14 +1451,14 @@ customMatcher.post('questionnaire/generated/:id', function(request) {
 });
 
 customMatcher.get('/test', function(request) {
-  queryMongo.getTestList(function(r) {
+  mongo.test.list(function(r) {
     templateManager.render_template('testlist', {"tests":r.results},request);
   })
 
 });
 
 customMatcher.get('/test/json', function(request) {
-  queryMongo.getTestList(function(r) {
+  mongo.test.list(function(r) {
     request.response.end(JSON.stringify(r.results))
   })
 })
@@ -1478,7 +1479,7 @@ customMatcher.post("/test", requireAdmin(function(request) {
 
     console.log("name1: " + name);
 
-    queryMongo.saveTest({"name":name}, function(r) {
+    mongo.test.save({"name":name}, function(r) {
       console.log(JSON.stringify(r));
 
       var dirName = testImages + "/" + r._id
@@ -1514,7 +1515,7 @@ customMatcher.get('/test/:id', requireAdmin(function(request) {
         console.log(JSON.stringify(files));
         console.log("\n\n\n");
     }
-    queryMongo.getTest(id, function(r) {
+    mongo.test.get(id, function(r) {
       templateManager.render_template('testEditor', 
         {"code":code, "test":r.result, "files":files}, request);
     })
@@ -1563,7 +1564,7 @@ customMatcher.post("/test/:id", requireAdmin(function(request) {
         test.compiled = true;
       }
 
-      queryMongo.updateTest(test, function() {
+      mongo.test.update(test, function() {
         request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
         request.response.end(JSON.stringify(response));
       });
@@ -1656,7 +1657,7 @@ customMatcher.post('/user', function(request) {
     var city       = params.city;
     var country    = params.country;
 
-    queryMongo.updateUser(userid, firstname, lastname, address1, address2,
+    mongo.user.update(userid, firstname, lastname, address1, address2,
       postalcode, city, country, function(r) {
         console.log(r);
         return request.redirect("/");
@@ -1669,7 +1670,7 @@ customMatcher.get('/', function(request) {
 
   // Admin showing admin controls
   if (request.session.isAdmin()) {
-    queryMongo.getExperimentList([], function(r) {
+    mongo.experiment.list([], function(r) {
 
       templateManager.render_template('admin', {"experiments":r.results,"test":"This is a test"},request);
     });
@@ -1678,7 +1679,7 @@ customMatcher.get('/', function(request) {
     // User logged in showing user controls
     if (request.session.loggedIn()) {
       var userid = request.session.loggedIn().id;
-      queryMongo.userStatus(userid, function(r) {
+      mongo.user.status(userid, function(r) {
         console.log(JSON.stringify(r));
         var openExperiments = [];
         for (var i = r.newExps.length - 1; i >= 0; i--) {
@@ -1687,9 +1688,9 @@ customMatcher.get('/', function(request) {
           }
         };
         r.newExps = openExperiments;
-        console.log("\n\h" + userid);
+        console.log("\n\n" + userid);
 
-        queryMongo.getUser(userid, function(userdetails) {
+        mongo.user.get(userid, function(userdetails) {
           r.u = userdetails;
           console.log(JSON.stringify(r));
           templateManager.render_template('user', r, request);
