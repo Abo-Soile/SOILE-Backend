@@ -207,7 +207,7 @@ var utils = (function(conf) {
       params = params.split('&');
       for(i = 0; i<params.length;i++) {
         datapart = params[i].split('=');
-        paramsObject[datapart[0]] = datapart[1];
+        paramsObject[datapart[0]] = this.cleanUriParam(datapart[1]);
       }
 
       return paramsObject;
@@ -220,6 +220,10 @@ var utils = (function(conf) {
           }
       }
       return arr;
+    },
+    //Decode uri params and remove +-signs
+    'cleanUriParam': function(param) {
+      return decodeURIComponent(param).split("+").join(" ");
     }
   };
 

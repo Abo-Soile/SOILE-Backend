@@ -196,11 +196,16 @@ User dashboard
 	box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.25);
 }
 
-.userlist > h3 {
+.userlist > h4 {
 	background-color: #464852;
 	padding:10px;
 	color: white;
 	margin-top: 0px;
+}
+
+#userdetails{
+	padding: 10px;
+	background: 
 }
 
 /* end userdashboard /*
