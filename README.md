@@ -12,13 +12,52 @@ Tech used:
 - Some javascript library to handle the client side stuff, dojo, underscore.
 
 
+### Install instructions
+Dependencies:
+- Java version 7 or greater.
+- Vertx 2.0, should be added top path.
+- Mongodb, newest version.
 
 ## Mongo Collections and Fields
 
 #### User:
-	- email/username
-	- password hashed
-	-  
+	- username
+	- password (hashed)
+	- name
+	- address1
+	- city
+	- postalcode
+	- country
+
+#### Experiment: 
+	- Name
+	- Start Date
+	- Stop Date
+	- Description
+	- Components [{_id, name, type}]
+	- loginrequired
+
+#### Tests:
+	- _id
+	- code
+	- compiled (true/false)
+	- js 		#Compiled js
+	- name 
+
+#### Form: 
+	- _id
+	- form 		# Compiled form
+	- markup	# Markup code
+
+####Test/Form Data:
+	- _id
+	- phase
+	- expId
+	- userid
+	- confirmed
+	- data {collection}
+	- type
+
 
 
 ### Dev history in gitlog
