@@ -70,7 +70,7 @@
 		}
     #pagecontent > .commandspec {
       margin-left: 2em;
-      width: 40%;
+      width: 70%;
       font-size: smaller;
       border: thin inset black;
       font-family: "Courier New", Courier, monospace;
@@ -769,6 +769,21 @@
   }
           </pre>
         </div>
+        <p> Example: </p>
+        <div class="commandspec">
+          <pre>
+  /dropdownmenu {
+   dbcolumn: "continent",
+   label: "Select Continent",
+   options: [{dbvalue: "EU", text: "Europe"},
+             {dbvalue: "AM", text: "America"},
+             {dbvalue: "AS", text: "Asia"},
+             {dbvalue: "AU", text: "Australia"},
+             {dbvalue: "AF", text: "Africa"}
+             ]
+  }
+          </pre>
+        </div>
 
         <hr />
 
@@ -794,6 +809,35 @@
           </pre>
         </div>
 
+        <p> Example: </p>
+        <div class="commandspec">
+          <pre>
+  /multiselect {
+      default_value: "no",
+      dbcolumn: "vehicle",
+      options: [ [ 
+            {
+              dbcolumn: "Bike",
+              dbvalue: "yes", 
+              text: "Bike", 
+              checked: true
+            },
+              {
+              dbcolumn: "Car",
+              dbvalue: "yes", 
+              text: "Car", 
+              checked: false
+            },
+            {
+              dbcolumn: "Motorbike",
+              dbvalue: "yes", 
+              text: "Motorbike", 
+              checked: false
+            }] ]
+  }
+          </pre>
+        </div>
+
         <hr />
         
         <h3><a name="cmd_numberfield">/numberfield</a></h3>
@@ -811,9 +855,25 @@
   }
           </pre>
         </div>
+
+
         <p>
           Increment can be either an integer(5) or a decimal value(3.6).Note that decimal values must be surrounded by quotes("5.5"). If not it's interpreted as an integer.
        </p>
+
+        <p> Example: </p>
+        <div class="commandspec">
+          <pre>
+  /numberfield {
+      dbcolumn: "age",
+      label: "Enter your age",
+      value: 0,
+      minimum: 0,
+      maximum: 100,
+      increment: 1
+  }
+          </pre>
+        </div>
 
         <hr />
 
@@ -839,6 +899,19 @@
           </pre>
         </div>
 
+        <p> Example: </p>
+        <div class="commandspec">
+          <pre>
+  /singleselect {
+     default_value: "-1",
+     dbcolumn: "Yes/No/maybe",
+     options: [[{dbvalue: "yes", text: "Yes", checked: true},
+               {dbvalue: "no", text: "No"},
+               {dbvalue: "maybe", text: "Maybe"}]]
+  }
+          </pre>
+        </div>
+
         <hr />
 
         <h3><a name="cmd_slider">/slider</a></h3>
@@ -856,6 +929,22 @@
       <strong>maximum</strong>: <em>Integer</em>,
       <strong>increment</strong>: <em>Integer</em>,
       <strong>select</strong>: <em>Integer</em>                                            
+  }
+          </pre>
+        </div>
+
+        <p> Example: </p>
+        <div class="commandspec">
+          <pre>
+  /slider {
+     dbcolumn: "Slider 0-6",
+     numeric: true,
+     dbtype: "int",
+     labels: [0,1,2,3,4,5,6],
+     minimum: 0,
+     maximum: 6,
+     increment: 1,
+     select: 0
   }
           </pre>
         </div>
@@ -879,6 +968,19 @@
         </div>
         
         <p>The <strong>Optional</strong> field is not required and can be left out, the default value for it is false</p>
+
+        <p> Example: </p>
+        <div class="commandspec">
+          <pre>
+  /textarea {
+     dbcolumn: "story",
+     rows: 3,
+     length: 150,
+     label: "Tell us a story",
+     text: "Enter your story here."
+  }
+          </pre>
+        </div>
         <hr />
 
         <h3><a name="cmd_textbox">/textbox</a></h3>
@@ -896,7 +998,20 @@
           </pre>
         </div>
           
-          <p>The <strong>Optional</strong> field is not required and can be left out, the default value for it is false </p>
+        <p>The <strong>Optional</strong> field is not required and can be left out, the default value for it is false </p>
+
+        <p> Example: </p>
+        <div class="commandspec">
+          <pre>
+  /textbox {
+     dbcolumn: "name",
+     label: "Enter you name",
+     linebreak: true,
+     length: 40,
+     text: "Enter your name here"
+  }
+          </pre>
+        </div>
 
         <hr />
 
