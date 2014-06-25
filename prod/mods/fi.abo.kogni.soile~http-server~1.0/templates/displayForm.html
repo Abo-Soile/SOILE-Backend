@@ -12,12 +12,9 @@
 				{markup}
 			</textarea>
 			<button id="renderform" data-dojo-type="dijit/form/Button" type="button">	Update Form
-  			<!--<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
-      			require(["dojo/dom"], function(dom){
-            	dom.byId("markup").innerHTML += "Thank you! ";
-			        });
-			    </script>-->
 			</button>
+			
+			<div id="error-message-lower" style="visibility: hidden;" class="alert alert-danger"> </div>
 			<div id="result2"></div>
 		</div>
 		<div class="col-md-7" id="renderWindow">

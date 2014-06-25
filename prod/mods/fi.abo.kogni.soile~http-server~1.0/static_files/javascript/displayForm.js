@@ -26,10 +26,11 @@ require(["dijit/form/Button",
 
 	var markup = dom.byId("markup");
 	markup = registry.byId("markup");
-	var renderForm = dom.byId("renderform");
+	var renderForm = registry.byId("renderform");
 	var renderWindow = dom.byId("renderWindow");
 
 	var errorFrame = dom.byId("error-message");
+	var errorFrameLower = dom.byId("error-message-lower")
 
 	var contentPane = new ContentPane({
 			content:"This is a contentpane"
@@ -39,7 +40,11 @@ require(["dijit/form/Button",
 	on(renderForm, "click", function() {
 		console.log("posting data");
 
+		renderForm.set('label', 'Saving and rendering form');
+		renderForm.setDisabled(true);
+
 		errorFrame.innerHTML = "";
+		errorFrameLower.innerHTML = "";
 		domStyle.set("error-message", "visibility", "hidden");
 
 		request.post("",{
@@ -47,10 +52,15 @@ require(["dijit/form/Button",
 
 		}).then(function(reply){
 			/*Parsing json*/
+			renderForm.set('label', 'Update Form');
+			renderForm.setDisabled(false);
+
 			jsonData = json.parse(reply);
 			if(jsonData.hasOwnProperty('error')) {
 				errorFrame.innerHTML = jsonData.error;
+				errorFrameLower.innerHTML = jsonData.error;
 				domStyle.set("error-message","visibility","visible");
+				domStyle.set("error-message-lower","visibility","visible");
 			}else {
 				/*updating the div with the new form*/
 				//var renderedForm = jsonData.data;
