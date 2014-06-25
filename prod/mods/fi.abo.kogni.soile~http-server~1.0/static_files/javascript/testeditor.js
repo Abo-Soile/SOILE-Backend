@@ -61,6 +61,7 @@ function(dom,
 
 		var submitButton = registry.byId("compileButton");
 		var runButton = registry.byId("runButton");
+		runButton.setDisabled(true);
 		// var codeBox = registry.byId("code");
 		var errorBox = dom.byId("errorbox");
 		var logger = document.getElementById('log');
@@ -159,6 +160,8 @@ function(dom,
 
 		on(compileButton, "click", function() {
 			console.log("compile");
+			runButton.setDisabled(true);
+			compileButton.setText("Compiling...");
 			
 			//var code = {"code":codeBox.get("value")};
 			var code = {"code":editor.getValue()};
@@ -180,6 +183,7 @@ function(dom,
 				}else {
 					domClass.add(errorBox,"hidden");
 					compiledCode = data.code;
+					runButton.setDisabled(false);
 				}
 
 			})
