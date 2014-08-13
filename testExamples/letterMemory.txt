@@ -1,0 +1,367 @@
+# Loading images
+gvar crosshair <- imagefile("http://ocean.danielwarna.com:8081/testimages/a578c12d-4951-488d-90a6-e230b10950fa/crosshair.jpg") 
+gvar fortsatt <- imagefile("http://ocean.danielwarna.com:8081/testimages/ad088132-438f-4a4f-a65a-dafc6b6c4bea/fortsatt.png") 
+
+#gvar rounds <- 4
+gvar clicked <- false
+
+# Defining position to avoid repetition later
+val center <- {top:200 left:500}
+val leftpos <- {top:200 left:200}
+val rightpos <- {top:200 left:600}
+
+val upPos <- {top:100 left:500}
+val downPos <- {top:300 left:500}
+
+val keypadpos <- {top:350 left:400}
+val rectpos <- {top:345 left:395}
+
+# Defining globals
+gvar userinput <- "a"
+gvar in <- ""
+
+# How long should a letter be shown
+gvar delay <- 1500
+
+# The box that goes around the input
+gvar inputBox <- rectangle(210 60 2)
+
+# The roccect answer is shown only on the first letterserie so we should track this
+gvar firstSerie <- true
+
+function click(a)
+  helptext(a)
+  clicked <- true
+end
+
+# First phase, showing instructions to user
+intermezzo-phase Start
+  wait(seconds(2))
+  
+  # Showing instructions
+  showmsg("I denna uppgift ser du serier med bokstäver som visas ett i taget på datorskärmen. Din uppgift är att hela tiden hålla i minnet de fyra senaste siffrorna. Bokstavsserierna kan vara mycket långa, så försök att hela tiden hålla i minnet endast de fyra sista bokstäverna som presenterats i exakt den ordning de visats. Då serien tar slut bör du svara vilka de sista fyra bokstäverna var med att trycka på bokstavsknapparna på ditt tangentbord. Du vet inte hur lång serien är, så du måste hela tiden vara uppmärksam. Tryck på Fortsätt för att se en demonstration av uppgiften.")
+  
+  # Showing the "Fortsätt" button
+  show(fortsatt keypadpos)
+  
+  # Activiting mouseclick on the button -> waiting until user clicks it
+  onmouseclick(fortsatt {action:resume})
+  wait(45656456465)
+  
+  # Hiding message and button and disabling clickaction
+  hidemsg()
+  hide(fortsatt)
+  onmouseclick(fortsatt)
+  
+end
+
+# Second phase, showing what the user should do throught examples
+interaction-phase Guide
+  enterphase
+    # The stimuli consists of the letter serie and the correct answer
+    setstimuli([{serie:"GLRBKS" ans:"rbks"}
+              ])
+  end
+    
+  leavephase
+    helptext("Leaving practise")
+  end
+  
+  beforeiteration
+    # Filler , iteration blocks can't be empty
+    plus(1 1)
+  end
+  
+  afteriteration
+    plus(1 1)
+    #helptext("After stimuli iteration")
+  end
+  
+  iteration
+    # Defining variables
+    var textbox <- 0
+    var s <- 0
+    var letters <- 0
+    var currentletter <- 0
+    var answer <- 0
+    var ind <- 0
+    
+    var counter <- 0
+    
+    # Showing message -> wait -> hide
+    showmsg("En ny serie börjar....")
+    wait(seconds(3))
+    hidemsg()
+    
+    # Storeing stimuli data in variables
+    s <- stimulus()
+    letters <- s.serie
+    answer <- s.ans
+  
+    # currentLetter is set to the first letter in the serie
+    currentletter <- elementatindex(letters 0)
+    
+    # While loop is run until all letters have been shown
+    while currentletter
+    do
+      # Logging
+      helptext(currentletter)
+      
+      # Showing and hiding crosshair
+      show(crosshair center)
+      wait(500)
+      hide(crosshair)
+      
+      # Creating a messagebox containing the current letter, showing and hiding it
+      textbox <- msgbox(currentletter 40)
+      show(textbox center)
+      wait(delay)
+      hide(textbox)
+      
+      # Incrementing ind with 1
+      ind <- plus(ind 1)
+      
+      # And loading the next letter, elementatindex returns false when ind is bigger than the number of letters
+      # thus ending the while-loop
+      currentletter <- elementatindex(letters ind)
+      
+      wait(50)
+      
+    end
+    
+    showmsg("Då denna fråga ställs, vet du att det är dags att svara. Bokstavsserien var G-L-R-B-K-S, de sista fyra bokstäverna var alltså R-B-K-S. Svara med att trycka på bokstavsknapparna på ditt tangentbord. Tryck först på R, sedan på B, därefter på K och slutligen på S. Kom ihåg att ordningsföljden är viktig! Du kan inte ändra på ditt svar då du tryckt på en knapp. Tryck på de angivna bokstavsknapparna och tryck sedan Här visas på Fortsätt för personens att börja övningsuppgiften.")
+    
+    # User hasn't entered enything yet, make sure that it's empty
+    userinput <- ""
+    # Showing the border around the answer
+    show(inputBox rectpos)
+    
+    # Counter starts at 0, while loop is run until count is equal to or bigger than 4
+    while lt(counter 4)
+    do
+      # Resume when the user enters the correct letter, incorrect ones are ignored
+      resumeonkey(elementatindex(answer counter))
+      
+      # Wait until user enters something
+      wait(500052352)
+      hide(textbox)
+      
+      # storing the pressed key in the variable "in"
+      in <- getlastkey()
+      
+      # Logging user input
+      helptext(append("Testing input: " in))
+      
+      # adding the recently pressed letter to the userinput variable, 
+      userinput <- append(userinput in)
+      userinput <- append(userinput " - ")
+      
+      # Adding the letter to shown message and showing it
+      textbox <- msgbox(userinput 40)
+      show(textbox keypadpos)
+      
+      helptext(userinput)
+      
+      # Adding +1 to the counter, loop won't repeat when counter equels 4
+      counter <- plus(counter 1)
+    end
+    
+    # Showing the continue button and waiting for the uset to click it
+    show(fortsatt {top:350 left:780})
+    wait(500)
+
+    onmouseclick(fortsatt {action: resume})
+    resumeonkey()
+    wait(3456334635)
+    
+    
+    # Hiding everything
+    hide(fortsatt)
+    onmouseclick(fortsatt)
+
+    hidemsg()
+    hide(inputBox)
+    hide(textbox)
+    
+    helptext("Guide over")
+  end
+end
+
+# The actual test phase
+interaction-phase Test
+
+  enterphase
+    # Setting the stimuli, all users are giventhe same serie
+    setstimuli([ 
+              {serie:"GSIEKZSI" ans:"kzsi"}
+              {serie:"MNIOPE" ans:"iope"}
+              {serie:"SJNEUAOA" ans:"uaoa"}
+              ])
+  end
+    
+  leavephase
+    helptext("Leaving practise")
+  end
+  
+  beforeiteration
+    plus(1 1)
+  end
+  
+  afteriteration
+    plus(1 1)
+    # Creating a new resultrow after each round
+    newrow()
+  end
+  
+  iteration
+    # Initiating variables
+    var tb <- 0
+    var s <- 0
+    var currentletter <- 0
+    var ind <- 0
+    var counter <- 0
+    var userans <- 0
+    
+    var ansbox <- 0
+    
+    # Preparing the user
+    showmsg("En ny serie börjar....")
+    wait(seconds(3))
+    hidemsg()
+
+    # Setting variables
+    s <- stimulus()
+    ind <- 0
+    userans <- ""
+    
+    helptext(s.serie)
+    
+    # Current letter is set to the first letter in the serie
+    currentletter <- elementatindex(s.serie 0)
+    
+    # Displaying all letters on by one until all letters have been displayed. 
+    while currentletter
+    do
+      helptext(currentletter)
+      show(crosshair center)
+      wait(500)
+      hide(crosshair)
+      
+      tb <- msgbox(currentletter 40)
+      show(tb center)
+      wait(delay)
+      hide(tb)
+        
+      ind <- plus(ind 1)
+      currentletter <- elementatindex(s.serie ind)
+      
+    end
+    
+    # All letters have been shown, preparing to accept user input
+    showmsg("Vilka var de fyra sista bokstäverna? Svara med att trycka på bokstavsknapparna på tangentbordet. Gissa även ifall du inte är helt säker, gissande avdrar inte poäng och du kanske svarar rätt. Ge ett fullständigt svar (fyra bokstäver) för att fortsätta..")
+    wait(50)
+    
+    # User input is empty at first, and the counter starts at 0
+    userinput <- ""
+    counter <- 0
+    
+    show(inputBox rectpos)
+
+    # Starting to accept input from user, one letter at the time
+    while lt(counter 4)
+    do
+      # Waiting for a keypress, 
+      onanykey(resume "onlyletters")
+      wait(500052352)
+      
+      # Stop listening for a input
+      onanykey()
+      hide(tb)
+      
+      # Storing the keypress and appening it to the user input variable
+      in <- getlastkey()
+      userinput <- append(userinput in)
+      userinput <- append(userinput " - ")
+      
+      # We're also storing the user input without any "-" inbetween for easier comparison
+      userans <- append(userans in)
+      
+      # Showing the updated inputstring to the uset
+      tb <- msgbox(userinput 40)
+      show(tb keypadpos)
+      
+      helptext(userinput)
+      
+      # +1 to counter
+      counter <- plus(counter 1)
+      
+      wait(50)
+    end
+    
+    # Showing the correct answer on the first round
+    if firstSerie
+    then
+      ansbox <- msgbox(append("Rätt svar: " s.ans) 36)
+      show(ansbox {top: 280 left:350})
+    end
+    
+    # Storing the serie, correct answer adn user provided answer in results
+    storerow("serie" s.serie)
+    storerow("svar" s.ans)
+    storerow("anvandarens svar" userans)
+    
+    # Comparing the users' answer to the correct one
+    if eq(userans s.ans)
+    then
+      # User answered correctly
+      storerow("ratt_svar" true)
+    else
+      # User anwered incorrectly
+      storerow("ratt_svar" false)
+    end
+    
+    # Showing the continuebutton
+    show(fortsatt {top:350 left:780})
+    
+    wait(500)
+    
+    # Waiting for a mouseclick on it
+    onmouseclick(fortsatt {action: resume})
+    wait(3456334635)
+    
+    # Button clicked, disabling button and hidning it
+    hide(fortsatt)
+    onmouseclick(fortsatt)
+    
+    #resumeonkey()
+    #wait(2345345345)
+    
+    # Setting firstserie to false and hiding the correct answer box. 
+    if firstSerie
+    then 
+      hide(ansbox)
+      firstSerie <- false
+    end
+    
+    # Hiding everything else in preparation for the next round
+    hide(inputBox)
+    hide(tb)
+    wait(500)
+
+  end
+end
+
+# Final phase, aggregating results
+intermezzo-phase FinalPhase
+    plus(1 1)
+    count("ratt_svar" true)
+    count("ratt_svar" false)
+end
+
+transition
+  start(Start),
+  Start -> Guide,
+  Guide -> Test,
+  Test -> FinalPhase,
+  final(FinalPhase)
+end
