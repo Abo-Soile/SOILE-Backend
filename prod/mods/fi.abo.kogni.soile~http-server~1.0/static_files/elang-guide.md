@@ -109,9 +109,9 @@ Program flow is contolled with phases and phase trasnsitions. There are two type
       # Even moar stuff
     end
     
-The interaction phase as some mandatory extra control structures, enterphase, leavephase, beforeiteration, afteriteration and iteration. Commands inside enterphase are run once when the phase starts and leavephase behaves in the same way when the phase ends.
+The interaction phase as some mandatory extra control structures, **enterphase**, **leavephase**, **beforeiteration**, **afteriteration** and **iteration**. Commands inside enterphase are run once when the phase starts and leavephase behaves in the same way when the phase ends.
 
-A set of stimuli should be defined in each iterationphase, usually in enterphase using the setstimuli() function. The set stimuli function accepts an array with stimuliobjects and iteration is run once for each object. Before and afteriteration are run before/after each iteration and can be used for example tio store data and clean up after an iteration/ prepare for the next iteration. See the stimuli topic for more information.
+A set of stimuli should be defined in each iterationphase, usually in enterphase using the setstimuli() function. The set stimuli function accepts an array (e.g. [5 3 4]) with stimuliobjects and iteration is run once for each object. Before and afteriteration are run before/after each iteration and can be used for example to store data and clean up after an iteration/ prepare for the next iteration. See the stimuli topic for more information.
     
     interaction-phase MainPhase
         enterphase
@@ -149,6 +149,59 @@ A set of stimuli should be defined in each iterationphase, usually in enterphase
     # End iteration
     # Leaving phase
     
+
+The order in which phases are run is defined in the transition block that should be placed after all phase definitions in the code. A very simple tranition definition could look like this:
+
+    transition
+      start(firstPhase),
+      firstPhase -> secondPhase,
+      secondPhase -> lastPhase,
+      final(lastPhase)
+    end
+
+The transition definition starts with the keyword **transition**, followed by a list of phase tranistion separated by a commas (**,**). The starting phase is defined first using the **start**(_phaseName_) command and the last phase is lastly defined in the same way with the **final**(_phaseName_) command. These phases (start, final) should **only** be reachable once, ie at the beginning end of the program.
+
+Phases transition are  defined in any order using the _fromPhase_ **->** _toPhase_ command, until all phases have been visited atleast once.
+
+It's also possible to include a conditional transition by adding **if** _boolean expression_ after the transition, e.g. phase1 -> phase2 if(_boolean expression_). This transition will only occure if the boolean expression returns true, making it possible to choose how a program should progress. 
+
+In the example below the phase *add_a* is repeated as long as a is less than 5, and add_a transitions into lastPhase when a is greater than 4, i.e. when it reaches 5.
+
+        gvar a <- 0
+
+        intermezzo-phase first
+          a <- 0
+        end
+
+        intermezzo-phase add_a
+            helptext(a)
+            a <- plus(a 1)
+        end
+
+        intermezzo-phase lastPhase
+            helptext("Reached lastphase")
+        end
+
+        transition
+          start(first),
+          first -> increment_a,
+          add_a -> add_a if(lt(a 5)),
+          add_a -> lastPhase if(gt(a 4)),
+          final(lastPhase)
+        end
+
+        Result:
+        0
+        1
+        2
+        3
+        4
+        Reached lastphae
+
+        Tranisitions
+        first->add_a->add_a->add_a->add_a->add_a->lastPhase
+
+**Warning:** It's up to the user to make sure that test don't end up in a so calle infinite loop, where it never reaches the final tranisiton and just repeats something _ad infinum_.
     
 ## Functions
 
