@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component inheritJdk="true">
 	<exclude-output/>
-	<contentEntry url="file://$MODULE_DIR$"/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<testFolder url="file://$MODULE_DIR$/tests"/>
+	</contentEntry>
 	<lib name="antlr-4.0-complete.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-elang/lib/antlr-4.0-complete.jar!/"/>
 	</lib>
@@ -11,4 +13,7 @@
 	<lib name="fastutil-6.5.9.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-elang/lib/fastutil-6.5.9.jar!/"/>
 	</lib>
+	<levels>
+		<level name="junit:junit:4.11" value="project"/>
+	</levels>
 </component>

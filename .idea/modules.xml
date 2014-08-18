@@ -9,7 +9,6 @@
       <module fileurl="file://$PROJECT_DIR$/soile-testing/soile-testing.iml" filepath="$PROJECT_DIR$/soile-testing/soile-testing.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-utils/soile-utils.iml" filepath="$PROJECT_DIR$/soile-utils/soile-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-verticle/soile-verticle.iml" filepath="$PROJECT_DIR$/soile-verticle/soile-verticle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/soile2-styles/soile2-styles.iml" filepath="$PROJECT_DIR$/soile2-styles/soile2-styles.iml" />
     </modules>
   </component>
 </project>
