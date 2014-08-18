@@ -10,8 +10,8 @@ echo "Fetching dependencies"
 #Dust.js templates
 if [ ! -d "fi.abo.kogni.soile~vertx-mod-template-engines~1.0
 " ]; then
-	git clone git@github.com:danielwarna/vertx-mod-template-engines.git
-
+	#git clone git@github.com:danielwarna/vertx-mod-template-engines.git
+	git clone https://github.com/danielwarna/vertx-mod-template-engines.git
 	echo "Renaming folder"
 	mv vertx-mod-template-engines $domain~vertx-mod-template-engines~$version
 fi
