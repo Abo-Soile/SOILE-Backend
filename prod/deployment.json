@@ -63,7 +63,7 @@
   },
 
   "questionnaire_markup": {
-    "templates": "./templates"
+    "templates": "./templates/questionnaire_embedded.stg"
   },
 
   "dustjs":{

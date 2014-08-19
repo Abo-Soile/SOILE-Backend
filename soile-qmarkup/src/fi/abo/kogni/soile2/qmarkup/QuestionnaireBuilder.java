@@ -11,18 +11,19 @@ import org.stringtemplate.v4.STGroup;
 import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
 import fi.abo.kogni.soile2.qmarkup.typespec.Validator;
 import fi.abo.kogni.soile2.utils.generator.UniqueStringGenerator;
-
+import org.stringtemplate.v4.STGroupFile;
 
 
 public class QuestionnaireBuilder implements QuestionnaireProcessor {
 
-    public QuestionnaireBuilder(Template template) {
+    public QuestionnaireBuilder(String template) {
         super();
         this.pendingTags = new ArrayDeque<>();
         this.tsStack = new ArrayDeque<>();
         this.bsStack = new ArrayDeque<>();
     //    this.group = template.getTemplate("questionnaire_proto.stg");
-        this.group = template.getTemplate("questionnaire_embedded.stg");
+    //    this.group = template.getTemplate("questionnaire_embedded.stg");
+        this.group = new STGroupFile(template);
         this.questionnaire = questionnaireST();
         this.spacer = group.getInstanceOf("vspacer");
         this.body = new StringBuilder();

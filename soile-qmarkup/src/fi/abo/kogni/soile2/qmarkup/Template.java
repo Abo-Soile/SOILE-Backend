@@ -1,4 +1,4 @@
-package fi.abo.kogni.soile2.qmarkup;
+/*package fi.abo.kogni.soile2.qmarkup;
 
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
@@ -18,3 +18,4 @@ public class Template {
     private String directory;
     
 }
+*/

@@ -9,7 +9,6 @@ import org.vertx.java.core.json.JsonObject;
 
 import fi.abo.kogni.soile2.qmarkup.InputReader;
 import fi.abo.kogni.soile2.qmarkup.QuestionnaireBuilder;
-import fi.abo.kogni.soile2.qmarkup.Template;
 import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
 import fi.abo.kogni.soile2.utils.generator.IdGenerator;
 import fi.kogni.abo.soile2.handlers.VerticleMessageHandler;
@@ -80,8 +79,8 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
 
         @Override
         public void init() {
-            Template template = new Template(directory);
-            this.builder = new QuestionnaireBuilder(template);
+            //Template template = new Template(directory);
+            this.builder = new QuestionnaireBuilder(directory);
             generator.seed(1024);
             generator.init();
         }
