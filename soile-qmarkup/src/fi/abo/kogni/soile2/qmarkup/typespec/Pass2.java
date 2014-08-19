@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
-import fi.abo.kogni.soile2.qmarkup.Template;
+//import fi.abo.kogni.soile2.qmarkup.Template;
 import fi.abo.kogni.soile2.qmarkup.Value;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Array_typeContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.BodyContext;
@@ -21,15 +21,16 @@ import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.ObjectContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Object_typeContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.Repeat_typeContext;
 import fi.abo.kogni.soile2.qmarkup.typespec.TypeSpecParser.TypeContext;
-
+import org.stringtemplate.v4.STGroupFile;
 
 
 public class Pass2 extends Pass {
 
     public Pass2(IdentityHashMap<ParserRuleContext, NodeData> nd) {
         super(nd);
-        Template template = new Template("./soile-qmarkup/spec");
-        tgroup = template.getTemplate("validator.stg");
+        //Template template = new Template("./soile-qmarkup/spec");
+        //tgroup = template.getTemplate("validator.stg");
+        tgroup = new STGroupFile(".//soile-qmarkup//spec//validator.stg");
         validator = tgroup.getInstanceOf("body");
         generatedTypes = new HashSet<>();
         methodSignatures = new HashMap<>();

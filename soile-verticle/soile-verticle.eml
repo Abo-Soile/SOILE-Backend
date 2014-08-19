@@ -32,12 +32,6 @@
 	<lib name="netty-all-4.0.2.Final.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/netty-all-4.0.2.Final.jar!/"/>
 	</lib>
-	<lib name="soile2-qmarkup.jar" scope="COMPILE">
-		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/soile2-qmarkup.jar!/"/>
-	</lib>
-	<lib name="soile2-utils.jar" scope="COMPILE">
-		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/soile2-utils.jar!/"/>
-	</lib>
 	<lib name="vertx-core-2.0.0-final.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/soile-verticle/lib/vertx-core-2.0.0-final.jar!/"/>
 	</lib>
