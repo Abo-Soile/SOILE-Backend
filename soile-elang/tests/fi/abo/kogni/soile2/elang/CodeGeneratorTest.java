@@ -20,16 +20,29 @@ import static org.junit.Assert.*;
 
 public class CodeGeneratorTest extends TestCase {
 
+    CodeGenerator codeGen;
+    StringBuilder code;
+    StringBuilder errors;
+
+    String templatePath = "./soile-elang/tests/resources/elang.stg";
+    STGroup templateGroup = new STGroupFile(templatePath);
+
     @Before
     public void setUp() throws Exception {
+        codeGen = new CodeGenerator(templateGroup);
 
+        code = new StringBuilder();
+        errors = new StringBuilder();
+
+        codeGen.codeOutputTo(code);
+        codeGen.errorMessagesTo(errors);
     }
 
     @After
     public void tearDown() throws Exception {
 
     }
-
+/*
     @Test
     public void testGenerate() throws Exception {
 
@@ -38,17 +51,15 @@ public class CodeGeneratorTest extends TestCase {
         //URL templatePath = this.getClass().getResource("elang.stg");
         //System.out.println(new File(templatePath.toURI()).getAbsolutePath());
 
-        String templatePath = "./soile-elang/tests/resources/elang.stg";
+        //String templatePath = "./soile-elang/tests/resources/elang.stg";
         //System.out.println(templatePath.toString());
         //String templatePath = "./tests/resources/elang.stg";
-        STGroup templateGroup = new STGroupFile(templatePath);
+        //STGroup templateGroup = new STGroupFile(templatePath);
 
-        CodeGenerator codeGen = new CodeGenerator(templateGroup);
+        //CodeGenerator codeGen = new CodeGenerator(templateGroup);
 
-        StringBuilder code = new StringBuilder();
-        StringBuilder errors = new StringBuilder();
-        codeGen.codeOutputTo(code);
-        codeGen.errorMessagesTo(errors);
+        //codeGen.codeOutputTo(code);
+        //codeGen.errorMessagesTo(errors);
 
         String codeString = readFile("./soile-elang/tests/resources/codeTest1.elang", Charset.defaultCharset());
 
@@ -57,8 +68,35 @@ public class CodeGeneratorTest extends TestCase {
 
         //System.out.println(code.toString());
         System.out.println(errors.toString());
+    }*/
+
+    @Test
+    public void testVar() throws Exception {
+
+        String codeString = readFile("./soile-elang/tests/resources/testVar.elang", Charset.defaultCharset());
+
+        StringReader input = new StringReader(codeString);
+        codeGen.generate(input);
+
+        //System.out.println(code.toString());
+        System.out.println(errors.toString());
+        assertEquals(errors.toString(), "");
+        System.out.println("Exiting variable test");
     }
 
+    @Test
+    public void testUnassignedVar() throws Exception {
+
+        String codeString = readFile("./soile-elang/tests/resources/unassignedVariable.elang", Charset.defaultCharset());
+
+        StringReader input = new StringReader(codeString);
+        codeGen.generate(input);
+
+        //System.out.println(code.toString());
+        System.out.println(errors.toString());
+        assertEquals(errors.toString(), "Variable arrs is undefined");
+        System.out.println("Exiting unassigned variable test");
+    }
     @Test
     public void testRandom() throws Exception {
         System.out.println("Random test is random");

@@ -155,7 +155,13 @@ public class SymbolTable {
     
     public String jsref(String name) {
         Symbol s = currentScope.resolve(name);
-        return (s == null? "???" : s.jsref);
+
+        if(s == null) {
+            return "???";
+        } else {
+            return s.jsref;
+        }
+        //return (s == null? "???" : s.jsref);
     }
     
     public boolean defined(String name) {
