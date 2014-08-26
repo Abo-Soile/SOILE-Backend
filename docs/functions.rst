@@ -219,6 +219,7 @@ Counts how many rows contain a specific field with a specific value.
 Computes the average value from all rows containing this field.
 
 ::
+
     #Example
     
     #Adding values to first row
@@ -245,6 +246,7 @@ Computes the average value from all rows containing this field.
     storeSingle("Single Value" 1234567)
 
 **Raw Data** 
+
 +------------+-----------+----------+------------+
 | Row Number | TestValue | Message  | ExtraValue |
 +============+===========+==========+============+
@@ -252,6 +254,7 @@ Computes the average value from all rows containing this field.
 |     2      |     5     | "Hello"  |            |
 |     3      |     14    | "Goodbye"|   "Extra"  |
 +------------+-----------+----------+------------+
+
 **Aggregate Data**
 
 +-----------------+------------------+---------------------+------------------+--------------+
