@@ -72,12 +72,16 @@ Variables
 #########
 
 Variables are containers that can store a value. A variable is created by using the approperiate keyword and assigning a value to it. "val a <- "abc" creates a variable named a that contains the value "abc". The value can then be used by using the variables name. Variable definitions should be in the beginning of a function.
-    
+
+::
+
     var a <- "abc"
     showmsg(a)  # Displays abc on the screen
 
 A existing variable can be given a new value by using the assignment operator <-. 
-    
+
+::
+
     var a <- 41  # a contains the number 41
     a <- 66      # 66 is assign to a, the old value(41) is forgotten
 
