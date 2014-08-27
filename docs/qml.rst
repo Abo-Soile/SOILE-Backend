@@ -1,5 +1,5 @@
 ===================================
-Questioneer Docs
+Questionnaire Docs
 ===================================
 
 ##########
@@ -8,11 +8,13 @@ Plain text
 
 There are several commands available to format plain text. They are the subject of this section.
 
-## Next-line arguments
+Next-line arguments
 
 When we say that a command accepts a “next-line argument,” we mean that the argument to the command is on the next line of the markup.
 
 To demonstrate, the following command could be used to produce the title of this section. (*/title* requires a next-line argument.)
+
+::
 
     /title
     Next-line arguments
@@ -23,17 +25,13 @@ Stack arguments
 
 Two commands - */ts* and */bs* - operate on **stacks**. They differ in their scope. The scope of */ts* is always a single paragraph, whereas the scope of */bs* may be several paragraphs. As it has a more restricted scope, */ts* has a higher precedence than */bs* when they conflict with each other.
 
-There are three fundamental stack operations - *push*, *pop*, and *empty*. All of these operations involve [text styles](# text styles).
+There are three fundamental stack operations - *push*, *pop*, and *empty*. All of these operations involve :ref:`text styles. <text_style_ref>`
 
 **push** places a style on top of the stack. *push* can be abbreviated as "+".
 
 **pop** removes the style off of the stack, which was inserted (i.e. pushed) last. *pop* can be abbreviated as "-"
 
 **empty** clears the whole stack; i.e., it basically calls *pop* repeatedly, until there is nothing more to *pop*. *empty* can be abbreviated as "!".
-
-.. raw:: html
-
-    <font color="blue">Blue word,</font>
 
 In the example to follow, '[]' denotes an empty stack. (Do not mistake it for an array, however.) The leftmost element is considered the top of the stack.
 
@@ -75,6 +73,8 @@ In the example to follow, '[]' denotes an empty stack. (Do not mistake it for an
 +-------------------+----------------------------------+-------------+
 | empty             |                []                |    Text     |
 +-------------------+----------------------------------+-------------+
+
+.. _text_style_ref:
 
 ###########
 Text styles

@@ -267,10 +267,3 @@ Computes the average value from all rows containing this field.
 Not implemented yet
 median(field)
 sum(field)
-
-
-======================
-RT - Runtime functions
-======================
-
-Rt functions operate within the vm and should not be called by users. They are only used to manage and run the vm.

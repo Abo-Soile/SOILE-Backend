@@ -12,7 +12,8 @@ Contents:
    :maxdepth: 3
 
    elang
-   Function Reference <functions>
+   Elang Function Reference <functions>
+   Elang Examples <elangexamples>
    qml
 
 

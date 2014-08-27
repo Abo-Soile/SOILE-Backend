@@ -19,4 +19,6 @@ prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-qmarkup.jar
 prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-utils.jar
 prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-verticle.jar
 
+docs/_build
+
 *io.vertx~mod-mongo-persistor~2.1.0/
