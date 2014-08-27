@@ -106,23 +106,27 @@ Returns the most recent keypress as a string.
 Arithmetic
 ##########
 
-Basic
-=====
-**plus(number1 number2)** number1 + number2
+Basic arithmetic operations that takes on two or more numbers as arguments, so plus(5 5 5 5) is equivalent with 5 + 5 + 5 + 5. Note that the inner function is evaluated before the outer one when performing mulitple nested operations so **multiply(2 plus(5 5)) = 2 * (5+5)** while **plus(2 multiply(5 5)) = 2 + (5*5)**.
 
-**minus(number1 number2)** number1 - number2
+**plus(number1 number2)** = number1 + number2
 
-**multiply(number1 number2)** number1 * number2
+**minus(number1 number2)** = number1 - number2
 
-**divide(number1 number2)** number1 / number2
+**multiply(number1 number2)** = number1 * number2
 
+**divide(number1 number2)** = number1 / number2
+
+#####
 Logic
-=====
-**not(boolean)**
+#####
 
-**and(bool1 bool2)**
+Basic logic functions that return a boolean value(true or false)
 
-**or(bool1 bool2)**
+**not(boolean)**  Logic NOT
+
+**and(bool1 bool2)** Logic AND
+
+**or(bool1 bool2)** logic OR
 
 **lessthan(number1 number2 _or_ lt(number1 number2))** number1 < number2
 
@@ -136,15 +140,19 @@ Arrays/String Manipulation
 
 **append(string1 string2)**
 
-Appends two strings
+Appends two strings, append("Hello " "World") = "Hello World"
 
 **lenght(object)**
 
-Returns the number of elements/letters in a array or string
-
+Returns the number of elements/letters in a array or string including whitespaces. 
 **elementatindex(object, index)**
 
-Returns the element at the specified index in the object/string, starting from zero.
+Returns the element at the specified index an array/string where the index starts from 0.
+
+::
+
+    elementatindex("Hello" 0) #= "H"
+    elementatindex("Test" 3) #= t
 
 ##############
 Random numbers
@@ -166,9 +174,11 @@ Seeds the random generator with  a value. A certain seed will always produce the
 Time and timers
 ###############
 
+Time is measured in milliseconds with a precision of +-2 milliseconds in most cases. Time is measured in Epoch time, i.e. the number of milliseconds since 00:00:00 1.1.1970.
+
 **recordts()**
 
-Returns a timestamp with the current time with millisecond precision. Timestamps can easily be compared with basic arithmetic operations.
+Returns a timestamp with the current time with millisecond precision. 
 
 **starttimer()**
 
@@ -176,7 +186,7 @@ Starts the timer.
 
 **elapsedtime()**
 
-Returns time elapsed, in ms, since the last call top starttimer. Returns 0 if no timer has been started. 
+Returns elapsed time, in ms, since the last call to starttimer. Returns 0 if no timer has been started. 
 
 ##############
 Result storage
