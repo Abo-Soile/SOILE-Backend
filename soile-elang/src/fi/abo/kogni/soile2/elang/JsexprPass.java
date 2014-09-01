@@ -244,6 +244,11 @@ public class JsexprPass extends ProcessorListenerPass {
         getNodeData(ctx).jsref = jsref;
         stExprFuncCall.remove("name");
         stExprFuncCall.remove("params");
+
+        if(name.equals("???")) {
+            addError("Function " + ctx.functionIdentifier().getText() +
+                    " on line " + ctx.start.getLine() + " is undefined");
+        }
         
         if (parentIsStatement(ctx)) {
             getNodeData(ctx.getParent()).jsref = jsref;
