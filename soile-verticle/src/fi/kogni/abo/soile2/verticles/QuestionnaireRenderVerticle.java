@@ -98,19 +98,22 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
             if(json.getString("id")==null) {
               hasID = false;
             }
+
             InputReader reader = new InputReader(markup);
             reader.addListener(builder);
             builder.questionnaireId("questionnaire-id");
             builder.encryptionKey("vr7DlZqAyY061Y9M");
+
+            ByteBuffer buffer = ByteBuffer.allocate(8);
+            buffer.putLong(0, System.currentTimeMillis());
+            generator.update(buffer);
+            String id = generator.getId();
             
             try {
                 reader.processInput();
                 builder.finish();
                 String output = builder.output();
-                ByteBuffer buffer = ByteBuffer.allocate(8);
-                buffer.putLong(0, System.currentTimeMillis());
-                generator.update(buffer);
-                String id = generator.getId();
+
                 reply.putString("id", id);
                 if (action.equals("save")){
                     saveToDisk(id, output);
@@ -126,13 +129,18 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
                 if(action.equals("render")){
                     reply.putString("form", output);
                 }
-                builder.reset();
-                generator.reset();
+
             } catch (MalformedCommandException e) {
                 reply.putString("error", e.getMessage());
-                builder.reset();
-                generator.reset();
+                if(hasID) {
+                    saveToMongo(json.getString(("id")), markup, "");
+                }else {
+                    saveToMongo(id, markup, "");
+                }
             }
+
+            builder.reset();
+            generator.reset();
 
             message.reply(reply);
         }
