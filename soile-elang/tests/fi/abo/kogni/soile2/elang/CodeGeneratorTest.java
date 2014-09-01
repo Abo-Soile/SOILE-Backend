@@ -80,7 +80,7 @@ public class CodeGeneratorTest extends TestCase {
 
         //System.out.println(code.toString());
         System.out.println(errors.toString());
-        assertEquals(errors.toString(), "Variable arrs is undefined");
+        assertEquals(errors.toString(), "Variable arrs on line 10 is undefined");
         System.out.println("Exiting unassigned variable test");
     }
 

@@ -197,7 +197,7 @@ public class JsexprPass extends ProcessorListenerPass {
         String id = ctx.identifier().getText();
         nd.jsref = getSymbolTable().jsref(id);
         if(nd.jsref.equals("???")) {
-            addError("Variable " + id + " is undefined");
+            addError("Variable " + id + " on line " + ctx.start.getLine() + " is undefined");
         }
         
         // We copy the node data from THIS context to
