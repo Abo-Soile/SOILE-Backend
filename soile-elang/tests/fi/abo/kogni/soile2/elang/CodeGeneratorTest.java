@@ -42,33 +42,19 @@ public class CodeGeneratorTest extends TestCase {
     public void tearDown() throws Exception {
 
     }
-/*
+
     @Test
     public void testGenerate() throws Exception {
-
-        System.out.println(new File(".").getAbsolutePath());
-
-        //URL templatePath = this.getClass().getResource("elang.stg");
-        //System.out.println(new File(templatePath.toURI()).getAbsolutePath());
-
-        //String templatePath = "./soile-elang/tests/resources/elang.stg";
-        //System.out.println(templatePath.toString());
-        //String templatePath = "./tests/resources/elang.stg";
-        //STGroup templateGroup = new STGroupFile(templatePath);
-
-        //CodeGenerator codeGen = new CodeGenerator(templateGroup);
-
-        //codeGen.codeOutputTo(code);
-        //codeGen.errorMessagesTo(errors);
 
         String codeString = readFile("./soile-elang/tests/resources/codeTest1.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
 
-        //System.out.println(code.toString());
+
+        assertEquals(errors.toString(), "");
         System.out.println(errors.toString());
-    }*/
+    }
 
     @Test
     public void testVar() throws Exception {
@@ -97,6 +83,29 @@ public class CodeGeneratorTest extends TestCase {
         assertEquals(errors.toString(), "Variable arrs is undefined");
         System.out.println("Exiting unassigned variable test");
     }
+
+    @Test
+    public void testUndefinedFunction() throws Exception {
+        String codeString = readFile("./soile-elang/tests/resources/undefinedFunction.elang", Charset.defaultCharset());
+        StringReader input = new StringReader(codeString);
+        codeGen.generate(input);
+
+        //System.out.println(errors.toString());
+
+        assertEquals(errors.toString(), "Function clickd on line 2 is undefined");
+    }
+
+    @Test
+    public void testAlreadyAssignedFunction() throws Exception {
+        String codeString = readFile("./soile-elang/tests/resources/alreadyAssignedFunction.elang", Charset.defaultCharset());
+        StringReader input = new StringReader(codeString);
+        codeGen.generate(input);
+
+        //System.out.println(errors.toString());
+
+        assertEquals(errors.toString(), "Cannot define function 'helptext': variable 'helptext' already defined.");
+    }
+
     @Test
     public void testRandom() throws Exception {
         System.out.println("Random test is random");
