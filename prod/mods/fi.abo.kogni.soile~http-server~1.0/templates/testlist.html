@@ -3,10 +3,21 @@
 	<div class="row">
 		<div class="col-md-8"> 
 			<form action="/test", method="POST">
-				Test Name: <input type="text" name="name">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<input type="submit" value="newTest" class="btn btn-default">
+					</span>
+					<input type="text" name="name" class="form-control" placeholder="Testname">
 
-				<input type="submit" value="newTest">
+				</div>
 			</form>
+
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" title="">Go!</button>
+                </span>
+                <input type="text" class="form-control">
+              </div>
 		</div>
 	</div>
 	<div class="row">

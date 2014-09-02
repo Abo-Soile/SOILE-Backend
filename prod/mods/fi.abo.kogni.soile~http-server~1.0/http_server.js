@@ -1675,8 +1675,11 @@ customMatcher.get('/', function(request) {
   // Admin showing admin controls
   if (request.session.isAdmin()) {
     mongo.experiment.list([], function(r) {
+      mongo.test.list(function(s) {
+        templateManager.render_template('admin', {"experiments":r.results,"tests":s.results},request);
+        //templateManager.render_template('testlist', {"tests":r.results},request);
+      });
 
-      templateManager.render_template('admin', {"experiments":r.results,"test":"This is a test"},request);
     });
   }
   else {
