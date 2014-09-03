@@ -126,7 +126,7 @@ testeditor styles
 /*Logger styles */
 #logdiv {
 	height: 200px !important;
-    overflow: scroll;
+    overflow: auto;
 }
 
 #log td:first-child {

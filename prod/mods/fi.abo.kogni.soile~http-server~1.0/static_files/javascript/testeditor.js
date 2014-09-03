@@ -80,6 +80,7 @@ function(dom,
 		function end(data) {
 			console.log("it's over");
 			console.log(data);
+			logfunc("Program exited successfully");
 		}
 
 		var logfunc = function (message) {
@@ -89,6 +90,7 @@ function(dom,
 			var timeCell = row.insertCell(0);
 			timeCell.innerHTML = timestamp/1000 + " s  ";
 			var messageCell = row.insertCell(1);
+			console.log(typeof message);
 		    if (typeof message == 'object') {
 		    	var msg = (JSON && JSON.stringify ? JSON.stringify(message) : message);
 		    	messageCell.innerHTML = msg;
