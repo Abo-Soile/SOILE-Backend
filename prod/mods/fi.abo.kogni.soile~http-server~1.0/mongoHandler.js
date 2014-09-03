@@ -27,8 +27,8 @@ var millisecondsPerDay = 1000*3600*24
 Comparing start and end dates to calculate if an experiment 
 should be active or not */
 function _isActive(experiment) {
-  sDate = new Date(experiment.startDate)
-  eDate = new Date(experiment.endDate)
+  sDate = new Date(experiment.startDate);
+  eDate = new Date(experiment.endDate);
 
   if((sDate < currentDate)&&(currentDate<eDate)) {
     experiment.active = true;
@@ -39,6 +39,16 @@ function _isActive(experiment) {
 
     if(sDate > currentDate) {
       experiment.timedata = Math.ceil((sDate - currentDate)/millisecondsPerDay);
+    }
+  }
+
+  // Experiment is inactive if no components exits
+  if(!experiment.hasOwnProperty("components")) {
+    experiment.active = false;
+  }
+  else {
+    if (experiment.components.length == 0) {
+      experiment.active = false;
     }
   }
 
