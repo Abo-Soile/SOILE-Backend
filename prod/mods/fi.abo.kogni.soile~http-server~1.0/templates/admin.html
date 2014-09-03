@@ -70,12 +70,12 @@
 				{#tests uri=URI}
 				{?compiled} 
 					<tr>
-						<td><a href="{uri}/{_id}">{name}</a> </td>
+						<td><a href="{uri}test/{_id}">{name}</a> </td>
 						<td>Compiled</td>
 					<tr>
 				{:else}
 					<tr class="danger">
-						<td><a href="{uri}/{_id}">{name}</a> </td>
+						<td><a href="{uri}test/{_id}">{name}</a> </td>
 						<td>Errors</td>
 					</tr>
 				{/compiled}
