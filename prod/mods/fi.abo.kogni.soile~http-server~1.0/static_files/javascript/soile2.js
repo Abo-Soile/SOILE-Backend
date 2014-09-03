@@ -154,7 +154,11 @@ SOILE2 = (function(){
   };
   
   bin.helptext = function(msg){
-    msg = String(msg);
+    if (typeof message == 'object') {
+      msg = (JSON && JSON.stringify ? JSON.stringify(msg) : msg);
+    } else {
+      msg = String(msg);
+    }
     if(msg.length > 0) {
         if(logFunc) {
           logFunc(msg);
