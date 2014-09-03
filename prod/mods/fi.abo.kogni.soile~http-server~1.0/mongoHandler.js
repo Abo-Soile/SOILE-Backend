@@ -42,12 +42,16 @@ function _isActive(experiment) {
     }
   }
 
+  console.log("IS ACTIVE RUNNING");
   // Experiment is inactive if no components exits
   if(!experiment.hasOwnProperty("components")) {
+    console.log("components doesn't exist");
     experiment.active = false;
   }
   else {
     if (experiment.components.length == 0) {
+          console.log("components is empty");
+
       experiment.active = false;
     }
   }
@@ -274,14 +278,18 @@ var Experiment = {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"findone", 
    "collection":"experiment","matcher":{"_id":id}},function(reply){
 
-      if(reply.result) {
+      if(reply.result) {/*
         sDate = new Date(reply.result.startDate);
         eDate = new Date(reply.result.endDate);
 
         if((sDate < currentDate)&& (currentDate < eDate)) {
           reply.result.active = true;
-        } else { reply.result.active = false}
+        } else { reply.result.active = false}*/
+
+        reply.result = _isActive(reply.result);
       }
+
+      
 
       response(reply);
 
