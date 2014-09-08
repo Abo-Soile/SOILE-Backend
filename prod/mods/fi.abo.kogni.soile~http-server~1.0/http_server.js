@@ -757,6 +757,10 @@ customMatcher.post("/experiment/new", function(request) {
     var sDate = new Date(jsonData.startDate);
     var eDate = new Date(jsonData.endDate);
 
+    if(jsonData.name === "") {
+      jsonData.name = "Unnamed experiment"
+    }
+
 
     console.log(sDate.toString());
 
