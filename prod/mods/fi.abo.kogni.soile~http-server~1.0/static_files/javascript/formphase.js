@@ -185,8 +185,8 @@ require(["dijit/form/HorizontalSlider",
       for (var key in qdata){
         if (qdata.hasOwnProperty(key)){
 
-          domConstruct.create('dt', {innerHTML: key}, 'formdata');
-          domConstruct.create('dd', {innerHTML: qdata[key]}, 'formdata');
+          domConstruct.create('li', {innerHTML: key +" = " + qdata[key]}, 'formdata');
+          //domConstruct.create('dd', {innerHTML: qdata[key]}, 'formdata');
         }
       }
     };

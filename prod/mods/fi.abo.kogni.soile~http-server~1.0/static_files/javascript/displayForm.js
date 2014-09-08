@@ -24,13 +24,19 @@ require(["dijit/form/Button",
 		ready){ 
 	ready(function() {
 
-	var markup = dom.byId("markup");
-	markup = registry.byId("markup");
+	//var markup = dom.byId("markup");
+	//markup = registry.byId("markup");
 	var renderForm = registry.byId("renderform");
 	var renderWindow = dom.byId("renderWindow");
 
 	var errorFrame = dom.byId("error-message");
 	var errorFrameLower = dom.byId("error-message-lower")
+
+	var editor = ace.edit("editor");
+	editor.setTheme("ace/theme/dawn");
+	editor.getSession().setTabSize(2);
+	editor.getSession().setUseWrapMode(true);
+	editor.setShowPrintMargin(false);
 
 	var contentPane = new ContentPane({
 			content:"This is a contentpane"
@@ -43,13 +49,14 @@ require(["dijit/form/Button",
 		renderForm.set('label', 'Saving and rendering form');
 		renderForm.setDisabled(true);
 
-		errorFrame.innerHTML = "";
+		//errorFrame.innerHTML = "";
 		errorFrameLower.innerHTML = "";
-		domStyle.set("error-message", "visibility", "hidden");
+		//domStyle.set("error-message", "visibility", "hidden");
 		domStyle.set("error-message-lower","visibility","hidden");
 
 		request.post("",{
-			data: markup.get("value")
+			//data: markup.get("value")
+			data: editor.getValue()
 
 		}).then(function(reply){
 			/*Parsing json*/
@@ -58,9 +65,9 @@ require(["dijit/form/Button",
 
 			jsonData = json.parse(reply);
 			if(jsonData.hasOwnProperty('error')) {
-				errorFrame.innerHTML = jsonData.error;
+				//errorFrame.innerHTML = jsonData.error;
 				errorFrameLower.innerHTML = jsonData.error;
-				domStyle.set("error-message","visibility","visible");
+				//domStyle.set("error-message","visibility","visible");
 				domStyle.set("error-message-lower","visibility","visible");
 			}else {
 				/*updating the div with the new form*/

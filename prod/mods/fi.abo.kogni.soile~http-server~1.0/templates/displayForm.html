@@ -2,38 +2,46 @@
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dijit/themes/claro/claro.css">
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+
 <div id="main" class="container">
 	<div class="row">
-		<div class="col-md-5"> 
-			<div id="error-message" style="visibility: hidden;" class="alert alert-danger">
+		<div class="col-md-6"> 
+			<!--<div id="error-message" style="visibility: hidden;" class="alert alert-danger">
 
 			</div>
-			<textarea data-dojo-type="dijit/form/Textarea" id="markup">
+			<!--<textarea data-dojo-type="dijit/form/Textarea" id="markup">-->
+			<div id="editor" style="height:700px;">
 				{markup}
-			</textarea>
+			</div>
+			<!--</textarea>-->
 			<button id="renderform" data-dojo-type="dijit/form/Button" type="button">	Update Form
 			</button>
 			
 			<div id="error-message-lower" style="visibility: hidden;" class="alert alert-danger"> </div>
 			<div id="result2"></div>
 		</div>
-		<div class="col-md-7" id="renderWindow">
-
+		<div class="col-md-6" >
+			<div id="renderWindow">
+				
+			</div>
 		</div>
 
 		<button data-dojo-type="dijit/form/Button" type="button" id="showData">
                     Show data
         </button>
-        <dl id="formdata"><dl>
+        <div class="col-md-6">
+        	<ul id="formdata"></ul>
+        </div>
 	</div>
 	<div class="row">
-		<div class="col-md">
+		<div class="col-md-offset-6 col-md-6">
 			<div id="contPane"> </div>
 		</div>
 	</div>
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.0/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 <script type="text/javascript" src="/javascript/displayForm.js"></script>
 <script type="text/javascript" src="/javascript/formphase.js"></script>
 <!--
