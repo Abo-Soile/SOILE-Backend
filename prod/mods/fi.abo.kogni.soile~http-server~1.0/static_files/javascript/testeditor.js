@@ -35,7 +35,7 @@ function(dom,
 	ready(function() {
 		parser.parse();
 
-		var baseTable = "<thead><tr><th>Timestamp</th><th>Message</th></tr></thead>"
+		var baseTable = "<thead><tr><th>Time</th><th>Message</th></tr></thead>"
 
 		var uploadUrl = document.URL + "/imageupload"
 		var upbutton = registry.byId("uploadButton");
