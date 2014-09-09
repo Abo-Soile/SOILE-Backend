@@ -108,8 +108,19 @@ body > .container {
 	width: 90%;
 }
 
+
 #toolButtons .btn {
 	margin-right:7px;
+	overflow: hidden;
+}
+
+#toolButtons a {
+	float: left;
+}
+
+#toolButtons form {
+	float: left;
+	width: 300px;
 }
 
 
