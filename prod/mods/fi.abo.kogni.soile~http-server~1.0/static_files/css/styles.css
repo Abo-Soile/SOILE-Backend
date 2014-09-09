@@ -123,6 +123,9 @@ body > .container {
 	width: 300px;
 }
 
+#toolButtons form .form-control {
+	height: 33px;
+}
 
 /*
 testeditor styles
