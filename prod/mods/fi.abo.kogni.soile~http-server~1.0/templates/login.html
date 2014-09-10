@@ -1,6 +1,9 @@
-  {>header /}
+{>header /}
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
 <div class="container">    
-    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-4 col-sm-5">                    
+    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-sm-6">                    
         <div class="panel panel-info" >
             <div class="panel-heading">
                 <div class="panel-title">Sign In</div>
@@ -14,7 +17,6 @@
                 {:else}
                  <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                 {/errors}
-
                     
                 <form id="loginform" class="form-horizontal" role="form" action="/login" method="post">
                             
@@ -53,10 +55,10 @@
         </div>  
     </div>
 
-    <div id="registerbox" style="margin-top:50px;" class="mainbox col-md-4 col-sm-5 col-md-offset-2 col-sm-offset-1">                    
+    <div id="registerbox" style="margin-top:50px;" class="mainbox col-md-6 col-sm-6">                    
         <div class="panel panel-info" >
             <div class="panel-heading">
-                <div class="panel-title">Register</div>
+                <div class="panel-title">Create Account</div>
 
             </div>     
 
@@ -68,43 +70,61 @@
                  <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                 {/registererrors}
 
-                    
-                <form id="registerform" class="form-horizontal" role="form" action="/signup" method="post">
-                            
-                    <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        {#username}
-                        <input id="username" type="text" class="form-control" name="email" value="{username}" placeholder="username or email">
-                        {/username}
-                        {^username}    
-                        <input id="username" type="text" class="form-control" name="email" placeholder="username or email">           
-                        {/username}
+                {#registererrors}
+                <div id="registerContainer">
+                {:else}
 
-                    </div>
+                <p> orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation   </p>
 
-                    <input id="origin" name="origin" type="hidden" value="{origin|u|s}">
+                <button class="btn btn-primary btn-block" id="showRegister">Create Account</button>
 
-                        
-                    <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        <input id="login-password" type="password" class="form-control" name="passwd" placeholder="password">
-                    </div>
+                <div id="registerContainer" style="display:none">
 
-                    <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        <input id="register-password-again" type="password" class="form-control" name="passwdAgain" placeholder="Repeat Password">
-                    </div>
-                            
-                    <input id="origin" name="origin" type="hidden" value="{origin|u|s}">
+                <script type="text/javascript">
+                    $("#showRegister").click(function() {
+                        $("#registerContainer").show("slow")
+                    })
+                </script>
 
-                    <div style="margin-top:10px" class="form-group">
-                        <!-- Button -->
+                {/registererrors}
+                
+                    <form id="registerform" class="form-horizontal" role="form" action="/signup" method="post">
+                                
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            {#username}
+                            <input id="username" type="text" class="form-control" name="email" value="{username}" placeholder="username or email">
+                            {/username}
+                            {^username}    
+                            <input id="username" type="text" class="form-control" name="email" placeholder="username or email">           
+                            {/username}
 
-                        <div class="col-sm-12 controls">
-                          <button id="btn-login" class="btn btn-success" type="submit">Register</button>
                         </div>
-                    </div>
-                </form>     
+
+                        <input id="origin" name="origin" type="hidden" value="{origin|u|s}">
+
+                            
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input id="login-password" type="password" class="form-control" name="passwd" placeholder="password">
+                        </div>
+
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input id="register-password-again" type="password" class="form-control" name="passwdAgain" placeholder="Repeat Password">
+                        </div>
+                                
+                        <input id="origin" name="origin" type="hidden" value="{origin|u|s}">
+
+                        <div style="margin-top:10px" class="form-group">
+                            <!-- Button -->
+
+                            <div class="col-sm-12 controls">
+                              <button id="btn-login" class="btn btn-success" type="submit">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>     
             </div>                     
         </div>  
     </div>
