@@ -626,6 +626,9 @@ var Test = {
 
   save: function(test,response) {
     test.compiled = false;
+    if(test.name==="") {
+      test.name = "Unnamed";
+    }
     vertx.eventBus.send(mongoAddress, {"action":"save",
     "collection":"tests","document":test}, function(reply) {
       response(reply)
