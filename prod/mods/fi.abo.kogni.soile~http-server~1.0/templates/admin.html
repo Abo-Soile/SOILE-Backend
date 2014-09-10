@@ -66,16 +66,26 @@
 					<tbody>
 					{#tests uri=URI}
 					{?compiled} 
-						<tr>
-							<td><a href="{uri}test/{_id}">{name}</a> </td>
-							<td>Compiled</td>
-						</tr>
+					<tr>
 					{:else}
-						<tr class="danger">
-							<td><a href="{uri}test/{_id}">{name}</a> </td>
-							<td>Errors</td>
-						</tr>
+					<tr class="danger">
 					{/compiled}
+
+						<td>
+					{?name}
+						<a href="{uri}test/{_id}">{name}</a> 
+					{:else}
+						<a href="{uri}test/{_id}">Name Missing</a> 
+					{/name}
+						</td>
+
+					{?compiled} 
+						<td>Compiled</td>
+					{:else}
+						<td>Errors</td>
+					{/compiled}					
+					</tr>
+							
 
 					
 					{/tests}
