@@ -82,7 +82,10 @@
 
                 <script type="text/javascript">
                     $("#showRegister").click(function() {
-                        $("#registerContainer").show("slow")
+                        
+                        $("#showRegister").hide(0,function() {
+                            $("#registerContainer").show("slow");   
+                        });
                     })
                 </script>
 

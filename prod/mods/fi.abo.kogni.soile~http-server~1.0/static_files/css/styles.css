@@ -210,6 +210,10 @@ Login
 	border-color: #E6BCF1;
 }
 
+#registerContainer {
+	margin-top: 20px;
+}
+
 /*
 User dashboard
 */
