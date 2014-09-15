@@ -225,7 +225,8 @@ function(dom,
 				console.log("adding " + components[i].id);
 				createComponentRow(components[i].id, 
 								{name:components[i].name, 
-								 type:components[i].type
+								 type:components[i].type,
+								 index:i
 								});
 			}
 		})
@@ -281,7 +282,7 @@ function(dom,
 						dialog.show();
 					}});
 
-				var deleteButton = new dijit.form.Button({
+				/*var deleteButton = new dijit.form.Button({
 				 	label:"Delete",
 				 	id:"delete:"+id,
 					onClick: function(){
@@ -292,7 +293,10 @@ function(dom,
 							}).then(function(res) {
 								construct.destroy(li);
 						})
-					}});
+					}});*/
+
+				var deleteButton = buildDeleteButton(id, opts.index, li);
+
 
 				var newWindowButton = new dijit.form.Button({
 					label:"Edit in new window",
@@ -316,7 +320,7 @@ function(dom,
 					value:opts.name
 				});
 
-				var deleteButton = new dijit.form.Button({
+				/*var deleteButton = new dijit.form.Button({
 				 	label:"Delete",
 				 	id:"delete:"+id,
 					onClick: function(){
@@ -327,12 +331,30 @@ function(dom,
 							}).then(function(res) {
 								construct.destroy(li);
 						})
-					}});
+					}});*/
+				var deleteButton = buildDeleteButton(id, opts.index, li);
 
 				construct.place(nameBox.domNode, li);
 				construct.place(deleteButton.domNode, li);
 			}
 
+		}
+		function buildDeleteButton(id, phase, li) {
+			var button = new dijit.form.Button({
+			 	label:"Delete",
+			 	id:"delete:"+id,
+				onClick: function(){
+					console.log("delete " + id + " " + phase);
+					xhr.post("deletecomponent",
+						{
+							data: json.stringify({"id":id, "index":phase})
+						}).then(function(res) {
+							construct.destroy(li);
+					})
+				}
+			});
+
+			return button;
 		}
 	});
 });

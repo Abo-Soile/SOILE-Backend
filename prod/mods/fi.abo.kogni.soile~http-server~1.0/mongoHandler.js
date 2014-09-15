@@ -510,6 +510,40 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     });
   },
 
+  deleteComponentByIndex: function(expid, index, response) {
+
+    var comp = {}
+    comp["components."+index] = 1;
+    console.log(comp);
+    var query1 =  {
+      "action":"update",
+      "collection":"experiment",
+      "criteria":{
+        "_id":expid
+      },
+      "objNew":{"$unset":comp}
+    };
+
+    var query2 = {
+      "action":"update",
+      "collection":"experiment",
+      "criteria":{
+        "_id":expid
+      },
+      "objNew":{"$pull":{"components": null}}
+    };
+
+    console.log("Deleting by component index");
+
+    vertx.eventBus.send(mongoAddress, query1, function(reply1) {
+      console.log(JSON.stringify(reply1));
+      vertx.eventBus.send(mongoAddress, query2, function(reply2) {
+        console.log(JSON.stringify(reply2));
+        response(reply2);
+       });
+    });
+  },
+
   //Returns all active experiments not in the ignore list
   list: function(ignore, response) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"find",

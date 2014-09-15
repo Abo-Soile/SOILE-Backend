@@ -950,7 +950,13 @@ customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(requ
     var jsonData = (JSON.parse(data.getString(0, data.length())));
     console.log(JSON.stringify(jsonData));
 
-    mongo.experiment.deleteComponent(expId, jsonData.id, function(r) {
+    /*mongo.experiment.deleteComponent(expId, jsonData.id, function(r) {
+      console.log(JSON.stringify(r));
+
+      request.response.end(JSON.stringify(r.result));
+    });*/
+
+    mongo.experiment.deleteComponentByIndex(expId, jsonData.index, function(r) {
       console.log(JSON.stringify(r));
 
       request.response.end(JSON.stringify(r.result));
