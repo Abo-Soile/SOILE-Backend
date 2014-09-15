@@ -1028,8 +1028,8 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
       console.log("test");
 
       mongo.test.get(phase.id, function(r2) {
-        var experimentJs = r2.result.js;
-        context.experiment = experimentJs.replace(/(\r\n|\n|\r)/gm,"");
+        var experiments = r2.result.js;
+        context.experiment = experiments.replace(/(\r\n|\n|\r)/gm,"");
 
         templateManager.render_template("testphase", context, request);
       });
