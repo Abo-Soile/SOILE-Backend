@@ -165,7 +165,9 @@ function(dom,
 						console.log("Creating test row" + data);
 	
 						createComponentRow(data.id, {"type":"test", 
-													 "name":data.name})
+													 "name":data.name,
+													 "index":Math.random()
+													})
 					}
 				});
 			}
@@ -314,7 +316,7 @@ function(dom,
 
 				console.log("Test");
 				var nameBox = new dijit.form.TextBox({
-					id:"name"+id,
+					id:"name"+id+opts.index,
 					readOnly:true,
 					disabled: true,
 					value:opts.name
@@ -342,7 +344,7 @@ function(dom,
 		function buildDeleteButton(id, phase, li) {
 			var button = new dijit.form.Button({
 			 	label:"Delete",
-			 	id:"delete:"+id,
+			 	id:"delete:"+id+phase,
 				onClick: function(){
 					console.log("delete " + id + " " + phase);
 					xhr.post("deletecomponent",
