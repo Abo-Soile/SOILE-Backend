@@ -215,8 +215,8 @@ var user = {
           }
 
           for(var i = 0; i<replyTest.results.length; i++) {
-            expIDs.push(replyForm.results[i].expId)
-            console.log("Pushing formid: " + replyForm.results[i].expId + " i: " + i)
+            expIDs.push(replyTest.results[i].expId)
+            console.log("Pushing formid: " + replyTest.results[i].expId + " i: " + i)
           }
           console.log(JSON.stringify(expIDs));
 
