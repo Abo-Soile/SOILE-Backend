@@ -26,8 +26,11 @@
 	min-height: 900px;
 	background-color: white;
 	margin-top: -20px;
+	margin-bottom: 20px;
 	padding-top: 25px;
 	box-shadow: 12px 0 30px -4px rgba(0, 0, 0, 0.2), -12px 0 30px -4px rgba(0, 0, 0, 0.2);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
 }
 
 button {
@@ -263,15 +266,43 @@ html {
 
 body {
 	/*background-color: #F8F8F8;*/
-	background-color: #F5F6F7;
+	background-color: #C6D6EE;
 	margin-bottom: 100px;
 }
 
+.navbar {
+	border-radius: 1px;
+}
+
+.navbar-default {
+	background-color: #234349;
+	border-color: #222A3A;
+}
+
+.navbar-default .navbar-brand {
+	color: white;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+	color: grey;
+}
+
+.navbar-default .navbar-text {
+	color: white;
+}
+
+.navbar-default .navbar-link {
+	color: white;
+	font-weight: bold;
+}
+
+
 #footer {
 	position: absolute;
-	bottom: 0;
+	bottom: -10;
 	width: 100%;
-	background-color: #EAEADE;
+	/*background-color: #EAEADE;*/
+	background-color: #F5F6F7;
 }
 
 #foot {
