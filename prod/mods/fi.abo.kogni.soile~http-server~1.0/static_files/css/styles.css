@@ -23,7 +23,7 @@
 }
 
 #main {
-	min-height: 900px;
+	min-height: 850px;
 	background-color: white;
 	margin-top: -20px;
 	margin-bottom: 20px;
@@ -303,6 +303,7 @@ body {
 	width: 100%;
 	/*background-color: #EAEADE;*/
 	background-color: #F5F6F7;
+	display: none;
 }
 
 #foot {
