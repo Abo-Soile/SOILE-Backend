@@ -59,7 +59,7 @@
     "host": "127.0.0.1",
     "directory": "./static_files",
     "template_folder":"templates/",
-    "debugMode":true
+    "debug":true
   },
 
   "questionnaire_markup": {

@@ -3,13 +3,12 @@ var container = require('vertx/container');
 var console = require('vertx/console');
 
 var shared_config = container.config.shared;
-var http_directory = container.config.config.directory;
 
 var utils = (function() {
 
   var addresses = shared_config.addresses;
   var directories = shared_config.directories;
-  var http_directory = container.config.config.directory;
+  var http_directory = container.config.directory;
 
   return {
 

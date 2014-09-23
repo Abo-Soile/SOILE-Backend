@@ -8,8 +8,8 @@ var templateManager = (function() {
   var eb = vertx.eventBus;
   var i, sp;
 
-  var debug = container.config.config.debug;
-  var folder = container.config.config.template_folder;
+  var debug = container.config.debug;
+  var folder = container.config.template_folder;
 
   console.log("TEMPLATEFOLDER: " + folder);
   vertx.fileSystem.readDir(folder, function(err, res) {

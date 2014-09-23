@@ -3,14 +3,14 @@ var container = require('vertx/container');
 var console = require('vertx/console');
 
 var server = vertx.createHttpServer();
+
 var config = container.config;
-var http_config = config.config;
 var shared_config = config.shared;
-var port = http_config.port;
-var host = http_config.host;
-var http_directory = http_config.directory;
-var testImages = http_config.directory + "/testimages";
-//var testImages = http_config.directory;
+var port = config.port;
+var host = config.host;
+
+var testImages = config.directory + "/testimages";
+
 //var routeMatcher = new vertx.RouteMatcher();
 
 var sessionMap = vertx.getMap("soile.session.map");
@@ -1351,7 +1351,7 @@ customMatcher.post('/test/run', function(request) {
 });
 
 customMatcher.get('/questionnaire', function(req) {
-  var file = http_directory.concat('/questionnaire.html');
+  var file = config.directory.concat('/questionnaire.html');
 
   req.response.sendFile(file);
 });
