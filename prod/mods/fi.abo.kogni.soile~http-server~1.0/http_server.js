@@ -19,6 +19,7 @@ messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 
 var a = new java.lang.String("sdfsdfs");
 console.log(a.hashCode());
+console.log(JSON.stringify(container.config));
 
 // This function returns a function that calls the requesthandler
 // which makes it possible to run arbitrary code before the request
@@ -141,6 +142,9 @@ var DEBUG = true;   //This variable could stored in configs
 //   return (arrhaystack.indexOf(needle) > -1);
 // }
 
+var utils = require("utils");
+
+/*
 var utils = (function(conf) {
 
   var addresses = conf.addresses;
@@ -229,13 +233,17 @@ var utils = (function(conf) {
 
 })(shared_config);
 
-var user = require('mongoHandler').user;
-var queryMongo = require('mongoHandler').mongoHandler;
+*/
+
+//var user = require('mongoHandler').user;
+//var queryMongo = require('mongoHandler').mongoHandler;
 
 var mongo = require('mongoHandler');
+mongo.mongoHandler.init();
 
-queryMongo.init();
+var templateManager = require('templateManager');
 
+/*
 var templateManager = (function(folder) {
   var templates = [];
   var isLoaded = false;
@@ -309,7 +317,7 @@ var templateManager = (function(folder) {
     }
   };
 
-})(http_config.template_folder);
+})(http_config.template_folder);*/
 
 
 //Ugly hack to make sure that the template module is online before loading
@@ -341,6 +349,9 @@ var read_khtoken = (function() {
   };
 })();
 
+var sessionManager = require("sessionManager").sessionManager;
+
+/*
 var sessionManager =  {
 
   cookies: null,
@@ -490,6 +501,7 @@ var sessionManager =  {
   }
 
 };
+*/
 
 //Injects session code that is run before the actual request
 //It would probably be best to generalize this abit more to make it extendable
