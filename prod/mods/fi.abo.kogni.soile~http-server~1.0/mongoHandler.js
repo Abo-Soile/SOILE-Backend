@@ -560,6 +560,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   },
 
   save: function(exp,response){
+    exp.deleted = false;
     vertx.eventBus.send(mongoAddress, {"action":"save", 
       "collection":"experiment", "document":exp}, function(reply){
         response(reply);
@@ -660,6 +661,7 @@ var Test = {
 
   save: function(test,response) {
     test.compiled = false;
+    test.deleted = false;
     if(test.name==="") {
       test.name = "Unnamed";
     }
