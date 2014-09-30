@@ -11,7 +11,7 @@ var templateManager = (function() {
   var debug = container.config.debug;
   var folder = container.config.template_folder;
 
-  console.log("TEMPLATEFOLDER: " + folder);
+  console.log("TEMPLATEFOLDER: " + folder + "DEBUG MODE: " + debug);
   vertx.fileSystem.readDir(folder, function(err, res) {
     for (i = 0; i < res.length; i++) {
       sp = res[i].lastIndexOf("/") + 1;
@@ -55,7 +55,7 @@ var templateManager = (function() {
 
       console.log(JSON.stringify(data));
 
-      if (!isLoaded || this.debug) {
+      if (!isLoaded || debug) {
         this.load_template(templateName);
         vertx.setTimer(500, function() {
           eb.send("dust.render", {"name": templateName, "context": data}, function(reply) {
