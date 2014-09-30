@@ -1,4 +1,5 @@
 require(["dojo/dom",
+		"dbootstrap",
 		"dojo/dom-construct",
 		"dojo/parser", 
 		"dijit/form/TextBox",
@@ -14,6 +15,7 @@ require(["dojo/dom",
 		"dijit/form/FilteringSelect",
 		"dojo/ready"],
 function(dom,
+		dbootstrap,
 		construct,
 		parser,
 		TextBox,
@@ -301,7 +303,7 @@ function(dom,
 
 
 				var newWindowButton = new dijit.form.Button({
-					label:"Edit in new window",
+					label:"in new window",
 					onClick: function() {
 						window.open("/questionnaire/mongo/"+id)
 					}
@@ -309,8 +311,8 @@ function(dom,
 
 				construct.place(nameBox.domNode, li);
 				construct.place(editButton.domNode, li);
-				construct.place(deleteButton.domNode,li)
 				construct.place(newWindowButton.domNode, li);
+				construct.place(deleteButton.domNode,li)
 			}
 			else if(opts.type === "test") {
 
@@ -343,8 +345,9 @@ function(dom,
 		}
 		function buildDeleteButton(id, phase, li) {
 			var button = new dijit.form.Button({
-			 	label:"Delete",
+			 	label:"<span class='glyphicon glyphicon-remove-circle'></span>Delete ",
 			 	id:"delete:"+id+phase,
+			 	"class":"btn btn-danger",
 				onClick: function(){
 					console.log("delete " + id + " " + phase);
 					xhr.post("deletecomponent",

@@ -46,7 +46,7 @@ require(["dijit/form/Button",
 	on(renderForm, "click", function() {
 		console.log("posting data");
 
-		renderForm.set('label', 'Saving and rendering form');
+		renderForm.set('label', ' <i class="fa fa-spinner fa-spin"></i> Saving and rendering form ');
 		renderForm.setDisabled(true);
 
 		//errorFrame.innerHTML = "";

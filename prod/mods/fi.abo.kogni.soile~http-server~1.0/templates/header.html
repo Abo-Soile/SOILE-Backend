@@ -11,9 +11,11 @@
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.0/dijit/themes/soria/soria.css">
 
+    <!--<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.0/dijit/themes/soria/soria.css">-->
+    <link rel="stylesheet" type="text/css" href="/javascript/dbootstrap/theme/dbootstrap/dbootstrap.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Bootstrap3 theme -->
 <!--     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css"> -->
@@ -25,14 +27,15 @@
       var dojoConfig = {
         baseUrl: "/javascript/",
         packages: [
-          {name: "myWidgets", location:"myWidgets"}
+          {name: "myWidgets", location:"myWidgets"},
+          {name: "dbootstrap", location:"dbootstrap"}
         ]   
       }
     </script>
 
     </head>
 
-    <body class="soria">
+    <body class="dbootstrap">
     <nav class="navbar navbar-default" role="navigation">
       <div class="container">
         <a class="navbar-brand" href="/">Soile</a>

@@ -4,13 +4,14 @@
 
 <div class="container" id="main">    
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-sm-6">                    
-        <div class="panel panel-info" >
-            <div class="panel-heading">
+        <div class="panel panel-centered" >
+            <h4>Sign in</h4>
+            <!--<div class="panel-heading">
                 <div class="panel-title">Sign In</div>
                 <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
-            </div>     
+            </div>-->     
 
-            <div style="padding-top:30px" class="panel-body" >
+            <div style="padding-top:20px" class="panel-body" >
 
                 {#errors}
                 <div id="login-alert" class="alert alert-danger col-sm-12">{errors}</div>
@@ -56,12 +57,14 @@
     </div>
 
     <div id="registerbox" style="margin-top:50px;" class="mainbox col-md-6 col-sm-6">                    
-        <div class="panel panel-info" >
+        <div class="panel panel-centered panel-fancy" >
+            <!--
             <div class="panel-heading">
                 <div class="panel-title">Create Account</div>
 
             </div>     
-
+            -->
+            <h4> Create Account</h4>
             <div style="padding-top:30px" class="panel-body" >
 
                 {#registererrors}
@@ -123,7 +126,7 @@
                             <!-- Button -->
 
                             <div class="col-sm-12 controls">
-                              <button id="btn-login" class="btn btn-success" type="submit">Register</button>
+                              <button id="btn-login" class="btn btn-success" type="submit">Create Account</button>
                             </div>
                         </div>
                     </form>

@@ -41,7 +41,7 @@ function(dom,
 		var upbutton = registry.byId("uploadButton");
 
 		var uploader = new dojox.form.Uploader({
-			label:"Select images to upload",
+			label:"Select images to upload <i class='fa fa-cloud-upload'></i> ",
 			multiple: true,
 			url:uploadUrl,
 			uploadOnSelect: true
@@ -135,8 +135,8 @@ function(dom,
 			});
 
 			var deleteButton = new dijit.form.Button({
-				label:"",
-				iconClass:'dijitCommonIcon dijitIconDelete',
+				label:"<i class='fa fa-times'></i>",
+				/*iconClass:'dijitCommonIcon dijitIconDelete',*/
 				onClick: function() {
 					var url = window.location.href + "/imageupload/"+name 
 					var xhrArgs = {
@@ -166,7 +166,7 @@ function(dom,
 		on(compileButton, "click", function() {
 			console.log("compile");
 			runButton.setDisabled(true);
-			submitButton.set("label","Compiling...");
+			submitButton.set("label","<i class='fa fa-spinner fa-spin'></i> Compiling...");
 			
 			//var code = {"code":codeBox.get("value")};
 			var code = {"code":editor.getValue()};
@@ -175,13 +175,18 @@ function(dom,
 				data: json.stringify(code)
 			}).then(function(data) {
 				data = json.parse(data);
-				submitButton.set("label","Save&Compile");
+				submitButton.set("label","Save&Compile</i>");
 
 				if(data.errors) {
 					var err = "";
 
 					for(var i=0;i<data.errors.length; i++) {
-						err += "<p>" + data.errors[i] + "</p>"
+						if(i===0) {
+							err += "<p><i class='fa fa-exclamation-triangle'></i> " + 
+									data.errors[i] + "</p>";
+						}else {
+							err += "<p>" + data.errors[i] + "</p>"
+						}
 					}
 					errorBox.innerHTML = err;
 					domClass.remove(errorBox, "hidden");

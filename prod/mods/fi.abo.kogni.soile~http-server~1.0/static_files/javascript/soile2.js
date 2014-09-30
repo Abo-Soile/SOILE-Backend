@@ -1287,6 +1287,7 @@ SOILE2 = (function(){
 
     var d = soile2.rt.dataHandler.getData();
 
+    console.log("The end");
     endFunc(soile2.rt.dataHandler.getData());
   }
   

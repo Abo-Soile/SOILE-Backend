@@ -27,7 +27,7 @@
 	background-color: white;
 	margin-top: -20px;
 	margin-bottom: 20px;
-	padding-top: 25px;
+	padding-top: 10px;*/
 	box-shadow: 12px 0 30px -4px rgba(0, 0, 0, 0.2), -12px 0 30px -4px rgba(0, 0, 0, 0.2);
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
@@ -199,12 +199,17 @@ testeditor styles
 	list-style-type: none;
 	list-style-position: outside;
 	padding-left: 0;
+	margin-left: 0;
 }
 
 
 #imagelist img {
 	height: 30px;
 	width: 30px;
+}
+
+#imagelist li span .dijitButtonNode {
+	padding: 5px 8px !important;
 }
 
 /*
@@ -238,17 +243,27 @@ User dashboard
 	box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.25);
 }
 
-.userlist {
+.panel {
 	background-color: white;
 	margin-top: 15px;
 	box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.25);
+	border: none;
 }
 
-.userlist > h4 {
+.panel > h4 {
 	background-color: #464852;
 	padding:10px;
 	color: white;
 	margin-top: 0px;
+}
+
+.panel-fancy > h4 {
+	background-color: #428bca;
+	color: #ffffff
+}
+
+.panel-centered > h4{
+	text-align: center;
 }
 
 #userdetails{
@@ -333,3 +348,76 @@ body {
 	overflow: auto;
 	padding-left: 5px;
 }
+
+
+/*Overriding dojo buttons*/
+
+.customDojo #main .dijitButton .dijitButtonNode {
+	display: block;
+	padding: 6px 14px;
+	background-color: rgba(0,0,0,0.0);;
+	background-image: none;
+	color: inherit;
+}
+
+.customDojo #main .dijitButton {
+	background-image: none;
+}
+
+.customDojo #main .dijitButton:hover {
+	background-image: none;
+	color: #333;
+	background-color: #EEEEEE;
+}
+
+.customDojo #main .dijitButton .dijitReset {
+	background-color: rgba(0,0,0,0.0);
+}
+
+.customDojo #main .btn {
+	color: #fff;
+}
+
+.customDojo #main .btn:hover {
+	color: #fff;
+}
+
+.customDojo #main .btn .dijitButtonNode {
+	border: none;
+}
+
+/*.customDojo #main .btn-primary {
+	color: #fff;
+}*/
+
+.customDojo #main .btn-primary:hover {
+	background-color: #3276b1;
+	border-color: #285e8e;
+}
+
+.customDojo #main .btn-success:hover {
+	background-color: #5cb85c;
+	border-color: #4cae4c;
+}
+
+.customDojo #main .btn-info:hover {
+	background-color: #31b0d5;
+	border-color: #269abc;
+}
+
+.customDojo #main .btn-warning:hover {
+	background-color: #ec971f;
+	border-color: #d58512;
+}
+
+.customDojo #main .btn-danger:hover {
+	background-color: #c9302c;
+	border-color: #ac2925;
+}
+
+
+/*Experiment editor*/
+
+#componentlist li {
+	padding-left: 30px;
+} 
