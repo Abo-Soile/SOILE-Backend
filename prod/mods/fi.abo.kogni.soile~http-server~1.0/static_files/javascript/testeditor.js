@@ -66,6 +66,7 @@ function(dom,
 		// var codeBox = registry.byId("code");
 		var errorBox = dom.byId("errorbox");
 		var logger = document.getElementById('log');
+		var datatable = document.getElementById('dataTable');
 
 		var soileStartTime = 0;
 
@@ -80,6 +81,47 @@ function(dom,
 		function end(data) {
 			console.log("it's over");
 			console.log(data);
+			var set = new Object();
+
+			for (var i = 0; i<data.rows.length; i++) {
+				for(j in data.rows[i]) {
+					set[j] = {valid:true, data:[]};
+				}
+			};
+
+			console.log(set)
+
+			for (var i = 0; i<data.rows.length; i++) {
+				for(s in set) {
+					if ( data.rows[i].hasOwnProperty(s) ) {
+						set[s].data.push(data.rows[i][s])
+					}else {
+						set[s].data.push("-");
+					}
+				}
+			};
+
+			var rowCount = data.rows.length;
+			var table = "<thead><tr>"
+
+			for(col in set) {
+				table += "<th>"+col+"</th>"
+			}
+			table += "</tr></thead><tbody>"
+			for (var i = 0; i<rowCount; i++) {
+				table += "<tr>"
+				for(col in set) {
+					table += "<td>"+set[col].data[i]+"</td>";
+				}
+				table += "</tr>"
+			};
+			table += "</tbody>"
+			
+			datatable.innerHTML = table;
+
+			console.log(s);
+
+
 			logfunc("Program exited successfully");
 		}
 
@@ -90,7 +132,7 @@ function(dom,
 			var timeCell = row.insertCell(0);
 			timeCell.innerHTML = timestamp/1000 + " s  ";
 			var messageCell = row.insertCell(1);
-			console.log(typeof message);
+
 		    if (typeof message == 'object') {
 		    	var msg = (JSON && JSON.stringify ? JSON.stringify(message) : message);
 		    	messageCell.innerHTML = msg;
