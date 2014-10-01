@@ -227,7 +227,7 @@ var mouseMove = function (e){
 	var displayRect = display.getBoundingClientRect()
     x=e.clientX - displayRect.left + 0.5;
     y=e.clientY - displayRect.bottom + displayRect.height;
-    cursor="Mouse Position: Top " + y + " Left: " + x ;
+    cursor="Mouse Position: Top " + y.toFixed(0) + " Left: " + x.toFixed(0) ;
     mousePos.innerHTML=cursor
 }
 
