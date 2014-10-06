@@ -429,8 +429,33 @@ customMatcher.get("/experiment", function(request){
 });
 
 
+/*
+Creates a new empty experiment and redirects the user to the new 
+experiments' edit page
+*/
 customMatcher.get("/experiment/new", function(request){
-  templateManager.render_template("experimentform", {},request);
+  //templateManager.render_template("experimentform", {},request);
+
+
+  var sDate = Date.now()
+  var eDate = Date.now() + (1000*60*60*24*14)  //14 days in the future
+
+  var expData = {};
+
+  expData.name =  "";
+  expData.startDate = new Date(sDate);
+  expData.endDate = new Date(eDate);
+
+  mongo.experiment.save(expData, function(r){
+      console.log(JSON.stringify(r));
+      var resp = {
+        "status":"ok",
+        "id":r._id
+      };
+      request.redirect("/experiment/"+r._id+"/edit");
+      request.response.end();
+
+    });
 });
 
 

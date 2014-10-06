@@ -35,7 +35,16 @@
 				</thead>
 				{#experiments uri=URI}
 					<tr>
-						<td><a href="{uri}experiment/{_id}"/>{name}</td>
+						<td>
+							<a href="{uri}experiment/{_id}">
+							{?name}
+								{name} 
+							{:else}
+								Unnamed Experiment
+							{/name}
+							</a>
+
+							</td>
 						{#timedata}
 							{?active}
 							<td>Closes in {timedata} days</td>
