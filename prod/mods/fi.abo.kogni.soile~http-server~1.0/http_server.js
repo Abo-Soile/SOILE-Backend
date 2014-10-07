@@ -290,6 +290,76 @@ customMatcher.post("/login", function(request) {
   });
 });
 
+customMatcher.get("/login/forgotten", function(request) {
+    templateManager.render_template("forgotten", {}, request)
+});
+
+customMatcher.post("/login/forgotten", function(request) {
+
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+    var params = data.getString(0, data.length());
+    params = utils.getUrlParams(params);
+
+    var username = params.username;
+
+    mongo.user.forgotPassword(username, function(r) {
+      console.log(JSON.stringify(r))
+
+      var templateParams = {};
+      templateParams.success = true;
+      templateParams.email = username;
+
+      //TODO actually send the email
+
+      templateManager.render_template("forgotten", templateParams, request)
+    });
+  });
+});
+
+customMatcher.get("/login/forgotten/:token", function(request) { 
+    var token = request.params().get('token');
+
+    mongo.user.getWithToken(token, function(r) {
+      console.log(JSON.stringify(r));
+      if(!r.result) {
+        request.notfound();
+      }else {
+        templateManager.render_template("resetpassword", {}, request)
+      }
+    })
+});
+
+customMatcher.post("/login/forgotten/:token", function(request) { 
+  var data = new vertx.Buffer();
+  var token = request.params().get('token');
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() { 
+    var params = data.getString(0, data.length());
+    params = utils.getUrlParams(params);
+
+    if (params.password === params.passwordAgain) {
+      mongo.user.resetPassword(token, params.password, function(r) {
+        console.log(r);
+        templateManager.render_template("resetpassword",{"success":true}, request);
+      })
+
+    }
+    else {
+      templateManager.render_template("resetpassword",{"error":"The password didn't match, please try again"}, request);
+    }
+  });
+});
+
 customMatcher.get("/logout", function(request) {
   var uname = request.session.loggedIn();
 

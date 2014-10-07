@@ -104,12 +104,20 @@ var user = {
      })
   },
 
-  get:function(userid, response) {
+  get: function(userid, response) {
     vertx.eventBus.send(mongoAddress, {"action":"findone",
       "collection":"users","matcher":{"_id":userid}},
       function(reply) {
         console.log(JSON.stringify(reply));
         response(reply.result);
+      });
+  },
+
+  getWithToken: function(token, response) {
+    vertx.eventBus.send(mongoAddress, {"action":"findone",
+      "collection":"users", "matcher":{"forgottenPasswordToken":token}},
+      function(reply) {
+        response(reply)
       });
   },
 
@@ -177,6 +185,38 @@ var user = {
           response(reply);
         }
       }
+    })
+  },
+
+  /*Generates a token that can be used to access the password reset page*/
+  forgotPassword: function(username, response) {
+    var token = java.util.UUID.randomUUID().toString();
+
+    vertx.eventBus.send(mongoAddress, {"action":"update",
+      "collection": "users",
+      "criteria": {"username":username},
+       "objNew":{"$set":{
+        "forgottenPasswordToken":token
+      }},
+      "multi":false
+    }, function(reply) {
+      console.log("Setting forgott password token for user: " + username + "to: " + token);
+      response(reply)
+    })
+  },
+
+  resetPassword: function(token, password,response) {
+    vertx.eventBus.send(mongoAddress, {"action":"update",
+      "collection":"users",
+      "criteria":{"forgottenPasswordToken":token},
+      "objNew":{"$set":{
+        "forgottenPasswordToken":"",
+        "password":_hashPassword(password)
+      }},
+      "multi":false
+    }, function(reply) {
+      console.log("Setting new password using reset token");
+      response(reply);
     })
   },
 
