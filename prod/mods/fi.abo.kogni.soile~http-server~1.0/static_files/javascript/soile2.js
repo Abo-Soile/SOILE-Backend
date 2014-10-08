@@ -960,17 +960,39 @@ SOILE2 = (function(){
   rt.stimuli = (function(){
     var _stimuli = [];
 
+    var currentInteration = true;
+
+    //Stimuli for the  current iteration
+    var _iterationStimuli = null;
+
+    //Hasmore is called at the end of an iteration to check if there's
+    //still any stimulus left, _hasMore should only be called once per iteration
     var _hasmore = function(){
+      _iterationStimuli = null;
+
+      //console.log("Running hasmore " + _stimuli.length)
+
       return _stimuli.length > 0;
     };
 
     return {
       'hasmore': _hasmore,
+      /*
+        Get stimuli returns the current stimuli in the current iteration. Calling 
+        getstimuli multiple times in an iteration will return the same result so 
+        it's not necessary to store the stimuli in another variable
+      */
       'get': function(){
-        if (_hasmore() === true) {
-          return _stimuli.pop();
-        }
-        return null;
+        //if (_stimuli.length > 0) {
+         if (_iterationStimuli === null) {
+            console.log("Popping stimuli");
+            _iterationStimuli = _stimuli.pop();
+         }
+         console.log("Returning stimuli " + _iterationStimuli);
+         return _iterationStimuli;
+
+        //}
+        //return null;
       },
       'set': function(arr){
         if (_.isArray(arr) && arr.length > 0) {
