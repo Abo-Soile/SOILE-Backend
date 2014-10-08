@@ -100,7 +100,49 @@ Runs resume() on any keypress once.
 
 **getlastkey()**
 
-Returns the most recent keypress as a string. 
+Returns the most recent keypress as a string.
+
+KeyCodes
+========
+Keys are specified using keycodes where keycode corrsepsonds to a certain key, keycodes should be defined as strings e.g. ("a"). Alphanumerical keys(a-ö 0-9) simply uses the keys letter, so the keycode "a" corresponds to the button a key on the keyboard. All other keycodes are defined in the following table.
+
++-----------+------------------------+
+|"backspace"| Backspace              |       
++-----------+------------------------+
+| "tab"     |  Tab                   |   
++-----------+------------------------+
+| "enter"   |  Enter/Return          |           
++-----------+------------------------+
+| "shift"   |  Left and Right shift  |                   
++-----------+------------------------+
+| "ctrl"    |  Left and right control|                   
++-----------+------------------------+
+| "alt"     |  Alt                   |   
++-----------+------------------------+
+| "capslock"|  Capslock              |       
++-----------+------------------------+
+| "escape"  |  Esc                   |   
++-----------+------------------------+
+| "pageup"  |  Page Up               |       
++-----------+------------------------+
+| "pagedown"|  Page Down             |       
++-----------+------------------------+
+| "end"     |  End                   |   
++-----------+------------------------+
+| "home"    |  Home                  |   
++-----------+------------------------+
+| "insert"  |  Insert                |   
++-----------+------------------------+
+| "delete"  |  Delete                |   
++-----------+------------------------+
+| "left"    |  Arrow Left            |       
++-----------+------------------------+
+| "up"      |  Arrow Up              |       
++-----------+------------------------+
+| "right"   |  Arrow Right           |           
++-----------+------------------------+
+| "down"    |  Arrow Down            |       
++-----------+------------------------+
 
 ##########
 Arithmetic

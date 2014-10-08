@@ -8,12 +8,12 @@ This document contains documentation for the experiment language.
 Structure
 #########
 
-The following structure is enforced on programs:
+The following structure/order is enforced on programs:
 
--  Val and gvar definiton block
--  Function definiton block
--  Phase definition block
--  Transition block
+1.  Val and gvar definiton block
+2.  Function definiton block
+3.  Phase definition block
+4.  Transition block
     
 **Example** ::
 
@@ -145,6 +145,23 @@ An array is a list like structure that contains a set of values in a certain ord
 Objects
 =======
 
+An object is a value that can contain mulitple values using a key value structure. An object is defined using curly brackets { }, and an simple object definition would look like this:  **var obj <- {name:"Jon Doe"}**, where *name* is the key and "Jon Doe" is the value. Value is then accessed with *obj.name* . Values in objects cannot be changed after it's been defined, but a new value can ofcourse be assigned to the variable
+
+::
+  
+  #Object example
+  var person <- {firstname:"Jon" lastname:"Doe"}
+  helptext(obj.firstname) # Logs "Jon"
+  helptext(obj.lastname)  # Logs "Doe"
+
+  # This is illegal since values can't be changes
+  person.firstname <- "Kat" #Doesn't work
+
+  # This is fine
+  person <- {firstname:"Kat" lastname:person.lastname}
+
+
+
 ######################
 Phases and transitions
 ######################
@@ -160,9 +177,9 @@ Program flow is contolled with phases and phase trasnsitions. There are two type
       # Even moar stuff
     end
     
-The interaction phase as some mandatory extra control structures, **enterphase**, **leavephase**, **beforeiteration**, **afteriteration** and **iteration**. Commands inside enterphase are run once when the phase starts and leavephase behaves in the same way when the phase ends.
+The interaction phase should be used when the same task should be repeated with slighly different input, typically when building a test where the test person repeats an tesk multiple times. The interaction phase as some mandatory extra control structures/block, **enterphase**, **leavephase**, **beforeiteration**, **afteriteration** and **iteration**. Commands inside enterphase are run once when the phase starts and leavephase behaves in the same way when the phase ends.
 
-A set of stimuli should be defined in each iterationphase, usually in enterphase using the setstimuli() function. The set stimuli function accepts an array (e.g. [5 3 4]) with stimuliobjects and iteration is run once for each object. Before and afteriteration are run before/after each iteration and can be used for example to store data and clean up after an iteration/ prepare for the next iteration. See the stimuli topic for more information.
+A set of stimuli should be defined in each interactionphase, usually in the enterphase block using the setstimuli() function. The set stimuli function accepts an array (e.g. [5 3 4]) with values and the iteration block is run once for every value specified in setstimuli. Before and afteriteration are run before/after each iteration and can be used for example to store data and clean up after an iteration/ prepare for the next iteration.
 
 ::    
 
@@ -313,3 +330,14 @@ So a function is defined with the keyword function followed by it's name. A func
     var a <- returnZero()
     # a = 0
 
+
+###############
+Getting Started 
+###############
+
+Hello Experiment
+================
+
+
+Defining stimuli
+================
