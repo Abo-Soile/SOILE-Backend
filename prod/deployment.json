@@ -1,10 +1,10 @@
 {
   "deploy": [
-    { 
+    /*{ 
       "module": "fi.abo.kogni.soile~disk-io~1.0",
       "config": "disk_io",
       "instances": 1
-    },
+    },*/
     { 
       "module": "fi.abo.kogni.soile~experiment-lang~1.0",
       "config": "experiment_language",
@@ -38,21 +38,21 @@
       "questionnaires": "./generated/questionnaire"
     },
     "addresses": {
-      "disk_io": "soile.io.disk",
+      /*"disk_io": "soile.io.disk",*/
       "experiment_language": "soile.experiment.lang",
-      "gc": "soile.gc",
+      /*"gc": "soile.gc",*/
       "questionnaire_render": "soile.workbench.questionnaire.render"
     }
   },
 
-  "disk_io": {},
+  /*"disk_io": {},*/
 
   "experiment_language": {
     "code-gen-template": "./templates/elang.stg"
   },
 
 
-  "gc": {},
+  /*"gc": {},*/
 
   "http_server": {
     "port": 8081,
