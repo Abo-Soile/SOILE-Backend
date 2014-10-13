@@ -85,7 +85,7 @@
   "mailer": {
     "address": "soile.my_mailer",
     "host": "smtp.sendgrid.net",
-    "port": "465",
+    "port": 465,
     "auth": true,
     "ssl": true,
     "username": "soile",
