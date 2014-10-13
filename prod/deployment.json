@@ -87,7 +87,7 @@
     "host": "smtp.sendgrid.net",
     "port": "465",
     "auth": true,
-    "ssl": true;
+    "ssl": true,
     "username": "soile",
     "password": "soilesendgridpassword"
   }
