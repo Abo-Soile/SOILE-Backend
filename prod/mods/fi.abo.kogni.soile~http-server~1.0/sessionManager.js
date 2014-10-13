@@ -155,4 +155,4 @@ var sessionManager =  {
 
 };
 
-module.exports.sessionManager = sessionManager;
+module.exports = sessionManager;

@@ -101,6 +101,19 @@ function requireAdmin(func) {
   };
 }
 
+function sendEmail(subject, body, address, func) {
+  var mailAddress = "soile.my_mailer";
+
+  var mail = {}
+  mail.from = "kogni@abo.fi";
+  mail.to = address;
+  mail.subject = subject;
+  mail.body = body;
+
+  vertx.eventBus.send(mailAddress, mail, func);
+
+}
+
 
 function customMatcher() {
   return;
@@ -151,6 +164,7 @@ var mongo = require('mongoHandler');
 mongo.mongoHandler.init();
 
 var templateManager = require('templateManager');
+var mailManager = require('mailManager');
 
 //Ugly hack to make sure that the template module is online before loading
 //Base templates
@@ -181,7 +195,9 @@ var read_khtoken = (function() {
   };
 })();
 
-var sessionManager = require("sessionManager").sessionManager;
+var sessionManager = require("sessionManager");
+
+//var sessionManager = require("sessionManager").sessionManager;
 
 //Injects session code that is run before the actual request
 //It would probably be best to generalize this abit more to make it extendable
@@ -315,9 +331,15 @@ customMatcher.post("/login/forgotten", function(request) {
       templateParams.success = true;
       templateParams.email = username;
 
-      //TODO actually send the email
+      var uri = request.absoluteURI() + "/" + r.token;
 
-      templateManager.render_template("forgotten", templateParams, request)
+      //TODO actually send the email
+      mailManager.passwordReset(username, uri, function(r) {
+        console.log("Reset mail sent to: " + username + " " + JSON.stringify(r));
+        templateManager.render_template("forgotten", templateParams, request)
+        
+      })
+
     });
   });
 });
@@ -464,8 +486,13 @@ customMatcher.get("/a", requireAdmin(function(request){
 }));
 
 customMatcher.get("/aa", function(request){
+  console.log("Testing sending of emails");
 
-  templateManager.render_template('landing', {"name":"Daniel Testing","test":"This is a test"},request);
+  sendEmail("testmail from aa", "This is a test email", "test@danielwarna.com", function(res) {
+    console.log("Email sent");
+    console.log(JSON.stringify(res));
+    templateManager.render_template('landing', {"name":"Daniel Testing","test":"This is a test"},request);
+  })
 
 });
 

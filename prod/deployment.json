@@ -29,6 +29,11 @@
       "module": "io.vertx~mod-mongo-persistor~2.1.0",
       "config": "mongo",
       "instances": 1
+    },
+    {
+      "module": "io.vertx~mod-mailer~2.0.0-final",
+      "config": "mailer",
+      "instances": 1
     }
   ],
 
@@ -76,6 +81,15 @@
     "host": "127.0.0.1",
     "port": 27017,
     "db_name": "soiletest"
+  },
+  "mailer": {
+    "address": "soile.my_mailer",
+    "host": "smtp.sendgrid.net",
+    "port": "465",
+    "auth": true,
+    "ssl": true;
+    "username": "soile",
+    "password": "soilesendgridpassword"
   }
 
 }

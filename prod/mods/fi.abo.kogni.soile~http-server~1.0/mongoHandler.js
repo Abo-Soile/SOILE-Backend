@@ -201,6 +201,7 @@ var user = {
       "multi":false
     }, function(reply) {
       console.log("Setting forgott password token for user: " + username + "to: " + token);
+      reply.token = token
       response(reply)
     })
   },
