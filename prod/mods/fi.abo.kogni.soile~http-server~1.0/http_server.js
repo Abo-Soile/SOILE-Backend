@@ -114,6 +114,15 @@ function sendEmail(subject, body, address, func) {
 
 }
 
+function looksLikeMail(str) {
+    var lastAtPos = str.lastIndexOf('@');
+    var lastDotPos = str.lastIndexOf('.');
+    return (lastAtPos < lastDotPos &&  // @ before last .
+      lastAtPos > 0 &&                 // Something before @
+      str.indexOf('@@') == -1 &&       // No double @
+      lastDotPos > 2 &&                // 3 chars before .com
+      (str.length - lastDotPos) > 2);  // domain = min 2 chars
+}
 
 function customMatcher() {
   return;
@@ -438,6 +447,12 @@ customMatcher.post("/signup", function(request) {
       //templateManager.render_template('signup', templateVars,request);
       templateManager.render_template('login', templateVars,request);
 
+      return;
+    }
+
+    if(!looksLikeMail(email)) {
+      templateVars.registererrors = "Enter a valid email address";
+      templateManager.render_template('login', templateVars,request);
       return;
     }
 
