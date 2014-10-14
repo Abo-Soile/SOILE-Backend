@@ -1010,6 +1010,10 @@ SOILE2 = (function(){
       },
       'set': function(arr){
         if (_.isArray(arr) && arr.length > 0) {
+          
+          //Setting current stimuli to 0
+          _iterationStimuli = null;
+
           _stimuli = soile2.bin.copydata(arr);
           _stimuli.reverse();
         }
