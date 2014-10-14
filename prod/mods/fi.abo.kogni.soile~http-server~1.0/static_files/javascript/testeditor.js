@@ -81,6 +81,11 @@ function(dom,
 		function end(data) {
 			console.log("it's over");
 			console.log(data);
+
+		/*	 This part pretty much generate a bucket for all distinct fields
+			 in the result object. These buckets are then filled sequentially
+			 so that all fields are filled int the right order and missing values
+			 are replaced with a -*/
 			var set = new Object();
 
 			for (var i = 0; i<data.rows.length; i++) {
@@ -111,15 +116,13 @@ function(dom,
 			for (var i = 0; i<rowCount; i++) {
 				table += "<tr>"
 				for(col in set) {
-					table += "<td>"+set[col].data[i]+"</td>";
+					table += "<td>"+JSON.stringify(set[col].data[i])+"</td>";
 				}
 				table += "</tr>"
 			};
 			table += "</tbody>"
 			
 			datatable.innerHTML = table;
-
-			console.log(s);
 
 
 			logfunc("Program exited successfully");
