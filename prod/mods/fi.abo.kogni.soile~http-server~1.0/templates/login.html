@@ -11,7 +11,7 @@
                 <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
             </div>-->     
 
-            <div style="padding-top:20px" class="panel-body" >
+            <div style="padding-top:20px" class="panel-body row" >
 
                 {#errors}
                 <div id="login-alert" class="alert alert-danger col-sm-12">{errors}</div>
@@ -19,8 +19,7 @@
                  <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                 {/errors}
                     
-                <form id="loginform" class="form-horizontal" role="form" action="/login" method="post">
-                            
+                <form id="loginform" class="form-horizontal col-sm-12" role="form" action="/login" method="post">
                     <div style="margin-bottom: 20px" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="username or email">                                        
@@ -32,25 +31,21 @@
                     </div>
                             
                     <input id="origin" name="origin" type="hidden" value="{origin|u|s}">
-
                        
-                     <div class="input-group col-sm-12">
-                      <div class="checkbox pull-left">
-                        <label>
-                          <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
-                        </label>
-                      </div>
-                      <div class="pull-right controls">
-                          <button id="btn-login" class="btn btn-success" type="submit">Login</button>
-                        </div>
+		    <div class="input-group col-sm-12">
+			<div class="checkbox pull-left">
+			    <label>
+				<input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
+			    </label>
+			</div>
+			<div class="pull-right controls">
+			    <button id="btn-login" class="btn btn-success" type="submit">Login</button>
+			</div>
                     </div>
-
-
 
                    <!-- <div style="margin-top:10px" class="form-group ">
                         <!-- Button 
                     </div> -->
-
 
                 </form>     
             </div>                     
