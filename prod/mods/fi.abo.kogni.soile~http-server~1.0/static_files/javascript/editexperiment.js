@@ -345,7 +345,7 @@ function(dom,
 		}
 		function buildDeleteButton(id, phase, li) {
 			var button = new dijit.form.Button({
-			 	label:"<span class='glyphicon glyphicon-remove-circle'></span>Delete ",
+			 	label:"Delete ",
 			 	id:"delete:"+id+phase,
 			 	"class":"btn btn-danger",
 				onClick: function(){

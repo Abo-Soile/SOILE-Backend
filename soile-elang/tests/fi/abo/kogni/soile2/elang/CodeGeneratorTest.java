@@ -106,6 +106,33 @@ public class CodeGeneratorTest extends TestCase {
         assertEquals(errors.toString(), "Cannot define function 'helptext': variable 'helptext' already defined.");
     }
 
+    /*
+        This test reproduces a bug in the compiler where jumps in the iteration phase are
+        incorrect, +1 bigger than they should be.
+    */
+
+    @Test
+    public void testBuggyJumps() throws Exception {
+        String codeString = readFile("./soile-elang/tests/resources/buggedJumps.elang", Charset.defaultCharset());
+
+        StringReader input = new StringReader(codeString);
+        codeGen.generate(input);
+
+        //System.out.println(errors.toString());
+    }
+
+    @Test
+    public void testBuggyJumps2() throws Exception {
+        String codeString = readFile("./soile-elang/tests/resources/buggyJumps2.elang", Charset.defaultCharset());
+
+        StringReader input = new StringReader(codeString);
+        codeGen.generate(input);
+
+        System.out.println(code.toString());
+
+        //System.out.println(errors.toString());
+    }
+
     @Test
     public void testRandom() throws Exception {
         System.out.println("Random test is random");

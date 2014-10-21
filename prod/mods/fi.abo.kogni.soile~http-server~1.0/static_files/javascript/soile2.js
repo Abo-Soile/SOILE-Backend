@@ -602,10 +602,24 @@ SOILE2 = (function(){
   
   rt.kbd = (function(){
     var name2keycode = soile2.rt.freeze({
-      "left": 37,
-      "up": 38,
-      "right": 39,
-      "down": 40,
+      "backspace": 8,
+      "tab":       9,
+      "enter":     13,
+      "shift":     16,
+      "ctrl":      17,
+      "alt":       18,
+      "capslock":  20,
+      "escape":    27,
+      "pageup":    33,
+      "pagedown":  34,
+      "end":       35,
+      "home":      36,
+      "insert":    45,
+      "delete":    46,
+      "left":      37,
+      "up":        38,
+      "right":     39,
+      "down":      40,
       "0": 48,
       "1": 49,
       "2": 50,
@@ -985,10 +999,10 @@ SOILE2 = (function(){
       'get': function(){
         //if (_stimuli.length > 0) {
          if (_iterationStimuli === null) {
-            console.log("Popping stimuli");
+            //console.log("Popping stimuli");
             _iterationStimuli = _stimuli.pop();
          }
-         console.log("Returning stimuli " + _iterationStimuli);
+         //console.log("Returning stimuli " + _iterationStimuli);
          return _iterationStimuli;
 
         //}
@@ -996,6 +1010,10 @@ SOILE2 = (function(){
       },
       'set': function(arr){
         if (_.isArray(arr) && arr.length > 0) {
+          
+          //Setting current stimuli to 0
+          _iterationStimuli = null;
+
           _stimuli = soile2.bin.copydata(arr);
           _stimuli.reverse();
         }
@@ -1101,6 +1119,8 @@ SOILE2 = (function(){
       idx = soile2.rt.pi_index.get();
       pi = soile2.rt.get_pi(idx);
       opcode = soile2.rt.pi_opcode(pi);
+
+      //console.log("Current index: " + idx + "  Instruction: " + JSON.stringify(pi) + " Params: " + pi.params);
 
       if (opcode < 0){
         // TODO
