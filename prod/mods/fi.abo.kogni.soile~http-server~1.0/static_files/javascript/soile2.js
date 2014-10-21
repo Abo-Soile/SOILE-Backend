@@ -999,10 +999,10 @@ SOILE2 = (function(){
       'get': function(){
         //if (_stimuli.length > 0) {
          if (_iterationStimuli === null) {
-            console.log("Popping stimuli");
+            //console.log("Popping stimuli");
             _iterationStimuli = _stimuli.pop();
          }
-         console.log("Returning stimuli " + _iterationStimuli);
+         //console.log("Returning stimuli " + _iterationStimuli);
          return _iterationStimuli;
 
         //}
@@ -1119,6 +1119,8 @@ SOILE2 = (function(){
       idx = soile2.rt.pi_index.get();
       pi = soile2.rt.get_pi(idx);
       opcode = soile2.rt.pi_opcode(pi);
+
+      //console.log("Current index: " + idx + "  Instruction: " + JSON.stringify(pi) + " Params: " + pi.params);
 
       if (opcode < 0){
         // TODO
