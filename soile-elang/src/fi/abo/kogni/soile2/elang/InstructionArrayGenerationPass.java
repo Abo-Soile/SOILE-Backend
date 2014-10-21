@@ -70,6 +70,8 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
         this.pendingGotos = new ArrayDeque<>();
         this.tmpidx2name = new Int2ObjectAVLTreeMap<String>();
         this.name2idx = new Object2IntAVLTreeMap<String>();
+
+        this.jumpOffset = 0;
     }
     
     public void usePhaseData(PhaseData data) {
@@ -194,6 +196,20 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
             piArray.add(undef);
             piUndef(undef);
         }
+
+        /*
+            This makes sure that the number of instructions is the same even
+            if there aren't any variable definitions in an iteration phase
+         */
+
+        else {
+            piDef(def, pfVardefs);
+            ProgramInstruction.Undef undef = new ProgramInstruction.Undef(nextIndex());
+            piArray.add(undef);
+            piUndef(undef);
+            jumpOffset -= 0;
+        }
+
         piArray.add(def);
         
         doTransitionRules(phaseName);
@@ -248,6 +264,9 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
                 blockIndex = Math.min(blockIndex, idx);
             }
         }
+        /*System.out.println(this.jumpOffset);
+        return blockIndex + this.jumpOffset;*/
+
         return blockIndex;
     }
 
@@ -487,6 +506,7 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
             String value = nodeData(varDef.expr()).jsref;
             st.addAggr("varDefs.{name, value}", name, value);
         }
+
         def.setCommand(st.render());
     }
 
@@ -677,4 +697,6 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
     private ArrayDeque<ProgramInstruction.Goto> pendingGotos;
     private Int2ObjectMap<String> tmpidx2name;
     private Object2IntMap<String> name2idx;
+
+    private int jumpOffset;
 }
