@@ -338,6 +338,25 @@ Getting Started
 Hello Experiment
 ================
 
+We'll start by creating a minimal experiment that displays "Hello World" for 3 seconds and exits.
+
+::
+  
+  intermezzo-phase hello
+    showmsg("Hello")
+    wait(3000)
+  end
+
+  intemezzo-phase world
+    showmsg("World!")
+    wait(3000)
+  end
+
+  transition
+    start(hello),
+    hello -> world,
+    final(world) 
+  end
 
 Defining stimuli
 ================
