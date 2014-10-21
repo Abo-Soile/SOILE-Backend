@@ -99,5 +99,7 @@ public class Builtin {
         builtinFunctions.add("elementatindex");
 
         builtinFunctions.add("rectangle");
+
+        builtinFunctions.add("shufflestimuli");
     }
 }
