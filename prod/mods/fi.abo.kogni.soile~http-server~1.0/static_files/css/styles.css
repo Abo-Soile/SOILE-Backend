@@ -78,6 +78,7 @@ p {
 
 #display>p  {
 	padding-left: 0px;
+	display: inline;
 }
 
 #code {

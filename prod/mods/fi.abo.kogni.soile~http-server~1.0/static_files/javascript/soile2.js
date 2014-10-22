@@ -286,8 +286,10 @@ SOILE2 = (function(){
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
         jQuery(id).removeClass("hiddenelem");
+
         if (typeof pos !== 'undefined'){
           soile2.bin.position(id, pos);
+          return;
         }
       }
     }
@@ -333,8 +335,10 @@ SOILE2 = (function(){
   
   bin.position = function(){
     var arr = Array.prototype.slice.call(arguments);
-    var id, top, left, args;
-    
+    var id, top, left, args, pos;
+
+    console.log(arr);
+
     if (arr.length < 2){
       return;
     }
@@ -356,6 +360,21 @@ SOILE2 = (function(){
     else if (args.length > 1){
       left = args[0];
       top = args[1];
+    }
+
+    if (args[0] === "center") {
+      var imgWidth, imgHeight;
+      imgWidth = jQuery(id).width();
+      imgHeight = jQuery(id).height();
+
+      var posLeft = (jQuery("#display").width()/2) - (imgWidth/2);
+      var posTop = (jQuery("#display").height()/2) - (imgHeight/2);
+
+      left = posLeft;
+      top = posTop;
+
+      console.log("width: " + imgWidth + " height " + imgHeight);
+      //soile2.bin.position(id, {"top":posTop, "left":posLeft})
     }
     
     if (soile2.util.is_number(top) && soile2.util.is_number(left)){

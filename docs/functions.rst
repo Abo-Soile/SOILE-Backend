@@ -13,6 +13,9 @@ Display positions are defined as the number of pixels from the top-left corner o
 **show(displayobject position)**
 Displays an object at the specified position.
 
+**show(displayobject "center")**
+Displays the object at the absolute center of the screen. 
+
 **hide(displayobject)**
 Hides the specified object.
 
