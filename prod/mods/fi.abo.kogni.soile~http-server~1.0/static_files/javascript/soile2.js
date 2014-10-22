@@ -462,6 +462,10 @@ SOILE2 = (function(){
 
   bin.shufflestimuli = function() {
     soile2.rt.stimuli.shuffle();
+  };
+
+  bin.pickstimulisubset= function(count) {
+    soile2.rt.stimuli.subset(count)
   }
   
   bin.length = function(o){
@@ -1037,7 +1041,18 @@ SOILE2 = (function(){
             _stimuli[index] = temp;
           }
         }
-      }
+      },
+      //Randomly remove stimuli until x are left
+      'subset':function(stimuliCount) {
+        this.shuffle();
+        if(stimuliCount < _stimuli.length) {
+          var removeCount = _stimuli.length - stimuliCount
+          for (var i = 0; i < (removeCount); i++) {
+            _stimuli.pop(0);
+            console.log("Popping stimuli " + i);
+          };
+        }
+      } 
     };
   })();
   

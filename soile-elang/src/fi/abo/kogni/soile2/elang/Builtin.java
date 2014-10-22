@@ -101,5 +101,6 @@ public class Builtin {
         builtinFunctions.add("rectangle");
 
         builtinFunctions.add("shufflestimuli");
+        builtinFunctions.add("pickstimulisubset");
     }
 }
