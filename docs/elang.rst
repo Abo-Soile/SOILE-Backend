@@ -123,11 +123,11 @@ Strings
 A string is a sequence of characters defined by being surrounded by " ". For example "This is a string".
 
 Lists
-======
+=====
 A list is a list like structure that contains a set of values in a certain order. A list is defined with space separated values surrounded by square brackets, eg. ** var list <- [1 5 10 15 20]. Accessing of a individual value in the list is done with list[index] where index is a number corresponding to the values position in the list starting from 0.´So list[0] corresponds to the value 1 while list[3] corresponds to 15. The lists values and indexes is shown in the table below. 
 
 +-------+---+---+----+----+----+
-| list | 1 | 5 | 10 | 15 | 20 |
+| list  | 1 | 5 | 10 | 15 | 20 |
 +-------+---+---+----+----+----+
 | index | 0 | 1 | 2  | 3  | 4  |   
 +-------+---+---+----+----+----+
@@ -173,6 +173,7 @@ Program flow is contolled with phases and phase transitions. There are two types
 
 An simple intermezzophase is shown below. This phase, named helloPhase, displays a simple greeting to the user and quites after that. 
 ::
+
     #Simple intermezzo phase definition
     intermezzo-phase helloPhase
       showmsg("Hello")
@@ -190,6 +191,7 @@ The interaction phase should be used when the same task is repeated with slighly
 
 A minimal interaction-phase definition would look like this:
 ::
+
     interaction-phase simpleInteraction
       iteration
         showmsg(stimulus())
@@ -201,6 +203,7 @@ There's two things that separate this from the intermezzo-phase. The *iteration*
 
 We could expand the interactionphase a little by storing objects in the list instead of strings, for example [{message:"Hello" time:2} {message:"How are you today" time:4}, and changing the iteration block a little:
 ::
+
     interaction-phase simpleInteraction
       iteration
         showmsg(stimulus().message)
@@ -213,7 +216,8 @@ Our phase will now do the same thing as the intermezzo-phase we looked at above.
 
 
 The interaction phase as some extra control structures, **enterphase**, **leavephase**, **beforeiteration**, **afteriteration** and **iteration**. Commands inside enterphase are run once when the phase starts and leavephase is run once at the end of the whole iteration phase. Before and after iteration is run before/after each time the iteration step is run.
-::    
+::
+
     interaction-phase MainPhase
         enterphase
             showmsg("Entering phase")
