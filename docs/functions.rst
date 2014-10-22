@@ -5,6 +5,13 @@ Function Reference
 Elang comes with a set of built in functions for performing common tasks. These functions are pretty much necessary when building tests so it's usefull to be familiar with them. 
 
 #######
+Stimuli
+#######
+
+Stimu
+
+
+#######
 Display
 #######
 
@@ -83,7 +90,7 @@ Runs the specified function on all keypresses.
 
 **onanykey(func ignore="")**
 
-Executes the specified function when any keyboeard key except keys specified ignore are pressed. Ignored keys should be sent as an array of individual keynames, for example ["a" "enter"] ignores the keys **a** and **enter**, see the keycode table for the correct key names. 
+Executes the specified function when any keyboeard key except keys specified ignore are pressed. Ignored keys should be sent as a list of individual keynames, for example ["a" "enter"] ignores the keys **a** and **enter**, see the keycode table for the correct key names. 
 
 
 Ignore can also accept a special command "onlyletters" which ignores everything but a-z.
@@ -179,8 +186,8 @@ Basic logic functions that return a boolean value(true or false)
 
 **equal(number1 number2) _or_ eq(number1 number2)** number1 == number2
 
-##########################
-Arrays/String Manipulation
+#########################
+lists/String Manipulation
 ##########################
 
 **append(string1 string2)**
@@ -189,10 +196,10 @@ Appends two strings, append("Hello " "World") = "Hello World"
 
 **lenght(object)**
 
-Returns the number of elements/letters in a array or string including whitespaces. 
+Returns the number of elements/letters in  list or string including whitespaces. 
 **elementatindex(object, index)**
 
-Returns the element at the specified index an array/string where the index starts from 0.
+Returns the element at the specified index a list/string where the index starts from 0.
 
 ::
 

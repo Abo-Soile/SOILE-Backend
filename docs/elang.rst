@@ -108,7 +108,7 @@ There are three different types of variables;
 Values
 ######
 
-Elang supports 5 different values or data types; boolean values, numbers, strings, arrays and objects.
+Elang supports 5 different values or data types; boolean values, numbers, strings, lists and objects.
 
 Boolean
 =======
@@ -122,12 +122,12 @@ Strings
 =======
 A string is a sequence of characters defined by being surrounded by " ". For example "This is a string".
 
-Arrays
+Lists
 ======
-An array is a list like structure that contains a set of values in a certain order. An array is defined with space separated values surrounded by square brackets, eg. ** var array <- [1 5 10 15 20]. Accessing of a individual value in the array is done with array[index] where index is a number corresponding to the values position in the array starting from 0.´So array[0] corresponds to the value 1 while array[3] corresponds to 15. The arrays values and indexes is shown in the table below. 
+A list is a list like structure that contains a set of values in a certain order. A list is defined with space separated values surrounded by square brackets, eg. ** var list <- [1 5 10 15 20]. Accessing of a individual value in the list is done with list[index] where index is a number corresponding to the values position in the list starting from 0.´So list[0] corresponds to the value 1 while list[3] corresponds to 15. The lists values and indexes is shown in the table below. 
 
 +-------+---+---+----+----+----+
-| array | 1 | 5 | 10 | 15 | 20 |
+| list | 1 | 5 | 10 | 15 | 20 |
 +-------+---+---+----+----+----+
 | index | 0 | 1 | 2  | 3  | 4  |   
 +-------+---+---+----+----+----+
@@ -135,11 +135,11 @@ An array is a list like structure that contains a set of values in a certain ord
 
 ::    
 
-    var arr <- ["oh" "hi" "there"]
+    var aList <- ["oh" "hi" "there"]
     # index    [  0    1      2 ]
-    # arr contains 3 elemts "oh", "hi" and "there".
+    # aList contains 3 elemts "oh", "hi" and "there".
     #
-    helptext(arr[1])
+    helptext(aList[1])
     # Writes "hi" ti the 
 
 Objects
