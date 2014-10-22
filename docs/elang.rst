@@ -10,23 +10,23 @@ Structure
 
 The following structure/order is enforced on programs:
 
-1.  Val and gvar definiton block
-2.  Function definiton block
-3.  Phase definition block
-4.  Transition block
+1.  Val and gvar definitons
+2.  Function definitons
+3.  Phase definitions
+4.  Transitions
     
 **Example** ::
 
-    #Val and gvar definition block"
+    #Val and gvar definitions"
     gvar g1 <- "global var"
     gvar g2 <- 56
     val a <- "a"
     .
     .
     .
-    #end of block
+    #end of definitions
  
-    #Function definition block 
+    #Function definitions 
     function test()
       helptext("test")
     end
@@ -37,7 +37,7 @@ The following structure/order is enforced on programs:
      .
      .
      .
-    #end of function block
+    #end of function definitions
 
     #Phase definitions
     intermezzo-phase phase1
@@ -54,10 +54,10 @@ The following structure/order is enforced on programs:
       showmsg("In phase3")
       wait(5000)
     end
-    #End of phase definitionsd
+    #End of phase definitions
 
 
-    #Transition definations
+    #Transitions
     transition
       start(phase1)
       phase1 -> phase2
@@ -166,27 +166,58 @@ An object is a value that can contain mulitple values using a key value structur
 Phases and transitions
 ######################
 
-Program flow is contolled with phases and phase trasnsitions. There are two types of phases; intermezzo-phases and interaction phases. The intermezzo phase is more simple and is just run from the beginning to the end while the interaction phase has more support for repeating actions. Phases are defined with the correscponding keyword followed a name, and the phases is anded with the **end** command.
+Phases
+======
 
+Program flow is contolled with phases and phase transitions. There are two types of phases; intermezzo-phases and interaction phases. The intermezzo phase is more simple and is just run from the beginning to the end while the interaction phase has more support for repeating actions. Phases are defined with the correscponding keyword followed a name, and the phases is ended with the **end** command.
+
+An simple intermezzophase is shown below. This phase, named helloPhase, displays a simple greeting to the user and quites after that. 
 ::
-
     #Simple intermezzo phase definition
-    intermezzo-phase FirstPhase
-      # Doing stuff
-      # Moar stuff
-      # Even moar stuff
+    intermezzo-phase helloPhase
+      showmsg("Hello")
+      wait(seconds(2))
+      showmsg("How are you today?")
+      wait(seconds(4))
+      hidemsg()
     end
+
+    Result:
+    Displays Hello for two exonds -> displays "How are you" for 4 seconds -> hides the message.
     
-The interaction phase should be used when the same task should be repeated with slighly different input, typically when building a test where the test person repeats an tesk multiple times. The interaction phase as some mandatory extra control structures/block, **enterphase**, **leavephase**, **beforeiteration**, **afteriteration** and **iteration**. Commands inside enterphase are run once when the phase starts and leavephase behaves in the same way when the phase ends.
 
-A set of stimuli should be defined in each interactionphase, usually in the enterphase block using the setstimuli() function. The set stimuli function accepts an array (e.g. [5 3 4]) with values and the iteration block is run once for every value specified in setstimuli. Before and afteriteration are run before/after each iteration and can be used for example to store data and clean up after an iteration/ prepare for the next iteration.
+The interaction phase should be used when the same task is repeated with slighly different input, typically when building a test where the test person repeats a task multiple times. Theses inputs are defined using the *setstimuli(_list of stimuli_)* function, which is a functions that takes a list([]) of values and stores them until an interaction phase is reached. 
 
+A minimal interaction-phase definition would look like this:
+::
+    interaction-phase simpleInteraction
+      iteration
+        showmsg(stimulus())
+        wait(seconds(2))
+      end
+    end
+
+There's two things that separate this from the intermezzo-phase. The *iteration* block and the *stimulus()* function. The code inside the iteration block is run once for every stimuli stored using setstimuli(). The current stimulus value can be accessed using the stimulus() function inside the iteration block. So in the example above we're displaying each stimuli as a message to the user. So for example if we set the stimuli (using setstimuli()) to for example ["Hello" "How are you today?"] (two string) the iteration will run two times, displaying "Hello" at the first iteration and "How are you" at the second, and then we're out of stimuli so the phase will end. 
+
+We could expand the interactionphase a little by storing objects in the list instead of strings, for example [{message:"Hello" time:2} {message:"How are you today" time:4}, and changing the iteration block a little:
+::
+    interaction-phase simpleInteraction
+      iteration
+        showmsg(stimulus().message)
+        wait(seconds(stimulus().time))
+      end
+    end
+
+Our phase will now do the same thing as the intermezzo-phase we looked at above. It's also very easy to add more stimuli by just adding more values to the list when setting the stimuli. 
+
+
+
+The interaction phase as some extra control structures, **enterphase**, **leavephase**, **beforeiteration**, **afteriteration** and **iteration**. Commands inside enterphase are run once when the phase starts and leavephase is run once at the end of the whole iteration phase. Before and after iteration is run before/after each time the iteration step is run.
 ::    
-
     interaction-phase MainPhase
         enterphase
             showmsg("Entering phase")
-            # Setting two stimuli, 1 and 2
+            # Setting 3 stimuli, 1, 2 and 3
             setstimuli([1 2)])  
         end
         
@@ -195,32 +226,37 @@ A set of stimuli should be defined in each interactionphase, usually in the ente
         end
         
         beforeiteration
-            showmsg("Start iteration")
+            showmsg("Before iteration")
         end
         
         afteriteration
-            showmsg("End iteration")
+            showmsg("After iteration")
         end
         
         iteration
             # Stimulus returns the current stimuli, 1 in the first iteration
             # and 2 in the second one.
-            showmsg(append("Stimulus nr " stimulus()))
+            showmsg(append("In iteration, at stimulus number " stimulus()))
         end
     end
     
     # Output:
     # Entering phase
-    # Start iteration
-    # Stimulus nr 1
-    # End iteration
-    # Start iteration
-    # Stimulus nr 2
-    # End iteration
+    # Before iteration
+    # In iteration, at stimulus number 1
+    # After iteration
+    # Before iteration
+    # In iteration, at stimulus number 2
+    # After iteration
+    # Before iteration
+    # In iteration, at stimulus number 3
+    # After iteration
     # Leaving phase
-    
 
-The order in which phases are run is defined in the transition block that should be placed after all phase definitions in the code. A very simple tranition definition could look like this:
+Transitions
+===========
+
+The order in which phases are run is defined in the transition block that should be placed after all phase definitions in the code (at the buttom of the program). A very simple transitions definition could look like this:
 
 ::
 
@@ -231,13 +267,13 @@ The order in which phases are run is defined in the transition block that should
       final(lastPhase)
     end
 
-The transition definition starts with the keyword **transition**, followed by a list of phase tranistion separated by a commas (**,**). The starting phase is defined first using the **start**(_phaseName_) command and the last phase is lastly defined in the same way with the **final**(_phaseName_) command. These phases (start, final) should **only** be reachable once, ie at the beginning end of the program.
+The transition definition starts with the keyword **transition**, followed by a list of phase tranistion separated by a commas (,). The starting phase is defined first using the **start(_phaseName_)** command and the last phase is lastly defined in the same way with the **final(phaseName)** command. These phases (start, final) should **only** be reachable once, ie at the beginning end of the program.
 
-Phases transition are  defined in any order using the _fromPhase_ **->** _toPhase_ command, until all phases have been visited atleast once.
+Phases transition are  defined in any order using the *fromPhase* -> *toPhase* command, until all phases have been visited atleast once.
 
 It's also possible to include a conditional transition by adding **if** *boolean expression* after the transition, e.g. phase1 -> phase2 if(*boolean expression*). This transition will only occure if the boolean expression returns true, making it possible to choose how a program should progress. 
 
-In the example below the phase *add_a* is repeated as long as a is less than 5, and add_a transitions into lastPhase when a is greater than 4, i.e. when it reaches 5.
+In the example below the phase *add_a* is repeated as long as a is less than 5, and add a transitions into lastPhase when a is greater than 4, i.e. when it reaches 5.
 
 ::
 
