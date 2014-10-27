@@ -8,8 +8,13 @@ Elang comes with a set of built in functions for performing common tasks. These 
 Stimuli
 #######
 
-Stimu
+**setstimuli(list)**
 
+**shufflestimuli()**
+Randomly shuffles the order of the stimuli.
+
+**shufflestimuli(stimulicount)**
+Creates a randomized suset of the stimuli containing the number specified in _stimulicount_.
 
 #######
 Display

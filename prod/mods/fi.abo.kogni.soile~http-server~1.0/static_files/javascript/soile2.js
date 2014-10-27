@@ -479,8 +479,15 @@ SOILE2 = (function(){
     soile2.rt.stimuli.set(arr);
   };
 
-  bin.shufflestimuli = function() {
-    soile2.rt.stimuli.shuffle();
+  bin.shufflestimuli = function(count) {
+    if(typeof count === 'undefined'){
+      console.log("Shuffling");
+      soile2.rt.stimuli.shuffle();
+    }
+    else {
+      console.log("Shuffling subset");
+      soile2.rt.stimuli.subset(count);
+    }
   };
 
   bin.pickstimulisubset= function(count) {
@@ -1046,7 +1053,7 @@ SOILE2 = (function(){
         }
       },
       //Shuffle stimuli with Fisher-Yates Shuffle
-      'shuffle':function() {
+      'shuffle':function(count) {
         if (_stimuli.length > 0) {
           var counter = _stimuli.length;
           var temp, index;
@@ -1068,7 +1075,7 @@ SOILE2 = (function(){
           var removeCount = _stimuli.length - stimuliCount
           for (var i = 0; i < (removeCount); i++) {
             _stimuli.pop(0);
-            console.log("Popping stimuli " + i);
+            //console.log("Popping stimuli " + i);
           };
         }
       } 
