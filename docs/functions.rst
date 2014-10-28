@@ -8,7 +8,10 @@ Elang comes with a set of built in functions for performing common tasks. These 
 Stimuli
 #######
 
+Stimuli is a special list that defines how many times a 
+
 **setstimuli(list)**
+Sets the stimuli to the given list. Overwrites previously defined stimuli.
 
 **shufflestimuli()**
 Randomly shuffles the order of the stimuli.
@@ -318,7 +321,9 @@ Computes the average value from all rows containing this field.
 | Row Number | TestValue | Message  | ExtraValue |
 +============+===========+==========+============+
 |     1      |     5     | "Hello"  |            |
++------------+-----------+----------+------------+
 |     2      |     5     | "Hello"  |            |
++------------+-----------+----------+------------+
 |     3      |     14    | "Goodbye"|   "Extra"  |
 +------------+-----------+----------+------------+
 
