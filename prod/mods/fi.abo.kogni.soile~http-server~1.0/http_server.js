@@ -1477,6 +1477,26 @@ customMatcher.get('/test/:id/imagelist', function(request) {
   });
 });
 
+customMatcher.post('/test/:id/editname', requireAdmin(function(request) {
+  var id = request.params().get('id');
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer){
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+    var jsonData = (JSON.parse(data.getString(0, data.length())));
+
+    var name = jsonData.name;
+
+    mongo.test.editName(id, name, function(r){
+      console.log(JSON.stringify(r));
+      request.response.end(JSON.stringify(r.result));
+    });
+  });
+}));
+
 customMatcher.post('/user', function(request) {
   var data = new vertx.Buffer();
 

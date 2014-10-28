@@ -79,6 +79,29 @@ function(dom,
 		editor.getSession().setUseWrapMode(true);
 		editor.setShowPrintMargin(false);
 
+		var testName = dom.byId('testName');
+		var editNameUrl = document.URL + "/editname"
+
+		on(testName, "click", function(evt) {
+			console.log("Clicked header");
+			testNameForm =  new dijit.form.TextBox({
+					value:testName.innerHTML,
+					onChange: function(value){
+						console.log(value +" ---- ");
+						xhr.post(editNameUrl, {
+							data: json.stringify({"name":value})
+						}).then(function(res) {
+							console.log(res);
+						});
+					}
+				});
+			console.log(testNameForm.domNode);
+			construct.place(testNameForm.domNode, testName,"replace");
+			domStyle.set(testNameForm.domNode, "font-size", "26px");
+
+		})
+
+
 		function end(data) {
 			console.log("it's over");
 			console.log(data);

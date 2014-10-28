@@ -725,6 +725,23 @@ var Test = {
     })
   },
 
+  editName: function(test, name, response) {
+
+    var query = {
+      "action":"update",
+      "collection":"tests",
+      "criteria":{
+        "_id":test
+      },
+      "objNew":{"$set":{"name":name}}
+      }
+    //var command = "db.experiment.update({'_id':'"+expid+"','components.id':'"+formid+"'},{$set:{'components.$.name':'"+name+"''}})";
+    // console.log("\n"+command+"\n");
+    vertx.eventBus.send(mongoAddress, query, function(reply){
+      response(reply);
+    })
+  }
+
 }
 
 //Refactoring Done
