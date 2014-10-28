@@ -67,6 +67,7 @@ function(dom,
 		var errorBox = dom.byId("errorbox");
 		var logger = document.getElementById('log');
 		var datatable = document.getElementById('dataTable');
+		var rawtable = document.getElementById('rawTable');
 
 		var soileStartTime = 0;
 
@@ -122,8 +123,21 @@ function(dom,
 			};
 			table += "</tbody>"
 			
-			datatable.innerHTML = table;
+			rawtable.innerHTML = table;
 
+			var aggregateHead = "<thead><tr>";
+			var aggregateBody = "<tbody><tr>";
+
+			//for(var i=0; i < data.single.length; i++) {
+			for(key in data.single) {
+				aggregateHead += "<th>" + key + "</th>"
+				aggregateBody += "<td>" + data.single[key] + "</td>"
+			}
+
+			aggregateHead += "</tr></thead>"
+			aggregateBody += "</tr></tbody>"
+
+			datatable.innerHTML = aggregateHead + aggregateBody;
 
 			logfunc("Program exited successfully");
 		}

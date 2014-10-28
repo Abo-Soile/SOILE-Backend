@@ -153,9 +153,13 @@ testeditor styles
 }
 
 /*Logger styles */
+.overflow300 {
+	height: 300px !important;
+	overflow: auto
+}
+
 #logdiv {
-	height: 200px !important;
-    overflow: auto;
+	
 }
 
 #log td:first-child {
@@ -260,6 +264,13 @@ User dashboard
 	margin-top: 0px;
 }
 
+.panel > h5 {
+	background-color: #464852;
+	padding:6px;
+	color: white;
+	margin-top: 0px;
+}
+
 .panel-fancy > h4 {
 	background-color: #428bca;
 	color: #ffffff
@@ -268,6 +279,11 @@ User dashboard
 .panel-centered > h4{
 	text-align: center;
 }
+
+.panel-centered > h5 {
+	text-align: center;
+}
+
 
 #userdetails{
 	padding: 10px;
