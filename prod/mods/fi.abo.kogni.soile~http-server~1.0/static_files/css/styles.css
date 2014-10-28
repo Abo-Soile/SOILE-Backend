@@ -154,12 +154,13 @@ testeditor styles
 
 /*Logger styles */
 .overflow300 {
-	height: 300px !important;
+	min-height: 100px !important;
+	max-height: 300px !important;
 	overflow: auto
 }
 
-#logdiv {
-	
+.overflow {
+	overflow: auto;
 }
 
 #log td:first-child {
@@ -275,6 +276,12 @@ User dashboard
 	background-color: #428bca;
 	color: #ffffff
 }
+
+.panel-fancy > h5 {
+	background-color: #428bca;
+	color: #ffffff
+}
+
 
 .panel-centered > h4{
 	text-align: center;
