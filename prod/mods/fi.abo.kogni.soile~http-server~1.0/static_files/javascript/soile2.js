@@ -479,6 +479,10 @@ SOILE2 = (function(){
     soile2.rt.stimuli.set(arr);
   };
 
+  bin.emptystimuli = function() {
+    soile2.rt.stimuli.empty();
+  }
+
   bin.shufflestimuli = function(count) {
     if(typeof count === 'undefined'){
       console.log("Shuffling");
@@ -1078,7 +1082,10 @@ SOILE2 = (function(){
             //console.log("Popping stimuli " + i);
           };
         }
-      } 
+      },
+      'empty' : function() {
+        _stimuli = [];
+      }
     };
   })();
   
