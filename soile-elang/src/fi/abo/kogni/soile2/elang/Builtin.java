@@ -89,6 +89,9 @@ public class Builtin {
         builtinFunctions.add("storerow");
         builtinFunctions.add("newrow");
         builtinFunctions.add("average");
+        builtinFunctions.add("median");
+        builtinFunctions.add("standarddeviation");
+        builtinFunctions.add("outliers");
         builtinFunctions.add("count");
 
         builtinFunctions.add("onkeypress");

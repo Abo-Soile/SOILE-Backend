@@ -441,6 +441,7 @@ SOILE2 = (function(){
     soile2.rt.dataHandler.newRow();
   };
 
+  /*Statistics*/
   bin.average = function(field) {
     soile2.rt.dataHandler.average(field);
   }
@@ -451,6 +452,18 @@ SOILE2 = (function(){
     } else {
       soile2.rt.dataHandler.count(field);
     }
+  }
+
+  bin.outlier = function(field, value) {
+    soile2.rt.dataHandler.outlier(field, value);
+  }
+
+  bin.median = function(field, value) {
+    soile2.rt.dataHandler.median(field);
+  }
+
+  bin.standarddeviation = function(field) {
+    soile2.rt.dataHandler.standarddeviation(field);
   }
 
   /*
@@ -897,6 +910,16 @@ SOILE2 = (function(){
       }
     }
 
+    var _fieldToArray = function(field) {
+      var arr = [];
+      _iterateRows(function(row){
+        if(row.hasOwnProperty(field)) {
+          arr.push(row[field])
+        }
+      });
+      return arr;
+    }
+
     var _setData = function() {
       data = {};
       currentRow = 0;
@@ -956,6 +979,32 @@ SOILE2 = (function(){
         });
 
         data.single["count_"+field+"_"+value] = count;
+      },
+      'median': function(field) {
+
+        var values = []; 
+        var median; 
+
+        _iterateRows(function(row) {
+          if(row.hasOwnProperty(field) && util.is_number(row[field])) {
+            values.push(row[field]);
+          }
+        })
+
+        values.sort( function(a,b) {return a - b;} );
+        var half = Math.floor(values.length/2);
+
+        if(values.length % 2)
+            median = values[half];
+        else
+            median = (values[half-1] + values[half]) / 2.0;
+
+        data.single["median_"+field] = median;
+      },
+      'standarddeviation':function(field) {
+        var values = _fieldToArray(field);
+        console.log(values);
+
       },
 
       //Getters and setters
@@ -1193,6 +1242,7 @@ SOILE2 = (function(){
       if (opcode < 0){
         // TODO
         rt.finish();
+        
         // Program is over, remove listeners send data and navigate to next view
         break;
       }
