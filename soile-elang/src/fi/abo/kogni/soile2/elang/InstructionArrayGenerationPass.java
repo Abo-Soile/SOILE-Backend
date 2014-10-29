@@ -71,6 +71,8 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
         this.tmpidx2name = new Int2ObjectAVLTreeMap<String>();
         this.name2idx = new Object2IntAVLTreeMap<String>();
 
+        this.inInterationBlock = false;
+
         this.jumpOffset = 0;
     }
     
@@ -165,6 +167,7 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
         
         // 'iteration' subphase is always present.
         {
+            this.inInterationBlock = true;
             int idx = doPhaseFunctionDef(phase.iteration());
             if (iterationIndex < 0) {
                 iterationIndex = idx;
@@ -233,8 +236,28 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
         int blockIndex = Integer.MAX_VALUE;
         List<StmtContext> stmts = block.stmt();
         Iterator<StmtContext> it = stmts.iterator();
+        if(inInterationBlock){
+            for(VarDefContext def : pfVardefs) {
+                ProgramInstructionIndex index = nextIndex();
+                Assign assign = new ProgramInstruction.Assign(index);
+
+                String name = def.identifier().getText();
+                assign.setName(name);
+                assign.setHost(template("abspathVars").render());
+                assign.setValue(nodeData(def.expr()).jsref);
+
+                piArray.add(assign);
+                piAssign(assign);
+
+                int idx = index.getValue();
+                blockIndex = Math.min(blockIndex, idx);
+            }
+            inInterationBlock = false;
+        }
+
         while (it.hasNext()) {
             StmtContext stmt = it.next();
+
             if (stmt instanceof BreakStatementContext) {
                 int idx = doStmtBreak((BreakStatementContext) stmt);
                 blockIndex = Math.min(blockIndex, idx);
@@ -697,6 +720,8 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
     private ArrayDeque<ProgramInstruction.Goto> pendingGotos;
     private Int2ObjectMap<String> tmpidx2name;
     private Object2IntMap<String> name2idx;
+
+    private boolean inInterationBlock;
 
     private int jumpOffset;
 }
