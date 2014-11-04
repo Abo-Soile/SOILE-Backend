@@ -454,7 +454,7 @@ SOILE2 = (function(){
     }
   }
 
-  bin.outlier = function(field, value) {
+  bin.outliers = function(field, value) {
     soile2.rt.dataHandler.outlier(field, value);
   }
 
@@ -1030,7 +1030,15 @@ SOILE2 = (function(){
         var standardDev = _standardDeviation(values);
 
         data.single["standarddeviation_"+field] = standardDev;
-      }
+      },
+
+      'outlier':function(field) {
+        _iterateRows(function(row) {
+          if(row.hasOwnProperty(field)) {
+            row[field+"_outlier"] = row[field] + 1000;
+          }
+        })
+      },
 
       //Getters and setters
       'getData': function() {
