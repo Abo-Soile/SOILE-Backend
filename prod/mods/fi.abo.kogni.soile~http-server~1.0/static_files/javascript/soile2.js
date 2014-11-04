@@ -929,6 +929,30 @@ SOILE2 = (function(){
       data.rows.push({});
     }
 
+    var _average = function(array) {
+      var sum =  array.reduce(function(sum, value) {
+        return sum + value
+      })
+
+      var avg = sum/array.length;
+      return avg;
+    }
+
+    var _standardDeviation = function(array) {
+        var avg = _average(array);
+
+        //Calcualting squarediffs
+        var squareDiffs = array.map(function(value) {
+          var diff = value - avg;
+          var sqr = diff * diff;
+          return sqr;
+        })
+
+        var standardDev = Math.sqrt(_average(squareDiffs));
+
+        return standardDev;
+    }
+
     _setData();
 
     return {
@@ -972,7 +996,6 @@ SOILE2 = (function(){
         var count = 0;
 
         _iterateRows(function(row) {
-          //hum borde kanske ge en function åt denhär?
           if(row.hasOwnProperty(field) && row[field]===value) {
             count += 1;
           }
@@ -1003,9 +1026,11 @@ SOILE2 = (function(){
       },
       'standarddeviation':function(field) {
         var values = _fieldToArray(field);
-        console.log(values);
 
-      },
+        var standardDev = _standardDeviation(values);
+
+        data.single["standarddeviation_"+field] = standardDev;
+      }
 
       //Getters and setters
       'getData': function() {
