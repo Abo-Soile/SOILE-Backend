@@ -33,8 +33,10 @@ SOILE2 = (function(){
       if (_.isObject(conf)) {
         if (_.isNumber(conf.inputid)) {
           _inputid = conf.inputid.toString(10);
+        }else {
+          _inputid = id;
         }
-        _inputid = (_.isString(conf['inputid'])) ? conf['inputid'] : id;
+        //_inputid = (_.isString(conf['inputid'])) ? conf['inputid'] : id;
         _resettimer = (_.isBoolean(conf['resettimer'])) ? conf['resettimer'] : false;
         if (_.isFunction(conf.action)) {
           action = conf.action;
@@ -575,6 +577,7 @@ SOILE2 = (function(){
   }
 
   bin.elementatindex = function(value, index) {
+    var index = parseInt(index)
     if(typeof value != 'undefined' && _.isNumber(index)) {
       if(index>value.length) {
         return false;
