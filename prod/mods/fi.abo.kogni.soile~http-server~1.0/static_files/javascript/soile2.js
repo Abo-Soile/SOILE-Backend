@@ -83,9 +83,12 @@ SOILE2 = (function(){
     }
   }
 
-  bin.getlastkey = function() {
-    var key = rt.keyhandler.lastkey();
-    return key;
+  bin.getlastkey = function(active) {
+    if (typeof active === 'undefined') {
+      return rt.keyhandler.lastActiveKey();
+    }else {
+      return rt.keyhandler.lastKey();
+    }
   }
 
   bin.resumeonkey = function(key) {
@@ -337,7 +340,7 @@ SOILE2 = (function(){
     var arr = Array.prototype.slice.call(arguments);
     var id, top, left, args, pos;
 
-    console.log(arr);
+    //console.log(arr);
 
     if (arr.length < 2){
       return;
@@ -777,6 +780,7 @@ SOILE2 = (function(){
     var keyfunctions = {}
     var anykeyfunctions = []
     var lastKey = ""
+    var lastActiveKey = ""
 
     // Special ignore case
     // Nothing ignored
@@ -799,6 +803,7 @@ SOILE2 = (function(){
       lastKey = soile2.rt.kbd.name(e.keyCode);
       //console.log(e.keyCode);
       if(keyfunctions[e.keyCode]) {
+        lastActiveKey = e.keyCode;
         keyfunctions[e.keyCode].call();
       }
 
@@ -810,6 +815,7 @@ SOILE2 = (function(){
         //Check if the click key is ignored before calling
         // the bound function
         if(anykeyfunctions[i].ignoreFunc(e.keyCode)) {
+          lastActiveKey = e.keyCode;
           anykeyfunctions[i].func.call("key");
         }
       }
@@ -827,6 +833,8 @@ SOILE2 = (function(){
       'reset': function() {
         keyfunctions = {};
         anykeyfunctions = [];
+        lastKey = ""
+        lastActiveKey = ""
         // document.onkeydown = null;
       },
       'resume': function(key) {
@@ -881,8 +889,13 @@ SOILE2 = (function(){
       'removeAny': function() {
         anykeyfunctions = [];
       },
-      'lastkey': function() {
+      'lastKey': function() {
         return lastKey;
+      },
+      'lastActiveKey': function() {
+        var key = soile2.rt.kbd.name(lastActiveKey);
+        lastActiveKey = ""
+        return key;
       }
     }
   })();
@@ -1033,8 +1046,11 @@ SOILE2 = (function(){
       },
 
       'outlier':function(field) {
+        var arr = _fieldToArray(field);
+        var sd = _standardDeviation(arr);
+
         _iterateRows(function(row) {
-          if(row.hasOwnProperty(field)) {
+          if(row.hasOwnProperty(field) && util.is_number(row[field])) {
             row[field+"_outlier"] = row[field] + 1000;
           }
         })
