@@ -257,7 +257,12 @@ SOILE2 = (function(){
   };
 
   bin.eq = function(x, y){
-    return _.isEqual(x, y);
+    if (_.isObject(x) || _.isObject(y)) {
+      return _.isEqual(x, y);
+    }
+    else {
+      return x == y;
+    }
   };
   
   bin.equals = bin.eq;
