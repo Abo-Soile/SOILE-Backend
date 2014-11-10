@@ -1424,7 +1424,15 @@ customMatcher.post("/test/:id/imageupload", function(request) {
 
   request.uploadHandler(function(upload) {
       //var path = testImages + id + "/" + upload.filename()
-      var path = testImages + "/" + id +"/" + upload.filename()
+      var fixedFilename = upload.filename()
+
+      //Replacing and removing unwanted characters from filename
+      fixedFilename = fixedFilename.replace(/[å+ä]/gi, "a");
+      fixedFilename = fixedFilename.replace("ö", "o"); 
+      fixedFilename = fixedFilename.replace(/[^a-z0-9+.]/gi, '_').toLowerCase();
+
+      var path = testImages + "/" + id +"/" + fixedFilename;
+      //var path = testImages + "/" + id +"/" + upload.filename()
       console.log("Uploading image to "+ path);
       upload.streamToFileSystem(path);
   });
