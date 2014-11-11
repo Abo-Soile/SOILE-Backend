@@ -69,7 +69,8 @@ p {
 
 #display {
 	height: 500px;
-	min-width: 1000px;
+	/*min-width: 1000px;*/
+	width: 1000px;
 	border: solid black 2px;
 	background-color: white;
 	overflow: hidden;
