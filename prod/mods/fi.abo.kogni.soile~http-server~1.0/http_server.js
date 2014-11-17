@@ -615,6 +615,9 @@ customMatcher.get('/experiment/:id', function(request){
   //Keeping stuff DRY
   function renderExp(r) {
     var experiment = r.result;
+
+    //Replacing newlines with html linebreaks when displaying the description
+    experiment.description = experiment.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
     //console.log(JSON.stringify(r));
     templateManager.render_template("experiment", {"exp":experiment},request);
   }
