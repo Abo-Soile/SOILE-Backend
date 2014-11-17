@@ -25,7 +25,7 @@ function(
 			console.log(expdata);
 
 			//Send data xhr,
-			xhr.post("", {data:JSON.stringify(expdata)}).then(
+			xhr.post(document.URL, {data:JSON.stringify(expdata)}).then(
 				function(response) {
 					console.log(response);
 

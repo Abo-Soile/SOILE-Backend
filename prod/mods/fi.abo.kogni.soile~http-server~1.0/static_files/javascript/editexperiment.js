@@ -207,7 +207,7 @@ function(dom,
 
 				console.log(jsform);
 				xhr.post(
-					"",{
+					document.URL,{
 						data:json.stringify(resp)
 					}).then(function(data){
 					respData = json.parse(data);

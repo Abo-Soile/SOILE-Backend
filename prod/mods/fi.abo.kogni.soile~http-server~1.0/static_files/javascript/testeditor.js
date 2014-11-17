@@ -253,9 +253,10 @@ function(dom,
 			//var code = {"code":codeBox.get("value")};
 			var code = {"code":editor.getValue()};
 
-			xhr.post("", {
+			xhr.post(document.URL, {
 				data: json.stringify(code)
 			}).then(function(data) {
+				console.log("Then")
 				data = json.parse(data);
 				submitButton.set("label","Save&Compile</i>");
 

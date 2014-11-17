@@ -54,7 +54,7 @@ require(["dijit/form/Button",
 		//domStyle.set("error-message", "visibility", "hidden");
 		domStyle.set("error-message-lower","visibility","hidden");
 
-		request.post("",{
+		request.post(document.URL,{
 			//data: markup.get("value")
 			data: editor.getValue()
 

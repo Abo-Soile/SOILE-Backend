@@ -249,7 +249,7 @@ require(["dijit/form/HorizontalSlider",
           var formdata = loadData();
           send_questionnaire_data(formdata);
 
-          xhr.post("",{data:JSON.stringify(formdata)}).then(function(response) {
+          xhr.post(document.URL,{data:JSON.stringify(formdata)}).then(function(response) {
             console.log(response);
 
             var url = document.URL;
