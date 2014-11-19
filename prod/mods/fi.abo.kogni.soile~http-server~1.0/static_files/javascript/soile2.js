@@ -247,6 +247,9 @@ SOILE2 = (function(){
   };
 
   bin.divide = function(x, y){
+    var x = Number(x)
+    var y = Number(y)
+
     if (_.isNumber(x) && _.isNumber(y)){
       if (y === 0) {
         return Number.NaN;
@@ -383,7 +386,7 @@ SOILE2 = (function(){
       left = posLeft;
       top = posTop;
 
-      console.log("width: " + imgWidth + " height " + imgHeight);
+      //console.log("width: " + imgWidth + " height " + imgHeight);
       //soile2.bin.position(id, {"top":posTop, "left":posLeft})
     }
     
@@ -435,6 +438,21 @@ SOILE2 = (function(){
       return memo + num;
     }, 0);
   };
+
+  bin.modulo = function(num1, num2) {
+    var mod = num1 % num2;
+    return mod
+  };
+
+  bin.round = function(num, op) {
+    if(op==="floor") {
+      return Math.floor(num)
+    }
+    if(op==="ceil") {
+      return Math.ceil(num)
+    }
+    return Math.round(num);
+  }
 
   /*
   Datahandling
@@ -566,18 +584,32 @@ SOILE2 = (function(){
   };
 
   bin.append = function(str1, str2) {
-    var result = ""
-    if(str1 && str2) {
-      return str1.toString() + str2.toString();
+    //console.log("str1: " + str1 + " " + typeof str1 + " ||str2 " + str2 + " " + typeof str2)
+    if(typeof str1 === "undefined") {
+      var temp = []
+      temp.push(str2);
+      return temp;
+      return([].push(str2));
     }
-    else{
-      if(str1) {
-        return str1.toString();
-      }
 
-      if (str2) {
-        return str2.toString();
+    if(typeof str1 === "string") {
+      var result = ""
+      if(str1 && str2) {
+        return str1.toString() + str2.toString();
       }
+      else{
+        if(str1) {
+          return str1.toString();
+        }
+
+        if (str2) {
+          return str2.toString();
+        }
+      }
+    }
+
+    if(typeof str1 === "object") {
+      return str1.push(str2);
     }
   }
 

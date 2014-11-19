@@ -56,6 +56,8 @@ public class Builtin {
         builtinFunctions.add("minus");
         builtinFunctions.add("minutes");
         builtinFunctions.add("multiply");
+        builtinFunctions.add("modulo");
+        builtinFunctions.add("round");
         builtinFunctions.add("nkeypresses");
         builtinFunctions.add("nmouseclicks");
         builtinFunctions.add("onmouseclick");
