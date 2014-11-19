@@ -176,6 +176,13 @@ Basic arithmetic operations that takes on two or more numbers as arguments, so p
 
 **divide(number1 number2)** = number1 / number2
 
+**modulo(number1 number2)** = number1 % number2 
+Calculates the remainder when dividing number1 with number2 (number1/number2)
+
+**round(number)** Rounds the number to the nearest whole number
+
+**round(number mode)** Round a number down when mode = "floor" and up when mode = "ceil"
+
 #####
 Logic
 #####
@@ -195,7 +202,7 @@ Basic logic functions that return a boolean value(true or false)
 **equal(number1 number2) _or_ eq(number1 number2)** number1 == number2
 
 #########################
-lists/String Manipulation
+Lists/String Manipulation
 ##########################
 
 **append(string1 string2)**
@@ -287,6 +294,14 @@ Counts how many rows contain a specific field with a specific value.
 **average(field)**
 
 Computes the average value from all rows containing this field.
+
+**median(field)**
+
+Computes the median from all rows containing this field.
+
+**standarddeviation(field)**
+
+Computes the standard deviation from all rows containing ths field.
 
 ::
 
