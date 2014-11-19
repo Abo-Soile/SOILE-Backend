@@ -1585,7 +1585,7 @@ customMatcher.get('/', function(request) {
 
 /* This will match static files. ('Static files' are files which 
  * have not been generated programmatically.) */
-customMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg)$', function(req) {
+customMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff)$', function(req) {
   req.response.sendFile(utils.file_from_serverdir(req.path()));
 });
 
