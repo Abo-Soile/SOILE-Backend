@@ -5,7 +5,7 @@
 		{#user.admin}
 
 			<h1>{exp.name}   <a class="btn btn-default" href="{URI}/edit">Edit</a></h1>
-			<p> {exp.description|s }</p>
+			<p> {exp.description|s}</p>
 			<ul class="componentlist">
 				{#exp.components uri=URI}
 				<li><a class="phaselistlink" href="{uri}/phase/{$idx}">phase {$idx} - {name}</a>
