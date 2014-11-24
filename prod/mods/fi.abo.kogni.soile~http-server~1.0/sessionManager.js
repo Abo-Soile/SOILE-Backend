@@ -9,6 +9,8 @@ var sessionManager =  {
 
   cookies: null,
   request: null,
+  sessionTime: 1000*60*60*24,
+  //sessionTime: 20000,
 
   loadManager: function(request) {
     this.cookies = request.headers().get("Cookie");
@@ -98,8 +100,8 @@ var sessionManager =  {
       this.eraseCookie("PersonToken");
       this.setPersonToken();
 
-      var timerID = vertx.setTimer(1000*60*60*24, function(timerID) {
-        sessionMap.put(sessionKey, null);
+      var timerID = vertx.setTimer(this.sessionTime, function(timerID) {
+        sessionMap.put(sessionKey, "");
       });
 
       sessionMap.put(sessionKey, JSON.stringify({"username":username, "timerID": timerID,
@@ -108,16 +110,21 @@ var sessionManager =  {
 
   loggedIn: function() {
     var sessionData = sessionMap.get(this.getSessionCookie());
-    if(sessionData == null) {
+    if(!sessionData) {
+      //Not logging in
       return false;
     }
-    else {return JSON.parse(sessionData);}
+    else {
+      var data = JSON.parse(sessionData);
+      this.renewSessionTimer(this.getSessionCookie(), data);
+      return data;
+    }
       
   },
 
   isAdmin: function() {
     var sessionData = sessionMap.get(this.getSessionCookie());
-    if(sessionData == null) {
+    if(!sessionData) {
       return false;
     }
     else {
@@ -151,8 +158,20 @@ var sessionManager =  {
       console.log(JSON.stringify(r));
       callback(r);
     });
+  },
+
+  renewSessionTimer: function (sessionID, sessionData) {
+    vertx.cancelTimer(sessionData.timerID);
+
+    sessionData.timerID = vertx.setTimer(this.sessionTime, function(timerID) {
+        console.log("Killing session " + sessionData.username);
+        sessionMap.put(sessionID, "");
+    });
+
+    sessionMap.put(sessionID, JSON.stringify(sessionData));
+
   }
 
 };
 
-module.exports = sessionManager;
+module.exports = sessionManager; 
