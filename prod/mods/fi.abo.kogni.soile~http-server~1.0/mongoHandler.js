@@ -42,15 +42,15 @@ function _isActive(experiment) {
     }
   }
 
-  console.log("IS ACTIVE RUNNING");
+  //console.log("IS ACTIVE RUNNING");
   // Experiment is inactive if no components exits
   if(!experiment.hasOwnProperty("components")) {
-    console.log("components doesn't exist");
+    //console.log("components doesn't exist");
     experiment.active = false;
   }
   else {
     if (experiment.components.length == 0) {
-          console.log("components is empty");
+      //console.log("components is empty");
 
       experiment.active = false;
     }
@@ -150,7 +150,7 @@ var user = {
     function(reply) {
 
       console.log("Finding user");
-      console.log(JSON.stringify(reply));
+      //console.log(JSON.stringify(reply));
 
       //No user found, incorrect credentials
       if(reply.result==null) {
@@ -177,7 +177,7 @@ var user = {
               }
             }
           }, function(replyNested) {
-            console.log(JSON.stringify(replyNested));
+            //console.log(JSON.stringify(replyNested));
             response(reply);
           })
         } 
@@ -329,9 +329,6 @@ var Experiment = {
 
         reply.result = _isActive(reply.result);
       }
-
-      
-
       response(reply);
 
     });
@@ -427,8 +424,8 @@ var Experiment = {
     "keys": {"confirmed":0}},  // Projection
      function(reply) {
       Experiment.phaseCount(id, "form", function(phases) {
-        console.log(JSON.stringify(reply))
-        console.log(JSON.stringify(phases));
+        //console.log(JSON.stringify(reply))
+        //console.log(JSON.stringify(phases));
         reply.phases = phases.result.values;
         response(reply);
       })
@@ -475,7 +472,7 @@ var Experiment = {
         }
       }
     }, function(reply){
-      console.log(JSON.stringify(reply))
+      //console.log(JSON.stringify(reply))
       response(reply);
 
     })
@@ -498,7 +495,7 @@ var Experiment = {
         }
       }
     }, function(reply){
-      console.log(JSON.stringify(reply))
+      //console.log(JSON.stringify(reply))
       response(reply);
 
     })
@@ -577,9 +574,9 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     console.log("Deleting by component index");
 
     vertx.eventBus.send(mongoAddress, query1, function(reply1) {
-      console.log(JSON.stringify(reply1));
+      //console.log(JSON.stringify(reply1));
       vertx.eventBus.send(mongoAddress, query2, function(reply2) {
-        console.log(JSON.stringify(reply2));
+        //console.log(JSON.stringify(reply2));
         response(reply2);
        });
     });
@@ -675,7 +672,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       "multi": true
     },
     function(reply) {
-      console.log(reply);
+      //console.log(reply);
       response(reply);
     })
   }

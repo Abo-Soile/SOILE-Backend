@@ -1557,7 +1557,7 @@ customMatcher.get('/', function(request) {
     if (request.session.loggedIn()) {
       var userid = request.session.loggedIn().id;
       mongo.user.status(userid, function(r) {
-        console.log(JSON.stringify(r));
+        //console.log(JSON.stringify(r));
         var openExperiments = [];
         for (var i = r.newExps.length - 1; i >= 0; i--) {
           if(r.newExps[i].active) {
@@ -1569,7 +1569,7 @@ customMatcher.get('/', function(request) {
 
         mongo.user.get(userid, function(userdetails) {
           r.u = userdetails;
-          console.log(JSON.stringify(r));
+          //console.log(JSON.stringify(r));
           templateManager.render_template('user', r, request);
         })
 

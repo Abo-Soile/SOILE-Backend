@@ -53,7 +53,7 @@ var templateManager = (function() {
         data.loggedIn = false;
       }
 
-      console.log(JSON.stringify(data));
+      //console.log(JSON.stringify(data));
 
       if (!isLoaded || debug) {
         this.load_template(templateName);
