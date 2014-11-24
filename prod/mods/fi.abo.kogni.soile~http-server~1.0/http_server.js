@@ -532,6 +532,13 @@ customMatcher.get('/dust2', function(request){
   });
 });
 
+customMatcher.get('/users', requireAdmin(function(request){
+  mongo.user.list(true, function(r) {
+      var admins = r.results;
+      console.log(JSON.stringify(r));
+      templateManager.render_template("userList",{"users":admins}, request);
+    })
+}));
 
 customMatcher.get("/experiment", function(request){
   mongo.experiment.list([], function(r){

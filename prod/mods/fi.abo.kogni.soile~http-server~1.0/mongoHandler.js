@@ -108,9 +108,17 @@ var user = {
     vertx.eventBus.send(mongoAddress, {"action":"findone",
       "collection":"users","matcher":{"_id":userid}},
       function(reply) {
-        console.log(JSON.stringify(reply));
+        //console.log(JSON.stringify(reply));
         response(reply.result);
       });
+  },
+
+  list: function(isAdmin, response) {
+      vertx.eventBus.send(mongoAddress, {"action":"find",
+        "collection":"users","matcher":{"admin":isAdmin}},
+        function listUserResponse (reply) {
+          response(reply);
+        });
   },
 
   getWithToken: function(token, response) {
