@@ -157,7 +157,7 @@ SOILE2 = (function(){
     jQuery(id).css('top', '50px');
     jQuery(id).text(msg);
   };
-  
+  /*
   bin.helptext = function(msg){
     if (typeof message == 'object') {
       msg = (JSON && JSON.stringify ? JSON.stringify(msg) : msg);
@@ -171,7 +171,19 @@ SOILE2 = (function(){
           console.log(msg);
         }
       }
-  };
+  };*/
+
+  bin.helptext = function() {
+    var args = _.toArray(arguments);
+    var msg = rt.mergeToString(args);
+    if(msg.length > 0) {
+      if(logFunc) {
+        logFunc(msg)
+      } else {
+        console.log(msg)
+      }
+    }
+  }
 
   bin.msgbox = function(msg, _size){
     var id = soile2.rt.uniqueid(); 
@@ -693,6 +705,20 @@ SOILE2 = (function(){
       delete vars[name];
     }
   };
+
+  /* Builds a string out of multiple arguments */
+  rt.mergeToString = function(arr) {
+    var msg = _.reduce(arr, function(memo, num) {
+      if(_.isArray(num) || _.isObject(num)) {
+        num = JSON.stringify(num);
+      } else {
+        num = String(num);
+      }
+      return memo.concat(num);
+    }, "");
+
+    return msg;
+  }
   
   rt.kbd = (function(){
     var name2keycode = soile2.rt.freeze({
