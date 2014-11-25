@@ -532,6 +532,10 @@ SOILE2 = (function(){
     soile2.rt.stimuli.set(arr);
   };
 
+  bin.addstimuli = function(stim) {
+    soile2.rt.stimuli.add(stim);
+  } 
+
   bin.emptystimuli = function() {
     soile2.rt.stimuli.empty();
   }
@@ -1219,6 +1223,9 @@ SOILE2 = (function(){
           _stimuli = soile2.bin.copydata(arr);
           _stimuli.reverse();
         }
+      },
+      'add':function(stim) {
+        _stimuli.push(stim);
       },
       //Shuffle stimuli with Fisher-Yates Shuffle
       'shuffle':function(count) {

@@ -70,6 +70,7 @@ public class Builtin {
         builtinFunctions.add("elapsedtime");
         builtinFunctions.add("seconds");
         builtinFunctions.add("setstimuli");
+        builtinFunctions.add("addstimuli");
         builtinFunctions.add("show");
         builtinFunctions.add("showmsg");
         builtinFunctions.add("msgbox");
