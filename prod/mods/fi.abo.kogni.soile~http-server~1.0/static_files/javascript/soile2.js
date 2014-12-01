@@ -608,7 +608,8 @@ SOILE2 = (function(){
       return([].push(str2));
     }
 
-    if(typeof str1 === "string") {
+    if(typeof str1 !== "object") {
+      console.log("Appending strings " + str1 + str2);       
       var result = ""
       if(str1 && str2) {
         return str1.toString() + str2.toString();
@@ -625,7 +626,8 @@ SOILE2 = (function(){
     }
 
     if(typeof str1 === "object") {
-      return str1.push(str2);
+      str1.push(str2);
+      return str1;
     }
   }
 
