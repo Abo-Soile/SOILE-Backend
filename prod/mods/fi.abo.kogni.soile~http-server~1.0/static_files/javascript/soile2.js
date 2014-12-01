@@ -609,7 +609,7 @@ SOILE2 = (function(){
     }
 
     if(typeof str1 !== "object") {
-      console.log("Appending strings " + str1 + str2);       
+      //console.log("Appending strings " + str1 + str2);       
       var result = ""
       if(str1 && str2) {
         return str1.toString() + str2.toString();
@@ -1038,6 +1038,20 @@ SOILE2 = (function(){
         return standardDev;
     }
 
+    var _median = function(array) {
+      var median = 0;
+
+      array.sort( function(a,b) {return a - b;} );
+      var half = Math.floor(array.length/2);
+
+      if(array.length % 2)
+          median = array[half];
+      else
+          median = (array[half-1] + array[half]) / 2.0;
+
+      return median;
+    }
+
     _setData();
 
     return {
@@ -1099,14 +1113,8 @@ SOILE2 = (function(){
           }
         })
 
-        values.sort( function(a,b) {return a - b;} );
-        var half = Math.floor(values.length/2);
-
-        if(values.length % 2)
-            median = values[half];
-        else
-            median = (values[half-1] + values[half]) / 2.0;
-
+        median = _median(values);
+      
         data.single["median_"+field] = median;
       },
       'standarddeviation':function(field) {
@@ -1117,12 +1125,18 @@ SOILE2 = (function(){
         data.single["standarddeviation_"+field] = standardDev;
       },
 
-      'outlier':function(field) {
+      //Finds values that are within a certain range from the standarddeviation times x
+      'outlier':function(field, multiplier, standardd) {
         var arr = _fieldToArray(field);
-        var sd = _standardDeviation(arr);
+        var sd = standardd;
+        if (sd === undefined) {
+          sd = _standardDeviation(arr);
+        }
+        //var average = this.average
 
         _iterateRows(function(row) {
           if(row.hasOwnProperty(field) && util.is_number(row[field])) {
+            //if(Math.abs(row[field]*multiplier))
             row[field+"_outlier"] = row[field] + 1000;
           }
         })
