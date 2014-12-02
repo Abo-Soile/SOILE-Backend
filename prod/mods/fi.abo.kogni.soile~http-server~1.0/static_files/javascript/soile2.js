@@ -389,8 +389,8 @@ SOILE2 = (function(){
 
     if (args[0] === "center") {
       var imgWidth, imgHeight;
-      imgWidth = jQuery(id).width();
-      imgHeight = jQuery(id).height();
+      imgWidth = jQuery(id).outerWidth();
+      imgHeight = jQuery(id).outerHeight();
 
       var posLeft = (jQuery("#display").width()/2) - (imgWidth/2);
       var posTop = (jQuery("#display").height()/2) - (imgHeight/2);
