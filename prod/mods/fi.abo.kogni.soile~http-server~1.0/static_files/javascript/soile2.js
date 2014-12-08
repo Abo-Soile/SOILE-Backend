@@ -488,27 +488,29 @@ SOILE2 = (function(){
 
   /*Statistics*/
   bin.average = function(field) {
-    soile2.rt.dataHandler.average(field);
+    return soile2.rt.dataHandler.average(field);
   }
 
   bin.count = function(field, value) {
+    var res;
     if(typeof value !== 'undefined') {
-      soile2.rt.dataHandler.countValue(field, value);
+      res = soile2.rt.dataHandler.countValue(field, value);
     } else {
-      soile2.rt.dataHandler.count(field);
+      res = soile2.rt.dataHandler.count(field);
     }
+    return res;
   }
 
-  bin.outliers = function(field, value) {
-    soile2.rt.dataHandler.outlier(field, value);
+  bin.outliers = function(field, multiplier, standarddeviation) {
+    return soile2.rt.dataHandler.outlier(field, multiplier, standarddeviation);
   }
 
   bin.median = function(field, value) {
-    soile2.rt.dataHandler.median(field);
+    return soile2.rt.dataHandler.median(field);
   }
 
   bin.standarddeviation = function(field) {
-    soile2.rt.dataHandler.standarddeviation(field);
+    return soile2.rt.dataHandler.standarddeviation(field);
   }
 
   /*
@@ -1000,7 +1002,13 @@ SOILE2 = (function(){
       }
     }
 
+    /* Returns an arroy with data from the current field
+       if field is an array do nothign and return it.
+    */
     var _fieldToArray = function(field) {
+      if(field instanceof Array) {
+        return field;
+      }
       var arr = [];
       _iterateRows(function(row){
         if(row.hasOwnProperty(field)) {
@@ -1077,74 +1085,125 @@ SOILE2 = (function(){
         var noOfvalues = 0;
         var sum = 0;
 
-        _iterateRows(function(row) {
+        return _average(_fieldToArray(field));
+
+       /* _iterateRows(function(row) {
           if(row.hasOwnProperty(field)&& util.is_number(row[field])) {
             sum += row[field];
             noOfvalues += 1;
           }
         });
         console.log("average is " + sum/noOfvalues);
-        data.single["average_"+field] = sum/noOfvalues;
+        data.single["average_"+field] = sum/noOfvalues;*/
       },
       'count': function(field) {
         var count = 0;
+        var arr = _fieldToArray(field)
 
-        _iterateRows(function(row) {
+        /*_.each(arr, function(row) {
+          if(row.hasOwnProperty(field)) {
+            count += 1;
+          }
+        });*/
+        console.log(arr);
+        console.log(arr.length);
+
+        return arr.length
+        
+       /* _iterateRows(function(row) {
           if(row.hasOwnProperty(field)) {
             count += 1;
           }
         });
-        data.single["count_"+field] = count;
+        data.single["count_"+field] = count;*/
       },
       'countValue': function(field, value) {
         var count = 0;
+        var arr = _fieldToArray(field)
 
-        _iterateRows(function(row) {
+        _.each(arr, function(val) {
+          if(val === value) {
+            count += 1;
+          }
+        });
+
+        return count;
+
+        /*_iterateRows(function(row) {
           if(row.hasOwnProperty(field) && row[field]===value) {
             count += 1;
           }
         });
 
-        data.single["count_"+field+"_"+value] = count;
+        data.single["count_"+field+"_"+value] = count;*/
       },
       'median': function(field) {
 
-        var values = []; 
+        var values = _fieldToArray(field); 
         var median; 
 
-        _iterateRows(function(row) {
+        /*_iterateRows(function(row) {
           if(row.hasOwnProperty(field) && util.is_number(row[field])) {
             values.push(row[field]);
           }
-        })
+        })*/
 
         median = _median(values);
-      
-        data.single["median_"+field] = median;
+        return median;
+
+        //data.single["median_"+field] = median;
       },
       'standarddeviation':function(field) {
         var values = _fieldToArray(field);
 
         var standardDev = _standardDeviation(values);
 
-        data.single["standarddeviation_"+field] = standardDev;
+        //data.single["standarddeviation_"+field] = standardDev;
+        return standardDev;
       },
 
       //Finds values that are within a certain range from the standarddeviation times x
       'outlier':function(field, multiplier, standardd) {
         var arr = _fieldToArray(field);
         var sd = standardd;
+
         if (sd === undefined) {
           sd = _standardDeviation(arr);
         }
-        //var average = this.average
+        if (multiplier === undefined) {
+          multiplier = 2
+        }
 
+        var limit = sd * multiplier;
+        var av = _average(arr);
+        //console.log("Limit: " + limit + " av: " + av );
+
+        var upperLimit = av + limit;
+        var lowerLimit = av - limit;
+
+        var reminder = [];
+
+        //console.log("Upper: " + upperLimit + " Lower: " + lowerLimit);
+
+        //TODO Do somthing proper with this
         _iterateRows(function(row) {
-          if(row.hasOwnProperty(field) && util.is_number(row[field])) {
+          if((row.hasOwnProperty(field) && util.is_number(row[field])) &&
+              (row[field] < upperLimit && row[field] > lowerLimit)) {
             //if(Math.abs(row[field]*multiplier))
-            row[field+"_outlier"] = row[field] + 1000;
+            //console.log("Outlier value: " + row[field])
+            row[field+"_outlier"] = row[field];
           }
         })
+
+        for(var i =0; i<arr.length;i++) {
+          if(util.is_number(arr[i]) &&
+              (arr[i] < upperLimit && arr[i] > lowerLimit)) {
+            reminder.push(arr[i])
+          }
+        }
+        console.log("Reminder: "+reminder);
+        return reminder;
+
       },
 
       //Getters and setters

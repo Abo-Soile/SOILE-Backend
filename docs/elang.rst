@@ -375,10 +375,8 @@ So a function is defined with the keyword function followed by it's name. A func
 Getting Started 
 ###############
 
-Hello Experiment
-================
 
-We'll start by creating a minimal experiment that displays "Hello World" for 3 seconds and exits.
+We'll start by creating a minimal experiment that displays "Hello Test" for 3 seconds and exits.
 
 ::
   
@@ -388,7 +386,7 @@ We'll start by creating a minimal experiment that displays "Hello World" for 3 s
   end
 
   intemezzo-phase world
-    showmsg("World!")
+    showmsg("Test!")
     wait(3000)
   end
 
