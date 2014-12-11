@@ -1031,6 +1031,7 @@ SOILE2 = (function(){
       return avg;
     }
 
+    /* Using population standard deviation */
     var _standardDeviation = function(array) {
         var avg = _average(array);
 

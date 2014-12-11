@@ -281,7 +281,7 @@ The example produces the following result:
 Data processing and aggregation
 ###############################
 
-Raw data can be processed to something more usable. An aggregation function loops through the whole raw data table and performs the specified function on every field that it finds. Rows that don't have any value in the specific field are simply omitted. Results are stored in the processed data table in the fi
+Raw data can be processed to something more usable. An aggregation function loops through the whole raw data table and performs the specified function on every field that it finds. Rows that don't have any value in the specific field are simply omitted. Aggregation functions can also be used to aggregate data in lists.
 
 **count(field)**
 
@@ -303,6 +303,12 @@ Computes the median from all rows containing this field.
 
 Computes the standard deviation from all rows containing ths field.
 
+**outliers(field multiplier)**
+Removes values that deviate more than multiplier*standarddefinition from the average value.
+
+**outliers(field multiplier standarddeviation average)**
+You can also provid your own standarddeviation and average for example when computing outliers of a subset of you data when you still want to use for example the whole dataset for average and standarddeviation.
+
 ::
 
     #Example
@@ -323,10 +329,10 @@ Computes the standard deviation from all rows containing ths field.
     storeRow("Message" "Goodbye")
     storeRow("ExtraValue" "Extra")
 
-    count("RowNumber")       # How many rows in coloumn "RowNumber" contain a value
-    count("ExtraValue")      # How many rows in coloumn "ExtraValue" contain a value
-    count("Message" "Hello") # How many rows in coloumn "Message" contain the value "Hello"
-    average("TestValue")     # Avarage of all values in the TestValue coloumn
+    storesingle("countrows" count("RowNumber"))       # How many rows in coloumn "RowNumber" contain a value
+    storesingle("countExtra" count("ExtraValue"))      # How many rows in coloumn "ExtraValue" contain a value
+    storesingle("countHello" count("Message" "Hello")) # How many rows in coloumn "Message" contain the value "Hello"
+    storesingle("average" average("TestValue"))     # Avarage of all values in the TestValue coloumn
 
     storeSingle("Single Value" 1234567)
 
@@ -344,13 +350,8 @@ Computes the standard deviation from all rows containing ths field.
 
 **Aggregate Data**
 
-+-----------------+------------------+---------------------+------------------+--------------+
-| count_RowNumber | count_ExtraValue | count_Message_Hello | average_TestValue| Single Value |
-+=================+==================+=====================+==================+==============+
-|       3         |        1         |          2          |       8          |   1234567    |
-+-----------------+------------------+---------------------+------------------+--------------+
-
-
-Not implemented yet
-median(field)
-sum(field)
++-----------+------------+------------+--------+--------------+
+| countrows | countExtra | countHello | average| Single Value |
++===========+============+============+====-===+=====---======+
+|     3     |     1      |      2     |   8    |   1234567    |
++-----------+------------+------------+--------+--------------+
