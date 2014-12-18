@@ -205,7 +205,8 @@ function(dom,
 			var name = image.name;
 			var humanName = name.substring(0, name.lastIndexOf("."));
 			var url = "/"+image.url 	//Relative
-			var absoluteUrl = window.location.origin + url
+			//var absoluteUrl = window.location.origin + url
+			var absoluteUrl = url;
 			var li = construct.create("li", null,imageList,"last");
 
 			var insertButton = new dijit.form.Button({
