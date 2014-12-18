@@ -14,6 +14,7 @@ require(["dojo/dom",
 		"dojox/widget/DialogSimple",
 		"dojox/form/Uploader",
 		"dojox/form/uploader/FileList",
+		"dojo/_base/unload",
 		"dojo/ready"],
 function(dom,
 		construct,
@@ -31,6 +32,7 @@ function(dom,
 		Dialog,
 		Upload,
 		FileList,
+		baseUnload,
 		ready) {
 	ready(function() {
 		parser.parse();
@@ -81,6 +83,9 @@ function(dom,
 
 		var testName = dom.byId('testName');
 		var editNameUrl = document.URL + "/editname"
+
+		//On loading page
+		var lastSavedCode = editor.getValue();
 
 		on(testName, "click", function(evt) {
 			console.log("Clicked header");
@@ -254,6 +259,8 @@ function(dom,
 			//var code = {"code":codeBox.get("value")};
 			var code = {"code":editor.getValue()};
 
+			lastSavedCode = code.code;
+
 			xhr.post(document.URL, {
 				data: json.stringify(code)
 			}).then(function(data) {
@@ -301,6 +308,15 @@ function(dom,
 				SOILE2.rt.exec_pi();
 			}, 1500);
 		})
+
+		//Preventing unload if there are changes
+		window.onbeforeunload = function() {
+			if(editor.getValue() !== lastSavedCode) {
+				return "If you leave this page you will lose your unsaved changes."
+			}
+			return null
+		}
+
 	});
 });
 
@@ -332,3 +348,7 @@ document.addEventListener("keydown", function (e) {
     // Do whatever else you want with the keydown event (i.e. your navigation).
   }
 }, false);
+
+/*
+
+*/
