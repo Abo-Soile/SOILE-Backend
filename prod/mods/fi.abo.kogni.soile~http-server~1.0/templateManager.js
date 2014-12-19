@@ -54,7 +54,7 @@ var templateManager = (function() {
       }
 
       //console.log(JSON.stringify(data));
-
+      // Reloading templates adds about 500ms to pageload and should be avoided in production
       if (!isLoaded || debug) {
         this.load_template(templateName);
         vertx.setTimer(500, function() {

@@ -348,7 +348,3 @@ document.addEventListener("keydown", function (e) {
     // Do whatever else you want with the keydown event (i.e. your navigation).
   }
 }, false);
-
-/*
-
-*/

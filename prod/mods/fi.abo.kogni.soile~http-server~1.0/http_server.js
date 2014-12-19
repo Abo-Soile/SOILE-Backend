@@ -652,7 +652,13 @@ customMatcher.get('/experiment/:id', function(request){
     } 
 
     //Admin, navigation controls dont apply here, just show the view
-    else { renderExp(r); }
+    else {
+      mongo.experiment.countParticipants(id, function(r2) {
+        r.result.participants = r2;
+        console.log(JSON.stringify(r));
+        renderExp(r); 
+      })
+    }
   });
 });
 
