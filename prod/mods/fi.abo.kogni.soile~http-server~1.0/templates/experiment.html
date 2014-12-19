@@ -6,7 +6,7 @@
 
 			<h1>{exp.name}   <a class="btn btn-default" href="{URI}/edit">Edit</a></h1>
 			<p> {exp.description|s}</p>
-			<ul class="componentlist">
+			<ol class="componentlist fancyList">
 				{#exp.components uri=URI}
 				<li><a class="phaselistlink" href="{uri}/phase/{$idx}">phase {$idx} - {name}</a>
 					{@eq key=type value="test"}

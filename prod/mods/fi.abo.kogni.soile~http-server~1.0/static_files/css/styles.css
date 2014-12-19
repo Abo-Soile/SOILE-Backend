@@ -188,6 +188,7 @@ testeditor styles
 	margin-right: 3px;
 }
 
+
 .componentlist .label {
 	display: inline-block;
 	min-width: 40px;
@@ -196,6 +197,8 @@ testeditor styles
 .componentlist .phaselistlink {
 	display: inline-block;
 	min-width: 250px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 /*END compnentlist */
 
@@ -464,3 +467,52 @@ body {
 #componentlist li {
 	padding-left: 30px;
 } 
+
+.fancyList {
+	counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    padding-left: 20px;
+}
+
+.fancyList li {
+	position: relative;
+	/*line-height: 40px;
+	font-size: 16px;*/
+}
+
+.fancyList li:before {
+	content: counter(li);
+	counter-increment: li;
+	position: absolute;
+    left: -2.5em;
+    top: 50%;
+    margin-top: -1em;
+    background: #fa8072;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 2px;
+    z-index: 2;
+}
+
+
+.fancyList li:after {
+	content: "";
+	position: absolute;
+	height: 50%;
+	width: 2px;
+	border: 2px solid #fa8072;
+	left: -1.65em;
+	top: 2em;
+	z-index: 1;
+}
+
+.fancyList li:last-child:after {
+	content: "";
+	display: none;
+}
