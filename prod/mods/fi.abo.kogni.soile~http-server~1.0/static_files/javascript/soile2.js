@@ -207,7 +207,7 @@ SOILE2 = (function(){
     return id;
   };
 
-  bin.rectangle = function(width, height, _borderWidth) {
+  bin.rectangle = function(width, height, _borderWidth, _colour) {
     var id = soile2.rt.uniqueid();
     var borderWidth;
 
@@ -219,11 +219,16 @@ SOILE2 = (function(){
 
     var styleSize = "width:"+width+"px; " + "height:"+height+"px;";
     var styleBorder = "border:"+borderWidth+"px solid black;"; 
+    var colourStyle = "";
+    
+    if(_colour !== undefined) {   
+      colourStyle = "background-color:" + _colour + ";";
+    }
 
     var props = {
       "id": id,
       "class": "hiddenelem",
-      "style": styleSize + " " + styleBorder
+      "style": styleSize + " " + styleBorder + " " + colourStyle
       //"src": url
     };
     
