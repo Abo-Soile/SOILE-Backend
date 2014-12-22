@@ -827,65 +827,76 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   var phaseNo = request.params().get('phase');
   var phase;
 
-  mongo.experiment.get(expID, function(r) {
-    phase = r.result.components[phaseNo];
+  var userID = request.session.getPersonToken();
 
-    //Redirecting to experiment end
-    if(phase===undefined) {
-      var url = request.absoluteURI().toString();
-      var cut = url.indexOf("/phase/");
-      console.log(cut);
-      url = url.substr(0,cut) + "/end";
+  //Redirecting user if he/she is on the wrong phase;
+  mongo.experiment.userPosition(userID, expID, function(re) {
+    if((re+1) != phaseNo) {
+      var reg = /phase\/\d*/;;
+      request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (re+1)));
+    } 
 
-      console.log(url);
-
-      //request.response.statusCode(302);
-      //request.response.putHeader('Location', url);
-      //request.response.end();
-      return request.redirect(url);
-    }
-
-    if(r.result.loginrequired && !request.session.loggedIn()) {
-      var url = "/experiment/"+expID
-      return request.redirect(url);
-    }
-
-    //Calculating how much of the experiment is completed
-    var noOfPhases = parseInt(r.result.components.length);
-    phaseNo = parseInt(phaseNo);
-    var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
-
-    //Formphase, rendering form template
-    if(phase.type === "form") {
-      console.log("Form ");
-
-      mongo.form.get(phase.id, function(r2) {
-        var form = r2.result.form;
-        context.form = form;
-
-        templateManager.render_template("formphase", context, request);
-
-       // request.response.end(form);
-      });
-    }
-    //Testphases, rendering test template
-    if(phase.type === "test") {
-      console.log("test");
-
-      mongo.test.get(phase.id, function(r2) {
-        var experiments = r2.result.js;
-        context.experiment = experiments.replace(/(\r\n|\n|\r)/gm,"");
-
-        templateManager.render_template("testphase", context, request);
-      });
-    }
-    
     else {
-      console.log(phase.type);
-      console.log("Phase type is undefined");
+        mongo.experiment.get(expID, function(r) {
+        phase = r.result.components[phaseNo];
+
+        //Redirecting to experiment end
+        if(phase===undefined) {
+          var url = request.absoluteURI().toString();
+          var cut = url.indexOf("/phase/");
+          console.log(cut);
+          url = url.substr(0,cut) + "/end";
+
+          console.log(url);
+
+          return request.redirect(url);
+        }
+
+        if(r.result.loginrequired && !request.session.loggedIn()) {
+          var url = "/experiment/"+expID
+          return request.redirect(url);
+        }
+
+        //Calculating how much of the experiment is completed
+        var noOfPhases = parseInt(r.result.components.length);
+        phaseNo = parseInt(phaseNo);
+        var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
+
+        //Formphase, rendering form template
+        if(phase.type === "form") {
+          console.log("Form ");
+
+          mongo.form.get(phase.id, function(r2) {
+            var form = r2.result.form;
+            context.form = form;
+
+            templateManager.render_template("formphase", context, request);
+
+           // request.response.end(form);
+          });
+        }
+        //Testphases, rendering test template
+        if(phase.type === "test") {
+          console.log("test");
+
+          mongo.test.get(phase.id, function(r2) {
+            var experiments = r2.result.js;
+            context.experiment = experiments.replace(/(\r\n|\n|\r)/gm,"");
+
+            templateManager.render_template("testphase", context, request);
+          });
+        }
+        
+        else {
+          console.log(phase.type);
+          console.log("Phase type is undefined");
+        }
+      });
     }
-  });
+  })
+
 });
+
 
 customMatcher.get('/experiment/:id/phase/:phase/json', function(request) {
   var expID = request.params().get('id');
