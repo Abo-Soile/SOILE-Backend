@@ -501,8 +501,8 @@ SOILE2 = (function(){
     return res;
   }
 
-  bin.outliers = function(field, multiplier, standarddeviation) {
-    return soile2.rt.dataHandler.outlier(field, multiplier, standarddeviation);
+  bin.outliers = function(field, multiplier, standarddeviation, externalAverage) {
+    return soile2.rt.dataHandler.outlier(field, multiplier, standarddeviation, externalAverage);
   }
 
   bin.median = function(field, value) {
@@ -1028,9 +1028,12 @@ SOILE2 = (function(){
     }
 
     var _average = function(array) {
+      if(!array instanceof Array) {
+      	return 0; 
+      }
       var sum =  array.reduce(function(sum, value) {
         return sum + value
-      })
+      }, 0)
 
       var avg = sum/array.length;
       return avg;
@@ -1163,7 +1166,7 @@ SOILE2 = (function(){
       },
 
       //Finds values that are within a certain range from the standarddeviation times x
-      'outlier':function(field, multiplier, standardd) {
+      'outlier':function(field, multiplier, standardd, externalAverage) {
         var arr = _fieldToArray(field);
         var sd = standardd;
 
@@ -1171,19 +1174,23 @@ SOILE2 = (function(){
           sd = _standardDeviation(arr);
         }
         if (multiplier === undefined) {
-          multiplier = 2
+          multiplier = 1; 
         }
 
         var limit = sd * multiplier;
         var av = _average(arr);
-        //console.log("Limit: " + limit + " av: " + av );
+	if(externalAverage !== "undefined") {
+	  av = externalAverage;
+	  console.log("external averagfe: "+av);
+	}
+        console.log("Limit: " + limit + " av: " + av );
 
         var upperLimit = av + limit;
         var lowerLimit = av - limit;
 
         var reminder = [];
 
-        //console.log("Upper: " + upperLimit + " Lower: " + lowerLimit);
+        console.log("Upper: " + upperLimit + " Lower: " + lowerLimit);
 
         //TODO Do somthing proper with this
         _iterateRows(function(row) {
