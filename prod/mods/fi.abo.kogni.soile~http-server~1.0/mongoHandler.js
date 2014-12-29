@@ -230,7 +230,6 @@ var user = {
   },
 
   fromSession: function(session, response) {
-
     vertx.eventBus.send(mongoAddress, {"action":"findone",
       "collection":"users",
       "matcher": {"sessiontoken":session}},
@@ -683,6 +682,61 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       //console.log(reply);
       response(reply);
     })
+  },
+
+
+  countParticipants: function(experimentid, response) {
+
+    var total = 0;
+    var confirmed = 0;
+
+    console.log("Counting participants");
+    vertx.eventBus.send(mongoAddress, 
+      {"action":"count",
+       "collection":"testdata",
+       "matcher":{"expId":experimentid,"confirmed":true}
+      },
+        function(reply) {
+          console.log("Testdata confirmed " + reply.count);
+          confirmed = reply.count;
+          //Found confirmed, first phase is test
+          if(confirmed > 0) {
+           vertx.eventBus.send(mongoAddress, 
+            {"action":"count",
+             "collection":"testdata",
+             "matcher":{"expId":experimentid}
+            },function(reply2) {
+              console.log("Testdata unconfirmed " + reply2.count);
+              total = reply2.count;
+              response({"confirmed":confirmed, 
+                      "total": total});
+            })
+          }
+          //Didn't find anything, first phase is form
+          else {
+
+          vertx.eventBus.send(mongoAddress, 
+            {"action":"count",
+             "collection":"formdata",
+             "matcher":{"expId":experimentid,"confirmed":true}
+            },function(reply3) {
+              console.log("formdata confirmed "  + reply3.count);
+              vertx.eventBus.send(mongoAddress, 
+                {"action":"count",
+                 "collection":"formdata",
+                 "matcher":{"expId":experimentid}
+                },function(reply4) {
+                  console.log("formdata unconfirmed " + reply4.count);
+                  confirmed = reply3.count;
+                  total = reply4.count;
+
+                  response({"confirmed":confirmed, 
+                      "total": total});
+                })
+            })
+          }
+        }
+      )
   }
 
   //end
