@@ -645,7 +645,7 @@ customMatcher.get('/experiment/:id', function(request){
         console.log("Position = " + re);
 
         if(re >= 0) {
-          request.redirect(request.absoluteURI() + "/phase/" + (re+1));
+          request.redirect(request.absoluteURI() + "/phase/" + (re));
         } 
         else { renderExp(r); }
       })
@@ -831,9 +831,9 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
   //Redirecting user if he/she is on the wrong phase;
   mongo.experiment.userPosition(userID, expID, function(re) {
-    if((re+1) != phaseNo) {
+    if(re != phaseNo && (re > -1)) {
       var reg = /phase\/\d*/;;
-      request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (re+1)));
+      request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (re)));
     } 
 
     else {

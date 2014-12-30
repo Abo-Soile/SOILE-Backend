@@ -3,7 +3,9 @@ var console = require('vertx/console');
 
 //TODO
 //Load this from config
-var mongoAddress = "vertx.mongo-persistor"
+var mongoAddress = "vertx.mongo-persistor";
+
+var dataCollection = "data";
 
 //Password hashing using SHA-256
 function _hashPassword(password) {
@@ -243,6 +245,35 @@ var user = {
   _getCompleteOrIncompleteExperiments: function(userID, completed,response) {
     //TestData
     console.log("LOADING EXP STATES : " + completed);
+
+    vertx.eventBus.send(mongoAddress, {"action":"find",
+      "collection":dataCollection,
+      "matcher": {"userid":userID,
+                  "confirmed": completed,
+                  "phase": "0" }},
+      function(replyData) {
+        //Formdata
+        var expIDs = []
+        for(var i = 0; i<replyData.results.length; i++) {
+          expIDs.push(replyData.results[i].expId)
+          console.log("Pushing formid: " + replyData.results[i].expId + " i: " + i)
+        }
+        console.log(JSON.stringify(expIDs));
+
+        vertx.eventBus.send(mongoAddress, {"action":"find",
+          "collection":"experiment",
+          "matcher": {"_id": {"$in":expIDs}}
+          }, 
+          function(exps) {
+            exps.list = expIDs;
+            response(exps);
+          }
+        )
+      }
+    )
+
+
+    /*
     vertx.eventBus.send(mongoAddress, {"action":"find",
       "collection":"testdata",
       "matcher": {"userid":userID,
@@ -278,7 +309,7 @@ var user = {
           }
         );
       }
-    );
+    );*/
   },
 
   //Returns a list of all completed and incompleted experiments for the current user. And a
@@ -341,10 +372,19 @@ var Experiment = {
     });
   },
 
-  phaseCount: function(id, collection,response) {
+  phaseCount: function(id,response) {
     //{ distinct: "orders", key: "item.sku" }
+    var dataCommand = "{distinct:'"+dataCollection+"', key:'phase', query: {expId:'"+id+"'}}";
+
+    vertx.eventBus.send(mongoAddress, {"action":"command",
+      "command":dataCommand}, function(reply) {
+        response(reply);
+      }
+    );
+
+    /*
     var formCommand = "{distinct:'formdata', key:'phase', query: {expId:'"+id+"'}}";
-    var testCommand = "{distinct:'formdata', key:'phase', query: {expId:'"+id+"'}}";
+    var testCommand = "{distinct:'testdata', key:'phase', query: {expId:'"+id+"'}}";
     console.log(formCommand);
     if (collection==="form") {
       vertx.eventBus.send(mongoAddress, {"action":"command",
@@ -360,10 +400,11 @@ var Experiment = {
           response(reply);
         }
       );
-    }
+    }*/
+    /*
     else {
       return 0;
-    }
+    }*/
   },
 
   saveData: function(phase, experimentid ,data, userid,response) {
@@ -374,12 +415,17 @@ var Experiment = {
     doc.confirmed = false;
     doc.data = data;
     
-  this.get(experimentid, function(r) {
+    this.get(experimentid, function(r) {
       var type = r.result.components[phase].type;
       doc.type = type;
 
       console.log(mongoAddress);
 
+      vertx.eventBus.send(mongoAddress, {"action":"save",
+        "collection":dataCollection, "document":doc}, function(reply) {
+          response(reply);
+      });
+      /*
       if(type === "form"){
         vertx.eventBus.send(mongoAddress, {"action":"save",
         "collection":"formdata", "document":doc}, function(reply) {
@@ -391,7 +437,7 @@ var Experiment = {
         "collection":"testdata", "document":doc}, function(reply) {
           response(reply);
         });
-      }
+      }*/
     });
   },
 
@@ -400,8 +446,20 @@ var Experiment = {
   // of an experiment.
   confirmData: function(expId, userid, response) {
 
-    //Confirming testdata.
     vertx.eventBus.send(mongoAddress, {"action":"update",
+    "collection":dataCollection, "criteria":{"expId":expId, "userid":userid}, 
+    "objNew":{"$set":{
+        "confirmed":true
+      }},
+    "multi":true
+    }, function(reply) {
+      console.log("confirming data");
+      console.log(JSON.stringify(reply));
+      response(reply);   
+    });
+
+    //Confirming testdata.
+    /*vertx.eventBus.send(mongoAddress, {"action":"update",
     "collection":"testdata", "criteria":{"expId":expId, "userid":userid}, 
     "objNew":{"$set":{
         "confirmed":true
@@ -421,16 +479,16 @@ var Experiment = {
     "multi":true
     }, function(reply) {
       response(reply);
-    })
+    })*/
   },
 
   formData: function(id, response) {
     vertx.eventBus.send(mongoAddress, {"action":"find",
-    "collection":"formdata",
-    "matcher":{"expId":id, "confirmed":true},
+    "collection":dataCollection,
+    "matcher":{"expId":id, "confirmed":true, "type":"form"},
     "keys": {"confirmed":0}},  // Projection
      function(reply) {
-      Experiment.phaseCount(id, "form", function(phases) {
+      Experiment.phaseCount(id, function(phases) {
         //console.log(JSON.stringify(reply))
         //console.log(JSON.stringify(phases));
         reply.phases = phases.result.values;
@@ -441,8 +499,8 @@ var Experiment = {
 
   testData: function(id, response) {
     vertx.eventBus.send(mongoAddress, {"action":"find", 
-      "collection":"testdata",
-      "matcher": {"expId":id, "confirmed":true},
+      "collection":dataCollection,
+      "matcher": {"expId":id, "confirmed":true, "type":"test"},
       "keys": {"confirmed": 0}},   // Projection
       function(reply) {
         response(reply);
@@ -453,7 +511,7 @@ var Experiment = {
   rawTestData: function(expId, phase, response) {
     vertx.eventBus.send(mongoAddress, {
         "action":"find",
-        "collection":"testdata",
+        "collection":dataCollection,
         "matcher":{"expId":expId, "phase":phase},
         "keys": {"data":1, "userid":1}},
       function(reply) {
@@ -621,9 +679,31 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   },
 
 
-  // Returns the users current position in the experiment,
+  // Returns the users current position in the experiment.
+  // Is done by selecting the latest stored data and checking its phase.
+  // So the phase to be displayed is latestdata.phase + 1.
   userPosition: function(userid, experimentid, response) {
+    vertx.eventBus.send(mongoAddress, {
+      "action":"find",
+      "collection":dataCollection,
+      "matcher":{
+        "userid":userid,
+        "expId":experimentid
+      },
+      "sort":{"phase":-1},
+      "limit":1},
+      function userTestData(reply) {
+        var currentPhase = -1;
+        if(reply.number == 1) {
+           currentPhase = parseInt(reply.results[0].phase) + 1;
+        }
 
+        console.log("userPosition: " + currentPhase);
+        response(currentPhase);
+      }
+    )
+
+    /*
     vertx.eventBus.send(mongoAddress, {
       "action":"find",
       "collection":"formdata",
@@ -658,7 +738,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
               response(Math.max(formPhase, testPhase));
           }
         )
-    });
+    });*/
   },
 
    //Refreshes the userid on submitted data, useable when
@@ -666,6 +746,25 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   updateDataIdentifier: function(userid, personToken,response) {
 
     vertx.eventBus.send(mongoAddress, {"action":"update",
+      "collection":dataCollection,
+      "criteria": {
+        "userid":personToken,
+        "confirmed":false
+      },
+      "objNew": {
+        "$set":{
+          "userid":userid
+        }
+      },
+      "multi": true
+    },
+    function(reply) {
+      //console.log(reply);
+      console.log("Identifying persontoken: " + personToken + " as user " + userid);
+      response(reply);
+    })
+
+    /*vertx.eventBus.send(mongoAddress, {"action":"update",
       "collection":"formdata",
       "criteria": {
         "userid":personToken,
@@ -680,8 +779,9 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     },
     function(reply) {
       //console.log(reply);
+      console.log("Identifying persontoken: " + personToken + " as user " + userid);
       response(reply);
-    })
+    })*/
   },
 
 
@@ -691,6 +791,31 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     var confirmed = 0;
 
     console.log("Counting participants");
+
+    vertx.eventBus.send(mongoAddress, 
+      {"action":"count",
+       "collection":dataCollection,
+       "matcher":{"expId":experimentid,"confirmed":true}
+      },
+      function(reply) {
+        console.log("Confirmed " + reply.count);
+        confirmed = reply.count;
+
+        //Found confirmed, first phase is test
+         vertx.eventBus.send(mongoAddress, 
+          {"action":"count",
+           "collection":dataCollection,
+           "matcher":{"expId":experimentid}
+          },function(reply2) {
+            console.log("unconfirmed " + reply2.count);
+            total = reply2.count;
+            response({"confirmed":confirmed, 
+                    "total": total});
+          })
+        }
+      )
+
+    /*
     vertx.eventBus.send(mongoAddress, 
       {"action":"count",
        "collection":"testdata",
@@ -736,7 +861,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
             })
           }
         }
-      )
+      )*/
   }
 
   //end
