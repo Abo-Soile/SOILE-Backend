@@ -116,7 +116,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
 
                 reply.putString("id", id);
                 if (action.equals("save")){
-                    saveToDisk(id, output);
+                    //saveToDisk(id, output);
                     if(hasID) {
                         saveToMongo(json.getString("id"), markup, output);
                         System.out.println("Saving with id " + json.getString("id"));
