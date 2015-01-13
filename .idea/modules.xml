@@ -6,10 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/qml-guide/qml-guide.iml" filepath="$PROJECT_DIR$/qml-guide/qml-guide.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-elang/soile-elang.iml" filepath="$PROJECT_DIR$/soile-elang/soile-elang.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-qmarkup/soile-qmarkup.iml" filepath="$PROJECT_DIR$/soile-qmarkup/soile-qmarkup.iml" />
-      <module fileurl="file://$PROJECT_DIR$/soile-testing/soile-testing.iml" filepath="$PROJECT_DIR$/soile-testing/soile-testing.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-utils/soile-utils.iml" filepath="$PROJECT_DIR$/soile-utils/soile-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-verticle/soile-verticle.iml" filepath="$PROJECT_DIR$/soile-verticle/soile-verticle.iml" />
     </modules>
   </component>
 </project>
-
