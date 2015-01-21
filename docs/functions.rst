@@ -17,7 +17,10 @@ Sets the stimuli to the given list. Overwrites previously defined stimuli.
 Randomly shuffles the order of the stimuli.
 
 **shufflestimuli(stimulicount)**
-Creates a randomized suset of the stimuli containing the number specified in _stimulicount_.
+Creates a randomized subset of the stimuli containing the number specified in _stimulicount_.
+
+**emptystimuli()**
+Empties the stimuli list, and ends an interaction phase when the current iteration ends when called from inside an interaction phase.
 
 #######
 Display
