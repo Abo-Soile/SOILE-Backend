@@ -783,6 +783,26 @@ customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
   });
 }));
 
+customMatcher.post("/experiment/:id/randomizeorder", requireAdmin(function(request) {
+  var expId = request.params().get('id');
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+    var jsonData = (JSON.parse(data.getString(0, data.length())));
+
+    console.log(JSON.stringify(jsonData));
+
+    request.response.end("Ending");
+
+  });
+
+}))
+
+
 customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();

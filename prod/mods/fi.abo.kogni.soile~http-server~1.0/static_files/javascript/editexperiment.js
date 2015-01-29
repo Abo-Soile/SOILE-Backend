@@ -13,6 +13,7 @@ require(["dojo/dom",
 		"dojox/widget/DialogSimple",
 		"dojo/store/Memory",
 		"dijit/form/FilteringSelect",
+		"dojo/dom-class",
 		"dojo/ready"],
 function(dom,
 		dbootstrap,
@@ -29,6 +30,7 @@ function(dom,
 		Dialog,
 		Memory,
 		FilteringSelect,
+		domClass,
 		ready) {
 	ready(function() {
 		parser.parse();
@@ -301,7 +303,6 @@ function(dom,
 
 				var deleteButton = buildDeleteButton(id, opts.index, li);
 
-
 				var newWindowButton = new dijit.form.Button({
 					label:"in new window",
 					onClick: function() {
@@ -337,7 +338,10 @@ function(dom,
 						})
 					}});*/
 				var deleteButton = buildDeleteButton(id, opts.index, li);
+				var randomizeButton = buildRandomCheckbox(id, opts.index, li);
 
+
+				construct.place(randomizeButton.domNode, li);
 				construct.place(nameBox.domNode, li);
 				construct.place(deleteButton.domNode, li);
 			}
@@ -360,6 +364,29 @@ function(dom,
 			});
 
 			return button;
+		}
+		function buildRandomCheckbox(id, phase, li) {
+			var cbox = new dijit.form.CheckBox({
+				id:"random:"+id+phase,
+				"class":"randomCheckBox",
+				onClick: function(b) {
+					var value = true;
+					if(this.get('value') === false) {
+						value = false;
+					}
+					console.log("Checkbox " + this.get('value'));
+					domClass.toggle(li, "randomize");
+					xhr.post("randomizeorder", 
+						{data:json.stringify({
+							"id":id, "index":phase, "value":value
+						})
+					}).then(function(res) {
+							console.log(res);
+					})
+				}
+			});
+			console.log("returning checkbox " + cbox);
+			return cbox;
 		}
 	});
 });

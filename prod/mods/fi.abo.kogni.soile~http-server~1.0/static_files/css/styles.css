@@ -516,3 +516,7 @@ body {
 	content: "";
 	display: none;
 }
+
+.fancyList .randomize:before {
+	background: #9BBCD0;
+}
