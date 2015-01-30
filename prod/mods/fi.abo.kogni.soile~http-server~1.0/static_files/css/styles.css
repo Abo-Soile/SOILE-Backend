@@ -520,3 +520,20 @@ body {
 .fancyList .randomize:before {
 	background: #9BBCD0;
 }
+
+
+/*
+dBootstrap fixes
+*/
+
+.dbootstrap .dijitCheckBox, .dbootstrap .dijitRadio {
+	width: 22px;
+	height: 22px;
+	margin-left: 3px;
+	margin-right: 3px;	
+}
+
+.dbootstrap label {
+	line-height: 100%;
+	margin-top: 5px;
+}
