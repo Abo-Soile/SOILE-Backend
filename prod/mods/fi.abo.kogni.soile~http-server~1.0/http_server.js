@@ -796,7 +796,12 @@ customMatcher.post("/experiment/:id/randomizeorder", requireAdmin(function(reque
 
     console.log(JSON.stringify(jsonData));
 
-    request.response.end("Ending");
+    mongo.experiment.setRandom(expId, jsonData.index, jsonData.value, function(r) {
+      console.log("Setting random, phase: " + jsonData.index + " v:" + jsonData.value);
+      request.response.end("Ending");
+      
+    })
+
 
   });
 

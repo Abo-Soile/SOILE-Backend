@@ -350,6 +350,7 @@ var user = {
   },
 }
 
+
 var Experiment = {
 
   get: function(id, response) {
@@ -439,6 +440,24 @@ var Experiment = {
         });
       }*/
     });
+  },
+
+  setRandom: function(expId, component, value, response) {
+    var qString = {};
+    qString["components."+component+".random"] = value;
+    var query = {
+      "action":"update",
+      "collection":"experiment",
+      "criteria":{
+        "_id":expId,
+      },
+      "objNew":{"$set":qString}
+    }
+
+    vertx.eventBus.send(mongoAddress, query, function(reply) {
+        console.log(JSON.stringify(reply));
+        response(reply);
+    })
   },
 
   // Setting a confirmed flag on submitted data. 
@@ -594,7 +613,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   },
 
   // http://stackoverflow.com/questions/4588303/in-mongodb-how-do-you-remove-an-array-element-by-its-index
-// The above method could also be used 
+  // The above method could also be used 
   deleteComponent: function(expid, compid, response) {
 
     var query =  {
@@ -618,6 +637,8 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     var comp = {}
     comp["components."+index] = 1;
     console.log(comp);
+
+    //Set the component to null
     var query1 =  {
       "action":"update",
       "collection":"experiment",
@@ -627,6 +648,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       "objNew":{"$unset":comp}
     };
 
+    //Pull all null components
     var query2 = {
       "action":"update",
       "collection":"experiment",
