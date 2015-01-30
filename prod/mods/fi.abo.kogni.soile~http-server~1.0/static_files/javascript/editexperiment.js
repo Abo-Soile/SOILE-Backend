@@ -170,7 +170,8 @@ function(dom,
 	
 						createComponentRow(data.id, {"type":"test", 
 													 "name":data.name,
-													 "index":Math.random()
+													 "index":Math.random(),
+													 "random":false
 													})
 					}
 				});
@@ -232,7 +233,8 @@ function(dom,
 				createComponentRow(components[i].id, 
 								{name:components[i].name, 
 								 type:components[i].type,
-								 index:i
+								 index:i,
+								 random:components[i].random
 								});
 			}
 		})
@@ -338,8 +340,12 @@ function(dom,
 						})
 					}});*/
 				var deleteButton = buildDeleteButton(id, opts.index, li);
-				var randomizeButton = buildRandomCheckbox(id, opts.index, li);
-
+				
+				//TODO: Load initial value from proper source	 
+				var randomizeButton = buildRandomCheckbox(id, opts.index, li, opts.random);
+				if (opts.random) {
+					domClass.add(li, "randomize");
+				}
 
 				construct.place(randomizeButton.domNode, li);
 				construct.place(nameBox.domNode, li);
@@ -365,10 +371,11 @@ function(dom,
 
 			return button;
 		}
-		function buildRandomCheckbox(id, phase, li) {
+		function buildRandomCheckbox(id, phase, li, checked) {
 			var cbox = new dijit.form.CheckBox({
 				id:"random:"+id+phase,
 				"class":"randomCheckBox",
+				checked: checked,
 				onClick: function(b) {
 					var value = true;
 					if(this.get('value') === false) {
