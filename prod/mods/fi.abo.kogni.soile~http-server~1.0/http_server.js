@@ -635,6 +635,8 @@ customMatcher.get('/experiment/:id', function(request){
       return request.notfound();
     }
 
+    var exp = r.result;
+
     //If normal user, check if user has filled in something before
     if(!request.session.isAdmin()) {
       var userID = request.session.getPersonToken();
@@ -647,7 +649,26 @@ customMatcher.get('/experiment/:id', function(request){
         if(re >= 0) {
           request.redirect(request.absoluteURI() + "/phase/" + (re));
         } 
-        else { renderExp(r); }
+        else { 
+
+          var randomize = false;
+          for (var i = 0; i < exp.components.length; i++) {
+            if (exp.components[i].random) {
+              randomize = true
+            }
+          };
+
+          if (randomize) {
+            mongo.experiment.generateRandomOrder(exp, userID, function(ran) {
+              console.log("SAVED RANDOM ORDER");
+              console.log(JSON.stringify(ran));
+              renderExp(r);
+            });
+          }
+          else {
+            renderExp(r); 
+          }
+        }
       })
     } 
 
@@ -860,7 +881,8 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
     else {
         mongo.experiment.get(expID, function(r) {
-        phase = r.result.components[phaseNo];
+        var exp  = r.result; 
+        phase = exp.components[phaseNo];
 
         //Redirecting to experiment end
         if(phase===undefined) {

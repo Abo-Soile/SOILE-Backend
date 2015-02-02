@@ -1,5 +1,6 @@
 var vertx = require('vertx');
 var console = require('vertx/console');
+var utils = require('utils');
 
 //TODO
 //Load this from config
@@ -459,6 +460,59 @@ var Experiment = {
         response(reply);
     })
   },
+
+  generateRandomOrder: function(exp, userId, callback) {
+    //var exp = r.result;
+    var randomList = [];
+
+    for (var i = 0; i < exp.components.length; i++) {
+      if (exp.components[i].random) {
+        randomList[i] = i
+      }
+    };
+
+    var startRandomSequence = null;
+
+    function randomizePart(arrSlice, index) {
+      arrSlice = utils.shuffle(arrSlice);
+      for (var i = 0; i < arrSlice.length; i++) {
+        randomList[i + index] = arrSlice[i];
+      };
+    }
+
+    for(var i = 0; i < randomList.length; i++) {
+      if ((randomList[i] || randomList[i] === 0) 
+        && startRandomSequence === null) {
+        startRandomSequence = i;
+      }
+      else if (startRandomSequence && (!(randomList[i]) || i==randomList.length-1)) {
+        var slice = i
+        if (i==randomList.length - 1) {
+          slice += 1
+        }
+        randomizePart(randomList.slice(startRandomSequence, slice), startRandomSequence)
+        startRandomSequence = null;
+      }
+    }
+
+    var doc = {};
+    doc._id = userId
+    doc.userid = userId;
+    doc.experimentid = exp._id;
+    doc.randomorder = randomList;
+    doc.type = "general";
+
+    vertx.eventBus.send(mongoAddress, {"action":"save",
+      "collection":dataCollection, "document":doc}, 
+      function(reply) {
+        callback(reply);
+      } 
+    )
+  },
+
+  var getRandomOrder(expId, userid, callback) {
+    // TODO: Implememnt this
+  }
 
   // Setting a confirmed flag on submitted data. 
   // This is run when an user successfully reaches the end
