@@ -16,6 +16,10 @@ var sessionManager =  {
     this.cookies = request.headers().get("Cookie");
     this.request = request;
 
+    if (typeof this.cookies == "undefined") {
+      this.cookies = "";
+    }
+
     return this;
   },
 
@@ -28,6 +32,8 @@ var sessionManager =  {
       expires = "; expires="+date.toGMTString();
     }
 
+    //Adding cookie to memory so that it can be used instantly
+    this.cookies += name+"="+value+";";
     return name+"="+value+expires+"; path=/";
   },
 
@@ -60,10 +66,11 @@ var sessionManager =  {
     //console.log(this.readCookie("PersonToken"));
     if(!this.readCookie("PersonToken")) {
       var c = this.createCookie("PersonToken", utils.getRandomInt(0, 10000000000000000), 900);
+
       this.request.response.headers().add("Set-Cookie",c);
     }
   },
-
+  
   getPersonToken: function() {
     return this.readCookie("PersonToken");
   },
