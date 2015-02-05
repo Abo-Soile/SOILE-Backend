@@ -914,7 +914,8 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
           /*"type":"$not('general')"*/
         }},
         function(data) {
-          if (data.status == "error") {
+          if (data.status == "error" ||
+              typeof data.result == "undefined") {
             return callback(false);
           }else {
             callback(data.result)

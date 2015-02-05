@@ -881,11 +881,21 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   var userID = request.session.getPersonToken();
 
   mongo.experiment.userPosition(userID, expID, function(userdata) {
-    
+    var reg = /phase\/\d*/;;
+
+    //Checking if user has visited the landing page
+    if(!userdata) {
+      console.log("No userdata, redirecting ")
+      return request.redirect(request.absoluteURI().toString().replace(reg,""));
+    }
+
     //Checking if user is in the wrong phase
-    if(userdata.position != phaseNo && (userdata.position > 0)) {
-      var reg = /phase\/\d*/;;
-      request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (userdata.position)));
+    if(userdata.position != phaseNo) {
+      console.log("Wrong position, redirecting to phase " + userdata.position);
+      if (userdata.position == 0) {
+        return request.redirect(request.absoluteURI().toString().replace(reg,""));
+      }
+      return request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (userdata.position)));
     } 
 
     else {
@@ -917,7 +927,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
         if (exp.israndom) {
           console.log("------Translating phase number---------");
-          console.log(phaseNo + " -> " + userdata.ranComp);
+          console.log(phaseNo + " -> " + userdata.randomorder[phaseNo]);
           phase = exp.components[userdata.randomorder[phaseNo]]; 
         }
 
