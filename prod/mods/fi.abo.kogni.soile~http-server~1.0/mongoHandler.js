@@ -1003,7 +1003,10 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     vertx.eventBus.send(mongoAddress, 
       {"action":"count",
        "collection":dataCollection,
-       "matcher":{"expId":experimentid,"confirmed":true}
+       "matcher":{"expId":experimentid,
+                  "confirmed":true,
+                  "type":"general"
+                }
       },
       function(reply) {
         console.log("Confirmed " + reply.count);
@@ -1013,7 +1016,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
          vertx.eventBus.send(mongoAddress, 
           {"action":"count",
            "collection":dataCollection,
-           "matcher":{"expId":experimentid}
+           "matcher":{"expId":experimentid, "type":"general"}
           },function(reply2) {
             console.log("unconfirmed " + reply2.count);
             total = reply2.count;
