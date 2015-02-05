@@ -640,38 +640,46 @@ customMatcher.get('/experiment/:id', function(request){
     //If normal user, check if user has filled in something before
     if(!request.session.isAdmin()) {
       var userID = request.session.getPersonToken();
+
       if(request.session.loggedIn()) {
         userID = request.session.loggedIn().id;
       }
-      mongo.experiment.userPosition(userID, id, function(re) {
-        console.log("Position = " + re);
-
-        if(re >= 0) {
-          request.redirect(request.absoluteURI() + "/phase/" + (re));
-        } 
+      //mongo.experiment.userPosition(userID, id, function(re) {
+      mongo.experiment.getUserData(userID, id, function(userdata) {
+      //console.log("Position = " + re);
+        if (userdata) {
+          console.log("Userdata exists " + JSON.stringify(userdata))
+          // TODO: This one should be changed to > 0
+          if(userdata.position > 0) {          
+            request.redirect(request.absoluteURI() + "/phase/" + (userdata.position));
+          }
+          else{
+            renderExp(r)
+          }
+        }
         else { 
-
-          var randomize = false;
-          for (var i = 0; i < exp.components.length; i++) {
+          console.log("No userdata");
+          var userdata = {}
+          // TODO: userposition should be set to 0, instead of -1
+          userdata.position = 0;
+          userdata.randomorder = false;
+          /*for (var i = 0; i < exp.components.length; i++) {
             if (exp.components[i].random) {
               randomize = true
             }
-          };
+          };*/
 
-          if (randomize) {
-            mongo.experiment.generateRandomOrder(exp, userID, function(ran) {
-              console.log("SAVED RANDOM ORDER");
-              console.log(JSON.stringify(ran));
-              renderExp(r);
-            });
+          if (exp.israndom) {
+            var order = mongo.experiment.generateRandomOrder(exp);
+            console.log("Generated random order " + JSON.stringify(order));
+            userdata.randomorder = order; 
           }
-          else {
-            renderExp(r); 
-          }
+          mongo.experiment.initUserData(userdata, userID, exp._id, function(r2){
+            renderExp(r);
+          })
         }
       })
     } 
-
     //Admin, navigation controls dont apply here, just show the view
     else {
       mongo.experiment.countParticipants(id, function(r2) {
@@ -872,15 +880,16 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
   var userID = request.session.getPersonToken();
 
-  //Redirecting user if he/she is on the wrong phase;
-  mongo.experiment.userPosition(userID, expID, function(re) {
-    if(re != phaseNo && (re > -1)) {
+  mongo.experiment.userPosition(userID, expID, function(userdata) {
+    
+    //Checking if user is in the wrong phase
+    if(userdata.position != phaseNo && (userdata.position > 0)) {
       var reg = /phase\/\d*/;;
-      request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (re)));
+      request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (userdata.position)));
     } 
 
     else {
-        mongo.experiment.get(expID, function(r) {
+      mongo.experiment.get(expID, function(r) {
         var exp  = r.result; 
         phase = exp.components[phaseNo];
 
@@ -905,6 +914,12 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         var noOfPhases = parseInt(r.result.components.length);
         phaseNo = parseInt(phaseNo);
         var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
+
+        if (exp.israndom) {
+          console.log("------Translating phase number---------");
+          console.log(phaseNo + " -> " + userdata.ranComp);
+          phase = exp.components[userdata.randomorder[phaseNo]]; 
+        }
 
         //Formphase, rendering form template
         if(phase.type === "form") {
@@ -938,7 +953,6 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
       });
     }
   })
-
 });
 
 
@@ -947,14 +961,23 @@ customMatcher.get('/experiment/:id/phase/:phase/json', function(request) {
   var phaseNo = request.params().get('phase'); 
   var phase;
 
-  mongo.experiment.get(expID, function(r) {
-    phase = r.result.components[phaseNo];
+  var userID = request.session.getPersonToken();
 
-    mongo.test.get(phase.id, function(r2) {
 
-      request.response.end(r2.result.js);
+  mongo.experiment.userPosition(userID, expID, function(userdata) {
+    phaseNo = userdata.position;
+    if (userdata.randomorder) {
+      phaseNo = userdata.randomorder[userdata.position];
+    }
+    mongo.experiment.get(expID, function(r) {
+      phase = r.result.components[phaseNo];
+
+      mongo.test.get(phase.id, function(r2) {
+
+        request.response.end(r2.result.js);
+      });
     });
-  });
+  })
 
 });
 

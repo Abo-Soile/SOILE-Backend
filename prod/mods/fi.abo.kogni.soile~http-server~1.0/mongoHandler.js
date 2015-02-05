@@ -62,6 +62,28 @@ function _isActive(experiment) {
   return experiment;
 }
 
+/*
+Checks if at least two consequent componentes are set to random.
+*/
+function _isRandom(experiment) {
+  var longestRandom = 0;
+  var prevRandom = false
+  for (var i = 0; i < experiment.components.length; i++) {
+    if(experiment.components[i].random) {
+      longestRandom +=1;
+      if (longestRandom > 1) {
+        return true;
+      }  
+    }
+    else {
+      longestRandom = 0;
+    } 
+  };
+
+  return false;
+}
+
+
 var mongoHandler = {
   mongoAddress: "vertx.mongo-persistor",
   init: function(){
@@ -368,6 +390,8 @@ var Experiment = {
         } else { reply.result.active = false}*/
 
         reply.result = _isActive(reply.result);
+        reply.result.israndom = _isRandom(reply.result); 
+
       }
       response(reply);
 
@@ -408,25 +432,53 @@ var Experiment = {
       return 0;
     }*/
   },
-
-  saveData: function(phase, experimentid ,data, userid,response) {
+  /*
+    Saves data and updated the user's position in the test. 
+  */
+  saveData: function(phase, experimentid ,data, userid, callback) {
     var doc = {};
     doc.phase = phase;
     doc.expId = experimentid;
     doc.userid = userid
     doc.confirmed = false;
     doc.data = data;
+
+    function save(document){     
+      vertx.eventBus.send(mongoAddress, {"action":"save",
+      "collection":dataCollection, "document":doc}, function(reply) {
+
+        vertx.eventBus.send(mongoAddress, {"action":"update", 
+          "collection":dataCollection, "criteria":{
+            "expId":document.experimentid,
+            "userid":document.userid,
+            "type":"general"
+          },
+          objNew : {
+            $inc: {
+              position:1
+            } 
+          },
+        }, function(reply2) {
+           callback(reply);
+        })
+      });
+    }
     
     this.get(experimentid, function(r) {
+      var exp = r.result;
       var type = r.result.components[phase].type;
       doc.type = type;
 
-      console.log(mongoAddress);
+      if (exp.israndom) {
+        Experiment.getUserData(userid, experimentid, function(userdata) {
+          doc.phase = userdata.randomorder[phase];
+          save(doc);
+        })
+      }
+      else {
+        save(doc);
+      }
 
-      vertx.eventBus.send(mongoAddress, {"action":"save",
-        "collection":dataCollection, "document":doc}, function(reply) {
-          response(reply);
-      });
       /*
       if(type === "form"){
         vertx.eventBus.send(mongoAddress, {"action":"save",
@@ -461,14 +513,16 @@ var Experiment = {
     })
   },
 
-  generateRandomOrder: function(exp, userId, callback) {
+  generateRandomOrder: function(exp) {
     //var exp = r.result;
     var randomList = [];
+    var randomMapping = []
 
     for (var i = 0; i < exp.components.length; i++) {
       if (exp.components[i].random) {
         randomList[i] = i
       }
+      randomMapping[i] = i;
     };
 
     var startRandomSequence = null;
@@ -477,6 +531,7 @@ var Experiment = {
       arrSlice = utils.shuffle(arrSlice);
       for (var i = 0; i < arrSlice.length; i++) {
         randomList[i + index] = arrSlice[i];
+        randomMapping[i + index] = arrSlice[i];
       };
     }
 
@@ -494,25 +549,28 @@ var Experiment = {
         startRandomSequence = null;
       }
     }
-
-    var doc = {};
-    doc._id = userId
-    doc.userid = userId;
-    doc.experimentid = exp._id;
-    doc.randomorder = randomList;
-    doc.type = "general";
-
-    vertx.eventBus.send(mongoAddress, {"action":"save",
-      "collection":dataCollection, "document":doc}, 
-      function(reply) {
-        callback(reply);
-      } 
-    )
+    return randomMapping;
   },
 
-  var getRandomOrder(expId, userid, callback) {
-    // TODO: Implememnt this
-  }
+  /*
+  Returns the random order if one exits, else false;
+  */
+  /*getRandomOrder:   function(expId, userid, callback) {
+    vertx.eventBus.send(mongoAddress, {"action":"findone",
+      "collection":dataCollection,
+      "matcher":{"expId":expId, "userid":userid, "type":"general"}},
+      function(r) {
+        console.log("-------Getting Random Order------");
+        console.log(JSON.stringify(r));
+        if (typeof r.result == 'undefined') {
+          callback(false);
+        }
+        else {
+          callback(r.result.randomorder)
+        }
+      }
+    )
+  },*/
 
   // Setting a confirmed flag on submitted data. 
   // This is run when an user successfully reaches the end
@@ -758,27 +816,55 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
   // Returns the users current position in the experiment.
   // Is done by selecting the latest stored data and checking its phase.
   // So the phase to be displayed is latestdata.phase + 1.
-  userPosition: function(userid, experimentid, response) {
-    vertx.eventBus.send(mongoAddress, {
-      "action":"find",
-      "collection":dataCollection,
-      "matcher":{
-        "userid":userid,
-        "expId":experimentid
-      },
-      "sort":{"phase":-1},
-      "limit":1},
-      function userTestData(reply) {
-        var currentPhase = -1;
-        if(reply.number == 1) {
-           currentPhase = parseInt(reply.results[0].phase) + 1;
+  userPosition: function(userid, experimentid, callback) {
+
+    //this.getRandomOrder(experimentid, userid, function(randomOrder) {
+      this.getUserData(userid, experimentid, function(userdata){
+          /*
+          BUG: Fails in some cases!! 
+           Getting fetching the latest stored data fails when a
+           random order goes from a bigger phase to a smaller on, eg 
+           3 -> 2, since 3 will always be fetched even if 2 is 
+           completed as well-
+          */
+          console.log("------Latest userData-----");
+          console.log(JSON.stringify(userdata));
+          var currentPhase = -1;
+          var nextPhase = -1
+          var ran = 0;
+
+          callback(userdata);
+
+          /*if(reply.number == 1) {
+            if(reply.results[0].type == 'general') {
+              console.log("no latest data, returning -1");
+              
+              return response({phase:-1, ranComp:0})
+            }
+
+            currentPhase = parseInt(reply.results[0].phase);
+            nextPhase = currentPhase + 1;
+          }*/
+          /*currentPhase = userdata.position;
+
+          if(userdata.randomorder) {
+            console.log("-----Random Order-----");
+            console.log("userposition " + currentPhase);
+            console.log("userrandomposition " + 
+            Experiment._randomToRealPhase(randomOrder, currentPhase));
+            currentPhase = Experiment._randomToRealPhase(userdata.randomorder, currentPhase);
+            nextPhase = currentPhase +1
+
+            ran = randomOrder[nextPhase];
+          } else {
+            console.log("------normal order-----------");
+            console.log("userPosition: " + currentPhase);          
+          }
+
+          response({phase:nextPhase, ranComp:ran});
+          */
         }
-
-        console.log("userPosition: " + currentPhase);
-        response(currentPhase);
-      }
-    )
-
+      )
     /*
     vertx.eventBus.send(mongoAddress, {
       "action":"find",
@@ -815,6 +901,52 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
           }
         )
     });*/
+  },
+
+  getUserData: function(userid, experimentid, callback) {
+    vertx.eventBus.send(mongoAddress, {
+        "action":"findone",
+        "collection":dataCollection,
+        "matcher":{
+          "userid":userid,
+          "expId":experimentid,
+          "type":"general"
+          /*"type":"$not('general')"*/
+        }},
+        function(data) {
+          if (data.status == "error") {
+            return callback(false);
+          }else {
+            callback(data.result)
+          }
+        }
+    )
+  },
+
+  initUserData: function(data, userid, experimentid, callback) {
+    data.userid = userid;
+    data.expId = experimentid;
+    data.type = "general";
+
+    vertx.eventBus.send(mongoAddress, {
+      "action":"save",
+      "collection":dataCollection,
+      "document":data
+    },function(reply) {
+      callback(reply);
+    })
+  },
+
+  _randomToRealPhase: function(randomOrder, phase) {
+    if (phase == -1) {
+      return -1;
+    }
+    for (var i = 0; i < randomOrder.length; i++) {
+      if(randomOrder[i] == phase) {
+        return i;
+      }
+    };
+    return 0;
   },
 
    //Refreshes the userid on submitted data, useable when
