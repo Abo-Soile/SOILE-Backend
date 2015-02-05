@@ -812,59 +812,58 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       })
   },
 
-
-  // Returns the users current position in the experiment.
-  // Is done by selecting the latest stored data and checking its phase.
-  // So the phase to be displayed is latestdata.phase + 1.
+/*
+  Returns the users current position in the experiment.
+  Is done by selecting the latest stored data and checking its phase.
+  So the phase to be displayed is latestdata.phase + 1.
+*/
   userPosition: function(userid, experimentid, callback) {
 
-    //this.getRandomOrder(experimentid, userid, function(randomOrder) {
-      this.getUserData(userid, experimentid, function(userdata){
-          /*
-          BUG: Fails in some cases!! 
-           Getting fetching the latest stored data fails when a
-           random order goes from a bigger phase to a smaller on, eg 
-           3 -> 2, since 3 will always be fetched even if 2 is 
-           completed as well-
-          */
-          console.log("------Latest userData-----");
-          console.log(JSON.stringify(userdata));
-          var currentPhase = -1;
-          var nextPhase = -1
-          var ran = 0;
+    this.getUserData(userid, experimentid, function(userdata){
+        /*
+         Getting fetching the latest stored data fails when a
+         random order goes from a bigger phase to a smaller on, eg 
+         3 -> 2, since 3 will always be fetched even if 2 is 
+         completed as well-
+        */
+        console.log("------Latest userData-----");
+        console.log(JSON.stringify(userdata));
+        var currentPhase = -1;
+        var nextPhase = -1
+        var ran = 0;
 
-          callback(userdata);
+        callback(userdata);
 
-          /*if(reply.number == 1) {
-            if(reply.results[0].type == 'general') {
-              console.log("no latest data, returning -1");
-              
-              return response({phase:-1, ranComp:0})
-            }
-
-            currentPhase = parseInt(reply.results[0].phase);
-            nextPhase = currentPhase + 1;
-          }*/
-          /*currentPhase = userdata.position;
-
-          if(userdata.randomorder) {
-            console.log("-----Random Order-----");
-            console.log("userposition " + currentPhase);
-            console.log("userrandomposition " + 
-            Experiment._randomToRealPhase(randomOrder, currentPhase));
-            currentPhase = Experiment._randomToRealPhase(userdata.randomorder, currentPhase);
-            nextPhase = currentPhase +1
-
-            ran = randomOrder[nextPhase];
-          } else {
-            console.log("------normal order-----------");
-            console.log("userPosition: " + currentPhase);          
+        /*if(reply.number == 1) {
+          if(reply.results[0].type == 'general') {
+            console.log("no latest data, returning -1");
+            
+            return response({phase:-1, ranComp:0})
           }
 
-          response({phase:nextPhase, ranComp:ran});
-          */
+          currentPhase = parseInt(reply.results[0].phase);
+          nextPhase = currentPhase + 1;
+        }*/
+        /*currentPhase = userdata.position;
+
+        if(userdata.randomorder) {
+          console.log("-----Random Order-----");
+          console.log("userposition " + currentPhase);
+          console.log("userrandomposition " + 
+          Experiment._randomToRealPhase(randomOrder, currentPhase));
+          currentPhase = Experiment._randomToRealPhase(userdata.randomorder, currentPhase);
+          nextPhase = currentPhase +1
+
+          ran = randomOrder[nextPhase];
+        } else {
+          console.log("------normal order-----------");
+          console.log("userPosition: " + currentPhase);          
         }
-      )
+
+        response({phase:nextPhase, ranComp:ran});
+        */
+      }
+    )
     /*
     vertx.eventBus.send(mongoAddress, {
       "action":"find",

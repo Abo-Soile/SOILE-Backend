@@ -130,7 +130,7 @@ function customMatcher() {
 
 customMatcher.prototype = new vertx.RouteMatcher();
 
-//more methods from the routematcher should be implementd as needed.
+//More methods from the routematcher should be implementd as needed.
 customMatcher.get = function(pattern, handler) {
   routeMatcher.get(pattern, sessionTest(handler));
 };
@@ -165,10 +165,6 @@ var DEBUG = true;   //This variable could stored in configs
 // }
 
 var utils = require("utils");
-
-//var user = require('mongoHandler').user;
-//var queryMongo = require('mongoHandler').mongoHandler;
-
 var mongo = require('mongoHandler');
 mongo.mongoHandler.init();
 
@@ -644,12 +640,14 @@ customMatcher.get('/experiment/:id', function(request){
       if(request.session.loggedIn()) {
         userID = request.session.loggedIn().id;
       }
-      //mongo.experiment.userPosition(userID, id, function(re) {
+
+      /*
+      Checking for userdata and generating it when needed.
+      */
       mongo.experiment.getUserData(userID, id, function(userdata) {
-      //console.log("Position = " + re);
         if (userdata) {
           console.log("Userdata exists " + JSON.stringify(userdata))
-          // TODO: This one should be changed to > 0
+          //Redirect to right phase if available
           if(userdata.position > 0) {          
             request.redirect(request.absoluteURI() + "/phase/" + (userdata.position));
           }
@@ -659,15 +657,10 @@ customMatcher.get('/experiment/:id', function(request){
         }
         else { 
           console.log("No userdata");
+
           var userdata = {}
-          // TODO: userposition should be set to 0, instead of -1
           userdata.position = 0;
           userdata.randomorder = false;
-          /*for (var i = 0; i < exp.components.length; i++) {
-            if (exp.components[i].random) {
-              randomize = true
-            }
-          };*/
 
           if (exp.israndom) {
             var order = mongo.experiment.generateRandomOrder(exp);
@@ -812,6 +805,7 @@ customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
   });
 }));
 
+
 customMatcher.post("/experiment/:id/randomizeorder", requireAdmin(function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
@@ -830,7 +824,6 @@ customMatcher.post("/experiment/:id/randomizeorder", requireAdmin(function(reque
       request.response.end("Ending");
     })
   });
-
 }))
 
 
@@ -1019,6 +1012,7 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
     });
   });
 });
+
 
 customMatcher.get('/experiment/:id/end', function(request) {
   var expID = request.params().get('id');
@@ -1238,6 +1232,7 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
 
 }));
 
+
 customMatcher.get('/test/demo', function(request) {
   var file = 'demo.html';
   request.response.sendFile(utils.file_from_serverdir(file));
@@ -1271,17 +1266,20 @@ customMatcher.post('/test/run', function(request) {
   });
 });
 
+
 customMatcher.get('/questionnaire', function(req) {
   var file = config.directory.concat('/questionnaire.html');
 
   req.response.sendFile(file);
 });
 
+
 customMatcher.get('/questionnaire/guide', function(request) {
   var file = 'qml-guide.html';
 
   request.response.sendFile(utils.file_from_serverdir(file));
 });
+
 
 customMatcher.post('/questionnaire/render', function(request) {
   var body = new vertx.Buffer();
@@ -1319,6 +1317,7 @@ customMatcher.post('/questionnaire/render', function(request) {
   });
 });
 
+
 customMatcher.get('/questionnaire/generated/:id', function(request) {
   console.log(request.method);
   var id = request.params().get('id');
@@ -1338,6 +1337,7 @@ customMatcher.get('/questionnaire/generated/:id', function(request) {
 
 });
 
+
 customMatcher.get('/questionnaire/mongo/:id', requireAdmin(function(request){
   var id = request.params().get('id');
   mongo.form.get(id, function(r){
@@ -1347,6 +1347,7 @@ customMatcher.get('/questionnaire/mongo/:id', requireAdmin(function(request){
     templateManager.render_template('displayForm', {"form":form,"markup":markup},request);
   });
 }));
+
 
 customMatcher.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
   var postdata = new vertx.Buffer();
@@ -1384,6 +1385,7 @@ customMatcher.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
   });
 }));
 
+
 customMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
   var id = request.params().get('id');
   mongo.form.get(id,function(r) {
@@ -1393,9 +1395,11 @@ customMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
   });
 });
 
+
 customMatcher.post('questionnaire/generated/:id', function(request) {
   console.log(request.method);
 });
+
 
 customMatcher.get('/test', function(request) {
   mongo.test.list(function(r) {
@@ -1403,6 +1407,7 @@ customMatcher.get('/test', function(request) {
   })
 
 });
+
 
 customMatcher.get('/test/json', function(request) {
   mongo.test.list(function(r) {
@@ -1521,6 +1526,7 @@ customMatcher.post("/test/:id", requireAdmin(function(request) {
   });
 }));
 
+
 customMatcher.post("/test/:id/imageupload", function(request) {
 
   request.expectMultiPart(true);
@@ -1549,6 +1555,7 @@ customMatcher.post("/test/:id/imageupload", function(request) {
   });
 });
 
+
 customMatcher.delete("/test/:id/imageupload/:imageName", function(request) {
   var id = request.params().get('id');
   var imgName = request.params().get('imageName');
@@ -1567,6 +1574,7 @@ customMatcher.delete("/test/:id/imageupload/:imageName", function(request) {
     })
   });
 });
+
 
 customMatcher.get('/test/:id/imagelist', function(request) {
   var id = request.params().get('id');
@@ -1589,6 +1597,7 @@ customMatcher.get('/test/:id/imagelist', function(request) {
   });
 });
 
+
 customMatcher.post('/test/:id/editname', requireAdmin(function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
@@ -1608,6 +1617,7 @@ customMatcher.post('/test/:id/editname', requireAdmin(function(request) {
     });
   });
 }));
+
 
 customMatcher.post('/user', function(request) {
   var data = new vertx.Buffer();
@@ -1642,7 +1652,6 @@ customMatcher.post('/user', function(request) {
 
 
 customMatcher.get('/', function(request) {
-
   // Admin showing admin controls
   if (request.session.isAdmin()) {
     mongo.experiment.list([], function(r) {
@@ -1683,6 +1692,7 @@ customMatcher.get('/', function(request) {
     }
   }
 });
+
 
 /*
   Matches static files. Uses the normal routmatcher so that session stuff is 
