@@ -114,6 +114,9 @@ function sendEmail(subject, body, address, func) {
 
 }
 
+/*
+  Checking if a string seems to be an email address
+*/
 function looksLikeMail(str) {
     var lastAtPos = str.lastIndexOf('@');
     var lastDotPos = str.lastIndexOf('.');
@@ -158,11 +161,8 @@ customMatcher.noMatch = function(handler) {
 // needed.
 var routeMatcher = new customMatcher();
 
+// TODO: Load this from config
 var DEBUG = true;   //This variable could stored in configs
-
-// function arrayContains(item, array){
-//   return (arrhaystack.indexOf(needle) > -1);
-// }
 
 var utils = require("utils");
 var mongo = require('mongoHandler');
@@ -174,7 +174,7 @@ var mailManager = require('mailManager');
 //Ugly hack to make sure that the template module is online before loading
 //Base templates
 var timerID = vertx.setTimer(2000, function() {
-  console.log("\n ------Loading base templates------");
+  console.log("\n ------Loading  templates------");
  // templateManager.load_template("header");
  // templateManager.load_template("footer");
   templateManager.loadAll();
@@ -239,15 +239,6 @@ function session(func) {
 }
 
 customMatcher.get("/login", function(request) {
- // request.response.putHeader("Set-Cookie","MySessionToken");
- // request.response.putHeader("Set-Cookie","MyAuthToken");
-
-  //var previous = utils.getUrlParams(request.query()).url;
-
-  //console.log(previous);
-
-  //Saving refere/previous url to enable redirects
-  //console.log(request.headers().get("Referer"));
   var previous = request.headers().get("Referer");
   
   templateManager.render_template('login', {"origin":previous},request);
@@ -300,20 +291,19 @@ customMatcher.post("/login", function(request) {
       }
       //No user was found, error
       else {
-
         templateVars.errors = "Wrong username or password";
         console.log(JSON.stringify(templateVars));
         templateManager.render_template('login', templateVars, request);
       }
-
-      //request.response.end("Returning testpost");
     });
   });
 });
 
+
 customMatcher.get("/login/forgotten", function(request) {
     templateManager.render_template("forgotten", {}, request)
 });
+
 
 customMatcher.post("/login/forgotten", function(request) {
 
@@ -338,7 +328,7 @@ customMatcher.post("/login/forgotten", function(request) {
 
       var uri = request.absoluteURI() + "/" + r.token;
 
-      //TODO actually send the email
+      //TODO: actually send the email
       mailManager.passwordReset(username, uri, function(r) {
         console.log("Reset mail sent to: " + username + " " + JSON.stringify(r));
         templateManager.render_template("forgotten", templateParams, request)
@@ -387,6 +377,7 @@ customMatcher.post("/login/forgotten/:token", function(request) {
   });
 });
 
+
 customMatcher.get("/logout", function(request) {
   var uname = request.session.loggedIn();
 
@@ -396,11 +387,11 @@ customMatcher.get("/logout", function(request) {
   request.redirect("/");
 });
 
+
 customMatcher.get('/signup', function(request) {
-
   templateManager.render_template('signup', {},request);
-
 });
+
 
 customMatcher.post("/signup", function(request) {
   var data = new vertx.Buffer();
@@ -414,13 +405,6 @@ customMatcher.post("/signup", function(request) {
     var params = {};
 
     data = data.getString(0, data.length());
-
-    // data = data.split('&');
-    // for(var i = 0; i<data.length;i++) {
-    //   datapart = data[i].split('=');
-    //   params[datapart[0]] = datapart[1];
-    // }
-
     params = utils.getUrlParams(data);
 
     var email = params.email;
@@ -433,14 +417,12 @@ customMatcher.post("/signup", function(request) {
     templateVars.username = email;
     templateVars.origin = decodeURIComponent(origin);
 
-    //console.log(data);
     console.log(JSON.stringify(params));
     console.log(passwd + "===" + passwdAgain);
 
 
     if(!(email && passwd && passwdAgain)) {
       templateVars.registererrors = "All fields are required";
-      //templateManager.render_template('signup', templateVars,request);
       templateManager.render_template('login', templateVars,request);
 
       return;
@@ -838,12 +820,6 @@ customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(requ
   request.endHandler(function() {
     var jsonData = (JSON.parse(data.getString(0, data.length())));
     console.log(JSON.stringify(jsonData));
-
-    /*mongo.experiment.deleteComponent(expId, jsonData.id, function(r) {
-      console.log(JSON.stringify(r));
-
-      request.response.end(JSON.stringify(r.result));
-    });*/
 
     mongo.experiment.deleteComponentByIndex(expId, jsonData.index, function(r) {
       console.log(JSON.stringify(r));
@@ -1381,7 +1357,6 @@ customMatcher.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(response));
     });
-  
   });
 }));
 
@@ -1405,7 +1380,6 @@ customMatcher.get('/test', function(request) {
   mongo.test.list(function(r) {
     templateManager.render_template('testlist', {"tests":r.results},request);
   })
-
 });
 
 
@@ -1443,8 +1417,6 @@ customMatcher.post("/test", requireAdmin(function(request) {
           return request.redirect("/test/"+r._id);
         }
       });
-
-      
     })
   });
 }));
@@ -1494,8 +1466,6 @@ customMatcher.post("/test/:id", requireAdmin(function(request) {
       'code': code
     };
 
-
-
     eb.send(address, msg, function(reply) {
       var response = {};
 
@@ -1521,8 +1491,6 @@ customMatcher.post("/test/:id", requireAdmin(function(request) {
         request.response.end(JSON.stringify(response));
       });
     });
-    //send to compiler -> send to mongo
-
   });
 }));
 
@@ -1583,16 +1551,16 @@ customMatcher.get('/test/:id/imagelist', function(request) {
   vertx.fileSystem.readDir(testImages + "/" + id, function(err, res) {
     if (!err) {
       //files = res;
-       for (var i = 0; i < res.length; i++) { 
-          var img = res[i].toString();
-          var file = {}
-          file.url = img.substring(img.indexOf("testimages"));
-          file.name = img.substring(img.lastIndexOf("/")+1);
-          files.push(file);
-        }
-        var fileJSON = JSON.stringify(files);
+      for (var i = 0; i < res.length; i++) { 
+        var img = res[i].toString();
+        var file = {}
+        file.url = img.substring(img.indexOf("testimages"));
+        file.name = img.substring(img.lastIndexOf("/")+1);
+        files.push(file);
+      }
 
-        request.response.end(fileJSON);
+      var fileJSON = JSON.stringify(files);
+      request.response.end(fileJSON);
     }
   });
 });
@@ -1659,7 +1627,6 @@ customMatcher.get('/', function(request) {
         templateManager.render_template('admin', {"experiments":r.results,"tests":s.results},request);
         //templateManager.render_template('testlist', {"tests":r.results},request);
       });
-
     });
   }
   else {
@@ -1682,10 +1649,8 @@ customMatcher.get('/', function(request) {
           //console.log(JSON.stringify(r));
           templateManager.render_template('user', r, request);
         })
-
       })
     }
-
     // Anonymous user, showing ladning page
     else {
       templateManager.render_template('landing', {} ,request);
