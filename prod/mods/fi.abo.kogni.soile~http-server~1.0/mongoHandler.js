@@ -138,6 +138,15 @@ var user = {
       });
   },
 
+  delete: function(userid, callback) {
+    vertx.eventBus.send(mongoAddress, {"action":"delete",
+      "collection":"users","matcher":{"_id":userid}},
+      function(reply) {
+        //console.log(JSON.stringify(reply));
+        response(reply.result);
+      });
+  },
+
   list: function(isAdmin, response) {
       vertx.eventBus.send(mongoAddress, {"action":"find",
         "collection":"users","matcher":{"admin":isAdmin}},
@@ -395,6 +404,15 @@ var Experiment = {
       }
       response(reply);
 
+    });
+  },
+
+  delete: function(id, callback) {
+    vertx.eventBus.send("vertx.mongo-persistor",
+      {"action":"delete", 
+       "collection":"experiment","matcher":{"_id":id}},
+       function(reply){
+      callback(reply)
     });
   },
 
@@ -1088,6 +1106,13 @@ var Test = {
     });
   },
 
+  delete: function(id, callback){
+    vertx.eventBus.send(mongoAddress, {"action":"delete",
+    "collection":"tests","matcher":{"_id":id}}, function(reply) {
+      callback(reply);
+    });
+  },
+
   list: function(response){
     vertx.eventBus.send(mongoAddress, {"action":"find",
     "collection":"tests"}, function(reply) {
@@ -1142,21 +1167,27 @@ var Test = {
 //Refactoring Done
 var Form = {
 
-  //Saves a form, does 
-  save: function(name, form, id, response) {
-    vertx.eventBus.send("vertx.mongo-persistor",{"action":"save",
-      "collection":"forms","document":{"form":form}}, function(reply){
-        response(reply)
-      })
-  },
-
-  get: function(id, response){
+  get: function(id, callback){
     vertx.eventBus.send("vertx.mongo-persistor", {"action":"findone",
     "collection":"forms","matcher":{"_id":id}}, function(reply) {
-      response(reply);
+      callback(reply);
     })
-  }
+  },
 
+  delete: function(id, callback){
+    vertx.eventBus.send("vertx.mongo-persistor", {"action":"delete",
+    "collection":"forms","matcher":{"_id":id}}, function(reply) {
+      callback(reply);
+    })
+  },
+
+  //Saves a form, does 
+  save: function(name, form, id, callback) {
+    vertx.eventBus.send("vertx.mongo-persistor",{"action":"save",
+      "collection":"forms","document":{"form":form}}, function(reply){
+        callback(reply)
+      })
+  }
 }
 
 module.exports.mongoHandler = mongoHandler;
