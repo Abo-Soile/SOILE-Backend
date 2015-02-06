@@ -1,0 +1,21 @@
+module.exports = {
+  "Demo test Google" : function (browser) {
+    browser
+      .url("http://www.google.com")
+      .waitForElementVisible('body', 1000)
+      .setValue('input[type=text]', 'nightwatch')
+      .waitForElementVisible('button[name=btnG]', 1000)
+      .click('button[name=btnG]')
+      .pause(1000)
+      .assert.containsText('#main', 'The Night Watch')
+      .end();
+  },
+
+  "TestSoileLanding": function (browser) {
+    browser
+      .url("http://soile.fi:8080/")
+      .waitForElementVisible('body', 1000)
+      .assert.containsText('h4', "Welcome to soile")
+      .end()
+  }
+};
