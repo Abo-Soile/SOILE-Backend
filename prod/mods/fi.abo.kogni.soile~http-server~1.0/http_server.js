@@ -204,40 +204,6 @@ var sessionManager = require("sessionManager");
 
 //var sessionManager = require("sessionManager").sessionManager;
 
-//Injects session code that is run before the actual request
-//It would probably be best to generalize this abit more to make it extendable
-//with other functionality as well
-
-//DEPRECATED, see sessiontest instead
-function session(func) {
-  console.log("test");
-  return function (request) {
-    console.log("Before returnfunction");
-    // request.headers().forEach(function(key,value){
-    //   console.log(key + " - " + value);
-    // });
-
-    console.log("Cookies:: " + request.headers().get("Cookie"));
-
-    var session = sessionManager.loadManager(request);
-    session.setPersonToken();
-
-    request.prototype.redirect = function(url) {
-      console.log("Redirecting to " + url);
-      console.log(this.remoteAddress());
-
-      this.response.statusCode(302);
-      this.response.putHeader('Location', url);
-      this.response.end();
-    };
-
-    //Sending the session manager with the request
-    request.session = session;
-
-    func(request);
-  };
-}
-
 customMatcher.get("/login", function(request) {
   var previous = request.headers().get("Referer");
   
@@ -462,54 +428,6 @@ customMatcher.post("/signup", function(request) {
 });
 
 
-customMatcher.get("/a", requireAdmin(function(request){
-  console.log(JSON.stringify(container.config));
-
-  vertx.eventBus.send("vertx.mongo-persistor",{"action":"save", 
-        "collection":"test","document":{"name":"Doe Joeddddd", "Age":10}},function(reply){
-          console.log(JSON.stringify(reply));
-        });
-
-  vertx.eventBus.send("vertx.mongo-persistor",{"action":"find", 
-      "collection":"test"},function(reply){
-        console.log(JSON.stringify(reply));
-      });
-
-  templateManager.render_template('landing', {"name":"","test":"This is a test"},request);
-}));
-
-customMatcher.get("/aa", function(request){
-  console.log("Testing sending of emails");
-
-  sendEmail("testmail from aa", "This is a test email", "test@danielwarna.com", function(res) {
-    console.log("Email sent");
-    console.log(JSON.stringify(res));
-    templateManager.render_template('landing', {"name":"Daniel Testing","test":"This is a test"},request);
-  })
-
-});
-
-
-customMatcher.get('/dust', function(request){
-  templateManager.loadAll();
-
-  request.response.end("Updated templates");
-});
-
-customMatcher.get('/dust1', function(request){
-  var eb = vertx.eventBus;
-  eb.send("dust.load", {"name":"test", "context": {"x":"world"}}, function(reply){
-   request.response.end(JSON.stringify(reply));
-  });
-});
-
-customMatcher.get('/dust2', function(request){
-  var eb = vertx.eventBus;
-  eb.send("dust.render", {"name":"test", "context": {"x":"world"}}, function(reply){
-   request.response.end(JSON.stringify(reply));
-  });
-});
-
 customMatcher.get('/users', requireAdmin(function(request){
   mongo.user.list(true, function(r) {
       var admins = r.results;
@@ -517,6 +435,7 @@ customMatcher.get('/users', requireAdmin(function(request){
       templateManager.render_template("userList",{"users":admins}, request);
     })
 }));
+
 
 customMatcher.get("/experiment", function(request){
   mongo.experiment.list([], function(r){
@@ -532,8 +451,6 @@ experiments' edit page
 */
 customMatcher.get("/experiment/new", function(request){
   //templateManager.render_template("experimentform", {},request);
-
-
   var sDate = Date.now()
   var eDate = Date.now() + (1000*60*60*24*14)  //14 days in the future
 
