@@ -33,6 +33,9 @@ var sessionManager =  {
     }
 
     //Adding cookie to memory so that it can be used instantly
+    if (this.cookies != "") {
+      this.cookies += ";";
+    }
     this.cookies += name+"="+value+";";
     return name+"="+value+expires+"; path=/";
   },
@@ -131,6 +134,8 @@ var sessionManager =  {
 
   isAdmin: function() {
     var sessionData = sessionMap.get(this.getSessionCookie());
+    console.log("----Checking for admin----\n with session: " + this.getSessionCookie());
+    console.log(JSON.stringify(sessionData));
     if(!sessionData) {
       return false;
     }
