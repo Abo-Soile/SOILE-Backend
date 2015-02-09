@@ -415,7 +415,10 @@ customMatcher.post("/signup", function(request) {
         //templateManager.render_template('landing', {}, request);
         console.log(origin);
         request.session.login(r._id, email,false);
-        return request.redirect(decodeURIComponent(origin));
+        if(origin){
+          return request.redirect(decodeURIComponent(origin));
+        }
+        return request.redirect('/')
       }
       else {
         templateVars.registererrors = "Username already exists!, try logging in";
