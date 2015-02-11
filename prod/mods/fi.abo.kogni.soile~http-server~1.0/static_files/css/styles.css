@@ -521,6 +521,13 @@ body {
 	background: #9BBCD0;
 }
 
+.dijitDialog  {
+	width: 80% !important;
+}
+
+.dijitDialogPaneContent {
+	widows: 100% !important;
+}
 
 /*
 dBootstrap fixes
