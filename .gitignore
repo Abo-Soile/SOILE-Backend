@@ -22,3 +22,8 @@ prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-verticle.jar
 docs/_build
 
 *io.vertx~mod-mongo-persistor~2.1.0/
+
+
+seleniumtests/selenium-server-standalone-2.44.0.jar
+seleniumtests/reports/
+seleniumtests/node_modules/
