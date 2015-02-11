@@ -67,6 +67,11 @@ Checks if at least two consequent componentes are set to random.
 function _isRandom(experiment) {
   var longestRandom = 0;
   var prevRandom = false
+
+  if (typeof experiment.components == 'undefined') {
+    return false;
+  } 
+
   for (var i = 0; i < experiment.components.length; i++) {
     if(experiment.components[i].random) {
       longestRandom +=1;
