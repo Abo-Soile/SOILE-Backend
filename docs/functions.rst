@@ -8,7 +8,7 @@ Elang comes with a set of built in functions for performing common tasks. These 
 Stimuli
 #######
 
-Stimuli is a special list that defines how many times a 
+Stimuli is a special list that controls the interaction phase. The iteration in an interaction phase is run once for each element in the stimuli list. 
 
 **setstimuli(list)**
 Sets the stimuli to the given list. Overwrites previously defined stimuli.
