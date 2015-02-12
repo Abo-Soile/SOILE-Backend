@@ -7,14 +7,6 @@ var console = require('vertx/console');
 
 var mongo = require("mongoHandler");
 
-container.config = {
-    "conf":"fdsdsfds",
-    "shared": {
-        "directories": {"sadsa":"dsf"},
-        "addresses": {"dsfs":"sdf"}
-        }
-    }
-
 var mongoConfig = {
     "address": "vertx.mongo-persistor",
     "host": "127.0.0.1",
@@ -42,12 +34,14 @@ function testMongo() {
 }
 
 function testInit() {
-    mongo.init();
+    mongo.mongoHandler.init();
 
     mongo.user.get(1, function(reply) {
-        var user = reply.result;
-        vassert.assertEquals(user.username, "admin")
-        vassert.assertEquals(user._id, 1)
+        var user = reply;
+        console.log(JSON.stringify(reply))
+        vassert.assertEquals(user.username, "admin");
+        vassert.assertEquals(user._id, 1, 0.0002);
+        vassert.testComplete();
     })
 }
 

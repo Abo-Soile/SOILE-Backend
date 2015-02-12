@@ -4,15 +4,13 @@ var console = require('vertx/console');
 
 var shared_config = container.config.shared;
 
-console.log("\n\n-----------------------\n\n");
 console.log(JSON.stringify(container.config));
-console.log("---------conf over----------");
 
 var utils = (function() {
 
-  var addresses = shared_config.addresses;
+  /*var addresses = shared_config.addresses;
   var directories = shared_config.directories;
-  var http_directory = container.config.directory;
+  var http_directory = container.config.directory;*/
 
   return {
 
@@ -23,11 +21,11 @@ var utils = (function() {
     },
 
     'get_address': function(address) {
-      return addresses[address];
+      return shared_config.addresses[address];
     },
 
     'get_directory': function(dir) {
-      return directories[dir];
+      return shared_config.directories[dir];
     },
 
     // Get the base directory of the ENTIRE app.
@@ -37,7 +35,7 @@ var utils = (function() {
 
     // Get the base directory of the HTTP server.
     'get_serverdir': function() {
-      return http_directory;
+      return container.config.directory;
     },
 
     'file_exists': function(path) {
