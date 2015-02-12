@@ -1,0 +1,106 @@
+{>header /}
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.0/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+
+    <script src="/javascript/soile2.js"></script>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+    <style type="text/css" media="screen">
+        #editor { 
+            height: 550px;
+        }
+    </style>
+
+    <div class="container" id="main">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 id="testName">{test.name}</h2>
+            </div>
+            <div class="col-md-9">
+<!--            <textarea data-dojo-type="dijit/form/Textarea" id="code">
+                    {test.code}
+                </textarea>    -->
+                <div id="editor">
+                    {test.code}
+                </div>
+            </div>
+
+            <div class="col-md-3"> 
+                <h3>Images</h3>
+                <div id="uploader"></div>
+                <h4>Available images</h4>
+                <div id="images">
+                    <ul id="imagelist"> </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-12">
+                <button data-dojo-type="dijit/form/Button" type="button" id="compileButton">Save&Compile</button>
+
+                <button data-dojo-type="dijit/form/Button" type="button" id="runButton"> Run</button>
+            </div>
+            <hr>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="alert alert-danger hidden" id="errorbox">
+                </div>
+            </div>
+            <div class="col-md-12 placeholder50px"></div>
+            <div class="col-md-12">
+                <div id="display">
+                    <div id="mouseposition">
+                    </div>
+                    <p id="message" style="display:none"></p>
+                </div>
+            </div>
+           
+            <div class="col-md-5">
+                <div class="panel">
+                    <h5>DebugLog</h5>
+                    <div id="logdiv" class="overflow300">
+                        <table class="table table-striped table-condensed" id="log">
+                            <thead>
+                                <th>Time</th>
+                                <th>Message</th>
+                            </thead>
+                            <tr></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="panel">
+                    <h5>Raw Data</h5>
+                    <div class="overflow300">
+                        <table id="rawTable" class="table table-striped table-condensed">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-fancy">
+                    <h5>Stored Data</h5>
+                    <div class="overflow">
+                        <table id="dataTable" class="table table-striped table-responsive overflow">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/javascript/testeditor.js"></script>
+
+
+{>footer /}

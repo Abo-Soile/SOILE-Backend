@@ -1,0 +1,113 @@
+{>header /}
+<div id="main" class="container">
+	{#user.admin}
+	<div class="row">
+		<div id="toolButtons" class="col-md-12">
+
+			
+				<a class="btn btn-primary" href="experiment/new"><span class="glyphicon glyphicon-plus"></span>New Experiment</a>
+<!-- 				<a class="btn btn-primary" href="experiment">Experiment list</a> -->	
+				<!-- <a class="btn btn-primary" href="test">Tests</a> -->
+				<form action="/test", method="POST">
+					<div class="input-group">
+						
+						<input type="text" name="name" class="form-control" placeholder="Testname">
+						<span class="input-group-btn">
+							<input type="submit" value="New Test" class="btn btn-primary">
+						</span>
+
+					</div>
+				</form>
+				<a class="btn btn-info" href="/docs/index.html" target="_blank"><span class="glyphicon glyphicon-book"></span>  Documentation</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel">
+				<h4>Experiments</h4>
+				<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Status</th>
+					</tr>
+
+				</thead>
+				{#experiments uri=URI}
+					<tr>
+						<td>
+							<a href="{uri}experiment/{_id}">
+							{?name}
+								{name} 
+							{:else}
+								Unnamed Experiment
+							{/name}
+							</a>
+
+							</td>
+						{#timedata}
+							{?active}
+							<td>Closes in {timedata} days</td>
+							{:else}
+							<td>Opens in {timedata} days</td>
+							{/active}
+						{:else}
+						<td>Closed</td>
+						{/timedata}
+					</tr>
+				{/experiments}
+					
+				</table>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="panel">
+				<h4>Tests</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Status</th>
+						</tr>
+
+					</thead>
+					<tbody>
+					{#tests uri=URI}
+					{?compiled} 
+					<tr>
+					{:else}
+					<tr class="danger">
+					{/compiled}
+
+						<td>
+					{?name}
+						<a href="{uri}test/{_id}">{name}</a> 
+					{:else}
+						<a href="{uri}test/{_id}">Name Missing</a> 
+					{/name}
+						</td>
+
+					{?compiled} 
+						<td>Compiled</td>
+					{:else}
+						<td>Errors</td>
+					{/compiled}					
+					</tr>
+							
+
+					
+					{/tests}
+				</table>
+			</div>
+		</div>
+
+	</div>
+
+
+	{:else}
+	<p> Nothing to see here</p>
+	{/user.admin}
+</div>
+
+{>footer /}
