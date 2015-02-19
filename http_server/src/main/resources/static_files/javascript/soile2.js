@@ -1,5 +1,3 @@
-var tempDebug = 0
-
 var SOILE2;
 
 if (SOILE2 !== undefined){
@@ -299,7 +297,6 @@ SOILE2 = (function(){
   bin.greaterthan = bin.gt;
 
   bin.hide = function(id){
-    console.log("Hiding element: " + id);
     id = soile2.util.getid(id);
     jQuery(id).addClass("hiddenelem");
   };
@@ -318,10 +315,7 @@ SOILE2 = (function(){
     
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
-        //console.log("Drawing element:" + id + " " + performance.now());
-        tempDebug = performance.now();
-        rt.displayManager.addElement(id);
-        //jQuery(id).removeClass("hiddenelem");
+        jQuery(id).removeClass("hiddenelem");
 
         if (typeof pos !== 'undefined'){
           soile2.bin.position(id, pos);
@@ -859,76 +853,6 @@ SOILE2 = (function(){
     
   })();
 
-  /*
-    Not completely sure how this should be done. I can either aniamte 
-    imeditially and then wait for rAF or wait for rAF and perform the
-    animation inside rAF.
-
-    One would assume that rAF is run by the browser when the buffer swaps
-    so stuff is never displayed before a swap. Therefor waiting for a swap
-    should yield the correct results.
-
-    swap    swap    swap    swap
-    --|------|-------|-------|--
-         d-->     d-> draw-->
-      
-  */
-  rt.displayManager = (function() {
-    console.log("Initializing displaymanager")
-    var displayQueue = [];
-    var toDraw = false;
-
-    var RAF = ""
-
-    /*Call for a wait here, and maybe perform draw call*/
-    var addElement = function(element) {
-      //displayQueue.push(element);
-      jQuery(element).removeClass("hiddenelem")
-      toDraw = true;
-      rt.schd.wait(10000000000000);
-      //console.log("Drawing element " + performance.now());
-    }
-
-    var reset = function() {
-      displayQueue = [];
-      toDraw = false;
-    }
-
-    var waitForDraw = function() {
-      return toDraw;
-    }
-
-    var drawQueue = function(now) {
-      if(toDraw) {
-        //console.log(now);
-        /*for (var i = 0; i<displayQueue.length; i++) {
-          console.log("Displaymanager drawing " + displayQueue[i] + " Delay: " + (performance.now()-tempDebug));
-          jQuery(displayQueue[i]).removeClass("hiddenelem");
-        };*/
-
-        displayQueue = [];
-        toDraw = false;
-
-        //console.log("Queue length: " + displayQueue.length)
-       // if (displayQueue.length > 0) {
-          console.log("DisplayManager resuming, delay " + (performance.now()-tempDebug));
-          rt.schd.cancel();
-          rt.schd.resume();
-        //}
-      }
-      RAF = window.requestAnimationFrame(drawQueue);
-    }
-    RAF = window.requestAnimationFrame(drawQueue);
-
-    return {
-      "waitForDraw":waitForDraw,
-      "addElement":function(elem) {
-        addElement(elem);
-      }
-    }
-
-  })();
-
   // The keyhandler captures all keystrokes and executes a callback
   // function if a key is bound to one.
   rt.keyhandler = (function() {
@@ -1008,7 +932,6 @@ SOILE2 = (function(){
             soile2.bin.resume()
             var index = anykeyfunctions.indexOf(onkey);
             anykeyfunctions.splice(index, 1);
-            console.log("Resuming on key")
           }
 
           anykeyfunctions.push({"func":onkey, "ignoreFunc":ignoreFunc});
@@ -1106,7 +1029,7 @@ SOILE2 = (function(){
 
     var _average = function(array) {
       if(!array instanceof Array) {
-      	return 0; 
+        return 0; 
       }
       var sum =  array.reduce(function(sum, value) {
         return sum + value
@@ -1257,10 +1180,10 @@ SOILE2 = (function(){
 
         var limit = sd * multiplier;
         var av = _average(arr);
-	if(externalAverage !== "undefined") {
-	  av = externalAverage;
-	  console.log("external averagfe: "+av);
-	}
+  if(externalAverage !== "undefined") {
+    av = externalAverage;
+    console.log("external averagfe: "+av);
+  }
         console.log("Limit: " + limit + " av: " + av );
 
         var upperLimit = av + limit;
@@ -1327,6 +1250,7 @@ SOILE2 = (function(){
   // Simple single timer function.
   rt.timer = (function() {
     var startTime = null;
+
     return {
       'start': function() {
         startTime = soile2.rt.timestamp();
@@ -1517,13 +1441,13 @@ SOILE2 = (function(){
     var dowait = false;
     var waitfor = 0;
     var pi, opcode, idx;
-
-    while (true && !scheduler.waiting()){
+    
+    while (true){
       idx = soile2.rt.pi_index.get();
       pi = soile2.rt.get_pi(idx);
       opcode = soile2.rt.pi_opcode(pi);
 
-      //console.log("Current index: " + idx + "  Instruction: " + JSON.stringify(pi) + " Params: " + pi.params + " Waiting " + scheduler.waiting());
+      //console.log("Current index: " + idx + "  Instruction: " + JSON.stringify(pi) + " Params: " + pi.params);
 
       if (opcode < 0){
         // TODO
@@ -1595,16 +1519,9 @@ SOILE2 = (function(){
     
     // This will be the integer returned from a call to setTimeout.
     var settimeout_id;
-
-    // Are we currently waiting?
-    var waiting = false;
-    var getWaiting = function() {
-      //console.log("Wait for draw:;" + rt.displayManager.waitForDraw())
-      return (waiting || rt.displayManager.waitForDraw());
-    }
     
     var msleft = function(ts){
-      return ts - soile2.rt.timestamp();	
+      return ts - soile2.rt.timestamp();  
       return Math.abs(ts - soile2.rt.timestamp());
     };
     
@@ -1643,7 +1560,6 @@ SOILE2 = (function(){
         schedule(compute_delay(due_ts));
         return;
       }
-
       resume();
     };
     
@@ -1662,10 +1578,6 @@ SOILE2 = (function(){
           soile2.rt.pi_index.set(args[0]);
         }
       }
-      waiting = false;
-      cancel();
-
-      //console.log("Resuming program " + performance.now());
       soile2.rt.exec_pi();
     };
     
@@ -1702,20 +1614,15 @@ SOILE2 = (function(){
     };
     
     var wait = function(ms){
-      //console.log("Waiting ms:" + ms);
-     // console.log("WAITING: " + ms)
-      waiting = true;
       due_ts = soile2.rt.future_timestamp(ms);
       schedule(compute_delay(due_ts));
     };
-
     
     return {
       'cancel': cancel,
       'resume': resume,
       'suspend': suspend,
       'wait': wait,
-      'waiting':getWaiting,
     };
   })();
 
@@ -1895,11 +1802,6 @@ SOILE2 = (function(){
   };
 
   soile2.bin = soile2.rt.seal(bin);
-
-  soile2.run = function() {
-    rt.schd.resume();
-    SOILE2.rt.exec_pi()
-  }
   
   return soile2;
 })();
