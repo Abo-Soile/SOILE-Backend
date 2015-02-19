@@ -98,8 +98,62 @@ function testUser() {
     vassert.assertEquals(typeof err, 'undefined');
     console.log("DONE");
     vassert.testComplete();
-
   })
+}
+
+function testExperiments() {
+  async.waterfall([
+    function(callback) {
+      vassert.assertEquals("a", "a")
+      callback(null);
+    }
+  ],
+    function end(err, result) {
+      console.log("DONE")
+      vassert.testComplete();
+  })
+}
+
+function testTest() {
+  async.waterfall([
+    function(callback) {
+      vassert.assertEquals("a", "a");
+      callback(null);
+    }
+  ],
+    function end(err, result) {
+      console.log("DONE")
+      vassert.testComplete();
+  })
+}
+
+function testForm() {
+  async.waterfall([
+    function saveForm(callback) {
+      mongo.form.save("Title", false, function(r) {
+        callback(null, r._id);
+      })
+    },
+    function getForm(id, callback) {
+      mongo.form.get(id, function(r){
+        var form = r.result;
+        console.log("----getForm----\n");
+        console.log(JSON.stringify(form));
+        vassert.assertEquals(form.form, "Title");
+        callback(null, id)
+      })
+    },
+    function deleteForm(id, callback) {
+      mongo.form.delete(id, function(r) {
+        vassert.assertEquals(r.number, 1, 0);
+        callback(null);
+      }) 
+    }
+  ],
+    function end(err, result) {
+      console.log("DONE")
+      vassert.testComplete();
+  })  
 }
 
 

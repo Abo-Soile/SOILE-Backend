@@ -917,7 +917,7 @@ var Form = {
   },
 
   //Saves a form, does 
-  save: function(name, form, id, callback) {
+  save: function(form, id, callback) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"save",
       "collection":"forms","document":{"form":form}}, function(reply){
         callback(reply)
