@@ -267,7 +267,8 @@ SOILE2 = (function(){
     var x = Number(x)
     var y = Number(y)
 
-    if (_.isNumber(x) && _.isNumber(y)){
+    //if (_.isNumber(x) && _.isNumber(y)){
+    if (util.can_be_number(x) && util.can_be_number(y)){
       if (y === 0) {
         return Number.NaN;
       }
@@ -427,7 +428,8 @@ SOILE2 = (function(){
   bin.lessthan = bin.lt;
 
   bin.minus = function(){
-    var nums = _.filter(_.toArray(arguments), _.isNumber);
+    //var nums = _.filter(_.toArray(arguments), _.isNumber);
+    var nums = _.filter(_.toArray(arguments), util.can_be_number);
     if (nums.length == 0){
       return undefined;
     }
@@ -435,24 +437,35 @@ SOILE2 = (function(){
       return nums[0];
     }
     return (nums[0] + _.reduce(nums.slice(1), function(memo, num){
-      return memo - num;
+      return memo - parseFloat(num);
     }, 0));
   };
 
   bin.multiply = function(){
-    var nums = _.filter(_.toArray(arguments), _.isNumber);
+    //var nums = _.filter(_.toArray(arguments), _.isNumber);
+    var nums = _.filter(_.toArray(arguments), util.can_be_number);
     if (_.isEmpty(nums)){
       return undefined;
     }
+    if (nums.length == 1){
+      return nums[0];
+    }
     return _.reduce(nums, function(memo, num){
-      return memo * num;
+      return memo * parseFloat(num);
     }, 1);
   };
 
   bin.plus = function(){
-    var nums = _.filter(_.toArray(arguments), _.isNumber);
+    //var nums = _.filter(_.toArray(arguments), _.isNumber);
+    var nums = _.filter(_.toArray(arguments), util.can_be_number);
+    if (_.isEmpty(nums)){
+      return undefined;
+    }
+    if (nums.length == 1){
+      return nums[0];
+    }
     return _.reduce(nums, function(memo, num){
-      return memo + num;
+      return memo + parseFloat(num);
     }, 0);
   };
 
@@ -1791,6 +1804,11 @@ SOILE2 = (function(){
     // http://stackoverflow.com/questions/1019515/javascript-test-for-an-integer
     //return ! isNaN(parseInt(i, 10));
     return _.isNumber(i);
+  };
+
+  util.can_be_number = function (i) {
+    var n = parseFloat(i)
+    return _.isNumber(n);
   };
 
   util.is_string = function(s){
