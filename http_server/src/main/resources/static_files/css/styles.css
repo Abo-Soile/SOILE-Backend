@@ -213,10 +213,12 @@ testeditor styles
 }
 
 #images ul {
-	list-style-type: none;
-	list-style-position: outside;
+	/*list-style-type: none;*/
+	/*list-style-position: outside;*/
 	padding-left: 0;
 	margin-left: 0;
+	max-height: 400px;
+	overflow-y:scroll;
 }
 
 
