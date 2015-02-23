@@ -576,6 +576,10 @@ SOILE2 = (function(){
   }
   
   bin.length = function(o){
+    if(_.isNumber(o)) {
+      o = o.toString();
+    }
+
     if (_.isArray(o) || _.isString(o)){
       return o.length;
     }
