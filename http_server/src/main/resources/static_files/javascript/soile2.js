@@ -280,7 +280,7 @@ SOILE2 = (function(){
   bin.eq = function(x, y){
 
     if (_.isArray(x) && _.isArray(y)) {
-      var equalArr = _.isEqual(x.map(Number), y.map(Number))
+      var equalArr = _.isEqual(x.map(String), y.map(String))
       if equalArr {
         return true
       }
