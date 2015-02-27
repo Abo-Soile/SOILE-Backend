@@ -281,7 +281,7 @@ SOILE2 = (function(){
 
     if (_.isArray(x) && _.isArray(y)) {
       var equalArr = _.isEqual(x.map(String), y.map(String))
-      if equalArr {
+      if (equalArr) {
         return true
       }
     }
