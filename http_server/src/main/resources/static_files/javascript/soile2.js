@@ -444,7 +444,7 @@ SOILE2 = (function(){
     if (nums.length == 1){
       return nums[0];
     }
-    return (nums[0] + _.reduce(nums.slice(1), function(memo, num){
+    return (_.reduce(nums.slice(1), function(memo, num){
       return memo - parseFloat(num);
     }, 0));
   };
