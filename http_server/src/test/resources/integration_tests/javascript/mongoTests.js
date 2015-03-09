@@ -50,7 +50,6 @@ function testInit() {
 
   mongo.user.get(1, function(reply) {
     var user = reply;
-    console.log(JSON.stringify(reply))
     vassert.assertEquals(user.username, "admin");
     vassert.assertEquals(user._id, 1, 0.0002);
     vassert.testComplete();
@@ -155,7 +154,6 @@ function testForm() {
       vassert.testComplete();
   })  
 }
-
 
 var script = this
 container.deployModule("io.vertx~mod-mongo-persistor~2.1.0", mongoConfig, function(err, deplId) {
