@@ -286,6 +286,18 @@ SOILE2 = (function(){
       }
     }
 
+    if (_.isArray(x) ) {
+      if (x.join("") == y) {
+        return true;
+      }
+    }
+
+    if(_.isArray(y)) {
+      if(y.join("") == x) {
+        return true;
+      }
+    }
+
     if (_.isObject(x) || _.isObject(y)) {
       return _.isEqual(x, y);
     }
@@ -299,6 +311,9 @@ SOILE2 = (function(){
   bin.gt = function(x, y){
     if (_.isNumber(x) && _.isNumber(y)){
       return (x > y);
+    }
+    else {
+      return x > y;
     }
     return false;
   };
@@ -429,6 +444,9 @@ SOILE2 = (function(){
   bin.lt = function(x, y){
     if (_.isNumber(x) && _.isNumber(y)){
       return (x < y);
+    }
+    else {
+      return x < y;
     }
     return false;
   };
