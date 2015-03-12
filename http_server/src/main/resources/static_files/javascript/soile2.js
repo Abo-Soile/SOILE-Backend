@@ -1223,10 +1223,11 @@ SOILE2 = (function(){
 
         var limit = sd * multiplier;
         var av = _average(arr);
-  if(externalAverage !== "undefined") {
-    av = externalAverage;
-    console.log("external averagfe: "+av);
-  }
+        console.log(externalAverage);
+        if(externalAverage !== undefined) {
+          av = externalAverage;
+          console.log("external averagfe: "+av);
+        }
         console.log("Limit: " + limit + " av: " + av );
 
         var upperLimit = av + limit;
@@ -1356,7 +1357,11 @@ SOILE2 = (function(){
         }
       },
       'add':function(stim) {
-        _stimuli.push(stim);
+        if(_.isArray(stim)) {
+          _stimuli.concat(stim);
+        }else{
+          _stimuli.push(stim);
+        }
       },
       //Shuffle stimuli with Fisher-Yates Shuffle
       'shuffle':function(count) {
