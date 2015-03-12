@@ -1358,7 +1358,7 @@ SOILE2 = (function(){
       },
       'add':function(stim) {
         if(_.isArray(stim)) {
-          _stimuli.concat(stim);
+          _stimuli = _stimuli.concat(stim);
         }else{
           _stimuli.push(stim);
         }
