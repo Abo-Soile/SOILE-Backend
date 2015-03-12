@@ -50,14 +50,3 @@ describe("Comparisons,", function() {
     expect(SOILE2.bin.eq(integer,string22)).toBeTruthy();
   })
 })
-
-describe("A suite is just a function", function() {
-  var a;
-  
-  it("and so is a spec", function() {
-    a = true;
-    b = SOILE2.bin.plus(1, 2);
-    expect(a).toBe(true);
-    expect(b).toBe(3);
-  });
-});
