@@ -661,7 +661,7 @@ SOILE2 = (function(){
     if(typeof str1 !== "object") {
       //console.log("Appending strings " + str1 + str2);       
       var result = ""
-      if(str1 && str2) {
+      if(!_.isUndefined(str1) && !_.isUndefined(str2)) {
         return str1.toString() + str2.toString();
       }
       else{
