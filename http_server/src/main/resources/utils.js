@@ -13,7 +13,6 @@ var utils = (function() {
   var http_directory = container.config.directory;*/
 
   return {
-
     'secure_path': function(path) {
       var secured = path.replace(/\.\.\//g, '');
       secured = secured.replace(/\.\//g, '');
@@ -109,6 +108,19 @@ var utils = (function() {
       }
 
       return array;
+    },
+
+    'hashPassword': function _hashPassword(password) {
+      var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
+      var jpass = new java.lang.String(password);
+
+      var bytes = messageDigest.digest(jpass.getBytes());
+
+      var hexString = java.math.BigInteger(1, bytes).toString(16);
+
+      console.log(hexString);
+
+      return hexString;
     }
   };
 
