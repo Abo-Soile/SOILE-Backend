@@ -36,7 +36,7 @@ public class QuestionnaireBuilderTest extends TestCase {
     @Test
     public void testTitle() throws Exception {
         String result = buildForm(".\\soile-qmarkup\\tests\\resources\\titleTest.qmarkup");
-        //System.out.println(result);
+        System.out.println(result);
         assertTrue(succeeded);
     }
 
@@ -52,6 +52,14 @@ public class QuestionnaireBuilderTest extends TestCase {
         String result = buildForm(".\\soile-qmarkup\\tests\\resources\\failTest.qmarkup");
         //System.out.println(result);
         assertFalse(succeeded);
+    }
+
+    @Test
+    public void testIf() throws Exception {
+        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\testIf.qmarkup");
+        System.out.println(result);
+        assertFalse(succeeded);
+
     }
 
 

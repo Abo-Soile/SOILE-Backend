@@ -68,7 +68,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
         });
                 sendMessage("vertx.mongo-persistor", msg);
     }
-    
+
     private class Handler extends VerticleMessageHandler {
 
         public Handler(String directory) {
@@ -143,7 +143,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
             generator.reset();
 
             message.reply(reply);
-        }
+            }
         
         private QuestionnaireBuilder builder;
         private IdGenerator generator;
