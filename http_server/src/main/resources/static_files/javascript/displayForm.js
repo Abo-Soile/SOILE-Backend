@@ -47,7 +47,7 @@ require(["dijit/form/Button",
 
 	on(renderForm, "click", function() {
 		console.log("posting data");
-		lastViewerScrollPos = renderWindow.scrollTop();
+		lastViewerScrollPos = $("#renderWindow").scrollTop();
 
 		renderForm.set('label', ' <i class="fa fa-spinner fa-spin"></i> Saving and rendering form ');
 		renderForm.setDisabled(true);
@@ -83,7 +83,7 @@ require(["dijit/form/Button",
 				contentPane = new ContentPane({
 					"content":cont}).placeAt("renderWindow");
 
-				renderWindow.scrollTop(lastViewerScrollPos);
+				$("#renderWindow").scrollTop(lastViewerScrollPos);
 			}
 		})
 	})
