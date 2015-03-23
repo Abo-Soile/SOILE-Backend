@@ -36,8 +36,8 @@ describe("Builtin minus -", function() {
 
     expect(num).toBe(1);
     expect(num2).toBe(-1);
-  })
-
+  }
+)
   it("subtracts strings with numbers", function() {
     var stringString = SOILE2.bin.minus("4","3");
     var intString = SOILE2.bin.minus(4,"3");
