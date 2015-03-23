@@ -32,7 +32,7 @@ require(["dijit/form/Button",
 	var errorFrame = dom.byId("error-message");
 	var errorFrameLower = dom.byId("error-message-lower")
 
-	var lastViewerScrollPos = 0:
+	var lastViewerScrollPos = 0;
 
 	var editor = ace.edit("editor");
 	editor.setTheme("ace/theme/dawn");
