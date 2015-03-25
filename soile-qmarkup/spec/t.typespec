@@ -3,6 +3,7 @@ command dropdownmenu {
     dbcolumn: String,
     numeric: Boolean(true),
     label: String,
+    inline: Boolean(false),
     options: [ {dbvalue: String, text: String}* ]
 
 }
@@ -23,6 +24,8 @@ command singleselect {
 
     numeric: Boolean(true),
     default_value: String,
+    colalign: Boolean(true),
+    inline: Boolean(false),
     dbcolumn: String,
     options: [ [ {
     		  dbvalue: String, 
@@ -35,6 +38,8 @@ command multiselect {
 
     numeric: Boolean(true),
     default_value: String,
+    colalign: Boolean(true),
+    inline: Boolean(false),
     options: [ [ {dbcolumn: String,
     		  dbvalue: String, 
     		  text: String, 
@@ -50,7 +55,8 @@ command numberfield {
     value: Integer,
     minimum: Integer,
     maximum: Integer,
-    increment: Float
+    increment: Float,
+    inline: Boolean(true)
 }
 
 command textarea {

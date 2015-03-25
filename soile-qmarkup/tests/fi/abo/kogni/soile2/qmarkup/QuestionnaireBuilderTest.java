@@ -41,9 +41,16 @@ public class QuestionnaireBuilderTest extends TestCase {
     }
 
     @Test
-    public void testAllWidgets() throws Exception {
+         public void testAllWidgets() throws Exception {
         String result = buildForm(".\\soile-qmarkup\\tests\\resources\\fullWidgetTest.qmarkup");
         //System.out.println(result);
+        assertTrue(succeeded);
+    }
+
+    @Test
+    public void testPilotForm() throws Exception {
+        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\pilotform.qmarkup");
+        System.out.println(result);
         assertTrue(succeeded);
     }
 

@@ -1,11 +1,11 @@
 /title
 This is a title
 
-/singleselect {
+/multiselect {
       default_value: "empty",
       dbcolumn: "kon",
       options:
-      [
+      [[
         {
           dbcolumn: "kon",
           dbvalue: "man",
@@ -17,16 +17,16 @@ This is a title
           dbvalue: "kvinna",
           text: "Kvinna",
           checked: false
-        }]
+        }]]
   }
 
 /dropdownmenu {
  dbcolumn: "continent",
  label: "Select Continent",
- options: [{dbvalue: "EU", text: "Europe"},
+ options: [[{dbvalue: "EU", text: "Europe"},
            {dbvalue: "AM", text: "America"},
            {dbvalue: "AS", text: "Asia"},
            {dbvalue: "AU", text: "Australia"},
            {dbvalue: "AF", text: "Africa"}
-           ]
+           ]]
 }

@@ -87,7 +87,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         
         case "dropdownmenu":
             if (args.size() > 0) {
-                closeParagraph();
+                //closeParagraph();
                 Value value = Value.parse(args.get(0));
                 Validator validator = Validator.validatorFor(command);
                 validator.validate(value);
@@ -97,6 +97,10 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 String id = idGen.generate();
                 ddmwd.setId(id);
                 vw.setId(id);
+                Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
+                if(! inline) {
+                    closeParagraph();
+                }
                 tmpl.add("id", id);
                 tmpl.add("label", value.getValue("label").toString());
                 String field = createColumnName(questionnaireId(),
@@ -112,15 +116,23 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 }
                 addTag(tmpl.render());
                 validationCode(ddmwd);
-                addSpacer = true;
+
+                if(! inline) {
+                    addSpacer = true;
+                }
             }
             break;
         case "multiselect":
             if (args.size() > 0) {
-                closeParagraph();
                 Value value = Value.parse(args.get(0));
                 Validator validator = Validator.validatorFor(command);
                 validator.validate(value);
+
+                Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
+                if(! inline) {
+                    closeParagraph();
+                }
+
                 ST tmpl = group.getInstanceOf("select");
                 String defaultValue = value.getValue("default_value").toString();
                 ArrayList<Value> options = 
@@ -167,15 +179,23 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 }
                 validationCode(mswd);
                 addTag(tmpl.render());
-                addSpacer = true;
+                if(! inline) {
+                    addSpacer = true;
+                }
             }
             break;
         case "numberfield":
             if (args.size() > 0) {
-                closeParagraph();
                 Value value = Value.parse(args.get(0));
                 Validator validator = Validator.validatorFor(command);
                 validator.validate(value);
+
+                Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
+
+                if(!inline) {
+                    closeParagraph();
+                }
+
                 ST tmpl = group.getInstanceOf(command);
                 NumberFieldWidgetData nfwd = this.new NumberFieldWidgetData();
                 String id = idGen.generate();
@@ -197,12 +217,13 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 tmpl.add("value", value.getValue("value"));
                 addTag(tmpl.render());
                 validationCode(nfwd);
-                addSpacer = true;
+                if(! inline) {
+                    addSpacer = true;
+                }
             }
             break;
         case "singleselect":
             if (args.size() > 0) {
-                closeParagraph();
                 Value value = Value.parse(args.get(0));
                 Validator validator = Validator.validatorFor(command);
                 validator.validate(value);
@@ -212,6 +233,12 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                         value.getValue("dbcolumn").toString());
                 sswd.setColumn(colname);
                 String defaultValue = value.getValue("default_value").toString();
+                Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
+
+                if(!inline){
+                    closeParagraph();
+                }
+
                 sswd.setDefaultValue(defaultValue);
                 ArrayList<Value> options = 
                         (ArrayList<Value>)  value.getValue("options").asJavaObject();
@@ -252,7 +279,9 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 }
                 validationCode(sswd);
                 addTag(tmpl.render());
-                addSpacer = true;
+                if(! inline) {
+                    addSpacer = true;
+                }
             }
             break;
         case "slider":
@@ -425,6 +454,14 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
             if (inParagraph && args.size() > 0) {
                 workOnStack(args, tsStack, tag);
             }
+            break;
+        case "if":
+            break;
+        case "elseif":
+            break;
+        case "else":
+            break;
+        case "endif":
             break;
         default:
             String msg = String.format("Unknown command: '%s'.", command);
@@ -799,6 +836,6 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         }
     }
     
-    private static final int CONTENT_WIDTH_PX = 700;
+    private static final int CONTENT_WIDTH_PX = 600;
 
 }

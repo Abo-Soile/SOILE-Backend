@@ -37,6 +37,7 @@ public class InputReader {
         this.currentChar = 'x';
         this.cbstack = 0;
         this.endOfInput = false;
+        this.lineNumber = 0;
         
     }
     
@@ -47,8 +48,12 @@ public class InputReader {
     public void processInput() throws MalformedCommandException {
         String line = readLine();
         while (hasMoreInput()) {
+            lineNumber += 1;
+            System.out.println(lineNumber);
             if (line.length() > 1 && line.charAt(0) == COMMAND_BEGIN) {
                 String command = readCommand(line);
+                //System.out.println(Integer.toString(lineNumber) + " " + command);
+
                 String remaining = line.substring(command.length() + 1);
                 ArrayList<String> args = readArguments(remaining);
                 notifyAboutCommand(command, args);
@@ -274,6 +279,8 @@ public class InputReader {
     private static final char DOUBLE_QUOTE = '"';
     private static final char ESCAPE = '\\';
     private static final int END_OF_STREAM = -1;
+
+    public int lineNumber;
     
 }
  

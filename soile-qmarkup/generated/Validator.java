@@ -178,6 +178,12 @@ public abstract class Validator {
                         String msg = String.format("Missing object element: '%s'.", "label");
                         throw new MalformedCommandException(msg);
                     } 
+                    if (object.containsKey("inline")) {
+                        validateBoolean(object.get("inline"));
+                    } 
+                    else {
+                        object.put("inline", defaultBooleanValue( false ));
+                    } 
                     if (object.containsKey("options")) {
                         validateRepeat_2147483645(object.get("options"));
                     } 
@@ -331,6 +337,18 @@ public abstract class Validator {
                         String msg = String.format("Missing object element: '%s'.", "default_value");
                         throw new MalformedCommandException(msg);
                     } 
+                    if (object.containsKey("colalign")) {
+                        validateBoolean(object.get("colalign"));
+                    } 
+                    else {
+                        object.put("colalign", defaultBooleanValue( true ));
+                    } 
+                    if (object.containsKey("inline")) {
+                        validateBoolean(object.get("inline"));
+                    } 
+                    else {
+                        object.put("inline", defaultBooleanValue( false ));
+                    } 
                     if (object.containsKey("dbcolumn")) {
                         validateString(object.get("dbcolumn"));
                     } 
@@ -429,6 +447,18 @@ public abstract class Validator {
                         String msg = String.format("Missing object element: '%s'.", "default_value");
                         throw new MalformedCommandException(msg);
                     } 
+                    if (object.containsKey("colalign")) {
+                        validateBoolean(object.get("colalign"));
+                    } 
+                    else {
+                        object.put("colalign", defaultBooleanValue( true ));
+                    } 
+                    if (object.containsKey("inline")) {
+                        validateBoolean(object.get("inline"));
+                    } 
+                    else {
+                        object.put("inline", defaultBooleanValue( false ));
+                    } 
                     if (object.containsKey("options")) {
                         validateRepeat_2147483638(object.get("options"));
                     } 
@@ -492,6 +522,12 @@ public abstract class Validator {
                     else {
                         String msg = String.format("Missing object element: '%s'.", "increment");
                         throw new MalformedCommandException(msg);
+                    } 
+                    if (object.containsKey("inline")) {
+                        validateBoolean(object.get("inline"));
+                    } 
+                    else {
+                        object.put("inline", defaultBooleanValue( true ));
                     } 
         }
      
