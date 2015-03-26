@@ -129,6 +129,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 validator.validate(value);
 
                 Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
+                Boolean colalign = ((BooleanValue) value.getValue("colalign")).asBoolean();
                 if(! inline) {
                     closeParagraph();
                 }
@@ -138,8 +139,10 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 ArrayList<Value> options = 
                         (ArrayList<Value>)  value.getValue("options").asJavaObject();
                 int numColumns = options.size();
-                int width = CONTENT_WIDTH_PX  / numColumns;
-                width -= 5;
+//                int width = CONTENT_WIDTH_PX  / numColumns;
+//                width -= 5;
+                float width = 100/numColumns;
+
                 MultiselectWidgetData mswd = this.new MultiselectWidgetData();
                 mswd.setDefaultValue(defaultValue);
                 String name = nameGen.generate();
@@ -149,7 +152,11 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                     
                     Value c = it.next();
                     ST columnTmpl = group.getInstanceOf("selection_column");
-                    columnTmpl.add("width", width);
+                    if(colalign) {
+                        columnTmpl.add("width", width);
+                    } else {
+                        columnTmpl.add("width", "");
+                    }
                     ArrayList<Value> column = (ArrayList<Value>) c.asJavaObject();
                     Iterator<Value> iter = column.iterator();
                     while (iter.hasNext()) {
@@ -234,6 +241,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 sswd.setColumn(colname);
                 String defaultValue = value.getValue("default_value").toString();
                 Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
+                Boolean colalign = ((BooleanValue) value.getValue("colalign")).asBoolean();
 
                 if(!inline){
                     closeParagraph();
@@ -243,8 +251,9 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 ArrayList<Value> options = 
                         (ArrayList<Value>)  value.getValue("options").asJavaObject();
                 int numColumns = options.size();
-                int width = CONTENT_WIDTH_PX  / numColumns;
-                width -= 5;
+                //int width = CONTENT_WIDTH_PX  / numColumns;
+                //width -= 5;
+                float width = 100/numColumns;
                 String name = nameGen.generate();
                 Iterator<Value> optionsIt = options.iterator();
                 while (optionsIt.hasNext()) {
@@ -252,7 +261,12 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                     
                     Value c = optionsIt.next();
                     ST columnTmpl = group.getInstanceOf("selection_column");
-                    columnTmpl.add("width", width);
+                    if (colalign) {
+                        columnTmpl.add("width", width);
+                    }
+                    else {
+                        columnTmpl.add("width", "");
+                    }
                     ArrayList<Value> column = (ArrayList<Value>) c.asJavaObject();
                     Iterator<Value> iter = column.iterator();
                     while (iter.hasNext()) {
@@ -454,6 +468,10 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
             if (inParagraph && args.size() > 0) {
                 workOnStack(args, tsStack, tag);
             }
+            break;
+        case "spacer":
+            closeParagraph();
+            addSpacer = true;
             break;
         case "if":
             break;

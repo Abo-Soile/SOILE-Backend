@@ -49,7 +49,7 @@ public class InputReader {
         String line = readLine();
         while (hasMoreInput()) {
             lineNumber += 1;
-            System.out.println(lineNumber);
+            //System.out.println(lineNumber);
             if (line.length() > 1 && line.charAt(0) == COMMAND_BEGIN) {
                 String command = readCommand(line);
                 //System.out.println(Integer.toString(lineNumber) + " " + command);
