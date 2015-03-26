@@ -5,7 +5,6 @@ questionnaire_html(title, body, stmts) ::= <<
 
 <title>$title$</title>
 <link rel="stylesheet" href="/css/styles.css" media="screen">
-<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.0/dijit/themes/claro/claro.css">
 
   <h1>$title$</h1>
 

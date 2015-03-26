@@ -233,7 +233,7 @@ select(columns) ::= <<
 
 selection_column(elems, width) ::= <<
 
-<div style="width: $width$px; float: left; display: block">
+<div style="width: $width$%; float: left; display: block">
  $elems:{elem | $elem.content$}; separator="\n"$
 </div>
  

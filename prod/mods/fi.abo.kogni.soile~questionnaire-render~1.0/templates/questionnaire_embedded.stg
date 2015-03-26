@@ -154,13 +154,13 @@ dropdownmenu(id, label, options) ::= <<
 >>
 
 numberfield(id, 
-	    name, 
-	    label, 
-	    value, 
-	    width, 
-	    minimum, 
-	    maximum, 
-	    increment) ::= <<
+      name, 
+      label, 
+      value, 
+      width, 
+      minimum, 
+      maximum, 
+      increment) ::= <<
 
 <label for="$id$">$label$</label>
 &nbsp;
@@ -233,7 +233,7 @@ select(columns) ::= <<
 
 selection_column(elems, width) ::= <<
 
-<div style="width: $width$px; float: left; display: block">
+<div style="width: $width$%; float: left; display: block">
  $elems:{elem | $elem.content$}; separator="\n"$
 </div>
  
