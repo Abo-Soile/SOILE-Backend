@@ -141,10 +141,12 @@ qdata_nonempty_text_widget(id) ::= <<
   // UNUSED: $id$ 
 >>
 
-dropdownmenu(id, label, options) ::= <<
+dropdownmenu(id, label, required,options) ::= <<
 
 <div>
+<label for="$id$">$label$</label>
 <select id="$id$" name="$id$"
+        required="$required$"
         data-dojo-type="dijit/form/FilteringSelect"
         data-dojo-props="value: '', placeHolder: '$label$'">
  $options:{op | <option value="$op.short$">$op.long$</option>}; separator="\n"$

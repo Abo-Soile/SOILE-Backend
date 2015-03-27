@@ -4,6 +4,7 @@ command dropdownmenu {
     numeric: Boolean(true),
     label: String,
     inline: Boolean(false),
+    optional: Boolean(false),
     options: [ {dbvalue: String, text: String}* ]
 
 }

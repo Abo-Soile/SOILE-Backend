@@ -184,6 +184,12 @@ public abstract class Validator {
         else {
             object.put("inline", defaultBooleanValue( false ));
         }
+        if (object.containsKey("optional")) {
+            validateBoolean(object.get("optional"));
+        }
+        else {
+            object.put("optional", defaultBooleanValue( false ));
+        }
         if (object.containsKey("options")) {
             validateRepeat_2147483645(object.get("options"));
         }

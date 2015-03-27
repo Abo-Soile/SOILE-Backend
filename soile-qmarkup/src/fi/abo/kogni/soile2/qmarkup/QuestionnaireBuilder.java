@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
@@ -98,11 +99,13 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 ddmwd.setId(id);
                 vw.setId(id);
                 Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
+                Boolean required = ((BooleanValue) value.getValue("required")).asBoolean();
                 if(! inline) {
                     closeParagraph();
                 }
                 tmpl.add("id", id);
                 tmpl.add("label", value.getValue("label").toString());
+                tmpl.add("required", required);
                 String field = createColumnName(questionnaireId(),
                         value.getValue("dbcolumn").toString());
                 ddmwd.setColumn(encrypt(field));

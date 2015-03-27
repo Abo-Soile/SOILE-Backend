@@ -50,7 +50,7 @@ require(["dijit/form/Button",
 		lastViewerScrollPos = $("#renderWindow").scrollTop();
 
 		renderForm.set('label', ' <i class="fa fa-spinner fa-spin"></i> Saving and rendering form ');
-		renderForm.setDisabled(true);
+		//renderForm.setDisabled(true);
 
 		//errorFrame.innerHTML = "";
 		errorFrameLower.innerHTML = "";
