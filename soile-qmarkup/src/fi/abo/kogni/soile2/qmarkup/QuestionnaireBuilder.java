@@ -99,13 +99,14 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 ddmwd.setId(id);
                 vw.setId(id);
                 Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
-                Boolean required = ((BooleanValue) value.getValue("required")).asBoolean();
+                Boolean optional = ((BooleanValue) value.getValue("optional")).asBoolean();
+
                 if(! inline) {
                     closeParagraph();
                 }
                 tmpl.add("id", id);
                 tmpl.add("label", value.getValue("label").toString());
-                tmpl.add("required", required);
+                tmpl.add("required", (!optional));
                 String field = createColumnName(questionnaireId(),
                         value.getValue("dbcolumn").toString());
                 ddmwd.setColumn(encrypt(field));
