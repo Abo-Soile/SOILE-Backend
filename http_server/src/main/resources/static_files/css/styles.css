@@ -546,3 +546,28 @@ dBootstrap fixes
 	line-height: 100%;
 	margin-top: 5px;
 }
+
+#formcol p {
+	min-height: 1px;
+}
+
+#formcol .dijitInline {
+	margin-bottom: 5px; 
+}
+
+#formcol .selectionBase .dijitRadio {
+	float:left;
+}
+
+#formcol .selectionBase .dijitCheckBox {
+	float:left;
+}
+
+#formcol .selectionBase br {
+	clear: both;
+}
+
+#formcol .selectionBase label {
+	float:left;
+	max-width: 88%;
+}
