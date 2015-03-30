@@ -387,6 +387,9 @@ var Experiment = {
     doc.confirmed = false;
     doc.data = data;
 
+    var timeStamp = new Date();
+    doc.timeStamp = timeStamp.toISOString();
+
     function save(document){     
       vertx.eventBus.send(mongoAddress, {"action":"save",
       "collection":dataCollection, "document":doc}, function(reply) {
