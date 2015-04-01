@@ -540,8 +540,8 @@ dBootstrap fixes
 */
 
 .dbootstrap .dijitCheckBox, .dbootstrap .dijitRadio {
-	width: 16px;
-	height: 16px;
+	width: 20px;
+	height: 20px;
 	margin-left: 3px;
 	margin-right: 3px;	
 }
@@ -549,22 +549,21 @@ dBootstrap fixes
 .dbootstrap label {
 	line-height: 100%;
 	margin-top: 5px;
+	font-style: normal;
 }
 
 #formcol p {
 	min-height: 1px;
 }
 
-#formcol .dijitInline {
-	margin-bottom: 5px; 
-}
-
 #formcol .selectionBase .dijitRadio {
 	float:left;
+	margin-top: 2px;
 }
 
 #formcol .selectionBase .dijitCheckBox {
 	float:left;
+	margin-top: 2px;
 }
 
 #formcol .selectionBase br {
