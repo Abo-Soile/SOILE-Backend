@@ -347,8 +347,8 @@ function(dom,
 					domClass.add(li, "randomize");
 				}
 
-				construct.place(randomizeButton.domNode, li);
 				construct.place(nameBox.domNode, li);
+				construct.place(randomizeButton.domNode, li);
 				construct.place(deleteButton.domNode, li);
 			}
 

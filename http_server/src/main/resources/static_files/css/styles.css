@@ -531,13 +531,17 @@ body {
 	widows: 100% !important;
 }
 
+.dijit {
+	line-height: 18px;
+}
+
 /*
 dBootstrap fixes
 */
 
 .dbootstrap .dijitCheckBox, .dbootstrap .dijitRadio {
-	width: 22px;
-	height: 22px;
+	width: 16px;
+	height: 16px;
 	margin-left: 3px;
 	margin-right: 3px;	
 }
@@ -570,4 +574,5 @@ dBootstrap fixes
 #formcol .selectionBase label {
 	float:left;
 	max-width: 88%;
+	margin-right: 14px;
 }
