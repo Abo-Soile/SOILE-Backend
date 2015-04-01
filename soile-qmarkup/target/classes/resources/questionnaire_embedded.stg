@@ -144,6 +144,7 @@ qdata_nonempty_text_widget(id) ::= <<
 dropdownmenu(id, label, options) ::= <<
 
 <div>
+<label for="$id$">$label$</label>
 <select id="$id$" name="$id$"
         data-dojo-type="dijit/form/FilteringSelect"
         data-dojo-props="value: '', placeHolder: '$label$'">
@@ -233,7 +234,7 @@ select(columns) ::= <<
 
 selection_column(elems, width) ::= <<
 
-<div style="width: $width$px; float: left; display: block">
+<div style="width: $width$%; float: left; display: block">
  $elems:{elem | $elem.content$}; separator="\n"$
 </div>
  
