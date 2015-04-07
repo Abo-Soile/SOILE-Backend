@@ -3,6 +3,7 @@ require(["dojo/dom",
 		"dojo/dom-construct",
 		"dojo/parser", 
 		"dijit/form/TextBox",
+		"dijit/form/NumberSpinner",
 		"dijit/registry",
 		"dojo/on",
 		"dojo/dom-form",
@@ -20,6 +21,7 @@ function(dom,
 		construct,
 		parser,
 		TextBox,
+		NumberSpinner,
 		registry,
 		on,
 		domForm,
@@ -171,7 +173,7 @@ function(dom,
 						createComponentRow(data.id, {"type":"test", 
 													 "name":data.name,
 													 "index":Math.random(),
-													 "random":false
+													 "random":0
 													})
 					}
 				});
@@ -342,13 +344,15 @@ function(dom,
 				var deleteButton = buildDeleteButton(id, opts.index, li);
 				
 				//TODO: Load initial value from proper source	 
-				var randomizeButton = buildRandomCheckbox(id, opts.index, li, opts.random);
+				var randomGroup = buildRandomGroup(id, opts.index, opts.random);
+				var randomizeButton = buildRandomCheckbox(id, opts.index, li, opts.random, randomGroup);
 				if (opts.random) {
 					domClass.add(li, "randomize");
 				}
 
 				construct.place(nameBox.domNode, li);
 				construct.place(randomizeButton.domNode, li);
+				construct.place(randomGroup.domNode, li);
 				construct.place(deleteButton.domNode, li);
 			}
 
@@ -371,29 +375,57 @@ function(dom,
 
 			return button;
 		}
-		function buildRandomCheckbox(id, phase, li, checked) {
+		function buildRandomCheckbox(id, phase, li, checked, randomGroup) {
 			var cbox = new dijit.form.CheckBox({
 				id:"random:"+id+phase,
 				"class":"randomCheckBox",
 				checked: checked,
 				onClick: function(b) {
-					var value = true;
+					var value = 1;
 					if(this.get('value') === false) {
-						value = false;
+						value = 0;
 					}
 					console.log("Checkbox " + this.get('value'));
 					domClass.toggle(li, "randomize");
+					domClass.toggle(randomGroup.domNode, "hide");
+					randomGroup.set('value', value);
 					xhr.post("randomizeorder", 
 						{data:json.stringify({
 							"id":id, "index":phase, "value":value
 						})
 					}).then(function(res) {
-							console.log(res);
+						console.log(res);
 					})
 				}
 			});
 			console.log("returning checkbox " + cbox);
 			return cbox;
+		}
+
+		function buildRandomGroup(id, phase, randvalue) {
+			var spinner = new dijit.form.NumberSpinner({
+				value:randvalue,
+				constraints:{min:1, max:9},
+				intermediateChanges: true,
+				style:{"width":"40px"}
+			})
+
+			dojo.connect(spinner,"onChange",function(value) {
+				// Now do something with the value...
+				console.log("Value is: ",value);
+
+				xhr.post("randomizeorder", 
+					{data:json.stringify({
+						"id":id, "index":phase, "value":value
+					})
+				}).then(function(res) {
+						console.log("Updated random group" + res);
+				})
+			});
+			if(!randvalue) {
+				domClass.toggle(spinner.domNode, "hide");
+			}
+			return spinner
 		}
 	});
 });

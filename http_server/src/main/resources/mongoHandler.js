@@ -448,15 +448,25 @@ var Experiment = {
 
   generateRandomOrder: function(exp) {
     var randomList = [];
-    var randomMapping = []
+    var randomMapping = [];
+    var randomGroups = [0,0,0,0,0,0,0,0,0,0];
 
     for (var i = 0; i < exp.components.length; i++) {
-      if (exp.components[i].random) {
-        randomList[i] = i
+      if (exp.components[i].random > 0) {
+        randomList[i] = exp.components[i].random 
+        randomGroups[exp.components[i].random] = 1;
+      } else {
+        randomList[i] = 0
       }
       randomMapping[i] = i;
     };
 
+
+   /* console.log(JSON.stringify(randomList))
+    console.log(JSON.stringify(randomMapping))
+    console.log(JSON.stringify(randomGroups))
+*/
+    randomGroups[0] = 0;
     var startRandomSequence = null;
 
     function randomizePart(arrSlice, index) {
@@ -467,6 +477,28 @@ var Experiment = {
       };
     }
 
+    function randomizeGroup(array, groupMapping, groupNo) {
+      var tempArr = [];
+      for (var i = 0; i < array.length; i++) {
+        if(groupMapping[i]===groupNo) {
+          tempArr.push(array[i])
+          array[i] = null;
+        }
+      };
+
+      //console.log(JSON.stringify(array))
+      tempArr = utils.shuffle(tempArr);
+
+      for (var i = 0; i < array.length; i++) {
+        if(array[i] === null) {
+          array[i] = tempArr.pop();
+        }
+      };
+
+      return array;
+
+    }
+/*
     for(var i = 0; i < randomList.length; i++) {
       if ((randomList[i] || randomList[i] === 0) 
         && startRandomSequence === null) {
@@ -481,7 +513,12 @@ var Experiment = {
         startRandomSequence = null;
       }
     }
-
+    */
+    for (var i = 0; i < randomGroups.length; i++) {
+      if(randomGroups[i]===1) {
+        randomMapping = randomizeGroup(randomMapping, randomList, i)
+      }
+    };
     return randomMapping;
   },
 

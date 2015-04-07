@@ -523,6 +523,10 @@ body {
 	background: #9BBCD0;
 }
 
+.fancyList .hide {
+	display: none;
+}
+
 .dijitDialog  {
 	width: 80% !important;
 }
@@ -549,7 +553,7 @@ dBootstrap fixes
 .dbootstrap label {
 	line-height: 100%;
 	margin-top: 5px;
-	font-style: normal;
+	font-weight: normal;
 }
 
 #formcol p {
