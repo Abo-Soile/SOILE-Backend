@@ -146,7 +146,7 @@ public class TextStyle {
         styles.put("green", "color: green;");
         styles.put("indent", "margin-left: 1em;");
         styles.put("italic", "font-style:italic;");
-        styles.put("large", "font-size: x-large;");
+        styles.put("large", "font-size: large;");
         styles.put("lime", "color: lime;");
         styles.put("linethrough", "text-decoration: line-through;");
         styles.put("lowercase", "text-transform: lowercase;");
