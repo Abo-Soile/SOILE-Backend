@@ -788,6 +788,9 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     data.expId = experimentid;
     data.type = "general";
 
+    var timeStamp = new Date();
+    data.starttime = timeStamp.toISOString();
+
     vertx.eventBus.send(mongoAddress, {
       "action":"save",
       "collection":dataCollection,
