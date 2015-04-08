@@ -361,7 +361,7 @@ function(dom,
 			var button = new dijit.form.Button({
 			 	label:"Delete ",
 			 	id:"delete:"+id+phase,
-			 	"class":"btn btn-danger",
+			 	"class":"btn btn-danger pull-right",
 				onClick: function(){
 					console.log("delete " + id + " " + phase);
 					xhr.post("deletecomponent",
