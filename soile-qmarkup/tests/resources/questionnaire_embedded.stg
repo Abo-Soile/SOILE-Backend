@@ -144,7 +144,11 @@ qdata_nonempty_text_widget(id) ::= <<
 dropdownmenu(id, label, required,options) ::= <<
 
 <div>
+
+$if(label)$
 <label for="$id$">$label$</label>
+$separator$
+$endif$
 <select id="$id$" name="$id$"
         required="$required$"
         data-dojo-type="dijit/form/FilteringSelect"
@@ -164,8 +168,10 @@ numberfield(id,
 	    maximum, 
 	    increment) ::= <<
 
+$if(label)$
 <label for="$id$">$label$</label>
-&nbsp;
+$separator$
+$endif$
 <input  data-dojo-type="dijit/form/NumberSpinner"
         id="$id$" name="someNumber" value="$value$"
         style="width: $width$em;"
@@ -189,7 +195,10 @@ $endif$
 
 textarea(id, text, rows, columns, label, required) ::= <<
 
+$if(label)$
 <label for="$id$">$label$</label>
+$separator$
+$endif$
 <br />
 <textarea id="$id$" rows="$rows$" cols="$columns$"
           data-dojo-type="myWidgets/ValidationTextArea"
