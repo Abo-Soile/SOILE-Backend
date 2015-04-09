@@ -194,10 +194,6 @@ testeditor styles
 	min-width: 40px;
 }
 
-.componentlist li {
-	min-height: 42px;
-}
-
 .componentlist .phaselistlink {
 	display: inline-block;
 	min-width: 250px;
@@ -472,6 +468,7 @@ body {
 
 #componentlist li {
 	padding-left: 30px;
+	line-height: 40px;
 } 
 
 .fancyList {
