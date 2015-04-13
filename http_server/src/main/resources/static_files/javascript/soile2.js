@@ -8,14 +8,20 @@ SOILE2 = (function(){
   'use strict';
 
   var soile2 = {};
-  var bin = {};        // builtin
-  var rt = {};         // runtime
-  var defs = {};       // definitions (gvars; vals; functions)
-  var util = {};       // miscellaneous utility functions
+  var bin = {};           // builtin
+  var rt = {};            // runtime
+  var defs = {};          // definitions (gvars; vals; functions)
+  var util = {};          // miscellaneous utility functions
 
-  var endFunc = null;  // function run when the program ends.
-  var logFunc = null;  // function used for logging
-  
+  var endFunc = null;     // function run when the program ends.
+  var logFunc = null;     // function used for logging
+
+  var startFunc = null;   // run this when images are loaded
+  var loadScreen = false; // not showing the loadscreen per default;
+  var toLoad = 0;
+
+  var allReady = false;
+
   soile2.defs = defs;
   soile2.rt = rt;
   soile2.bin = bin;
@@ -356,8 +362,13 @@ SOILE2 = (function(){
       "class": "hiddenelem",
       "src": url
     };
-    jQuery('<img />', props).appendTo(soile2.util.getid("display"));
+    var img = jQuery('<img />', props).appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
+    if(loadScreen) {  
+      console.log(performance.now() + " LOADING IMAGE");
+      toLoad += 1;
+      img.on('load', soile2.util.onImageLoad);
+    }
     return id;
   };
   
@@ -718,6 +729,8 @@ SOILE2 = (function(){
     soile2.rt.seal(soile2.defs.gvars);
     soile2.rt.freeze(soile2.defs.vals);
     soile2.rt.freeze(soile2.defs.fns);
+
+    allReady = true;
   };
   
   rt.freeze = (function(){
@@ -1680,29 +1693,6 @@ SOILE2 = (function(){
     soile2.rt.keyhandler.reset();      // Removing all keyhandlers
     $(document).add('*').off(); // Removing all clickhandlers
 
-    // soile2.rt.dataHandler.storeSingle("field", 123456);
-    // soile2.rt.dataHandler.storeRow("a", 5);
-    // soile2.rt.dataHandler.storeRow("t", true);
-    // soile2.rt.dataHandler.newRow();
-    // soile2.rt.dataHandler.storeRow("a",20);
-    // soile2.rt.dataHandler.storeRow("b",555);
-    // soile2.rt.dataHandler.storeRow("c",9999);
-    // soile2.rt.dataHandler.storeRow("t", false);
-    // soile2.rt.dataHandler.newRow();
-    // soile2.rt.dataHandler.storeRow("b", 1000);
-    // soile2.rt.dataHandler.storeRow("a", 5);
-    // soile2.rt.dataHandler.storeRow("t", true);
-
-    // soile2.rt.dataHandler.average("a");
-    // soile2.rt.dataHandler.average("b");
-
-    // soile2.rt.dataHandler.count("a");
-    // soile2.rt.dataHandler.count("c");
-
-    // soile2.rt.dataHandler.countValue("a", 5);
-    // soile2.rt.dataHandler.countValue("t", true);
-    // soile2.rt.dataHandler.countValue("t", false);
-
     var d = soile2.rt.dataHandler.getData();
 
     console.log("The end");
@@ -1805,6 +1795,18 @@ SOILE2 = (function(){
     endFunc = f;
   }
 
+  util.enableLoadScreen = function () {
+    console.log("Enabling loadscreen");
+    var a = $("#loadAnim").toggleClass("hidden", false);
+    a.removeClass("hidden")
+    console.log(a);
+    loadScreen = true;
+  }
+
+  util.setStartFunction = function(f) {
+    startFunc = f;
+  }
+
   util.setLogFunction = function(f) {
     logFunc = f;
   }
@@ -1814,6 +1816,8 @@ SOILE2 = (function(){
   util.resetData = function() {
     soile2.rt.dataHandler.reset();
     soile2.rt.keyhandler.reset();
+
+    allReady = false;
   }
 
   util.getid = function(s) {
@@ -1854,7 +1858,31 @@ SOILE2 = (function(){
     return parseInt(i, 10);
   };
 
+  util.onImageLoad = function() {
+    toLoad -= 1;
+
+    console.log(performance.now() + " Image Loaded, images left:" + toLoad + " allready: " + allReady);
+    if (toLoad === 0) {
+      if(allReady) {
+        soile2.start();
+      }
+    };
+  };
+
   soile2.bin = soile2.rt.seal(bin);
+
+
+  soile2.start = function  () {
+    if (toLoad > 0) {
+      console.log("loading images");
+    } else {
+      if(startFunc !== null) {
+        startFunc();
+      }
+      $("#loadAnim").toggleClass("hidden", true);
+      SOILE2.rt.exec_pi();
+    }
+  }
   
   return soile2;
 })();

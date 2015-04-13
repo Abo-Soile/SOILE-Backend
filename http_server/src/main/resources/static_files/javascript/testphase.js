@@ -20,6 +20,10 @@ function(
 		}, false);
 		//console.log(window.testJS);
 
+		function startFunc() {
+			console.log("Starting!!!");
+		}
+
 		function end(expdata) {
 			console.log("Test over");
 			console.log(expdata);
@@ -39,15 +43,20 @@ function(
 
 		}
 
-		var jsonUrl = document.URL + "/json"
+		var jsonUrl = document.URL + "/json";
 
 		xhr.get(jsonUrl).then(function(data) {
+			SOILE2.util.enableLoadScreen();
+
+			SOILE2.util.setStartFunction(startFunc)
 			SOILE2.util.eval(data);
+
 			SOILE2.util.setEndFunction(end);
 
-			setTimeout(function() {
-				SOILE2.rt.exec_pi();
-			}, 1500);
+			SOILE2.start();
+			//setTimeout(function() {
+			//	SOILE2.rt.exec_pi();
+			//}, 1500);
 		})
 
 	});

@@ -300,11 +300,13 @@ function(dom,
 
 			console.log(compiledCode);
 			console.log("Executing soile");
+			
 			SOILE2.util.eval(compiledCode);
 			SOILE2.util.setEndFunction(end);
 			SOILE2.util.setLogFunction(logfunc);
 			SOILE2.util.resetData();
 			setTimeout(function() {
+				//SOILE2.run()
 				SOILE2.rt.exec_pi();
 			}, 1500);
 		})

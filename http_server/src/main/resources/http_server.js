@@ -522,7 +522,9 @@ customMatcher.get('/experiment/:id', function(request){
     var experiment = r.result;
 
     //Replacing newlines with html linebreaks when displaying the description
-    experiment.description = experiment.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    if(typeof experiment.description !== 'undefined') {
+      experiment.description = experiment.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    }
     //console.log(JSON.stringify(r));
     templateManager.render_template("experiment", {"exp":experiment},request);
   }
@@ -797,8 +799,8 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
           var url = request.absoluteURI().toString();
           var cut = url.indexOf("/phase/");
           console.log(cut);
-          url = url.substr(0,cut) + "/end";
-
+          url = url.substr(0,cut) + "/end"
+;
           console.log(url);
 
           return request.redirect(url);
