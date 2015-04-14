@@ -251,16 +251,20 @@ selection_column(elems, width) ::= <<
 >>
 
 radiobutton(id, name, value, label, checked) ::= <<
+ <div class="innerSelect>
  <input type="radio" id="$id$" name="$name$" value="$value$" $if(checked)$ checked $endif$
         data-dojo-type="dijit/form/RadioButton" />
  <label for="$id$">$label$</label>
+ </div>
  <br />
 >>
 
 checkbox(id, name, value, label, checked) ::= <<
+ <div class="innerSelect">
  <input type="checkbox" id="$id$" name="$name$" value="$value$" $if(checked)$ checked $endif$
         data-dojo-type="dijit/form/CheckBox" />
  <label for="$id$">$label$</label>
+ </div>
  <br />
 >>
 
