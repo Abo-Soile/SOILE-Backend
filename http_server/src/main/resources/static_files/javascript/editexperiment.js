@@ -174,7 +174,7 @@ function(dom,
 						createComponentRow(data.id, {"type":"test", 
 													 "name":data.name,
 													 //"index":Math.random(),
-													 "index":componentCount
+													 "index":componentCount,
 													 "random":0
 													})
 					}
