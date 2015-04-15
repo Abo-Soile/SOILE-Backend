@@ -55,6 +55,7 @@ function(dom,
 		var experimentStore = null;
 		var filteringSelect = null;
 
+		var componentCount = 0;
 
 		startDate.oldValid = startDate.validator;
 		startDate.validator = function(value, constraints) {
@@ -172,7 +173,8 @@ function(dom,
 	
 						createComponentRow(data.id, {"type":"test", 
 													 "name":data.name,
-													 "index":Math.random(),
+													 //"index":Math.random(),
+													 "index":componentCount
 													 "random":0
 													})
 					}
@@ -355,6 +357,7 @@ function(dom,
 				construct.place(randomGroup.domNode, li);
 				construct.place(deleteButton.domNode, li);
 			}
+			componentCount += 1;
 
 		}
 		function buildDeleteButton(id, phase, li) {
@@ -369,6 +372,7 @@ function(dom,
 							data: json.stringify({"id":id, "index":phase})
 						}).then(function(res) {
 							construct.destroy(li);
+							componentCount -= 1;
 					})
 				}
 			});
