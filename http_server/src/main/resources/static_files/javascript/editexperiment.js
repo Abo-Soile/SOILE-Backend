@@ -38,14 +38,14 @@ function(dom,
 		parser.parse();
 
 		var submitButton = dom.byId("submit");
-		var newForm = dom.byId("newform")
-		var newTest = dom.byId("newtest")
+		var newForm = dom.byId("newform");
+		var newTest = dom.byId("newtest");
 
 		var form = dom.byId("expForm");
 
 		var name = registry.byId("name");
 		var description = registry.byId("description");
-		var loginRequired = registry.byId("loginrequired")
+		var loginRequired = registry.byId("loginrequired");
 
 		var startDate = registry.byId("startDate");
 		var endDate = registry.byId("endDate");
@@ -60,21 +60,21 @@ function(dom,
 		startDate.oldValid = startDate.validator;
 		startDate.validator = function(value, constraints) {
 			if(this.oldValid(value, constraints)) {
-				return true
+				return true;
 			}
-			return false
-		}
+			return false;
+		};
 
 		/*Overriding the standard validator to check if the enddate is later than
 		the startdate */
 		endDate.oldValid = endDate.validator;
 		endDate.validator = function(value, constraints) {
 			if(this.oldValid(value, constraints)) {
-				sDate = new Date(startDate.get('value'));
-				eDate = new Date(value);
+				var sDate = new Date(startDate.get("value"));
+				var eDate = new Date(value);
 
 				if(sDate > eDate) {
-					this.set('invalidMessage', "End date must be after startdate");
+					this.set("invalidMessage", "End date must be after startdate");
 					return false;
 				}
 				// currentDate = new Date();
@@ -82,11 +82,11 @@ function(dom,
 				// 	this.set('invalidMessage', "End date should be in the future");
 				// 	return false;
 				// }
-				return true
+				return true;
 			}
 
-			return false
-		}
+			return false;
+		};
 
 		xhr.get("/test/json").then(function(jsonData) {
 			var experimentList = json.parse(jsonData);
@@ -110,7 +110,7 @@ function(dom,
 				"testSelector"
 			);
 
-		})
+		});
 
 
 		var dialog = "";
@@ -119,7 +119,7 @@ function(dom,
 		on(newForm, "click", function() {
 			xhr.post("addform",
 				"").then(function(data){
-					var data = json.parse(data);
+					data = json.parse(data);
 					console.log(data);
 					//contentpane.setHref("/questionnaire/render/"+data.id);
 
@@ -143,17 +143,17 @@ function(dom,
 				    // });
 				    // dialog.show();
 				    // console.log("showing dialogs") 
-				})
+				});
 			
 		});
 
 		on(newTest, "click", function() {
-			var testId = filteringSelect.get('value');
-			var testName = filteringSelect.get('displayedValue');
+			var testId = filteringSelect.get("value");
+			var testName = filteringSelect.get("displayedValue");
 			filteringSelect.set("invalidMessage","Couldn't find experiment");
 
 
-			if (filteringSelect.validate() && filteringSelect.get('value')) {
+			if (filteringSelect.validate() && filteringSelect.get("value")) {
 	
 				console.log("Adding test");
 				xhr.post("addtest", {
@@ -176,7 +176,7 @@ function(dom,
 													 //"index":Math.random(),
 													 "index":componentCount,
 													 "random":0
-													})
+													});
 					}
 				});
 			}
@@ -186,13 +186,10 @@ function(dom,
 			var isValid = true;
 			isValid = expForm.validate();
 
-			sDate = new Date(startDate.get("value"));
-			eDate = new Date(endDate.get("value"));
+			var sDate = new Date(startDate.get("value"));
+			var eDate = new Date(endDate.get("value"));
 
 			startDate.get("value");
-
-
-			console.log(eDate.toString())
 
 			if(isValid) {
 				console.log("Valid");
@@ -217,8 +214,8 @@ function(dom,
 					document.URL,{
 						data:json.stringify(resp)
 					}).then(function(data){
-					respData = json.parse(data);
-					if(respData.status=="ok") {
+					var respData = json.parse(data);
+					if(respData.status === "ok") {
 						console.log("Navigating");
 						window.location.replace("");
 						
@@ -230,7 +227,7 @@ function(dom,
 
 		xhr.get("json").then(function(data) {
 			var jsonData = json.parse(data);
-			components = jsonData.components;
+			var components = jsonData.components;
 			console.log(components);
 			for(var i =0;i<components.length;i++) {
 				console.log("adding " + components[i].id);
@@ -241,7 +238,7 @@ function(dom,
 								 random:components[i].random
 								});
 			}
-		})
+		});
 
 		//ID must be a valid component id
 		//valid opts {name:name, dialog:<dialogobject>}
@@ -261,9 +258,9 @@ function(dom,
 			// 			"executeScripts":"true"
 			// 			});
 			//}
-			var componentList = dom.byId("componentlist")
+			var componentList = dom.byId("componentlist");
 
-			var li = construct.create("li", null,componentlist,"last");
+			var li = construct.create("li", null,componentList,"last");
 					
 			if(opts.type === "form") {
 				var nameBox = new dijit.form.TextBox({
@@ -312,14 +309,14 @@ function(dom,
 				var newWindowButton = new dijit.form.Button({
 					label:"in new window",
 					onClick: function() {
-						window.open("/questionnaire/mongo/"+id)
+						window.open("/questionnaire/mongo/"+id);
 					}
-				})
+				});
 
 				construct.place(nameBox.domNode, li);
 				construct.place(editButton.domNode, li);
 				construct.place(newWindowButton.domNode, li);
-				construct.place(deleteButton.domNode,li)
+				construct.place(deleteButton.domNode,li);
 			}
 			else if(opts.type === "test") {
 
@@ -373,7 +370,7 @@ function(dom,
 						}).then(function(res) {
 							construct.destroy(li);
 							componentCount -= 1;
-					})
+					});
 				}
 			});
 
@@ -384,24 +381,25 @@ function(dom,
 				id:"random:"+id+phase,
 				"class":"randomCheckBox",
 				checked: checked,
-				onClick: function(b) {
+				onClick: function() {
 					var value = 1;
-					if(this.get('value') === false) {
+					if(this.get("value") === false) {
 						value = 0;
 					}
-					console.log("Checkbox " + this.get('value'));
+					console.log("Checkbox " + this.get("value"));
 					domClass.toggle(li, "randomize");
 					domClass.toggle(randomGroup.domNode, "hide");
-					randomGroup.set('value', value);
+					randomGroup.set("value", value);
 					xhr.post("randomizeorder", 
 						{data:json.stringify({
 							"id":id, "index":phase, "value":value
 						})
 					}).then(function(res) {
 						console.log(res);
-					})
+					});
 				}
 			});
+
 			console.log("returning checkbox " + cbox);
 			return cbox;
 		}
@@ -412,7 +410,7 @@ function(dom,
 				constraints:{min:1, max:9},
 				intermediateChanges: true,
 				style:{"width":"40px"}
-			})
+			});
 
 			dojo.connect(spinner,"onChange",function(value) {
 				// Now do something with the value...
@@ -424,12 +422,13 @@ function(dom,
 					})
 				}).then(function(res) {
 						console.log("Updated random group" + res);
-				})
+				});
 			});
+
 			if(!randvalue) {
 				domClass.toggle(spinner.domNode, "hide");
 			}
-			return spinner
+			return spinner;
 		}
 	});
 });
