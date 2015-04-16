@@ -212,7 +212,13 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 String id = idGen.generate();
                 tmpl.add("id", id);
                 tmpl.add("name", nameGen.generate());
-                tmpl.add("label", value.getValue("label"));
+
+                String label = String.valueOf(value.getValue("label"));
+                if(label.length()==0) {
+                    tmpl.add("label", false);
+                }else {
+                    tmpl.add("label", label);
+                }
                 nfwd.setId(id);
                 String field = createColumnName(questionnaireId(),
                         value.getValue("dbcolumn").toString());

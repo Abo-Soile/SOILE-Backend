@@ -141,11 +141,16 @@ qdata_nonempty_text_widget(id) ::= <<
   // UNUSED: $id$ 
 >>
 
-dropdownmenu(id, label, options) ::= <<
+dropdownmenu(id, label, required,options) ::= <<
 
 <div>
+
+$if(label)$
 <label for="$id$">$label$</label>
+$separator$
+$endif$
 <select id="$id$" name="$id$"
+        required="$required$"
         data-dojo-type="dijit/form/FilteringSelect"
         data-dojo-props="value: '', placeHolder: '$label$'">
  $options:{op | <option value="$op.short$">$op.long$</option>}; separator="\n"$
@@ -163,8 +168,12 @@ numberfield(id,
 	    maximum, 
 	    increment) ::= <<
 
+Label = ($label$)
+$if(label)$
 <label for="$id$">$label$</label>
-&nbsp;
+$separator$
+$else$
+$endif$
 <input  data-dojo-type="dijit/form/NumberSpinner"
         id="$id$" name="someNumber" value="$value$"
         style="width: $width$em;"
@@ -188,7 +197,10 @@ $endif$
 
 textarea(id, text, rows, columns, label, required) ::= <<
 
+$if(label)$
 <label for="$id$">$label$</label>
+$separator$
+$endif$
 <br />
 <textarea id="$id$" rows="$rows$" cols="$columns$"
           data-dojo-type="myWidgets/ValidationTextArea"
@@ -226,7 +238,7 @@ slider(id, labels, minimum, maximum, increment, select, count) ::= <<
 
 select(columns) ::= <<
 
-<div style="margin-bottom: 1cm; display: block; width: 600px;">
+<div class="selectionBase" style="margin-bottom: 1cm; display: block; width: 600px;">
  $columns:{col | $col.content$}; separator="\n"$
 </div>
  
@@ -241,16 +253,25 @@ selection_column(elems, width) ::= <<
 >>
 
 radiobutton(id, name, value, label, checked) ::= <<
+ <div class="innerSelect">
  <input type="radio" id="$id$" name="$name$" value="$value$" $if(checked)$ checked $endif$
         data-dojo-type="dijit/form/RadioButton" />
- <label for="$id$">$label$</label>
+ $if(label)$
+    <label for="$id$">$label$</label>
+ $endif$
+ </div>
  <br />
 >>
 
 checkbox(id, name, value, label, checked) ::= <<
+ <div class="innerSelect">
  <input type="checkbox" id="$id$" name="$name$" value="$value$" $if(checked)$ checked $endif$
         data-dojo-type="dijit/form/CheckBox" />
+ $if(label)$
  <label for="$id$">$label$</label>
+  $endif$
+
+ </div>
  <br />
 >>
 
