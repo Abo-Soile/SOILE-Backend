@@ -933,7 +933,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   mongo.experiment.formData(expID, function(r) {
 		  
-	var data = r.results;
+    var data = r.results;
     console.log(JSON.stringify(r));
 
     var sep = "; ";
@@ -959,7 +959,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
         for (prop in item.data) {
           //console.log(prop);
        //   if(!(prop=="_id"||prop=="phase"||prop=="userid"||prop=="expId")) {
-            fields[phase].push(prop.slice(17, prop.length));
+            fields[phase].push(prop.slice(17, prop.length).replace(";","_"));
         //  }
         }
       }
@@ -971,23 +971,23 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
       var j;
       for(j in item.data) {
         //if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
-          userData[item.userid][phase].push(item.data[j]);
+          userData[item.userid][phase].push(item.data[j].toString().replace(";","_"));
        // }
       }
     }
     
-	fields = utils.cleanArray(fields);
-	for(var d in userData) {
-		userData[d] = utils.cleanArray(userData[d]);
-	}
-	var mergedFields = [];
+    fields = utils.cleanArray(fields);
+    for(var d in userData) {
+      userData[d] = utils.cleanArray(userData[d]);
+    }
+    var mergedFields = [];
     mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
 
     var stringFields = mergedFields.join(sep);
-	
-	console.log("\n\n\n" + JSON.stringify(userData));
-    var userFields = ""
-    for(id in userData) {
+
+    console.log("\n\n\n" + JSON.stringify(userData));
+    var userFields = "";
+    for(var id in userData) {
       var mergedUserData = [];
       mergedUserData = ([id]).concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
 
@@ -999,7 +999,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 
     request.response.end("\ufeff " + stringFields+"\n"+ userFields);
   });
-}))
+}));
 
 
 // Does pretty much the same as the form data method, 
