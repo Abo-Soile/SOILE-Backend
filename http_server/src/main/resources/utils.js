@@ -77,12 +77,19 @@ var utils = (function() {
 
       return paramsObject;
     },
+
+    /*
+      Removing empty elements and replacing all semicolons with something else
+    */
     'cleanArray':function(arr) {
       for (var i = 0; i < arr.length; i++) {
         if (arr[i] == null) {         
             arr.splice(i, 1);
             i--;
-          }
+        }
+        else {
+          arr[i] = arr[i].toString().replace(";",",");
+        }
       }
       return arr;
     },
