@@ -133,6 +133,19 @@ public class CodeGeneratorTest extends TestCase {
         //System.out.println(errors.toString());
     }
 
+    public void testWait() throws Exception {
+        String codeString = readFile("./soile-elang/tests/resources/testWait.elang", Charset.defaultCharset());
+
+        StringReader input = new StringReader(codeString);
+        codeGen.generate(input);
+
+        System.out.println(code.toString());
+        System.out.println(errors.toString());
+
+        assertEquals(errors.toString(), "");
+
+    }
+
     @Test
     public void testRandom() throws Exception {
         System.out.println("Random test is random");

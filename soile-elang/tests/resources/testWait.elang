@@ -1,0 +1,14 @@
+intermezzo-phase p
+    helptext("help")
+    wait()
+end
+
+intermezzo-phase g
+  wait(1234567890)
+end
+
+transition
+  start(p),
+  p -> g,
+  final(g)
+end

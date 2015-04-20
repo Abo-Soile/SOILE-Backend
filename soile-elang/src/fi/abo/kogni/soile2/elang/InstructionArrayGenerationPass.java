@@ -408,10 +408,19 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
     }
 
     private int doWaitCall(FunctionCallStatementContext ctx) {
+        ExprContext expr;
         ProgramInstructionIndex index = nextIndex();
         Wait wait = new ProgramInstruction.Wait(index);
-        ExprContext expr = ctx.functionCall().functionCallParams().expr(0);
-        wait.setMs(nodeData(expr).jsref);
+        try {
+            expr = ctx.functionCall().functionCallParams().expr(0);
+            wait.setMs(nodeData(expr).jsref);
+        }catch (Exception e) {
+            //System.out.println(e.toString());
+            //wait.setMs("");
+            //Setting wait to a really large number, in practise infinite.
+            wait.setMs(999999999);
+        }
+        //wait.setMs(nodeData(expr).jsref);
         piArray.add(wait);
         piWait(wait);
         return index.getValue();
