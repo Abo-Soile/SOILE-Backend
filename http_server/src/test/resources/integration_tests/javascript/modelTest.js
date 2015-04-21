@@ -6,7 +6,6 @@ var vassert = require("vertx_assert");
 var console = require('vertx/console');
 
 var mongo = require("mongoHandler");
-  
 var async = require("async");
 
 var models = require("Models")
@@ -28,7 +27,7 @@ function resetMongo(callback) {
       function(reply) {
         console.log("Dropping database");
         callback(reply);
-    })
+    })  
 }
 
 function testUser() {
@@ -46,12 +45,12 @@ function testUser() {
         console.log("Generating new user");
         callback(null,r)
       })*/
-      var u = new models.User();
+      var u = new models.User({email:"testuser2",testfield:"field"});
       u.delete();
-      u.email = "testemail"
+      //u.email = "testemail"
       u.setPassword("testpassword");
 
-      console.log("\n\n ------------ \n " + u._collection)
+      //console.log("\n\n ------------ \n " + u._collection)
 
       u.save(function(r) {
         console.log("User created")
@@ -62,8 +61,8 @@ function testUser() {
 
     function getUser(arg, callback) {
       userDao.get(arg, function(reply) {
+        console.log("\n################# got user")
         console.log(JSON.stringify(reply))
-
         callback();
       })
     }

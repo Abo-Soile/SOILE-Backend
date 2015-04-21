@@ -29,12 +29,12 @@ function resetMongo(callback) {
     })
 }
 
-function testSimple() {
+function teeestSimple() {
   vassert.assertEquals('test', 'test');
   vassert.testComplete();
 }
 
-function testMongo() {
+function teeestMongo() {
   vertx.eventBus.send(mongoConfig.address, {
   "action": "save",
   "collection": "testCol",
@@ -45,7 +45,7 @@ function testMongo() {
   })
 }
 
-function testInit() {
+function teeestInit() {
   mongo.mongoHandler.init();
 
   mongo.user.get(1, function(reply) {
@@ -57,7 +57,7 @@ function testInit() {
 }
 
 
-function testUser() {
+function teeestUser() {
   async.waterfall([
     function(callback) {
       resetMongo(function(r){
@@ -100,7 +100,7 @@ function testUser() {
   })
 }
 
-function testExperiments() {
+function teeestExperiments() {
   async.waterfall([
     function(callback) {
       vassert.assertEquals("a", "a")
@@ -113,7 +113,7 @@ function testExperiments() {
   })
 }
 
-function testTest() {
+function teeestTest() {
   async.waterfall([
     function(callback) {
       vassert.assertEquals("a", "a");
@@ -126,7 +126,7 @@ function testTest() {
   })
 }
 
-function testForm() {
+function teeestForm() {
   async.waterfall([
     function saveForm(callback) {
       mongo.form.save("Title", false, function(r) {

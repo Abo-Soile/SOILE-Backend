@@ -66,6 +66,8 @@ var mongoAddress = "vertx.mongo-persistor";
 function BaseModel(arg) {
     //this._collection = "temp";
     this._mongoAddress = mongoAddress;
+
+    this.populateFields(arg);
 }
 
 BaseModel.prototype.save = function(callback) {
@@ -119,17 +121,20 @@ BaseModel.prototype.populateFields = function(fields) {
 
 
 function User(arg) {
+    this.isAdmin = false;
+
     BaseModel.call(this, arg);
  
-    this._collection = "users"
-
+    //this._collection = "users"
+    this._collection = User.collection;
     this.email;
-    this.password;
-    this.isAdmin;
+    this.password;  
 }
 
 User.prototype = new BaseModel()
 User.prototype.constructor = User;
+User.collection = "users"
+
 
 //User.collection = "user";
 
