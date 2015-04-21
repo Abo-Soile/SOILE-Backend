@@ -1,4 +1,4 @@
-var vertx = require("vertx")
+var vertx = require("vertx");
 var container = require("vertx/container");
 var vertxTests = require("vertx_tests");
 var vassert = require("vertx_assert");
@@ -8,8 +8,8 @@ var console = require('vertx/console');
 var mongo = require("mongoHandler");
 var async = require("async");
 
-var models = require("Models")
-var dao = require('DAObjects')
+var models = require("Models");
+var dao = require('DAObjects');
 
 var userDao = new dao.UserDAO();
 
@@ -18,7 +18,7 @@ var mongoConfig = {
   "host": "127.0.0.1",
   "port": 27017,
   "db_name": "soilemodeltest"
-}
+};
 
 function resetMongo(callback) {
   vertx.eventBus.send(mongoConfig.address, {"action": "command",
@@ -27,7 +27,7 @@ function resetMongo(callback) {
       function(reply) {
         console.log("Dropping database");
         callback(reply);
-    })  
+    }); 
 }
 
 function testUser() {
@@ -37,8 +37,8 @@ function testUser() {
         console.log("Database dropped")
         callback();
       })*/
-      console.log("Firest stop")
-      callback()
+      console.log("Firest stop");
+      callback();
     },
     function newUser(callback) {
       /*mongo.user.new("user1","user1", function(r) {
@@ -53,37 +53,37 @@ function testUser() {
       //console.log("\n\n ------------ \n " + u._collection)
 
       u.save(function(r) {
-        console.log("User created")
+        console.log("User created");
         console.log(JSON.stringify(u));
         callback(null,u._id);
-      })
+      });
     },
 
     function getUser(arg, callback) {
       userDao.get(arg, function(reply) {
-        console.log("\n################# got user")
-        console.log(JSON.stringify(reply))
+        console.log("\n################# got user");
+        console.log(JSON.stringify(reply));
         callback();
-      })
+      });
     },
     function listUsers (callback) {
       userDao.list({"testfield":"field"}, function(reply) {
         console.log("#Testing list");
         callback();
-      })
+      });
     }
   ], function end(err,result) {
     console.log("Err: " + JSON.stringify(err));
     vassert.assertEquals(typeof err, 'undefined');
     console.log("DONE");
     vassert.testComplete();
-  })
+  });
 }
 
 
-var script = this
+var script = this;
 container.deployModule("io.vertx~mod-mongo-persistor~2.1.0", mongoConfig, function(err, deplId) {
-  if(err != null) {
+  if(err !== null) {
     err.printStackTrace();
     console.log("Mongo deployment failed");
   }else 

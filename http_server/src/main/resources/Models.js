@@ -73,24 +73,24 @@ function BaseModel(arg) {
 BaseModel.prototype.save = function(callback) {
     console.log("Saving " + typeof this.constructor.name);
     
-    var obj = {"action":"save"}
+    var obj = {"action":"save"};
     obj.document = this.filter();
 
-    console.log(JSON.stringify(obj))
+    console.log(JSON.stringify(obj));
 
     var self = this;
     this.sendToMongo(obj, function(reply) {
-        console.log(JSON.stringify(reply))
+        console.log(JSON.stringify(reply));
         self._id = reply._id;
-        callback(reply)
-    })
+        callback(reply);
+    });
 };
 
 BaseModel.prototype.update = function(objNew, callback) {
 
 };
 
-BaseModel.prototype.delete = function(callback) {
+BaseModel.prototype.delete = function(callback  ) {
     console.log("DELETE " + this._collection);    // body...
 };
 
@@ -104,10 +104,10 @@ BaseModel.prototype.sendToMongo = function(arg, callback) {
     eb.send(this._mongoAddress,
             arg,
             function(reply) {
-                callback(reply)
+                callback(reply);
             }
-    )
-}
+    );
+};
 
 BaseModel.prototype.filter = function () {
     /*var obj = this;
@@ -115,12 +115,12 @@ BaseModel.prototype.filter = function () {
     return obj
 */
     return JSON.parse(JSON.stringify(this, replacer));
-}
+};
 
 /*Populating fields on the object*/
 BaseModel.prototype.populateFields = function(fields) {
-  Object.assign(this, fields)
-}
+  Object.assign(this, fields);
+};
 
 
 function User(arg) {
@@ -130,13 +130,11 @@ function User(arg) {
  
     //this._collection = "users"
     this._collection = User.collection;
-    this.email;
-    this.password;  
 }
 
-User.prototype = new BaseModel()
+User.prototype = new BaseModel();
 User.prototype.constructor = User;
-User.collection = "users"
+User.collection = "users";
 
 
 //User.collection = "user";
@@ -152,7 +150,7 @@ function Experiment(arg) {
     this._collection = Experiment.collection;
 }
 
-Experiment.prototype = new BaseModel()
+Experiment.prototype = new BaseModel();
 Experiment.prototype.constructor = Experiment;
 Experiment.collection = "experiment";
 
@@ -163,9 +161,9 @@ function Test(arg) {
     this._collection = Test.collection;
 }
 
-Test.prototype = new BaseModel()
+Test.prototype = new BaseModel();
 Test.prototype.constructor = Test;
-Test.collection = "tests"
+Test.collection = "tests";
 
 function Form(arg) {
     BaseModel.call(this, arg);
