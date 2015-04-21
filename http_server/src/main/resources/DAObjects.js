@@ -38,10 +38,14 @@ BaseDAO.prototype.get = function(matcher, callback) {
 
 BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
     var mongoCommand = {};
+    var that = this;
     mongoCommand.action = "find";
     //mongoCommand.collection = this._collection;
-
-    mongoCommand.matcher = matcher;
+    if(matcher !== null) {
+        mongoCommand.matcher = matcher;
+    } else {
+        mongoCommand.matcher = {};
+    }
     if(typeof limit !== undefined && typeof limit === 'number') {
         mongoCommand.limit = limit;
     }
@@ -51,7 +55,21 @@ BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
     }
 
     this.sendToMongo(mongoCommand, function(mongoReply) {
+        if(mongoReply.status === "ok") {
+            var resultObjects = [];
 
+            var start = new Date().getTime();
+            for (var i = 0; i < mongoReply.results.length; i++) {
+                //console.log("Building object");
+                resultObjects.push(new that._baseObject(mongoReply.results[i]));
+            }
+            console.log("Timetaken: " + (new Date().getTime() - start));
+            callback(resultObjects);
+        }
+
+        else {
+            callback(false);
+        }
     });
 };
 
@@ -66,6 +84,8 @@ BaseDAO.prototype.sendToMongo = function(arg, callback) {
     eb.send(this._mongoAddress,
             arg,
             function(reply) {
+                console.log("####Result from mongo");
+                console.log(JSON.stringify(reply));
                 callback(reply);
             }
     );
@@ -83,7 +103,44 @@ UserDAO.prototype.constructor = UserDAO;
 
 function TestDAO() {
     BaseDAO.call(this);
-    this._collection = ""
+    this._baseObject = models.Test;
+    this._collection = this._baseObject.collection;
 }
 
+TestDAO.prototype = new BaseDAO();
+TestDAO.prototype.constructor = TestDAO;
+
+function ExperimentDAO() {
+    BaseDAO.call(this);
+    this._baseObject = models.Experiment;
+    this._collection = this._baseObject.collection;
+
+}
+
+ExperimentDAO.prototype = new BaseDAO();
+ExperimentDAO.prototype.constructor = ExperimentDAO;
+
+
+function FormDAO() {
+    BaseDAO.call(this);
+    this._baseObject = models.Form;
+    this._collection = this._baseObject.collection;
+}
+
+FormDAO.prototype = new BaseDAO();
+FormDAO.prototype.constructor = FormDAO;
+
+function DataDAO() {
+    BaseDAO.call(this);
+    this._baseObject = models.Form;
+    this._collection = this._baseObject.collection;
+}
+
+DataDAO.prototype = new BaseDAO();
+DataDAO.prototype.constructor = DataDAO;
+
 module.exports.UserDAO = UserDAO;
+module.exports.TestDAO = TestDAO;
+module.exports.ExperimentDAO = ExperimentDAO;
+module.exports.FormDAO = FormDAO;
+module.exports.DataDAO = DataDAO;

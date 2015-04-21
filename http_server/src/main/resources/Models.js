@@ -16,7 +16,7 @@ var vertx = require('vertx');
 var eb = vertx.eventBus;
 var utils = require('utils');
 
-var console = require('vertx/console')
+var console = require('vertx/console');
 
 if (!Object.assign) {
   Object.defineProperty(Object, 'assign', {
@@ -51,8 +51,8 @@ if (!Object.assign) {
 }
 
 function replacer(key, value) {
-    if (key == "_collection"||
-        key == "_mongoAddress"
+    if (key === "_collection" ||
+        key === "_mongoAddress"
         ) {
         return undefined;
     }
@@ -71,7 +71,7 @@ function BaseModel(arg) {
 }
 
 BaseModel.prototype.save = function(callback) {
-    console.log("SAVING!!!")
+    console.log("Saving " + typeof this.constructor.name);
     
     var obj = {"action":"save"}
     obj.document = this.filter();
@@ -90,14 +90,17 @@ BaseModel.prototype.update = function(objNew, callback) {
 
 };
 
-BaseModel.prototype.delete = function() {
-    console.log("DELETE" + this._collection);    // body...
+BaseModel.prototype.delete = function(callback) {
+    console.log("DELETE " + this._collection);    // body...
 };
 
+/*
+Sends the specified command to mongo-persistor and returns
+calls the callback function when done. 
+ */
 BaseModel.prototype.sendToMongo = function(arg, callback) {
-    console.log("This collection " + this._collection)
     arg.collection = this._collection;
-    console.log(JSON.stringify(arg))
+    console.log(JSON.stringify(arg));
     eb.send(this._mongoAddress,
             arg,
             function(reply) {
@@ -142,39 +145,50 @@ User.prototype.setPassword = function(password) {
     this.password = utils.hashPassword(password);
 };
 
-User.prototype.isAdmin = function(first_argument) {
-    // body...
-};
 
-function Experiment() {
-    BaseModel.call(this);
+function Experiment(arg) {
+    BaseModel.call(this, arg);
 
-    this._collection = "experiment";
+    this._collection = Experiment.collection;
 }
+
 Experiment.prototype = new BaseModel()
 Experiment.prototype.constructor = Experiment;
+Experiment.collection = "experiment";
 
-//Experiment.collection = "experiment";
 
-function Test() {
-    BaseModel.call(this);
+function Test(arg) {
+    BaseModel.call(this, arg);
 
-    this._collection = "tests";
+    this._collection = Test.collection;
 }
 
 Test.prototype = new BaseModel()
 Test.prototype.constructor = Test;
+Test.collection = "tests"
 
-//Test.collection = "tests"
+function Form(arg) {
+    BaseModel.call(this, arg);
 
-function Form() {
-    BaseModel.call(this);
-
-    this._collection = "forms"
+    this._collection = Form.collection;
 }
 
-Form.prototype = new BaseModel()
+Form.prototype = new BaseModel();
 Form.prototype.constructor = Form;
+Form.collection = "forms";
+
+
+function Data(arg) {
+  this.confirmed = false;
+
+  BaseModel.call(this, arg);
+  this._collection = Data.collection;
+}
+
+Data.prototype = new BaseModel();
+Data.prototype.constructor = Data;
+Data.collection = "data";
+
 
 //Form.collection = "forms"
 

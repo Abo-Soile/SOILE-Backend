@@ -65,6 +65,12 @@ function testUser() {
         console.log(JSON.stringify(reply))
         callback();
       })
+    },
+    function listUsers (callback) {
+      userDao.list({"testfield":"field"}, function(reply) {
+        console.log("#Testing list");
+        callback();
+      })
     }
   ], function end(err,result) {
     console.log("Err: " + JSON.stringify(err));
