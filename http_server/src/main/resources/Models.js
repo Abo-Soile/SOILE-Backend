@@ -76,12 +76,10 @@ BaseModel.prototype.save = function(callback) {
     var obj = {"action":"save"};
     obj.document = this.filter();
 
-    console.log(JSON.stringify(obj));
-
-    var self = this;
+    var that = this;
     this.sendToMongo(obj, function(reply) {
         console.log(JSON.stringify(reply));
-        self._id = reply._id;
+        that._id = reply._id;
         callback(reply);
     });
 };

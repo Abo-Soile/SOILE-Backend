@@ -73,6 +73,40 @@ BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
     });
 };
 
+BaseDAO.prototype.update = function(matcher, objnew, callback) {
+    var mongoCommand = {};
+
+    if (typeof matcher === 'undefined' ||
+        typeof objnew === 'undefined') {
+    }
+
+    mongoCommand.action = "update";
+    mongoCommand.criteria = matcher;
+    mongoCommand.objNew = objnew;
+
+    this.sendToMongo(mongoCommand, function(mongoReply) {
+        if(mongoReply.status === "ok") {
+            return callback(true);
+        }
+        return callback(false);
+    });
+};
+
+BaseDAO.prototype.count = function(matcher, callback) {
+    var mongoCommand = {};
+    mongoCommand.matcher = {};
+
+    mongoCommand.action = "count"
+    mongoCommand.matcher = matcher;
+
+    this.sendToMongo(mongoCommand, function(mongoReply) {
+        if (mongoReply.status === "ok") {
+            return callback(mongoReply.count);
+        }
+        return callback(0);
+    });
+};
+
 
 /*
 Sends a command to mongo with the specified arguments.

@@ -55,7 +55,11 @@ function testUser() {
       u.save(function(r) {
         console.log("User created");
         console.log(JSON.stringify(u));
-        callback(null,u._id);
+
+        u.anotherField="anotherField";
+        u.save(function(r2) {
+          callback(null,u._id);
+        });
       });
     },
 
@@ -67,8 +71,15 @@ function testUser() {
       });
     },
     function listUsers (callback) {
-      userDao.list({"testfield":"field"}, function(reply) {
+      userDao.list({"anotherField":"anotherField"}, function(reply) {
         console.log("#Testing list");
+        callback(null,reply.length);
+      });
+    },
+    function countUsers (arg,callback) {
+      userDao.count({"anotherField":"anotherField"}, function(reply) {
+        console.log("#Testing count");
+        vassert.assertEquals(reply, arg, 0.002);
         callback();
       });
     }
