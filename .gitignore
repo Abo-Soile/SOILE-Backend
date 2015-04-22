@@ -19,7 +19,8 @@ prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-qmarkup.jar
 prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-utils.jar
 prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-verticle.jar
 
-
+# Sublime workspace files are user-specific
+*.sublime-workspace
 
 prod/mods/fi.abo.kogni.soile~http-server~1.1/
 
