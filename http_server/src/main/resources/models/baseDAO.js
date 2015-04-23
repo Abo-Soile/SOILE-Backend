@@ -3,10 +3,6 @@ var eb = vertx.eventBus;
 var utils = require('utils');
 
 var console = require('vertx/console');
-
-var models = require('Models');
-var User = models.User;
-
 var mongoAddress = "vertx.mongo-persistor";
 
 function BaseDAO() {
@@ -125,56 +121,4 @@ BaseDAO.prototype.sendToMongo = function(arg, callback) {
     );
 };
 
-function UserDAO() {
-    BaseDAO.call(this);
-    this._baseObject = models.User;
-    this._collection = this._baseObject.collection;
-}
-
-UserDAO.prototype = new BaseDAO();
-UserDAO.prototype.constructor = UserDAO;
-
-
-function TestDAO() {
-    BaseDAO.call(this);
-    this._baseObject = models.Test;
-    this._collection = this._baseObject.collection;
-}
-
-TestDAO.prototype = new BaseDAO();
-TestDAO.prototype.constructor = TestDAO;
-
-function ExperimentDAO() {
-    BaseDAO.call(this);
-    this._baseObject = models.Experiment;
-    this._collection = this._baseObject.collection;
-
-}
-
-ExperimentDAO.prototype = new BaseDAO();
-ExperimentDAO.prototype.constructor = ExperimentDAO;
-
-
-function FormDAO() {
-    BaseDAO.call(this);
-    this._baseObject = models.Form;
-    this._collection = this._baseObject.collection;
-}
-
-FormDAO.prototype = new BaseDAO();
-FormDAO.prototype.constructor = FormDAO;
-
-function DataDAO() {
-    BaseDAO.call(this);
-    this._baseObject = models.Form;
-    this._collection = this._baseObject.collection;
-}
-
-DataDAO.prototype = new BaseDAO();
-DataDAO.prototype.constructor = DataDAO;
-
-module.exports.UserDAO = UserDAO;
-module.exports.TestDAO = TestDAO;
-module.exports.ExperimentDAO = ExperimentDAO;
-module.exports.FormDAO = FormDAO;
-module.exports.DataDAO = DataDAO;
+module.exports = BaseDAO;

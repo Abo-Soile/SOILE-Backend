@@ -8,8 +8,8 @@ var console = require('vertx/console');
 var mongo = require("mongoHandler");
 var async = require("async");
 
-var models = require("Models");
-var dao = require('DAObjects');
+var models = require("models/Models");
+var dao = require('models/DAObjects');
 
 var userDao = new dao.UserDAO();
 
@@ -30,43 +30,60 @@ function resetMongo(callback) {
     }); 
 }
 
+function setupDB(callback) {
+
+  var users = [1,2,3,4,5,6,7,8,9];
+
+  async.map(users, function (item, callback) {
+    var u = new models.User({email:"user"+item});
+    u.setPassword(u.email);
+    u.isAdmin = false;
+    u.save(function(err) {
+      callback(null,u);
+    });
+  }, function(err, results){
+    console.log("GENERATED USERS");
+    console.log(JSON.stringify(results));
+    callback();
+  });
+}
+
 function testUser() {
   async.waterfall([
-    function(callback) {
-      /*resetMongo(function(r){
-        console.log("Database dropped")
-        callback();
-      })*/
-      console.log("Firest stop");
-      callback();
+    function setup(callback) {
+      resetMongo(function() {
+        setupDB(function() {
+          callback();
+        });
+      });
     },
     function newUser(callback) {
-      /*mongo.user.new("user1","user1", function(r) {
-        console.log("Generating new user");
-        callback(null,r)
-      })*/
+
       var u = new models.User({email:"testuser2",testfield:"field"});
-      u.delete();
-      //u.email = "testemail"
+
       u.setPassword("testpassword");
 
-      //console.log("\n\n ------------ \n " + u._collection)
-
       u.save(function(r) {
-        console.log("User created");
-        console.log(JSON.stringify(u));
+        console.log("###############\nUser created");
+        console.log(JSON.stringify(u)+"\n\n");
 
         u.anotherField="anotherField";
         u.save(function(r2) {
-          callback(null,u._id);
+          console.log("\n\n#####Updated user");
+          console.log(JSON.stringify(u)+"\n");
+          callback(null,u);
         });
       });
     },
 
     function getUser(arg, callback) {
-      userDao.get(arg, function(reply) {
-        console.log("\n################# got user");
+      userDao.get(arg._id, function(reply) {
+        console.log("\n#GOT USER!");
         console.log(JSON.stringify(reply));
+        console.log(JSON.stringify(arg));
+
+        vassert.assertEquals(arg.email, reply.email);
+
         callback();
       });
     },
