@@ -520,13 +520,20 @@ customMatcher.get('/experiment/:id', function(request){
   //Keeping stuff DRY
   function renderExp(r) {
     var experiment = r.result;
+    var hidelogin = false;
+
+    if(typeof experiment.hidelogin !== undefined) {
+      if(experiment.hidelogin){
+        hidelogin = true;
+      }
+    }
 
     //Replacing newlines with html linebreaks when displaying the description
     if(typeof experiment.description !== 'undefined') {
       experiment.description = experiment.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
     }
     //console.log(JSON.stringify(r));
-    templateManager.render_template("experiment", {"exp":experiment},request);
+    templateManager.render_template("experiment", {"exp":experiment, "hideLogin":hidelogin},request);
   }
 
   mongo.experiment.get(id,function(r){
@@ -620,6 +627,7 @@ customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
       var eDate = new Date(jsonData.endDate);
 
       var loginRequired = jsonData.loginrequired
+      var hidelogin = jsonData.hidelogin;
 
       console.log(sDate.toString());
 
@@ -815,6 +823,11 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         var noOfPhases = parseInt(r.result.components.length);
         phaseNo = parseInt(phaseNo);
         var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
+
+
+        if (typeof exp.hidelogin !== 'undefined') {
+          context.hideLogin = exp.hidelogin;
+        }
 
         if (exp.israndom) {
           console.log("------Translating phase number---------");

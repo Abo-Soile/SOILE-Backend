@@ -32,6 +32,15 @@
 				 {/exp.loginrequired}
 				 />
 
+				 <label for="hidelogin">Hide Login</label>
+				<input type="text" name="hidelogin" id="hidelogin" data-dojo-type="dijit/form/CheckBox" 
+				 {#exp.hidelogin}
+				 	data-dojo-props="checked: true"
+				 {:else}
+				 	data-dojo-props="checked: false"
+				 {/exp.hidelogin}
+				 />
+
 				<br>
 				<div id="components">
 					<ul id="componentlist" class="fancyList">

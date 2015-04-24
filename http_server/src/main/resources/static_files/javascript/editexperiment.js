@@ -46,6 +46,7 @@ function(dom,
 		var name = registry.byId("name");
 		var description = registry.byId("description");
 		var loginRequired = registry.byId("loginrequired");
+		var hideLogin = registry.byId("hidelogin");
 
 		var startDate = registry.byId("startDate");
 		var endDate = registry.byId("endDate");
@@ -201,6 +202,12 @@ function(dom,
 				if (loginRequired.get("value")) {
 					resp.loginrequired = true;
 				}
+
+				resp.hidelogin = false;
+				if (hideLogin.get("value")) {
+					resp.hidelogin = true;
+				}
+
 				console.log(resp.loginrequired)
 
 				resp.startDate = sDate.toISOString();

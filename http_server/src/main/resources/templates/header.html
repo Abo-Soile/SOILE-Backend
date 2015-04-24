@@ -73,7 +73,12 @@
           </form>
          </li>
         {:else}
-        <a type="button" class="btn btn-success navbar-btn" href="/login">Login</a>
+          {?hideLogin}
+          
+          {:else}
+            <a type="button" class="btn btn-success navbar-btn" href="/login">Login</a>
+          {/hideLogin}
+
         {/loggedIn}
       </ul>
        
