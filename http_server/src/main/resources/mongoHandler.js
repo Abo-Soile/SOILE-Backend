@@ -390,9 +390,14 @@ var Experiment = {
     var timeStamp = new Date();
     doc.timeStamp = timeStamp.toISOString();
 
-    function save(document){     
+    function save(document){
+
+      if(typeof document.phase !== 'number') {
+        document.phase =  parseInt(document.phase);
+      }
+
       vertx.eventBus.send(mongoAddress, {"action":"save",
-      "collection":dataCollection, "document":doc}, function(reply) {
+      "collection":dataCollection, "document":document}, function(reply) {
 
         vertx.eventBus.send(mongoAddress, {"action":"update", 
           "collection":dataCollection, "criteria":{
@@ -566,6 +571,7 @@ var Experiment = {
   },
 
   rawTestData: function(expId, phase, response) {
+    phase = parseInt(phase);
     vertx.eventBus.send(mongoAddress, {
         "action":"find",
         "collection":dataCollection,
