@@ -1110,12 +1110,12 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
     var sep =";"
 
     var csvData = "";
-
+    
     for (var el in data){
       var element = data[el];
       console.log("dataa" + JSON.stringify(element._id))
       //Inserting username
-      csvData += "userID:" + sep +  element.userid + sep + "\n";
+      csvData += "userID: " + sep +  element.userid + sep + "\n";
 
       //inserting keynames names
       for (var key in element.data.rows[0]) {
