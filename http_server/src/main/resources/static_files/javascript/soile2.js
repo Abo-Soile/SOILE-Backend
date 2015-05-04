@@ -1337,6 +1337,8 @@ SOILE2 = (function(){
 
       //console.log("Running hasmore " + _stimuli.length)
 
+      console.log("Has more: " + (_stimuli.length > 0).toString());
+
       return _stimuli.length > 0;
     };
 
@@ -1349,11 +1351,12 @@ SOILE2 = (function(){
       */
       'get': function(){
         //if (_stimuli.length > 0) {
-         if (_iterationStimuli === null) {
+         if (_iterationStimuli === null || _iterationStimuli === undefined) {
             //console.log("Popping stimuli");
             _iterationStimuli = _stimuli.pop();
+
+            if(_iterationStimuli === undefined) {_iterationStimuli = null}
          }
-         //console.log("Returning stimuli " + _iterationStimuli);
          return _iterationStimuli;
 
         //}
