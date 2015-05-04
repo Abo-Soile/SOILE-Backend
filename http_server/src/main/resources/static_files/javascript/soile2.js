@@ -1335,10 +1335,6 @@ SOILE2 = (function(){
     var _hasmore = function(){
       _iterationStimuli = null;
 
-      //console.log("Running hasmore " + _stimuli.length)
-
-      console.log("Has more: " + (_stimuli.length > 0).toString());
-
       return _stimuli.length > 0;
     };
 
