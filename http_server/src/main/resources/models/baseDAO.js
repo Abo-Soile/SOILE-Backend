@@ -74,6 +74,7 @@ BaseDAO.prototype.update = function(matcher, objnew, callback) {
 
     if (typeof matcher === 'undefined' ||
         typeof objnew === 'undefined') {
+        callback(false);
     }
 
     mongoCommand.action = "update";
