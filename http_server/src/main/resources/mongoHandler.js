@@ -575,7 +575,7 @@ var Experiment = {
     vertx.eventBus.send(mongoAddress, {
         "action":"find",
         "collection":dataCollection,
-        "matcher":{"expId":expId, "phase":phase},
+        "matcher":{"expId":expId, "phase":phase, "confirmed":true},
         "keys": {"data":1, "userid":1}},
       function(reply) {
         response(reply);
