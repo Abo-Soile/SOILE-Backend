@@ -1107,11 +1107,11 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
   var phase = request.params().get('phase');
   mongo.experiment.rawTestData(expId, phase, function(r) {
     var data = r.results;
-    var sep =";"
+    var sep =";";
 
     var csvData = "";
     
-    for (var el in data){
+    /*for (var el in data){
       var element = data[el];
       console.log("dataa" + JSON.stringify(element._id))
       //Inserting username
@@ -1132,13 +1132,63 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
         }
         csvData += "\n";
       }
+    }*/
+
+    for (var i = 0; i < data.length; i++) {
+      var element = data[i]
+      var keys = {};
+
+      csvData += "userID: " + sep +  element.userid + sep + "\n";
+
+      for (var j = 0; j < element.data.rows.length; j++) {
+        var row = element.data.rows[j]
+        for (var rkey in row) {
+          if (keys.hasOwnProperty(rkey)) {
+            keys[rkey][j] = JSON.stringify(row[rkey]);
+          }else {
+            keys[rkey] = [];
+            keys[rkey][j] = JSON.stringify(row[rkey]);
+          }
+        }
+      }
+
+      var csv = "";
+      var lastK = "";
+      
+      //Building headers
+      for(var k in keys) {
+        csv += k + sep;
+        lastK = k;
+      }
+
+      //console.log(csv + "\n");
+      csv += "\n";
+      
+      /*
+        Skriver ut resultatet till csv:n
+      */
+      for (var ij = 0; ij < keys[lastK].length; ij++) {
+        for(k in keys) {
+          if ( keys[k][ij] != undefined) {
+            csv += keys[k][ij] + sep;
+            
+          } else{
+            csv += sep;
+          }
+        }
+        csv += "\n"; 
+      }
+
+      csvData += csv;
+
     }
+
 
     request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
     request.response.putHeader("Content-Disposition", "attachment; filename=phase"+phase+"RawData.csv");
 
     request.response.end("\ufeff " + csvData);
-  })
+  });
 
 
 }));
