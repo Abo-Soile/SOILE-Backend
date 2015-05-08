@@ -54,7 +54,7 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
 		loadImages();
 });
 
-app.controller('expEditController', function($scope, $http, $location) {
+app.controller('expEditController', function($scope, $http, $location, $timeout) {
 	$scope.compileErrors = "";
 	$scope.soileLog  = [];
 
@@ -76,9 +76,7 @@ app.controller('expEditController', function($scope, $http, $location) {
   	var logRow = {timestamp: Date.now() - $scope.testStartTime, message:message};
   	logRow.timestamp = logRow.timestamp/1000 + " s";
   	$scope.soileLog.push(logRow);
-  	console.log("adding to log");
-  	console.log($scope.soileLog);
-  	$scope.$apply();;
+  	$scope.$apply();
 
   }
 
@@ -91,16 +89,18 @@ app.controller('expEditController', function($scope, $http, $location) {
        so that all fields are filled int the right order and missing values
        are replaced with a -*/
       var set = new Object();
+      var rowCount = data.rows.length;
 
-      for (var i = 0; i<data.rows.length; i++) {
-        for(j in data.rows[i]) {
+
+      for (var i = 0; i<rowCount; i++) {
+        for(var j in data.rows[i]) {
           set[j] = {valid:true, data:[]};
         }
       }
 
 
-      for (var i = 0; i<data.rows.length; i++) {
-        for(s in set) {
+      for (var i = 0; i<rowCount; i++) {
+        for(var s in set) {
           if ( data.rows[i].hasOwnProperty(s) ) {
             set[s].data.push(data.rows[i][s]);
           }else {
@@ -109,29 +109,43 @@ app.controller('expEditController', function($scope, $http, $location) {
         }
       };
 
-      console.log(set);
+      var headers = []
+      var rows = []
+
+      for(var col in set) {
+        headers.push(col);
+      }
+
+      for (var i = 0; i < rowCount; i++) {
+      	rows[i] = []
+      	for(var col in set) {
+		      rows[i].push(JSON.stringify(set[col].data[i]));
+      		//rows[i][col] = JSON.stringify(set[col].data[i]);
+      	}
+      }
 
       $scope.singleData = data.single;
-      $scope.rawData = data.set;
-      $scope.rawHeaders = data.set[0];
+      $scope.rawHeaders = headers;
+      $scope.rawData = rows;
 
-      console.log($scope.rawHeaders);
 
       $scope.$apply();
-      console.log($scope.singleData);
+
+      console.log($scope);
   }
 
   $scope.runTest = function() {
   		$scope.testStartTime = Date.now();
 
-      console.log($scope.compiledCode);
+      //console.log($scope.compiledCode);
       console.log("Executing soile");
       
       SOILE2.util.eval($scope.compiledCode);
       SOILE2.util.setEndFunction($scope.endFunc);
       SOILE2.util.setLogFunction($scope.logFunc);
+
       SOILE2.util.resetData();
-      setTimeout(function() {
+      $timeout(function() {
         //SOILE2.run()
         SOILE2.rt.exec_pi();
       }, 1500);

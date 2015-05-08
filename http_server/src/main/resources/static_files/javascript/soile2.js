@@ -5,7 +5,7 @@ if (SOILE2 !== undefined){
 }
 
 SOILE2 = (function(){
-  'use strict';
+  /*'use strict';*/
 
   var soile2 = {};
   var bin = {};           // builtin
@@ -1689,8 +1689,10 @@ SOILE2 = (function(){
   rt.finish = function() {
     console.log("Test over");
 
-    soile2.rt.keyhandler.reset();      // Removing all keyhandlers
-    $(document).add('*').off(); // Removing all clickhandlers
+    //soile2.rt.keyhandler.reset();      // Removing all keyhandlers
+    //$("#document").add('*').off(); // Removing all clickhandlers
+    $("#display").off(); // Removing all clickhandlers
+    $("#display").children().off();
 
     var d = soile2.rt.dataHandler.getData();
 

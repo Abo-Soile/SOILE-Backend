@@ -221,6 +221,9 @@ testeditor styles
 	overflow-y:scroll;
 }
 
+#imagelist li{
+  min-height: 40px;
+}
 
 #imagelist img {
 	height: 30px;

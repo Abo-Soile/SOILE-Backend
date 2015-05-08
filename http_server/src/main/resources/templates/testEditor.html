@@ -1,144 +1,146 @@
 {>header /}
 
 
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
-    <script src="http://underscorejs.org/underscore-min.js"></script>
+<script src="http://underscorejs.org/underscore-min.js"></script>
 
-    <script src="/javascript/soile2.js"></script>
+<script src="/javascript/soile2.js"></script>
 
-    <style type="text/css" media="screen">
-        #editor { 
-            height: 550px;
-        }
-    </style>
+<style type="text/css" media="screen">
+    #editor { 
+        height: 550px;
+    }
+</style>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-    <script type="text/javascript" src="/javascript/bower_components/ace-builds/src-min-noconflict/ace.js"></script>
-    <script type="text/javascript" src="/javascript/bower_components/angular-ui-ace/ui-ace.js"></script>
-    
-    <script type="text/javascript" src="/javascript/bower_components\angular-file-upload/angular-file-upload.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script type="text/javascript" src="/javascript/bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+<script type="text/javascript" src="/javascript/bower_components/angular-ui-ace/ui-ace.js"></script>
+
+<script type="text/javascript" src="/javascript/bower_components\angular-file-upload/angular-file-upload.js"></script>
 
 
 
-    <div class="container" id="main" ng-app="testEditor" ng-controller="expEditController">
-        <div class="row">
-            <div class="col-md-12">
-                <h2 id="testName">{test.name}</h2>
-            </div>
-            <div class="col-md-9">
+<div class="container" id="main" ng-app="testEditor" ng-controller="expEditController">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 id="testName">{test.name}</h2>
+        </div>
+        <div class="col-md-9">
 <!--            <textarea data-dojo-type="dijit/form/Textarea" id="code">
-                    {test.code}
-                </textarea>    -->
-                <div ui-ace="{showGutter: false, onLoad: aceLoaded}"  id="editor">
-                    {test.code}
-                </div>
+                {test.code}
+            </textarea>    -->
+            <div ui-ace="{showGutter: false, onLoad: aceLoaded}"  id="editor">
+                {test.code}
             </div>
-
-            <div class="col-md-3" ng-controller="fileController"> 
-                <h3>Images</h3>
-                <div id="uploader"></div>
-                    <input type="file" nv-file-select uploader="uploader" multiple/>
-                    <h4>Available images</h4>
-                    <div id="images">
-                    <ul id="imagelist"> 
-                        <li ng-repeat="img in images"> 
-                            <img ng-src="/[([img.url])]">
-                            <p>Image [([img.name])]</p>
-                            <button ng:click="useImage(img)" >Use</button>
-                            <button ng:click="delImage($index)" >Del</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="col-md-12">
-                <button ng:click="compileTest()" id="compileButton">Save&Compile</button>
-
-                <button ng:click="runTest()" type="button" id="runButton"> Run</button>
-            </div>
-            <hr>
         </div>
-        <div class="row">
-            <div class="col-md-9">
-                <div class="alert alert-danger" id="errorbox" ng-show="compileErrors">
-                    [([compileErrors])]
-                </div>
-            </div>
-            <div class="col-md-12 placeholder50px"></div>
-            <div class="col-md-12">
-                <div id="display">
-                    <div id="mouseposition">
-                    </div>
-                    <p id="message" style="display:none"></p>
-                </div>
-            </div>
-           
-            <div class="col-md-5">
-                <div class="panel">
-                    <h5>DebugLog</h5>
-                    <div id="logdiv" class="overflow300">
-                        <table class="table table-striped table-condensed" id="log">
-                            <thead>
-                                <th>Time</th>
-                                <th>Message</th>
-                            </thead>
-                            <tr ng-repeat="row in soileLog">
-                                <th>[([row.timestamp])]</th>
-                                <th>[([row.message])]</th>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-md-7">
-                <div class="panel">
-                    <h5>Raw Data</h5>
-                    <div class="overflow300">
-                        <table id="rawTable" class="table table-striped table-condensed">
-                            <thead>
-                                <td ng-repeat="(key, value) in rawData">
-                                    [([key])]
-                                </td> 
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="(key,value) in rawData">
-                                    <td ng-repeat=" in key.data">
-                                        [([value])]
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <div class="col-md-3" ng-controller="fileController"> 
+            <h3>Images</h3>
+            <div id="uploader"></div>
+                <input type="file" nv-file-select uploader="uploader" multiple/>
+                <h4>Available images</h4>
+                <div id="images">
+                <ul id="imagelist"> 
+                    <li ng-repeat="img in images"> 
+                        <img ng-src="/[([img.url])]">
+                        <span class='imgname'>[([img.name])]</span>
+                        <button ng:click="useImage(img)" >Use</button>
+                        <button type="button" class="btn btn-danger" ng:click="delImage($index)" >Del</button>
+                    </li>
+                </ul>
             </div>
-
-            <div class="col-md-12">
-                <div class="panel panel-fancy">
-                    <h5>Stored Data</h5>
-                    <div class="overflow">
-                        <table id="dataTable" class="table table-striped table-responsive overflow">
-                            <thead>
-                                <td ng-repeat="(key, value) in singleData">
-                                    [([key])]
-                                </td> 
-                            </thead>
-                            <tbody>
-                                <td ng-repeat="(key, valuee) in singleData">
-                                    [([valuee])] aa    
-                                </td>
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-
         </div>
+        
+        <div class="col-md-12">
+            <button ng:click="compileTest()" id="compileButton">Save&Compile</button>
+
+            <button ng:click="runTest()" type="button" id="runButton"> Run</button>
+        </div>
+        <hr>
     </div>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="alert alert-danger" id="errorbox" ng-show="compileErrors">
+                [([compileErrors])]
+            </div>
+        </div>
+        <div class="col-md-12 placeholder50px"></div>
+        <div class="col-md-12">
+            <div id="display">
+                <div id="mouseposition">
+                </div>
+                <p id="message" style="display:none"></p>
+            </div>
+        </div>
+       
+        <div class="col-md-5">
+            <div class="panel">
+                <h5>DebugLog</h5>
+                <div id="logdiv" class="overflow300">
+                    <table class="table table-striped table-condensed" id="log">
+                        <thead>
+                            <th>Time</th>
+                            <th>Message</th>
+                        </thead>
+                        <tr ng-repeat="row in soileLog">
+                            <th>[([row.timestamp])]</th>
+                            <th>[([row.message])]</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-    <script type="text/javascript" src="/javascript/testeditor.js"></script>
+        <div class="col-md-7">
+            <div class="panel">
+                <h5>Raw Data</h5>
+                <div class="overflow300">
+                    <table id="rawTable" class="table table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <td ng-repeat="key in rawHeaders">
+                                    [([key])]
+                                </td> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in rawData">
+                                <td ng-repeat="v in row track by $index">
+                                    [([v])]
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="panel panel-fancy">
+                <h5>Stored Data</h5>
+                <div class="overflow">
+                    <table id="dataTable" class="table table-striped table-responsive overflow">
+                        <thead>
+                            <td ng-repeat="(key, value) in singleData">
+                                [([key])]
+                            </td> 
+                        </thead>
+                        <tbody>
+                            <td ng-repeat="(key, valuee) in singleData">
+                                [([valuee])] aa    
+                            </td>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="/javascript/testeditor.js"></script>
 
 
 {>footer /}
