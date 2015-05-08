@@ -1022,71 +1022,87 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
   console.log("Testing testdata");
 
   mongo.experiment.testData(expID, function(r) {
-    var data = r.results;
-    var sep = ";"
+    mongo.experiment.get(expID, function(expRes) {
 
-	//console.log(JSON.stringify(data));
+      var data = r.results;
+      var sep = ";";
 
-    var fields = [];
-    var userData = {};
-    for(i in data) {
-      var item = data[i];
-      console.log("\n" + i + " Index\n"  + JSON.stringify(item));
-	  item.single = item.data.single;
-      
-	  var phase = parseInt(item.phase);
+      var exp = expRes.result;
+      var phaseNames = "";
+      var phaseNameArray = [];
 
-      if(!("userid" in item)) {
-        item.userid = "Missing";
-      }
+      phaseNameArray.push("");
 
-      //Writing headers
-      if(!fields[phase]) {
+    //console.log(JSON.stringify(data));
 
-        //indexes before phase will be set to null
-        fields[phase] = [];
+      var fields = [];
+      var userData = {};
+      for(var i in data) {
+        var item = data[i];
+        console.log("\n" + i + " Index\n"  + JSON.stringify(item));
+        item.single = item.data.single;
+          
+        var phase = parseInt(item.phase);
 
-        var prop;
-        for (prop in item.single) {
-          fields[phase].push(prop);
+        if(!("userid" in item)) {
+          item.userid = "Missing";
+        }
+
+        //Writing headers
+        if(!fields[phase]) {
+
+          //indexes before phase will be set to null
+          fields[phase] = [];
+
+          phaseNameArray.push(exp.components[phase].name);
+          var prop;
+          for (prop in item.single) {
+            fields[phase].push(prop);
+            phaseNameArray.push("");
+          }
+          //Removing the last empty to account for the extra named field in the 
+          //beginning
+          phaseNameArray.pop();
+        }
+
+        if(!userData[item.userid]) {
+          userData[item.userid] = [];
+        }
+
+        userData[item.userid][phase] = [];
+        var j;
+        for(j in item.single) {
+            userData[item.userid][phase].push(item.single[j]);
         }
       }
-
-      if(!userData[item.userid]) {
-        userData[item.userid] = [];
-      }
-
-      userData[item.userid][phase] = [];
-      var j;
-      for(j in item.single) {
-        userData[item.userid][phase].push(item.single[j]);
-      }
-    }
-	
-	fields = utils.cleanArray(fields);
-	for(var d in userData) {
-		userData[d] = utils.cleanArray(userData[d]);
-	}
-
-    var mergedFields = [];
-    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
     
-    var stringFields = mergedFields.join(sep);
+      fields = utils.cleanArray(fields);
+      for(var d in userData) {
+        userData[d] = utils.cleanArray(userData[d]);
+      }
 
-    var userFields = ""
-    for(id in userData) {
-      var mergedUserData = [];
-      mergedUserData = ([id]).concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
+      var mergedFields = [];
+      mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
+      
+      var stringFields = mergedFields.join(sep);
 
-      userFields += mergedUserData.join(sep);
-      userFields += "\n";
-    }
+      var userFields = "";
+      for(var id in userData) {
+        var mergedUserData = [];
+        mergedUserData = ([id]).concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
 
-    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
-    request.response.putHeader("Content-Disposition", "attachment; filename=testdata.csv");
+        userFields += mergedUserData.join(sep);
+        userFields += "\n";
+      }
 
-    request.response.end("\ufeff " + stringFields+"\n"+ userFields);
-  })
+      phaseNames = phaseNameArray.join(sep);
+
+      request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+      request.response.putHeader("Content-Disposition", "attachment; filename=testdata.csv");
+
+      request.response.end("\ufeff " + phaseNames + "\n" + stringFields+"\n"+ userFields);
+    });
+  });
  
 }));
 // /experiment/:id/phase/:phase/rawdata'
