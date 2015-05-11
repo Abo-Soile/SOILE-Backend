@@ -1184,8 +1184,8 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
         Skriver ut resultatet till csv:n
       */
       for (var ij = 0; ij < keys[lastK].length; ij++) {
-        for(k in keys) {
-          if ( keys[k][ij] != undefined) {
+        for(var k in keys) {
+          if ( keys[k][ij] !== undefined) {
             csv += keys[k][ij] + sep;
             
           } else{
