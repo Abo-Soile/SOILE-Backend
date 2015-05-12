@@ -1151,13 +1151,14 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
     }*/
 
     for (var i = 0; i < data.length; i++) {
-      var element = data[i]
+      var element = data[i];
       var keys = {};
 
       csvData += "userID: " + sep +  element.userid + sep + "\n";
-
+      //console.log("RawData number of rows: " + element.data.rows.length);
+      var rowCount = element.data.rows.length;
       for (var j = 0; j < element.data.rows.length; j++) {
-        var row = element.data.rows[j]
+        var row = element.data.rows[j];
         for (var rkey in row) {
           if (keys.hasOwnProperty(rkey)) {
             keys[rkey][j] = JSON.stringify(row[rkey]);
@@ -1183,7 +1184,8 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
       /*
         Skriver ut resultatet till csv:n
       */
-      for (var ij = 0; ij < keys[lastK].length; ij++) {
+      //for (var ij = 0; ij < keys[lastK].length; ij++) {
+      for (var ij = 0; ij < rowCount; ij++) {
         for(var k in keys) {
           if ( keys[k][ij] !== undefined) {
             csv += keys[k][ij] + sep;
