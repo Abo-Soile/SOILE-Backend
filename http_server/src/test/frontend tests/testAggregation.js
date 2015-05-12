@@ -1,3 +1,6 @@
+var dataArray = [765,889,845,897,988,914,954,1362,1218,929,815,675,650,601,628,609,779,1950,866,922,884,975,671,644,691,711,675,477,437,547,610,572,683,706,602,506,629,559,584,577,476,516,502,824,584,521,532,601];
+
+
 describe("Aggragate data functions with stored data", function() {
   beforeEach(function(){
     var data = 2
@@ -14,6 +17,7 @@ describe("Aggragate data functions with stored data", function() {
       SOILE2.bin.newrow();
       data = data*2;
     };
+
   })
 
   afterEach(function() {
@@ -40,6 +44,15 @@ describe("Aggragate data functions with stored data", function() {
   it("standarddeviation of rows", function() {
     var a = SOILE2.bin.standarddeviation("data");
     expect(a).toBeCloseTo(312.97, 1);
+  })
+
+  it("standarddeviation of array", function() {
+    var st = SOILE2.bin.standarddeviation(dataArray);
+    console.log("STANDARDDEVIATION:\t"+ st*3);
+
+    console.log("average:\t" + SOILE2.bin.average(dataArray));
+    var outlier = SOILE2.bin.outliers(dataArray, 3);
+    console.log("outlier av:\t" + SOILE2.bin.average(outlier));
   })
 
   it("removes outliers of rows", function() {

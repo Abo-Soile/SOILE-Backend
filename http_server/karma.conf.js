@@ -18,7 +18,8 @@ module.exports = function(config) {
       './src/test/frontend tests/*.js',
       './src/main/resources/static_files/javascript/soile2.js',
       'https://code.jquery.com/jquery-2.1.3.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore.js'
+      'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore.js',
+      'https://raw.githubusercontent.com/Rich-Harris/BabyParse/master/babyparse.js'
     ],
 
 
