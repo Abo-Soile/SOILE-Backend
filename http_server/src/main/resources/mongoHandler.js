@@ -563,7 +563,9 @@ var Experiment = {
     vertx.eventBus.send(mongoAddress, {"action":"find", 
       "collection":dataCollection,
       "matcher": {"expId":id, "confirmed":true, "type":"test"},
-      "keys": {"confirmed": 0}},   // Projection
+      "keys": {"confirmed": 0},
+      "sort": {"phase":1}
+      },   // Projection
       function(reply) {
         response(reply);
       }

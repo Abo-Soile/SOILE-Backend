@@ -15,6 +15,8 @@ var testImages = config.directory + "/testimages";
 
 var sessionMap = vertx.getMap("soile.session.map");
 
+var logger = container.logger;
+
 messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 
 var a = new java.lang.String("sdfsdfs");
@@ -67,6 +69,8 @@ function sessionTest(func) {
     session.setPersonToken();
     request.session = session;
 
+
+
     //Check if a db session exists
     if((!session.loggedIn()) 
         && (session.getSessionCookie()) 
@@ -85,9 +89,19 @@ function sessionTest(func) {
       console.log("Skipping session check");
       func(request);
     }
+
+    logHttp(request);
   };
 }
 
+function logHttp(request) {
+  var method = request.method();
+  var url = request.absoluteURI();
+  var remoteAddress = request.remoteAddress().getHostString();
+  var userAgent = request.headers().get("User-Agent");
+
+  logger.info("HTTP " + method + "--" + remoteAddress + "  " + url + " Agent:" + userAgent);
+}
 
 //Decorator ish function to ensure that the user is admin
 function requireAdmin(func) {
@@ -144,7 +158,7 @@ customMatcher.post = function(pattern, handler) {
 
 customMatcher.delete = function(pattern, handler) {
   routeMatcher.delete(pattern, sessionTest(handler));
-}
+};
 
 customMatcher.allWithRegEx = function(pattern, handler) {
   routeMatcher.allWithRegEx(pattern, sessionTest(handler));
@@ -1151,13 +1165,14 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
     }*/
 
     for (var i = 0; i < data.length; i++) {
-      var element = data[i]
+      var element = data[i];
       var keys = {};
 
       csvData += "userID: " + sep +  element.userid + sep + "\n";
-
+      //console.log("RawData number of rows: " + element.data.rows.length);
+      var rowCount = element.data.rows.length;
       for (var j = 0; j < element.data.rows.length; j++) {
-        var row = element.data.rows[j]
+        var row = element.data.rows[j];
         for (var rkey in row) {
           if (keys.hasOwnProperty(rkey)) {
             keys[rkey][j] = JSON.stringify(row[rkey]);
@@ -1183,9 +1198,10 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
       /*
         Skriver ut resultatet till csv:n
       */
-      for (var ij = 0; ij < keys[lastK].length; ij++) {
-        for(k in keys) {
-          if ( keys[k][ij] != undefined) {
+      //for (var ij = 0; ij < keys[lastK].length; ij++) {
+      for (var ij = 0; ij < rowCount; ij++) {
+        for(var k in keys) {
+          if ( keys[k][ij] !== undefined) {
             csv += keys[k][ij] + sep;
             
           } else{
@@ -1664,8 +1680,9 @@ customMatcher.get('/', function(request) {
   Matches static files. Uses the normal routmatcher so that session stuff is 
   ignored when sending static files. 
 */
-routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff)$', function(req) {
-  req.response.sendFile(utils.file_from_serverdir(req.path()));
+routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff)$', function(request) {
+  //logHttp(request);
+  request.response.sendFile(utils.file_from_serverdir(request.path()));
 });
 
 customMatcher.allWithRegEx('.*/', function(req) {
