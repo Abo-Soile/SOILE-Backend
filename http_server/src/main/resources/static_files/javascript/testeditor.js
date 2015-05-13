@@ -1,4 +1,9 @@
-var app = angular.module('testEditor', ['ui.ace', 'angularFileUpload'])
+var app = angular.module('testEditor', ['ui.ace', 'angularFileUpload', 'xeditable'])
+
+
+app.run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});
 
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
@@ -70,7 +75,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
   		$scope.compileErrors = data.errors;
   		$scope.compiledCode = data.code;
   	});
-  }
+  };
 
   $scope.logFunc = function(message) {
   	var logRow = {timestamp: Date.now() - $scope.testStartTime, message:message};
@@ -78,7 +83,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
   	$scope.soileLog.push(logRow);
   	$scope.$apply();
 
-  }
+  };
 
   $scope.endFunc = function(data) {
       console.log("it's over");
@@ -88,7 +93,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
        in the result object. These buckets are then filled sequentially
        so that all fields are filled int the right order and missing values
        are replaced with a -*/
-      var set = new Object();
+      var set = {};
       var rowCount = data.rows.length;
 
 
@@ -132,7 +137,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
       $scope.$apply();
 
       console.log($scope);
-  }
+  };
 
   $scope.runTest = function() {
   		$scope.testStartTime = Date.now();
@@ -149,28 +154,48 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
         //SOILE2.run()
         SOILE2.rt.exec_pi();
       }, 1500);
+  };
+
+});
+
+app.controller('editNameController', function($scope, $http, $location) {
+  var editnameurl = $location.absUrl() + "/editname";
+
+  console.log($scope.testname)
+
+  $scope.updatename = function(data) {
+    console.log("Updating " + $scope.testname + "    " + data);
+    $scope.testname = data;
+    $http.post(editnameurl, {name: $scope.testname});
+  };
+
+  $scope.initname = function(name) {
+    console.log("initing name: " + name)
+    $scope.testname = name + "dsfsdfds";
   }
 
 });
 
 
+
 //Showing mouse coordinates when hovering over the test display
-var mousePos = document.getElementById("mouseposition")
+var mousePos = document.getElementById("mouseposition");
 
 var mouseMove = function (e){
-  var displayRect = display.getBoundingClientRect()
-    x=e.clientX - displayRect.left + 0.5;
-    y=e.clientY - displayRect.bottom + displayRect.height;
-    cursor="Mouse Position: Top " + y.toFixed(0) + " Left: " + x.toFixed(0) ;
-    mousePos.innerHTML=cursor
-}
+  var displayRect = display.getBoundingClientRect();
+  var x = e.clientX - displayRect.left + 0.5;
+  var y = e.clientY - displayRect.bottom + displayRect.height;
+  var cursor = "Mouse Position: Top " + y.toFixed(0) + " Left: " + x.toFixed(0) ;
+  mousePos.innerHTML = cursor;
+};
+
 
 function stopTracking(){
     mousePos.innerHTML="";
 }
 
-var display = document.getElementById("display")
-var displayRect = display.getBoundingClientRect()
+var display = document.getElementById("display");
+var displayRect = display.getBoundingClientRect();
 
 display.onmousemove = mouseMove;
 display.onmouseout = stopTracking;

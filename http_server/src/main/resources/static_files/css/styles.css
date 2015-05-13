@@ -33,7 +33,7 @@
 	border-bottom-right-radius: 10px;
 }
 
-button {
+/*button {
 	-webkit-transition: background-color 0.2s linear;
 	border-radius:4px;
 	-moz-border-radius: 4px 4px 4px 4px;
@@ -50,7 +50,7 @@ button {
 button:hover {
 	background-color: #AFD9FF;
 	color: #000000;
-}
+}*/
 
 /*h1 {
 	font-size:1.5em;
@@ -209,7 +209,8 @@ testeditor styles
 
 .imgname {
 	display: inline-block;
-	width: 40%; 
+  margin-right: 2px;
+	width: 45%; 
 }
 
 #images ul {

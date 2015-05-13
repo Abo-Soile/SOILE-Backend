@@ -18,13 +18,15 @@
 <script type="text/javascript" src="/javascript/bower_components/angular-ui-ace/ui-ace.js"></script>
 
 <script type="text/javascript" src="/javascript/bower_components\angular-file-upload/angular-file-upload.js"></script>
+<link href="/javascript/bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+<script src="/javascript/bower_components/angular-xeditable/dist/js/xeditable.js"></script>
 
 
 
 <div class="container" id="main" ng-app="testEditor" ng-controller="expEditController">
     <div class="row">
-        <div class="col-md-12">
-            <h2 id="testName">{test.name}</h2>
+        <div class="col-md-8" ng-controller="editNameController" ng-init="initname('{test.name}')">
+            <h2 id="testName" editable-text="testname" onbeforesave="updatename($data)">[([testname || '{test.name}' ])]</h2>
         </div>
         <div class="col-md-9">
 <!--            <textarea data-dojo-type="dijit/form/Textarea" id="code">
@@ -45,17 +47,20 @@
                     <li ng-repeat="img in images"> 
                         <img ng-src="/[([img.url])]">
                         <span class='imgname'>[([img.name])]</span>
-                        <button ng:click="useImage(img)" >Use</button>
-                        <button type="button" class="btn btn-danger" ng:click="delImage($index)" >Del</button>
+                        <span>
+                            <button ng:click="useImage(img)" class="btn btn-xs btn-primary">Use</button>  
+                            <button type="button" class="btn btn-xs btn-danger" ng:click="delImage($index)" >Del</button>
+                        </span>
                     </li>
                 </ul>
             </div>
         </div>
         
         <div class="col-md-12">
-            <button ng:click="compileTest()" id="compileButton">Save&Compile</button>
-
-            <button ng:click="runTest()" type="button" id="runButton"> Run</button>
+            <span> <button ng:click="compileTest()" id="compileButton" class="btn btn-primary">Save&Compile</button>   
+  
+            <button ng:click="runTest()" type="button" id="runButton" class="btn btn-success"> Run</button> </span>
+           
         </div>
         <hr>
     </div>
