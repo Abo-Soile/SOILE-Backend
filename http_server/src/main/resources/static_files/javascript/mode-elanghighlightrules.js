@@ -1,15 +1,22 @@
 /*
 http://ace.c9.io/tool/mode_creator.html
 Based on ABAP syntax highlighter
+
+see 
+http://plnkr.co/edit/MuzIWp?p=preview
  */
 
-define(function(require, exports, module) {
+ window.define = window.define || ace.define;
+
+define("ace/mode/elanghighlightrules", ["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(require, exports, module) {
 "use strict";
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = require("ace/lib/oop");
+var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
 
 var ElangHighlightRules = function() {
+
+    console.log("HIGHLIGHTNING")
 
     var keywordMapper = this.createKeywordMapper({
         "variable.language": "wait starttimer hidemsg",
@@ -55,5 +62,6 @@ var ElangHighlightRules = function() {
 };
 oop.inherits(ElangHighlightRules, TextHighlightRules);
 
+console.log("EXPORTED")
 exports.ElangHighlightRules = ElangHighlightRules;
 });

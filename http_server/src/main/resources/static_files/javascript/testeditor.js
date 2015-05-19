@@ -63,9 +63,14 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
 	$scope.compileErrors = "";
 	$scope.soileLog  = [];
 
+  ace.config.set("modePath", "/javascript");
+
 	$scope.aceLoaded = function(_editor) {
     // Options
     $scope.editor = _editor;
+    //$scope.editor.config.set("modePath", "/javascript");
+    $scope.editor.getSession().setMode("ace/mode/elanghighlightrules");
+    //$scope.editor.getSession().setMode("ace/mode/javascript");
   };
 
   $scope.compileTest = function() {
