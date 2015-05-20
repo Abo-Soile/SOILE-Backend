@@ -550,7 +550,10 @@ var Experiment = {
     vertx.eventBus.send(mongoAddress, {"action":"find",
     "collection":dataCollection,
     "matcher":{"expId":id, "confirmed":true, "type":"form"},
-    "keys": {"confirmed":0}},  // Projection
+    "keys": {"confirmed":0},  // Projection
+    //TODO: Handle larger replies.
+    "batch_size":1000  
+    }, 
      function(reply) {
       Experiment.phaseCount(id, function(phases) {
         reply.phases = phases.result.values;
@@ -563,9 +566,11 @@ var Experiment = {
     vertx.eventBus.send(mongoAddress, {"action":"find", 
       "collection":dataCollection,
       "matcher": {"expId":id, "confirmed":true, "type":"test"},
-      "keys": {"confirmed": 0},
-      "sort": {"phase":1}
-      },   // Projection
+      "keys": {"confirmed": 0}, // Projection
+      "sort": {"phase":1}, 
+      //TODO: Handle larger replies.
+     "batch_size":1000
+      },   
       function(reply) {
         response(reply);
       }
@@ -578,7 +583,10 @@ var Experiment = {
         "action":"find",
         "collection":dataCollection,
         "matcher":{"expId":expId, "phase":phase, "confirmed":true},
-        "keys": {"data":1, "userid":1}},
+        "keys": {"data":1, "userid":1},
+        //TODO: Handle larger replies.
+        "batch_size":1000
+      },
       function(reply) {
         response(reply);
       }
