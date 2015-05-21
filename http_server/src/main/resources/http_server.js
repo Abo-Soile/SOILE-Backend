@@ -957,7 +957,8 @@ customMatcher.get('/experiment/:id/end', function(request) {
 
 
 //Performs a custom crafted join on gathered data.
-customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
+// DEPRECATED!
+customMatcher.get('/experiment/:id/olddata', requireAdmin(function(request) {
   var expID = request.params().get('id');
   mongo.experiment.formData(expID, function(r) {
 		  
@@ -1029,7 +1030,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 }));
 
 //Performs a custom crafted join on gathered data.
-customMatcher.get('/experiment/:id/papadata', function(request) {
+customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   mongo.experiment.formData(expID, function(r) {
       
@@ -1039,6 +1040,7 @@ customMatcher.get('/experiment/:id/papadata', function(request) {
     var fields = [];
     var userData = {};
   
+    var semiColRegEx = RegExp(";","g");
 
     //finding max phase an
     for(var i in data) {
@@ -1057,7 +1059,7 @@ customMatcher.get('/experiment/:id/papadata', function(request) {
       //userData[item.userid][phase] = [];
       for(var j in item.data) {
         //if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
-          userData[item.userid][j + "_p_"+phase] = (item.data[j].toString().replace(";","_"));
+          userData[item.userid][j + "_p_"+phase] = (item.data[j].toString().replace(semiColRegEx,"_"));
        // }
       }
     }
@@ -1068,9 +1070,9 @@ customMatcher.get('/experiment/:id/papadata', function(request) {
       userArr.push(userData[ud]);
     }
 
-    console.log(JSON.stringify(userArr))
+   //console.log(JSON.stringify(userArr))
 
-    var csv = babyparser.unparse(userArr);
+    var csv = babyparser.unparse(userArr, {"delimiter":";"});
 
     request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
     request.response.putHeader("Content-Disposition", "attachment; filename=questioneerdata.csv");
@@ -1078,7 +1080,7 @@ customMatcher.get('/experiment/:id/papadata', function(request) {
     //request.response.end("\ufeff " + stringFields+"\n"+ userFields);
     request.response.end("\ufeff " + csv);
   });
-});
+}));
 
 
 // Does pretty much the same as the form data method, 
