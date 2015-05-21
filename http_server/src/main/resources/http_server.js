@@ -1059,7 +1059,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
       //userData[item.userid][phase] = [];
       for(var j in item.data) {
         //if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
-          userData[item.userid][j + "_p_"+phase] = (item.data[j].toString().replace(semiColRegEx,"_"));
+          userData[item.userid][j.replace(semiColRegEx,"_") + "_p_"+phase] = (item.data[j].toString().replace(semiColRegEx,"_"));
        // }
       }
     }
@@ -1067,7 +1067,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
     var userArr = [];
     for(var ud in userData) {
       userData[ud]["userid"] = ud;
-      userArr.push(userData[ud]);
+      userArr.unshift(userData[ud]);
     }
 
    //console.log(JSON.stringify(userArr))
