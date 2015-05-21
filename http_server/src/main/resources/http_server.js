@@ -11,6 +11,7 @@ var host = config.host;
 
 var testImages = config.directory + "/testimages";
 
+var babyparser = require("libs/babyparse");
 //var routeMatcher = new vertx.RouteMatcher();
 
 var sessionMap = vertx.getMap("soile.session.map");
@@ -970,8 +971,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 	
 
     //finding max phase an
-    var i;
-    for(i in data) {
+    for(var i in data) {
       var item = data[i];
       phase = parseInt(item.phase);
 
@@ -1027,6 +1027,58 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
     request.response.end("\ufeff " + stringFields+"\n"+ userFields);
   });
 }));
+
+//Performs a custom crafted join on gathered data.
+customMatcher.get('/experiment/:id/papadata', function(request) {
+  var expID = request.params().get('id');
+  mongo.experiment.formData(expID, function(r) {
+      
+    var data = r.results;
+
+
+    var fields = [];
+    var userData = {};
+  
+
+    //finding max phase an
+    for(var i in data) {
+      var item = data[i];
+      phase = parseInt(item.phase);
+
+      if(!("userid" in item)) {
+        item.userid = "Missing";
+      }
+
+      if(!userData[item.userid]) {
+        userData[item.userid] = {};
+      }
+
+      //Writing table data for each 
+      //userData[item.userid][phase] = [];
+      for(var j in item.data) {
+        //if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
+          userData[item.userid][j + "_p_"+phase] = (item.data[j].toString().replace(";","_"));
+       // }
+      }
+    }
+
+    var userArr = [];
+    for(var ud in userData) {
+      userData[ud]["userid"] = ud;
+      userArr.push(userData[ud]);
+    }
+
+    console.log(JSON.stringify(userArr))
+
+    var csv = babyparser.unparse(userArr);
+
+    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+    request.response.putHeader("Content-Disposition", "attachment; filename=questioneerdata.csv");
+
+    //request.response.end("\ufeff " + stringFields+"\n"+ userFields);
+    request.response.end("\ufeff " + csv);
+  });
+});
 
 
 // Does pretty much the same as the form data method, 
