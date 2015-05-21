@@ -1042,6 +1042,8 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   
     var semiColRegEx = RegExp(";","g");
 
+    var headerSet = {};
+
     //finding max phase an
     for(var i in data) {
       var item = data[i];
@@ -1078,17 +1080,22 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
           }
 
           userData[item.userid][headerName] = (item.data[j].toString().replace(semiColRegEx,"_"));
+          headerSet[headerName] = "";
        // }
       }
     }
 
+    headerSet["userid"] = "";
+
     var userArr = [];
     for(var ud in userData) {
       userData[ud]["userid"] = ud;
-      userArr.unshift(userData[ud]);
+      userArr.push(userData[ud]);
     }
 
-   //console.log(JSON.stringify(userArr))
+    userArr.unshift(headerSet);
+
+    console.log(JSON.stringify(userArr))
 
     var csv = babyparser.unparse(userArr, {"delimiter":";"});
 
