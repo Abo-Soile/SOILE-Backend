@@ -1047,6 +1047,8 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
       var item = data[i];
       phase = parseInt(item.phase);
 
+      var phaseName = " phase_" + phase;
+
       if(!("userid" in item)) {
         item.userid = "Missing";
       }
@@ -1055,11 +1057,27 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
         userData[item.userid] = {};
       }
 
-      //Writing table data for each 
-      //userData[item.userid][phase] = [];
+      var removeExtra = false;
+      var checkForExtra = true;
+
+      // Writing each users different phases to a single object.
       for(var j in item.data) {
-        //if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
-          userData[item.userid][j.replace(semiColRegEx,"_") + "_p_"+phase] = (item.data[j].toString().replace(semiColRegEx,"_"));
+          // checking for the useless quistionnaire-id at the beginning of keys, and removing it if present
+          if(checkForExtra) {
+            if(j.slice(0,17) === "questionnaire-id:") {
+              removeExtra = true;
+            }
+          }
+          checkForExtra = false;
+
+          var headerName = null;
+          if(removeExtra) {
+            headerName = j.slice(17, j.length).replace(semiColRegEx,"_") + phaseName;
+          } else {
+            headerName = j.replace(semiColRegEx,"_") + phaseName;
+          }
+
+          userData[item.userid][headerName] = (item.data[j].toString().replace(semiColRegEx,"_"));
        // }
       }
     }
