@@ -1304,6 +1304,91 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
 
 }));
 
+// Outputs 2d data where the useris is stored in every row, making it easier to perform various operation 
+// on the data. 
+customMatcher.get('/experiment/:id/phase/:phase/rawdata_pivot', requireAdmin(function(request) {
+  var expId = request.params().get('id');
+  var phase = request.params().get('phase');
+  mongo.experiment.rawTestData(expId, phase, function(r) {
+    var data = r.results;
+    var sep =";";
+
+    var csvData = "";
+
+    var keys = {}
+
+    keys.userid = [];
+
+    var totalRows = 0
+
+    var rowcounter = 0;
+    
+    for (var i = 0; i < data.length; i++) {
+      var element = data[i];
+
+      //csvData += "userID: " + sep +  element.userid + sep + "\n";
+      //console.log("RawData number of rows: " + element.data.rows.length);
+      var rowCount = element.data.rows.length;
+      for (var j = 0; j < element.data.rows.length; j++) {
+        var row = element.data.rows[j];
+        for (var rkey in row) {
+          if (keys.hasOwnProperty(rkey)) {
+            //keys[rkey][j] = JSON.stringify(row[rkey]);
+            keys[rkey][rowcounter] = JSON.stringify(row[rkey]);
+          }else {
+            keys[rkey] = [];
+            //keys[rkey][j] = JSON.stringify(row[rkey]);
+            keys[rkey][rowcounter] = JSON.stringify(row[rkey]);
+          }
+          //keys.userid[j] = element.userid;
+          keys.userid[rowcounter] = element.userid;
+          rowcounter += 1
+
+        }
+      }
+      totalRows += rowCount;
+    }
+
+    totalRows = rowcounter;
+
+    var csv = "";
+    var lastK = "";
+    
+    //Building headers
+    for(var k in keys) {
+      csv += k + sep;
+      lastK = k;
+    }
+
+    //console.log(csv + "\n");
+    csv += "\n";
+    
+    /*
+      Skriver ut resultatet till csv:n
+    */
+    //for (var ij = 0; ij < keys[lastK].length; ij++) {
+    for (var ij = 0; ij < totalRows; ij++) {
+      for(var k in keys) {
+        if ( keys[k][ij] !== undefined) {
+          csv += keys[k][ij] + sep;
+          
+        } else{
+          csv += sep;
+        }
+      }
+      csv += "\n"; 
+    }
+
+    csvData += csv;
+
+  
+    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+    request.response.putHeader("Content-Disposition", "attachment; filename=phase"+phase+"RawDataPivot.csv");
+
+    request.response.end("\ufeff " + csvData);
+  });
+}));
+
 
 customMatcher.get('/test/demo', function(request) {
   var file = 'demo.html';
