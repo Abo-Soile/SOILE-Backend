@@ -1342,9 +1342,9 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata_pivot', requireAdmin(fun
           }
           //keys.userid[j] = element.userid;
           keys.userid[rowcounter] = element.userid;
-          rowcounter += 1
 
         }
+          rowcounter += 1
       }
       totalRows += rowCount;
     }
