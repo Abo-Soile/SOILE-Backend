@@ -1315,11 +1315,11 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata_pivot', requireAdmin(fun
 
     var csvData = "";
 
-    var keys = {}
+    var keys = {};
 
     keys.userid = [];
 
-    var totalRows = 0
+    var totalRows = 0;
 
     var rowcounter = 0;
     
