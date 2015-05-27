@@ -1125,10 +1125,10 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
       var phaseNames = "";
       var phaseNameArray = [];
 
-        var headerSet = {};
+      var headerSet = {};
 
 
-      phaseNameArray.push("");
+      //phaseNameArray.push("");
 
     //console.log(JSON.stringify(data));
 
@@ -1171,7 +1171,7 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
         }
 
         for(var j in item.single) {
-            var headerName = j;
+            var headerName = j + "  " + exp.components[phase].name;
 
             userData[item.userid][headerName] = item.single[j];
             headerSet[headerName] = "";
