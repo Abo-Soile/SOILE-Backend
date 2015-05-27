@@ -1111,8 +1111,9 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 // Does pretty much the same as the form data method, 
 // Might generate empty fields when using phase no as array index
 customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
+//customMatcher.get('/experiment/:id/testdata', function(request) {
+
   var expID = request.params().get('id');
-  console.log("Testing testdata");
 
   mongo.experiment.testData(expID, function(r) {
     mongo.experiment.get(expID, function(expRes) {
@@ -1124,13 +1125,16 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
       var phaseNames = "";
       var phaseNameArray = [];
 
+        var headerSet = {};
+
+
       phaseNameArray.push("");
 
     //console.log(JSON.stringify(data));
 
       var fields = [];
       var userData = {};
-      for(var i in data) {
+      for(var i = 0; i < data.length; i++) {
         var item = data[i];
         console.log("\n" + i + " Index\n"  + JSON.stringify(item));
         item.single = item.data.single;
@@ -1139,6 +1143,10 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
 
         if(!("userid" in item)) {
           item.userid = "Missing";
+        }
+
+        if(!userData[item.userid]) {
+          userData[item.userid] = {};
         }
 
         //Writing headers
@@ -1162,38 +1170,31 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
           userData[item.userid] = [];
         }
 
-        userData[item.userid][phase] = [];
-        var j;
-        for(j in item.single) {
-            userData[item.userid][phase].push(item.single[j]);
+        for(var j in item.single) {
+            var headerName = j;
+
+            userData[item.userid][headerName] = item.single[j];
+            headerSet[headerName] = "";
         }
       }
-    
-      fields = utils.cleanArray(fields);
-      for(var d in userData) {
-        userData[d] = utils.cleanArray(userData[d]);
-      }
 
-      var mergedFields = [];
-      mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
-      
-      var stringFields = mergedFields.join(sep);
+      headerSet["userid"] = "";
 
-      var userFields = "";
-      for(var id in userData) {
-        var mergedUserData = [];
-        mergedUserData = ([id]).concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
+      var userArr = [];
+      for(var ud in userData) {
+        userData[ud]["userid"] = ud;
+        userArr.push(userData[ud]);
+      }    
 
-        userFields += mergedUserData.join(sep);
-        userFields += "\n";
-      }
+      userArr.unshift(headerSet);
 
+      var csv = babyparser.unparse(userArr, {"delimiter":";"});
       phaseNames = phaseNameArray.join(sep);
 
       request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
       request.response.putHeader("Content-Disposition", "attachment; filename=testdata.csv");
 
-      request.response.end("\ufeff " + phaseNames + "\n" + stringFields+"\n"+ userFields);
+      request.response.end("\ufeff " + phaseNames + "\n" + csv);
     });
   });
  
