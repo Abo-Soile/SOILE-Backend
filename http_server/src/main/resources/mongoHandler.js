@@ -383,7 +383,7 @@ var Experiment = {
     var doc = {};
     doc.phase = phase;
     doc.expId = experimentid;
-    doc.userid = userid
+    doc.userid = userid;
     doc.confirmed = false;
     doc.data = data;
 
@@ -421,15 +421,19 @@ var Experiment = {
       var type = r.result.components[phase].type;
       doc.type = type;
 
-      if (exp.israndom) {
-        Experiment.getUserData(userid, experimentid, function(userdata) {
+      Experiment.getUserData(userid, experimentid, function(userdata) {
+        if (exp.israndom) { 
           doc.phase = userdata.randomorder[phase];
-          save(doc);
-        })
-      }
-      else {
-        save(doc);
-      }
+        }
+        console.log("CURRENT PHASE: " + doc.phase)
+        Experiment.userCompletedPhase(userid, experimentid, doc.phase, function(shouldProceed) {
+          if(shouldProceed){
+            save(doc);
+          } else {
+            callback(r);
+          }
+        });
+      });
     });
   },
 
@@ -794,6 +798,28 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
           return callback(false);
         }else {
           callback(data.result)
+        }
+      }
+    )
+  },
+
+  /*Returns true if user has completed this phase already*/
+  userCompletedPhase: function(userid, experimentid, phase,callback) {
+    console.log("SHOULD PROCEED: " + experimentid + "   p:" + phase + "  u: " + userid);
+    vertx.eventBus.send(mongoAddress, {
+      "action":"findone",
+      "collection":dataCollection,
+      "matcher":{
+        "userid":userid.toString(),
+        "expId":experimentid,
+        "phase":parseInt(phase)
+      }},
+      function(data) {
+        if (data.status == "error" ||
+            typeof data.result == "undefined") {
+          return callback(true);
+        }else {
+          callback(false)
         }
       }
     )
