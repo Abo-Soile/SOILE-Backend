@@ -26,6 +26,8 @@ console.log(JSON.stringify(container.config));
 
 // This function returns a function that calls the requesthandler
 // which makes it possible to run arbitrary code before the request
+
+/*
 function sessionTest(func) {
   return function(request) {
     // console.log("this should be seen before the request")
@@ -94,15 +96,8 @@ function sessionTest(func) {
     logHttp(request);
   };
 }
+*/
 
-function logHttp(request) {
-  var method = request.method();
-  var url = request.absoluteURI();
-  var remoteAddress = request.remoteAddress().getHostString();
-  var userAgent = request.headers().get("User-Agent");
-
-  logger.info("HTTP " + method + "--" + remoteAddress + "  " + url + " Agent:" + userAgent);
-}
 
 //Decorator ish function to ensure that the user is admin
 function requireAdmin(func) {
@@ -142,39 +137,14 @@ function looksLikeMail(str) {
       (str.length - lastDotPos) > 2);  // domain = min 2 chars
 }
 
-function customMatcher() {
-  return;
-}
-
-customMatcher.prototype = new vertx.RouteMatcher();
-
-//More methods from the routematcher should be implementd as needed.
-customMatcher.get = function(pattern, handler) {
-  routeMatcher.get(pattern, sessionTest(handler));
-};
-
-customMatcher.post = function(pattern, handler) {
-  routeMatcher.post(pattern, sessionTest(handler));
-};
-
-customMatcher.delete = function(pattern, handler) {
-  routeMatcher.delete(pattern, sessionTest(handler));
-};
-
-customMatcher.allWithRegEx = function(pattern, handler) {
-  routeMatcher.allWithRegEx(pattern, sessionTest(handler));
-};
-
-customMatcher.noMatch = function(handler) {
-  routeMatcher.noMatch(sessionTest(handler));
-};
-
-
 // Generates  a new customMatcher and sets it to routmatcher
 // this matcher is then bound to de server object at the bottom
 // of this file. The normal routematcher can also be called if 
 // needed.
-var routeMatcher = new customMatcher();
+//var routeMatcher = new CustomMatcher();
+var CustomMatcher = require('router')
+
+var customMatcher = new CustomMatcher();
 
 // TODO: Load this from config
 var DEBUG = true;   //This variable could stored in configs
@@ -218,6 +188,8 @@ var read_khtoken = (function() {
 var sessionManager = require("sessionManager");
 
 //var sessionManager = require("sessionManager").sessionManager;
+
+require('testroute.js');
 
 customMatcher.get("/login", function(request) {
   var previous = request.headers().get("Referer");
@@ -969,7 +941,6 @@ customMatcher.get('/experiment/:id/olddata', requireAdmin(function(request) {
 
     var fields = [];
     var userData = {};
-	
 
     //finding max phase an
     for(var i in data) {
@@ -1171,7 +1142,7 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
         }
 
         for(var j in item.single) {
-            var headerName = j + "  " + exp.components[phase].name;
+            var headerName = j + "  " + exp.components[phase].name+phase;
 
             userData[item.userid][headerName] = item.single[j];
             headerSet[headerName] = "";
@@ -1845,7 +1816,7 @@ customMatcher.get('/', function(request) {
   Matches static files. Uses the normal routmatcher so that session stuff is 
   ignored when sending static files. 
 */
-routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff)$', function(request) {
+customMatcher.routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff)$', function(request) {
   //logHttp(request);
   request.response.sendFile(utils.file_from_serverdir(request.path()));
 });
@@ -1874,7 +1845,7 @@ customMatcher.noMatch(function(request) {
 //   req.response.sendFile(file);
 // });
 
-server.requestHandler(routeMatcher).listen(port, host);
+server.requestHandler(customMatcher.routeMatcher).listen(port, host);
 
 function vertxStop() {
   server.close();
