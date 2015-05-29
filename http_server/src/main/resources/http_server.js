@@ -629,9 +629,9 @@ customMatcher.post("/experiment/:id/randomizeorder", requireAdmin(function(reque
     mongo.experiment.setRandom(expId, jsonData.index, jsonData.value, function(r) {
       console.log("Setting random, phase: " + jsonData.index + " v:" + jsonData.value);
       request.response.end("Ending");
-    })
+    });
   });
-}))
+}));
 
 
 customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(request) {
@@ -676,11 +676,11 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
   var userID = request.session.getPersonToken();
 
   mongo.experiment.userPosition(userID, expID, function(userdata) {
-    var reg = /phase\/\d*/;;
+    var reg = /phase\/\d*/;
 
     //Checking if user has visited the landing page
     if(!userdata) {
-      console.log("No userdata, redirecting ")
+      console.log("No userdata, redirecting ");
       return request.redirect(request.absoluteURI().toString().replace(reg,""));
     }
 
@@ -710,7 +710,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         }
 
         if(r.result.loginrequired && !request.session.loggedIn()) {
-          var url = "/experiment/"+expID
+          var url = "/experiment/"+expID;
           return request.redirect(url);
         }
 
@@ -760,7 +760,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         }
       });
     }
-  })
+  });
 });
 
 
