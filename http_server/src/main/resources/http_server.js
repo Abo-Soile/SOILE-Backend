@@ -18,86 +18,11 @@ var sessionMap = vertx.getMap("soile.session.map");
 
 var logger = container.logger;
 
-messageDigest = java.security.MessageDigest.getInstance("SHA-256");
+var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 
 var a = new java.lang.String("sdfsdfs");
 console.log(a.hashCode());
 console.log(JSON.stringify(container.config));
-
-// This function returns a function that calls the requesthandler
-// which makes it possible to run arbitrary code before the request
-
-/*
-function sessionTest(func) {
-  return function(request) {
-    // console.log("this should be seen before the request")
-
-    //request.headers().forEach(function(key,value){
-      //console.log(key + " - " + value);
-    //});
-
-    //console.log("Cookies:: " + request.headers().get("Cookie"));
-
-    request.redirect = function(url) {
-      console.log("Redirecting to " + url);
-      console.log(this.remoteAddress());
-
-      this.response.statusCode(302);
-      this.response.putHeader('Location', url);
-      this.response.end();
-    };
-
-    request.unauthorized = function() {
-      this.response.statusCode(401);
-
-      var context = {};
-      context.short = "Not authorized";
-      context.long =  "You're not authorized to view this content. Try logging in";
-
-      templateManager.render_template("error", context, this);
-      //this.response.end("401, Unauthorized");
-    };
-
-    request.notfound = function() {
-      this.response.statusCode(404);
-      
-      var context = {};
-      context.short = "404, not found" ;
-      context.long =  "The content you're looking for couldn't be found.";
-
-      templateManager.render_template("error", context, this);
-    };
-
-    var session = sessionManager.loadManager(request);
-    session.setPersonToken();
-    request.session = session;
-
-
-
-    //Check if a db session exists
-    if((!session.loggedIn()) 
-        && (session.getSessionCookie()) 
-        && request.method()==="GET") {
-      console.log("Checking session");
-      session.checkSession(function callback(r) {
-        //Sending the session manager with the request
-        if(r.result) {
-          console.log("Logging in from token");
-          session.login(r.result._id, r.result.username, r.result.admin, r.result.sessiontoken)
-        }
-        func(request);
-      });
-    }
-    else {
-      console.log("Skipping session check");
-      func(request);
-    }
-
-    logHttp(request);
-  };
-}
-*/
-
 
 //Decorator ish function to ensure that the user is admin
 function requireAdmin(func) {
@@ -114,7 +39,7 @@ function requireAdmin(func) {
 function sendEmail(subject, body, address, func) {
   var mailAddress = "soile.my_mailer";
 
-  var mail = {}
+  var mail = {};
   mail.from = "kogni@abo.fi";
   mail.to = address;
   mail.subject = subject;
@@ -132,7 +57,7 @@ function looksLikeMail(str) {
     var lastDotPos = str.lastIndexOf('.');
     return (lastAtPos < lastDotPos &&  // @ before last .
       lastAtPos > 0 &&                 // Something before @
-      str.indexOf('@@') == -1 &&       // No double @
+      str.indexOf('@@') === -1 &&       // No double @
       lastDotPos > 2 &&                // 3 chars before .com
       (str.length - lastDotPos) > 2);  // domain = min 2 chars
 }
@@ -142,8 +67,7 @@ function looksLikeMail(str) {
 // of this file. The normal routematcher can also be called if 
 // needed.
 //var routeMatcher = new CustomMatcher();
-var CustomMatcher = require('router')
-
+var CustomMatcher = require('router');
 var customMatcher = new CustomMatcher();
 
 // TODO: Load this from config
@@ -158,32 +82,13 @@ var mailManager = require('mailManager');
 
 //Ugly hack to make sure that the template module is online before loading
 //Base templates
-var timerID = vertx.setTimer(2000, function() {
+var timerID = vertx.setTimer(3000, function() {
   console.log("\n ------Loading  templates------");
  // templateManager.load_template("header");
  // templateManager.load_template("footer");
   templateManager.loadAll();
 });
 
-var read_khtoken = (function() {
-  var pattern = /khtoken=(\w+)/;
-  return function(cookie) {
-    var match = [];
-
-    if (typeof cookie !== 'string') {
-      return null;
-    }
-
-    match = cookie.match(pattern);
-    if (match === null) {
-      return null;
-    }
-    if (match.length > 1) {
-      return match[1];
-    }
-    return null;
-  };
-})();
 
 var sessionManager = require("sessionManager");
 
@@ -239,7 +144,7 @@ customMatcher.post("/login", function(request) {
             return request.redirect(decodeURIComponent(origin));
           }
           return request.redirect("/");
-        })
+        });
         
       }
       //No user was found, error
@@ -254,7 +159,7 @@ customMatcher.post("/login", function(request) {
 
 
 customMatcher.get("/login/forgotten", function(request) {
-    templateManager.render_template("forgotten", {}, request)
+    templateManager.render_template("forgotten", {}, request);
 });
 
 
@@ -273,7 +178,7 @@ customMatcher.post("/login/forgotten", function(request) {
     var username = params.username;
 
     mongo.user.forgotPassword(username, function(r) {
-      console.log(JSON.stringify(r))
+      console.log(JSON.stringify(r));
 
       var templateParams = {};
       templateParams.success = true;
@@ -284,9 +189,9 @@ customMatcher.post("/login/forgotten", function(request) {
       //TODO: actually send the email
       mailManager.passwordReset(username, uri, function(r) {
         console.log("Reset mail sent to: " + username + " " + JSON.stringify(r));
-        templateManager.render_template("forgotten", templateParams, request)
+        templateManager.render_template("forgotten", templateParams, request);
         
-      })
+      });
 
     });
   });
@@ -300,9 +205,9 @@ customMatcher.get("/login/forgotten/:token", function(request) {
       if(!r.result) {
         request.notfound();
       }else {
-        templateManager.render_template("resetpassword", {}, request)
+        templateManager.render_template("resetpassword", {}, request);
       }
-    })
+    });
 });
 
 customMatcher.post("/login/forgotten/:token", function(request) { 
@@ -321,7 +226,7 @@ customMatcher.post("/login/forgotten/:token", function(request) {
       mongo.user.resetPassword(token, params.password, function(r) {
         console.log(r);
         templateManager.render_template("resetpassword",{"success":true}, request);
-      })
+      });
 
     }
     else {
@@ -364,7 +269,7 @@ customMatcher.post("/signup", function(request) {
     var passwd = params.passwd;
     var passwdAgain = params.passwdAgain;
 
-    var origin = params.origin
+    var origin = params.origin;
 
     var templateVars = {};
     templateVars.username = email;
@@ -387,12 +292,12 @@ customMatcher.post("/signup", function(request) {
       return;
     }
 
-    if(!(passwd===passwdAgain)) {
+    if((passwd !== passwdAgain)) {
       templateVars.registererrors = "Password didn't match";
       //templateManager.render_template('signup', templateVars,request);
       templateManager.render_template('login', templateVars,request);
 
-      return
+      return;
     }
 
     mongo.user.new(email, passwd, function(r) {
@@ -405,7 +310,7 @@ customMatcher.post("/signup", function(request) {
         if(origin){
           return request.redirect(decodeURIComponent(origin));
         }
-        return request.redirect('/')
+        return request.redirect('/');
       }
       else {
         templateVars.registererrors = "Username already exists!, try logging in";
@@ -423,7 +328,7 @@ customMatcher.get('/users', requireAdmin(function(request){
       var admins = r.results;
       console.log(JSON.stringify(r));
       templateManager.render_template("userList",{"users":admins}, request);
-    })
+    });
 }));
 
 
@@ -441,8 +346,8 @@ experiments' edit page
 */
 customMatcher.get("/experiment/new", function(request){
   //templateManager.render_template("experimentform", {},request);
-  var sDate = Date.now()
-  var eDate = Date.now() + (1000*60*60*24*14)  //14 days in the future
+  var sDate = Date.now();
+  var eDate = Date.now() + (1000*60*60*24*30);  //30 days in the future
 
   var expData = {};
 
@@ -479,7 +384,7 @@ customMatcher.post("/experiment/new", function(request) {
     var eDate = new Date(jsonData.endDate);
 
     if(jsonData.name === "") {
-      jsonData.name = "Unnamed experiment"
+      jsonData.name = "Unnamed experiment";
     }
 
 
@@ -500,6 +405,7 @@ customMatcher.post("/experiment/new", function(request) {
     //request.response.end({"status":"ok","id":id});
   });
 });
+
 
 customMatcher.get('/experiment/:id', function(request){
   var id = request.params().get('id');
@@ -544,19 +450,19 @@ customMatcher.get('/experiment/:id', function(request){
       */
       mongo.experiment.getUserData(userID, id, function(userdata) {
         if (userdata) {
-          console.log("Userdata exists " + JSON.stringify(userdata))
+          console.log("Userdata exists " + JSON.stringify(userdata));
           //Redirect to right phase if available
           if(userdata.position > 0) {          
             request.redirect(request.absoluteURI() + "/phase/" + (userdata.position));
           }
           else{
-            renderExp(r)
+            renderExp(r);
           }
         }
         else { 
           console.log("No userdata");
 
-          var userdata = {}
+          var userdata = {};
           userdata.position = 0;
           userdata.randomorder = false;
 
@@ -567,9 +473,9 @@ customMatcher.get('/experiment/:id', function(request){
           }
           mongo.experiment.initUserData(userdata, userID, exp._id, function(r2){
             renderExp(r);
-          })
+          });
         }
-      })
+      });
     } 
     //Admin, navigation controls dont apply here, just show the view
     else {
@@ -577,7 +483,7 @@ customMatcher.get('/experiment/:id', function(request){
         r.result.participants = r2;
         console.log(JSON.stringify(r));
         renderExp(r); 
-      })
+      });
     }
   });
 });
@@ -613,7 +519,7 @@ customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
       var sDate = new Date(jsonData.startDate);
       var eDate = new Date(jsonData.endDate);
 
-      var loginRequired = jsonData.loginrequired
+      var loginRequired = jsonData.loginrequired;
       var hidelogin = jsonData.hidelogin;
 
       console.log(sDate.toString());
@@ -653,6 +559,7 @@ customMatcher.post('/experiment/:id/addform', requireAdmin(function(request){
   });
 }));
 
+
 customMatcher.post('/experiment/:id/editformname', requireAdmin(function(request){
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
@@ -675,6 +582,7 @@ customMatcher.post('/experiment/:id/editformname', requireAdmin(function(request
   });
 }));
 
+
 customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
@@ -689,7 +597,7 @@ customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
     data = JSON.parse(data);
 
     if (data.name === "" || data.testId === "") {
-      return request.response.end(JSON.stringify({error:"No experiment specified"}))
+      return request.response.end(JSON.stringify({error:"No experiment specified"}));
     }
 
     mongo.experiment.addTest(expId, data.testId, data.name, function(r) {
@@ -747,6 +655,7 @@ customMatcher.post('/experiment/:id/deletecomponent', requireAdmin(function(requ
   });
 }));
 
+
 customMatcher.get('/experiment/:id/json', function(request){
   var expId = request.params().get('id');
 
@@ -794,8 +703,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
           var url = request.absoluteURI().toString();
           var cut = url.indexOf("/phase/");
           console.log(cut);
-          url = url.substr(0,cut) + "/end"
-;
+          url = url.substr(0,cut) + "/end";
           console.log(url);
 
           return request.redirect(url);
@@ -832,7 +740,6 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
             templateManager.render_template("formphase", context, request);
 
-           // request.response.end(form);
           });
         }
         //Testphases, rendering test template
@@ -929,78 +836,6 @@ customMatcher.get('/experiment/:id/end', function(request) {
 
 
 //Performs a custom crafted join on gathered data.
-// DEPRECATED!
-customMatcher.get('/experiment/:id/olddata', requireAdmin(function(request) {
-  var expID = request.params().get('id');
-  mongo.experiment.formData(expID, function(r) {
-		  
-    var data = r.results;
-    console.log(JSON.stringify(r));
-
-    var sep = "; ";
-
-    var fields = [];
-    var userData = {};
-
-    //finding max phase an
-    for(var i in data) {
-      var item = data[i];
-      phase = parseInt(item.phase);
-
-      if(!("userid" in item)) {
-        item.userid = "Missing";
-      }
-
-      //Writing table headers
-      if (!fields[phase]) {
-        fields[phase] = [];
-        var prop;
-        for (prop in item.data) {
-          //console.log(prop);
-       //   if(!(prop=="_id"||prop=="phase"||prop=="userid"||prop=="expId")) {
-            fields[phase].push(prop.slice(17, prop.length).replace(";","_"));
-        //  }
-        }
-      }
-      if(!userData[item.userid]) {
-        userData[item.userid] = [];
-      }
-      //Writing table data for each 
-      userData[item.userid][phase] = [];
-      var j;
-      for(j in item.data) {
-        //if(!(j=="_id"||j=="phase"||j=="userid"||j=="expId")) {
-          userData[item.userid][phase].push(item.data[j].toString().replace(";","_"));
-       // }
-      }
-    }
-    
-    fields = utils.cleanArray(fields);
-    for(var d in userData) {
-      userData[d] = utils.cleanArray(userData[d]);
-    }
-    var mergedFields = [];
-    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
-
-    var stringFields = mergedFields.join(sep);
-
-    console.log("\n\n\n" + JSON.stringify(userData));
-    var userFields = "";
-    for(var id in userData) {
-      var mergedUserData = [];
-      mergedUserData = ([id]).concat(mergedUserData.concat.apply(mergedUserData, userData[id]));
-
-      userFields += mergedUserData.join(sep);
-      userFields += "\n";
-    }
-    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
-    request.response.putHeader("Content-Disposition", "attachment; filename=questioneerdata.csv");
-
-    request.response.end("\ufeff " + stringFields+"\n"+ userFields);
-  });
-}));
-
-//Performs a custom crafted join on gathered data.
 customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   mongo.experiment.formData(expID, function(r) {
@@ -1082,7 +917,6 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 // Does pretty much the same as the form data method, 
 // Might generate empty fields when using phase no as array index
 customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
-//customMatcher.get('/experiment/:id/testdata', function(request) {
 
   var expID = request.params().get('id');
 
@@ -1192,28 +1026,6 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
 
     var csvData = "";
     
-    /*for (var el in data){
-      var element = data[el];
-      console.log("dataa" + JSON.stringify(element._id))
-      //Inserting username
-      csvData += "userID: " + sep +  element.userid + sep + "\n";
-
-      //inserting keynames names
-      for (var key in element.data.rows[0]) {
-        csvData += key + sep;
-      }
-
-      csvData += "\n";
-
-      //Inserting values
-      for (var r in element.data.rows) {
-        var row= element.data.rows[r];
-        for (var rowkey in row) {
-          csvData += JSON.stringify(row[rowkey]) + sep;
-        }
-        csvData += "\n";
-      }
-    }*/
 
     for (var i = 0; i < data.length; i++) {
       var element = data[i];
@@ -1249,7 +1061,6 @@ customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(
       /*
         Skriver ut resultatet till csv:n
       */
-      //for (var ij = 0; ij < keys[lastK].length; ij++) {
       for (var ij = 0; ij < rowCount; ij++) {
         for(var k in keys) {
           if ( keys[k][ij] !== undefined) {
@@ -1403,12 +1214,6 @@ customMatcher.get('/questionnaire', function(req) {
 });
 
 
-customMatcher.get('/questionnaire/guide', function(request) {
-  var file = 'qml-guide.html';
-
-  request.response.sendFile(utils.file_from_serverdir(file));
-});
-
 
 customMatcher.post('/questionnaire/render', function(request) {
   var body = new vertx.Buffer();
@@ -1463,7 +1268,6 @@ customMatcher.get('/questionnaire/generated/:id', function(request) {
     }
   });
   request.response.sendFile(file);
-
 });
 
 
@@ -1503,9 +1307,11 @@ customMatcher.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
       if (reply.hasOwnProperty('error') === true) {
         response.error = reply.error;
       } else {
-        response = {"test":"testresponse",
-                      "data": reply.form};
-                  };
+        response = {
+          "test":"testresponse",
+          "data": reply.form
+          };
+      }
 
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(response));
@@ -1532,15 +1338,15 @@ customMatcher.post('questionnaire/generated/:id', function(request) {
 customMatcher.get('/test', function(request) {
   mongo.test.list(function(r) {
     templateManager.render_template('testlist', {"tests":r.results},request);
-  })
+  });
 });
 
 
 customMatcher.get('/test/json', function(request) {
   mongo.test.list(function(r) {
-    request.response.end(JSON.stringify(r.results))
-  })
-})
+    request.response.end(JSON.stringify(r.results));
+  });
+});
 
 
 customMatcher.post("/test", requireAdmin(function(request) {
@@ -1561,7 +1367,7 @@ customMatcher.post("/test", requireAdmin(function(request) {
     mongo.test.save({"name":name}, function(r) {
       console.log(JSON.stringify(r));
 
-      var dirName = testImages + "/" + r._id
+      var dirName = testImages + "/" + r._id;
 
       vertx.fileSystem.mkDir(dirName, true, function(err, res) {
         console.log(err + "  " + res);
@@ -1570,7 +1376,7 @@ customMatcher.post("/test", requireAdmin(function(request) {
           return request.redirect("/test/"+r._id);
         }
       });
-    })
+    });
   });
 }));
 
@@ -1595,7 +1401,7 @@ customMatcher.get('/test/:id', requireAdmin(function(request) {
     mongo.test.get(id, function(r) {
       templateManager.render_template('testEditor', 
         {"code":code, "test":r.result, "files":files}, request);
-    })
+    });
   });
 }));
 
@@ -1655,7 +1461,7 @@ customMatcher.post("/test/:id/imageupload", function(request) {
 
   request.uploadHandler(function(upload) {
       //var path = testImages + id + "/" + upload.filename()
-      var fixedFilename = upload.filename()
+      var fixedFilename = upload.filename();
 
       //Replacing and removing unwanted characters from filename
       fixedFilename = fixedFilename.replace(/[å+ä]/gi, "a");
@@ -1692,7 +1498,7 @@ customMatcher.delete("/test/:id/imageupload/:imageName", function(request) {
       else {
         request.response.end(400);
       }
-    })
+    });
   });
 });
 
@@ -1706,7 +1512,7 @@ customMatcher.get('/test/:id/imagelist', function(request) {
       //files = res;
       for (var i = 0; i < res.length; i++) { 
         var img = res[i].toString();
-        var file = {}
+        var file = {};
         file.url = img.substring(img.indexOf("testimages"));
         file.name = img.substring(img.lastIndexOf("/")+1);
         files.push(file);
@@ -1754,7 +1560,7 @@ customMatcher.post('/user', function(request) {
     data = data.getString(0, data.length());
     params = utils.getUrlParams(data);
 
-    var userid = request.session.loggedIn().id
+    var userid = request.session.loggedIn().id;
     var firstname  = params.firstname;
     var lastname   = params.lastname;
     var address1   = params.address1;
@@ -1767,8 +1573,9 @@ customMatcher.post('/user', function(request) {
       postalcode, city, country, function(r) {
         console.log(r);
         return request.redirect("/");
-      })
-  })
+      }
+    );
+  });
 });
 
 
@@ -1791,9 +1598,9 @@ customMatcher.get('/', function(request) {
         var openExperiments = [];
         for (var i = r.newExps.length - 1; i >= 0; i--) {
           if(r.newExps[i].active) {
-            openExperiments.push(r.newExps[i])
+            openExperiments.push(r.newExps[i]);
           }
-        };
+        }
         r.newExps = openExperiments;
         console.log("\n\n" + userid);
 
@@ -1801,8 +1608,8 @@ customMatcher.get('/', function(request) {
           r.u = userdetails;
           //console.log(JSON.stringify(r));
           templateManager.render_template('user', r, request);
-        })
-      })
+        });
+      });
     }
     // Anonymous user, showing ladning page
     else {

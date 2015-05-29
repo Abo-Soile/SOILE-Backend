@@ -19,7 +19,9 @@ function logHttp(request) {
   logger.info("HTTP " + method + "--" + remoteAddress + "  " + url + " Agent:" + userAgent);
 }
 
-function sessionTestTwo(request, func) {
+//
+// Adds some usefull functions to the request object
+function extendRequest(request, func) {
   request.redirect = function(url) {
     console.log("Redirecting to " + url);
     console.log(this.remoteAddress());
@@ -54,18 +56,16 @@ function sessionTestTwo(request, func) {
   session.setPersonToken();
   request.session = session;
 
-
-
   //Check if a db session exists
-  if((!session.loggedIn()) 
-      && (session.getSessionCookie()) 
-      && request.method()==="GET") {
+  if((!session.loggedIn()) && 
+      (session.getSessionCookie()) && 
+      request.method()==="GET") {
     console.log("Checking session");
     session.checkSession(function callback(r) {
       //Sending the session manager with the request
       if(r.result) {
         console.log("Logging in from token");
-        session.login(r.result._id, r.result.username, r.result.admin, r.result.sessiontoken)
+        session.login(r.result._id, r.result.username, r.result.admin, r.result.sessiontoken);
       }
       func(request);
     });
@@ -84,15 +84,15 @@ function CustomMatcher() {
   return;
 }
 
-//CustomMatcher.prototype = new vertx.RouteMatcher();
 
+// Handles arguments sent to the router to preserv backwards
+// compatibility
 CustomMatcher.prototype.handleArgs = function(arg) {
-  middleware = [];
-  handler = "";
+  var middleware = [];
+  var handler = "";
 
   if(arg.length === 2) {
-    patter = arg[0];
-    handler = arg[1];
+      handler = arg[1];
   }
 
   if(arg.length === 3) {
@@ -103,21 +103,22 @@ CustomMatcher.prototype.handleArgs = function(arg) {
   return {h:handler, m:middleware};
 };
 
+
+// 
+// Runs middleware and 
 CustomMatcher.prototype.handleRequest = function(callback, middleware) {
   return function(request) {
-    console.log("HANDLING REQUEST")
-    for (var i = 0; i < middleware.length; i++) {
-      request = middleware[i](request);
-    }
     
-    request = sessionTestTwo(request, function(req) {
-      console.log("SESSIONTWOCALLBACK");
+    request = extendRequest(request, function(req) {
 
-      callback(req);
-      
+      for (var i = 0; i < middleware.length; i++) {
+        req = middleware[i](req);
+      }
+           
+      callback(req); 
     });
 
-  } 
+  }; 
 };
 
 //More methods from the routematcher should be implementd as needed.
