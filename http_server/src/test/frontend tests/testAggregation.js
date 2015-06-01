@@ -3,26 +3,27 @@ var dataArray = [765,889,845,897,988,914,954,1362,1218,929,815,675,650,601,628,6
 
 describe("Aggragate data functions with stored data", function() {
   beforeEach(function(){
-    var data = 2
+    var data = 2;
     var everySecond = 0;
   
     for (var i = 0; i < 10; i++) {
       SOILE2.bin.storerow("data", data);
-      if (everySecond == 1) {
+      //console.log(data);
+      if (everySecond === 1) {
         SOILE2.bin.storerow("test", "daa");
         everySecond = 0;
       }else {
-        everySecond = 1
+        everySecond = 1;
       }
       SOILE2.bin.newrow();
       data = data*2;
-    };
+    }
 
-  })
+  });
 
   afterEach(function() {
     SOILE2.util.resetData();
-  })
+  });
 
   it("counts rows", function() {
     var a = SOILE2.bin.count("data");
@@ -34,26 +35,34 @@ describe("Aggragate data functions with stored data", function() {
   it("average of rows", function() {
     var a = SOILE2.bin.average("data");
     expect(a).toBe(204.6);
-  })
+  });
 
   it("median of rows", function() {
     var a = SOILE2.bin.median("data");
     expect(a).toBe(48);
-  })
+  });
 
   it("standarddeviation of rows", function() {
     var a = SOILE2.bin.standarddeviation("data");
-    expect(a).toBeCloseTo(312.97, 1);
-  })
+    //expect(a).toBeCloseTo(312.97, 1);
+    expect(a).toBeCloseTo(329.8970, 1);
+
+  });
 
   it("standarddeviation of array", function() {
     var st = SOILE2.bin.standarddeviation(dataArray);
-    console.log("STANDARDDEVIATION:\t"+ st*3);
+
+    console.log("STANDARDDEVIATION:\t"+ st);
 
     console.log("average:\t" + SOILE2.bin.average(dataArray));
     var outlier = SOILE2.bin.outliers(dataArray, 3);
     console.log("outlier av:\t" + SOILE2.bin.average(outlier));
-  })
+    expect(st).toBeCloseTo(263.453, 1);
+
+    expect(SOILE2.bin.standarddeviation([5,6,8,4,8,2,1,6,8])).toBeCloseTo(2.5980,1);
+
+
+  });
 
   it("removes outliers of rows", function() {
     var a = SOILE2.bin.outliers("data", 0.5);
@@ -61,13 +70,13 @@ describe("Aggragate data functions with stored data", function() {
 
     expect(a.length).toBe(3);
     expect(b.length).toBe(9);
-  })
+  });
 
   it("testRandommapping", function() {
     var randomList =    [0,1,2,3,4,5,6,7,8,9];
     var randomMapping = [0,1,2,3,4,5,6,7,8,9];
     var randomT =       [1,1,0,2,3,3,2,2,1,1];
-    var randomGroups =  [0,0,0,0,0,0,0,0,0,0]
+    var randomGroups =  [0,0,0,0,0,0,0,0,0,0];
 
 
     for (var i = 0; i < randomT.length; i++) {
@@ -75,7 +84,7 @@ describe("Aggragate data functions with stored data", function() {
         randomGroups[randomT[i]] = 1;
       }
       randomMapping[i] = i;
-    };
+    }
 
     console.log(randomMapping);
     console.log(randomT);
@@ -97,43 +106,43 @@ describe("Aggragate data functions with stored data", function() {
         array[randomIndex] = temporaryValue;
       }
       return array;
-    }
+    };
 
     function randomizeGroup(array, groupMapping, groupNo) {
       var tempArr = [];
       for (var i = 0; i < array.length; i++) {
         if(groupMapping[i]===groupNo) {
-          tempArr.push(array[i])
+          tempArr.push(array[i]);
           array[i] = null;
         }
-      };
-      console.log(array)
+      }
+      console.log(array);
       tempArr = shuffle(tempArr);
 
       for (var i = 0; i < array.length; i++) {
         if(array[i] === null) {
           array[i] = tempArr.pop();
         }
-      };
+      }
 
       return array;
 
     }
 
     console.log(randomGroups);
-    console.log("-------------------")
+    console.log("-------------------");
 
     for (var i = 0; i < randomGroups.length; i++) {
       if(randomGroups[i]===1) {
-        randomMapping = randomizeGroup(randomMapping, randomT, i)
+        randomMapping = randomizeGroup(randomMapping, randomT, i);
       }
-    };
+    }
 
 
-    console.log(randomMapping)
+    console.log(randomMapping);
 
 
-  })
+  });
 
 });
 
