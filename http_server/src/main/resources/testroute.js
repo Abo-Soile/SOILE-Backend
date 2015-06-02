@@ -1,8 +1,9 @@
-var CustomMatcher = require('router')
+//var CustomMatcher = require('router')
 
 var console = require('vertx/console');
 
-var customMatcher = new CustomMatcher();
+//var customMatcher = new CustomMatcher();
+var customMatcher = require('router')();
 
 function testmiddleware(request) {
   console.log("Inside testmiddleware");

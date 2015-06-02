@@ -155,5 +155,12 @@ CustomMatcher.prototype.noMatch = function(handler) {
   //this.routeMatcher.noMatch(sessionTest(handler));
 };
 
+function a() {
+  return new CustomMatcher()
+}
 
-module.exports = CustomMatcher;
+
+//module.exports = CustomMatcher;
+module.exports = function(){ 
+  return new CustomMatcher();
+};

@@ -67,8 +67,9 @@ function looksLikeMail(str) {
 // of this file. The normal routematcher can also be called if 
 // needed.
 //var routeMatcher = new CustomMatcher();
-var CustomMatcher = require('router');
-var customMatcher = new CustomMatcher();
+
+
+var customMatcher = require('router')();
 
 // TODO: Load this from config
 var DEBUG = true;   //This variable could stored in configs
