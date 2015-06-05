@@ -1,6 +1,7 @@
 var CustomMatcher = require('router')
 var console = require('vertx/console');
 
+var templateManager = require('templateManager');
 var customMatcher = new CustomMatcher();
 
 
@@ -39,7 +40,7 @@ function handleResultData(data, datatype, callback) {
 
 //Admin view, show list of training experiments
 customMatcher.get("/training", function(request) {
-
+  console.log("TRAAAAINNNING!!!")
 })
 
 //Create a new training task 
@@ -69,6 +70,12 @@ customMatcher.get("/training/:id/post", function(request) {
 
 //Repeated training task 
 customMatcher.get("/training/:id/task", function(request) {
+
+})
+
+customMatcher.get("/training/:id/edit", function(request) {
+
+  templateManager.render_template('trainingEdit', {}, request);
 
 })
 

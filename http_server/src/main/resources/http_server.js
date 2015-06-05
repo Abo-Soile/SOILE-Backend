@@ -96,6 +96,7 @@ var sessionManager = require("sessionManager");
 //var sessionManager = require("sessionManager").sessionManager;
 
 require('testroute.js');
+require('training.js');
 
 customMatcher.get("/login", function(request) {
   var previous = request.headers().get("Referer");
