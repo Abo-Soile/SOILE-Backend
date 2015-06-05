@@ -1689,8 +1689,8 @@ SOILE2 = (function(){
   rt.finish = function() {
     console.log("Test over");
 
-    //soile2.rt.keyhandler.reset();      // Removing all keyhandlers
-    //$("#document").add('*').off(); // Removing all clickhandlers
+    soile2.rt.keyhandler.reset();      // Removing all keyhandlers
+    //$("#display").add('*').off(); // Removing all clickhandlers
     $("#display").off(); // Removing all clickhandlers
     $("#display").children().off();
 

@@ -9,6 +9,16 @@ app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
 });
 
+/*Marks html as safe*/
+app.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
+
+//Reverses the order of an array
+app.filter("reverse", function(){
+    return function(items){
+        return items.slice().reverse();
+    };
+});
+
 app.controller('fileController', function($scope, $http, $location, FileUploader) {
 		var baseUrl = $location.absUrl();
 		var imgUrl = baseUrl + "/imageupload"
@@ -59,9 +69,13 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
 		loadImages();
 });
 
-app.controller('expEditController', function($scope, $http, $location, $timeout) {
+app.controller('expEditController', function($scope, $http, $location, $timeout, $sce) {
 	$scope.compileErrors = "";
 	$scope.soileLog  = [];
+
+  $scope.savebutton = "Save&Compile";
+  $scope.runbutton = "Run";
+  $scope.compiled = false
 
   ace.config.set("modePath", "/javascript");
 
@@ -70,15 +84,27 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
     $scope.editor = _editor;
     //$scope.editor.config.set("modePath", "/javascript");
     $scope.editor.getSession().setMode("ace/mode/elanghighlightrules");
+    $scope.editor.renderer.setShowGutter(true); 
     //$scope.editor.getSession().setMode("ace/mode/javascript");
   };
 
   $scope.compileTest = function() {
   	var code = {"code":$scope.editor.getValue()};
 
+    $scope.savebutton = '<i class="fa fa-spinner fa-spin"></i> Compiling';
+
   	$http.post($location.absUrl(), code).success(function(data, status, headers, config) {
-  		$scope.compileErrors = data.errors;
+  		
+      $scope.savebutton = "Save&Compile";
+
+      $scope.compileErrors = data.errors;
   		$scope.compiledCode = data.code;
+
+      if (typeof data.errors == 'undefined') {
+        $scope.compiled = true;
+      }else {
+        $scope.compiled = false;
+      }
   	});
   };
 
@@ -93,6 +119,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
   $scope.endFunc = function(data) {
       console.log("it's over");
       console.log(data);
+
+      $scope.runbutton = "Run";
+
 
     /*   This part pretty much generate a bucket for all distinct fields
        in the result object. These buckets are then filled sequentially
@@ -145,6 +174,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout)
   };
 
   $scope.runTest = function() {
+      $scope.runbutton = "Running";
+
+      $scope.soileLog = [];
   		$scope.testStartTime = Date.now();
 
       //console.log($scope.compiledCode);
@@ -175,9 +207,9 @@ app.controller('editNameController', function($scope, $http, $location) {
   };
 
   $scope.initname = function(name) {
-    console.log("initing name: " + name)
-    $scope.testname = name + "dsfsdfds";
-  }
+    console.log("initing name: " + name);
+    $scope.testname = name;
+  };
 
 });
 

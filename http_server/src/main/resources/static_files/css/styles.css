@@ -532,6 +532,11 @@ body {
 	display: none;
 }
 
+.btn-row button{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .dijitDialog  {
 	width: 80% !important;
 }

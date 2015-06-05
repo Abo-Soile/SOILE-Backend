@@ -55,14 +55,16 @@
                 </ul>
             </div>
         </div>
-        
-        <div class="col-md-12">
-            <span> <button ng:click="compileTest()" id="compileButton" class="btn btn-primary">Save&Compile</button>   
+    </div>
+    <div class="row">  
+        <div class="col-md-12 btn-row">
+            <span> <button ng:click="compileTest()"  ng-bind-html="savebutton | unsafe" id="compileButton" class="btn btn-primary"></button>   
   
-            <button ng:click="runTest()" type="button" id="runButton" class="btn btn-success"> Run</button> </span>
+            <button ng:click="runTest()" type="button" id="runButton" class="btn btn-success"
+            ng-class="compiled ? '' : 'disabled'"
+            > [([runbutton])]</button> </span>
            
         </div>
-        <hr>
     </div>
     <div class="row">
         <div class="col-md-9">
@@ -88,7 +90,7 @@
                             <th>Time</th>
                             <th>Message</th>
                         </thead>
-                        <tr ng-repeat="row in soileLog">
+                        <tr ng-repeat="row in soileLog | reverse">
                             <th>[([row.timestamp])]</th>
                             <th>[([row.message])]</th>
                         </tr>
@@ -133,7 +135,7 @@
                         </thead>
                         <tbody>
                             <td ng-repeat="(key, valuee) in singleData">
-                                [([valuee])] aa    
+                                [([valuee])]    
                             </td>
                         </tbody>
 
