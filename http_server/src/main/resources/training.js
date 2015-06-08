@@ -41,32 +41,32 @@ function handleResultData(data, datatype, callback) {
 //Admin view, show list of training experiments
 customMatcher.get("/training", function(request) {
   console.log("TRAAAAINNNING!!!")
-})
+});
 
 //Create a new training task 
 customMatcher.post("/training", function(request) {
 
-})
+});
 
 //View  training experiment
 customMatcher.get("/training/:id", function(request) {
 
-})
+});
 
 //Save data to the experiment
 customMatcher.post("/training/:id", function(request) {
 
-})
+});
 
 //Pre test
 customMatcher.get("/training/:id/pre", function(request) {
 
-})
+});
 
 //Post test
 customMatcher.get("/training/:id/post", function(request) {
 
-})
+});
 
 //Repeated training task 
 customMatcher.get("/training/:id/task", function(request) {
