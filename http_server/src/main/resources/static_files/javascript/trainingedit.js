@@ -1,4 +1,4 @@
-var app = angular.module('trainingEdit', []);
+var app = angular.module('trainingEdit', ['ui.tree']);
 
 
 app.config(function($interpolateProvider){
@@ -19,12 +19,34 @@ app.filter("reverse", function(){
 app.controller('componentController', function($scope, $http, $location) {
     var baseUrl = $location.absUrl();
 
-    var arr = [];
-    arr.push({name:"aaa", type:"test"});
-    arr.push({name:"bbb", type:"form"});
-    arr.push({name:"ccc", type:"test"});
+    $scope.saveTraining = function save() {
+        console.log("SSSSAAAVVE")
+        var data = $scope.training;
 
-    $scope.components = {};
+        $http.post(baseUrl, data)
+    }
+
+    $scope.delComponent = function(type,index) {
+        console.log("Deleting " + type + " : " + index);
+        $scope.training.components[type].splice(index, 1);
+    }
+
+    function loadData() {
+        $http.get("json").success(function(data,status) {
+            console.log(data)
+            $scope.training = data;
+        });
+    }
+
+    var arr = [];
+   /* arr.push({name:"aaa", type:"test"});
+    arr.push({name:"bbb", type:"form"});
+    arr.push({name:"ccc", type:"test"});*/
+
+    $scope.training = {};
+    $scope.training.name = "TESTNAME";
+
+   /* $scope.components = {};
     $scope.components.pre = [];
     $scope.components.training = [];
     $scope.components.post = [];
@@ -33,5 +55,7 @@ app.controller('componentController', function($scope, $http, $location) {
     $scope.components.training = arr;
     $scope.components.post = arr;
 
+    $scope.training.components = $scope.components*/
 
+    loadData();
 });

@@ -61,6 +61,15 @@ function DataDAO() {
 DataDAO.prototype = new BaseDAO();
 DataDAO.prototype.constructor = DataDAO;
 
+function TrainingDAO() {
+    BaseDAO.call(this);
+    this._baseObject = models.Training;
+    this._collection = this._baseObject.collection;
+}
+
+TrainingDAO.prototype = new BaseDAO();
+TrainingDAO.prototype.constructor = TrainingDAO;
+
 
 module.exports.BaseDAO = BaseDAO;
 
@@ -69,3 +78,4 @@ module.exports.TestDAO = TestDAO;
 module.exports.ExperimentDAO = ExperimentDAO;
 module.exports.FormDAO = FormDAO;
 module.exports.DataDAO = DataDAO;
+module.exports.TrainingDAO = TrainingDAO;

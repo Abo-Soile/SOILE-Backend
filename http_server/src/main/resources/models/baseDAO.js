@@ -24,8 +24,10 @@ BaseDAO.prototype.get = function(matcher, callback) {
 
     this.sendToMongo(mongoCommand, function(mongoReply) {
         if (mongoReply.status === "ok") {
-            var user = new that._baseObject(mongoReply.result);
-            callback(user);
+            //console.log(JSON.stringify(mongoReply));
+            var obj = new that._baseObject(mongoReply.result);
+            //obj._id = mongoReply.result._id;
+            callback(obj);
         }else{
             callback("", mongoReply.message);
         }

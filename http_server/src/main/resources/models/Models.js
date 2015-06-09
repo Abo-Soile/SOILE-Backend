@@ -67,7 +67,27 @@ Experiment.prototype.renameComponent = function(index, name) {
   this.components[index].name = name;
 };
 
+/*
+##########
+TRAINING
+*/
+function Training(arg) {
 
+    this.components = [];
+
+    BaseModel.call(this, arg);
+
+    this._collection = Training.collection;
+}
+
+Training.prototype = new BaseModel();
+Training.prototype.constructor = Training;
+Training.collection = "training";
+
+/*
+####
+TEST
+*/
 function Test(arg) {
     BaseModel.call(this, arg);
 
@@ -78,6 +98,11 @@ Test.prototype = new BaseModel();
 Test.prototype.constructor = Test;
 Test.collection = "tests";
 
+
+/*
+####
+FORM
+*/
 function Form(arg) {
     BaseModel.call(this, arg);
 
@@ -89,6 +114,10 @@ Form.prototype.constructor = Form;
 Form.collection = "forms";
 
 
+/*
+####
+DATA
+*/
 function Data(arg) {
   this.confirmed = false;
   this.timestamp = new new Date().toISOString();
@@ -107,3 +136,4 @@ module.exports.User = User;
 module.exports.Test = Test;
 module.exports.Form = Form;
 module.exports.Experiment = Experiment;
+module.exports.Training = Training

@@ -659,3 +659,12 @@ dBootstrap fixes
     transform: rotate(360deg);
   }
 }
+
+
+/*TRAINING EDITOR*/
+
+.angular-ui-tree-placeholder {
+  border: lightblue 2px dashed;
+  border-radius: 5px;
+
+}

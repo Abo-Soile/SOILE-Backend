@@ -46,6 +46,7 @@ function replacer(key, value) {
 }
 
 
+// TODO: load from config
 var mongoAddress = "vertx.mongo-persistor";
 
 
@@ -66,7 +67,7 @@ BaseModel.prototype.save = function(callback) {
     this.sendToMongo(obj, function(reply) {
         if(typeof reply._id === "string" && reply.status === "ok") {
           that._id = reply._id;
-          console.log("THAT.id " + that._id)
+          //console.log("THAT.id " + that._id)
         }
 
         that._testfieldFDGFDGFDG = "TEST"
@@ -95,6 +96,10 @@ BaseModel.prototype.sendToMongo = function(arg, callback) {
                 callback(reply);
             }
     );
+};
+
+BaseModel.prototype.toJson = function() {
+  return JSON.stringify(this, replacer);
 };
 
 BaseModel.prototype.filter = function () {
