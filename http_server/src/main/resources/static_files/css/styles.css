@@ -652,7 +652,9 @@ dBootstrap fixes
 @keyframes load3 {
   0% {
     -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
+    transform: rotate(0d {
+      }
+      eg);
   }
   100% {
     -webkit-transform: rotate(360deg);
@@ -667,4 +669,26 @@ dBootstrap fixes
   border: lightblue 2px dashed;
   border-radius: 5px;
 
+}
+
+.dragHandle {
+  background-color: lightblue;
+  font-size: 16px;
+  border: solid 1px lightgray;
+  color: white;
+  margin-right: 10px;
+  min-height: 20px;
+  padding: 6px 8px;
+  margin: 3px;
+  margin-right: 10px;
+  float:left;
+}
+
+.angularcomponentlist {
+}
+
+.angularcomponentlist li {
+  margin-left: 25px;
+  padding-right: 10px;
+  line-height: 40px;
 }
