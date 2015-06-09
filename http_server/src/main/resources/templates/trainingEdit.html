@@ -1,0 +1,47 @@
+{>header /}
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.js"></script>
+
+<script type="text/javascript" src="/javascript/trainingedit.js"></script>
+
+
+
+<div class="container" id="main" ng-app="trainingEdit">
+    <div class="row">
+      <div class="col-md-3"> </div>
+      <div class="col-md-9" ng-controller="componentController"> 
+        <div class="panel panel-fancy" ng-repeat="(key, components) in components">
+          <h5>[([key])]</h5>
+          <ul ng-repeat="comp in components"> 
+            <li class="componentlist">
+              [([comp.name])]
+              <span ng-if="comp.type == 'test'">
+              TTTTEST
+              <!-- code to render a large video block-->
+              </span>
+              <span ng-if="comp.type == 'form'">
+                FFFORM
+              <!-- code to render the regular video block -->
+              </span>
+              <button class="btn btn-danger" type="submit">Delete</button>
+            </li>
+          </ul>
+
+          <span>
+            <button class="btn btn-default">Add form</button>
+            <input>
+            <button class="btn btn-default">Add test</button>
+          </span>
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        asdsadsadsad dfgfd gfd
+    </div>
+</div>
+
+<script type="text/javascript" src="/javascript/trainingedit.js"></script>
+
+
+{>footer /}

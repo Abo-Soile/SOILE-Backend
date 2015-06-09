@@ -184,7 +184,7 @@ An simple intermezzophase is shown below. This phase, named helloPhase, displays
     end
 
     Result:
-    Displays Hello for two exonds -> displays "How are you" for 4 seconds -> hides the message.
+    Displays Hello for two seconds -> displays "How are you" for 4 seconds -> hides the message.
     
 
 The interaction phase should be used when the same task is repeated with slighly different input, typically when building a test where the test person repeats a task multiple times. Theses inputs are defined using the *setstimuli(_list of stimuli_)* function, which is a functions that takes a list([]) of values and stores them until an interaction phase is reached. 
@@ -385,16 +385,13 @@ We'll start by creating a minimal experiment that displays "Hello Test" for 3 se
     wait(3000)
   end
 
-  intemezzo-phase world
+  intemrezzo-phase test
     showmsg("Test!")
     wait(3000)
   end
 
   transition
     start(hello),
-    hello -> world,
-    final(world) 
+    hello -> test,
+    final(test) 
   end
-
-Defining stimuli
-================

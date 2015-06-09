@@ -1095,6 +1095,22 @@ SOILE2 = (function(){
       return avg;
     }
 
+    /*
+      Calculates sum of array divided by n-1, used when calculating
+      sample standarddeviation.
+    */
+    var _avNminusOne = function(array) {
+      if(!array instanceof Array) {
+        return 0; 
+      }
+      var sum =  array.reduce(function(sum, value) {
+        return sum + value
+      }, 0)
+
+      var avg = sum/(array.length-1);
+      return avg;
+    }
+
     /* Using population standard deviation */
     var _standardDeviation = function(array) {
         var avg = _average(array);
@@ -1106,7 +1122,9 @@ SOILE2 = (function(){
           return sqr;
         })
 
-        var standardDev = Math.sqrt(_average(squareDiffs));
+
+        //var standardDev = Math.sqrt(_average(squareDiffs));
+        var standardDev = Math.sqrt(_avNminusOne(squareDiffs));
 
         return standardDev;
     }
@@ -1236,19 +1254,19 @@ SOILE2 = (function(){
 
         var limit = sd * multiplier;
         var av = _average(arr);
-        console.log(externalAverage);
+        //console.log(externalAverage);
         if(externalAverage !== undefined) {
           av = externalAverage;
           console.log("external averagfe: "+av);
         }
-        console.log("Limit: " + limit + " av: " + av );
+        //console.log("Limit: " + limit + " av: " + av );
 
         var upperLimit = av + limit;
         var lowerLimit = av - limit;
 
         var reminder = [];
 
-        console.log("Upper: " + upperLimit + " Lower: " + lowerLimit);
+        //console.log("Upper: " + upperLimit + " Lower: " + lowerLimit);
 
         //TODO Do somthing proper with this
         _iterateRows(function(row) {
@@ -1266,7 +1284,7 @@ SOILE2 = (function(){
             reminder.push(arr[i])
           }
         }
-        console.log("Reminder: "+reminder);
+        //console.log("Reminder: "+reminder);
         return reminder;
 
       },
@@ -1570,7 +1588,7 @@ SOILE2 = (function(){
   // The scheduler.
   rt.schd = (function(){
     // The "unit" of the delay times; i.e. the delay time is some multiple of this.
-    var MINDELAY = 5;
+    var MINDELAY = 1;
 
     // How long the execution will be suspended. ('dur' stands for duration.)
     var suspend_dur = -1;
@@ -1592,22 +1610,31 @@ SOILE2 = (function(){
     var compute_delay = function(ts){
       var delay = msleft(ts);
       //console.log("Delay = " + delay)
-      if (delay < 10){
+      if (delay < 6) {
+        return 1
+      }
+      if (delay < 14){
+        return 2
         return MINDELAY;
       }
       if (delay < 50){
-        return MINDELAY * 2;
-      }
-      if (delay < 100){
+        return 10
         return MINDELAY * 5;
       }
-      if (delay < 500){
+      if (delay < 100){
+        return 20
         return MINDELAY * 10;
       }
-      if (delay < 1000){
+      if (delay < 500){
+        return 50
         return MINDELAY * 15;
       }
-      return MINDELAY * 20;
+      if (delay < 1000){
+        return 100
+        return MINDELAY * 30;
+      }
+      return 300
+      return MINDELAY * 40;
     };
     
     var schedule = function(delay){

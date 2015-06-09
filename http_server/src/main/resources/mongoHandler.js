@@ -23,14 +23,14 @@ function _hashPassword(password) {
 }
 
 var currentDate = new Date();
-var millisecondsPerDay = 1000*3600*24
+var millisecondsPerDay = 1000*3600*24;
 
 /*
 Comparing start and end dates to calculate if an experiment 
 should be active or not */
 function _isActive(experiment) {
-  sDate = new Date(experiment.startDate);
-  eDate = new Date(experiment.endDate);
+  var sDate = new Date(experiment.startDate);
+  var eDate = new Date(experiment.endDate);
 
   if((sDate < currentDate)&&(currentDate<eDate)) {
     experiment.active = true;
@@ -38,7 +38,6 @@ function _isActive(experiment) {
   }
   else{
     experiment.active = false;
-
     if(sDate > currentDate) {
       experiment.timedata = Math.ceil((sDate - currentDate)/millisecondsPerDay);
     }
@@ -66,9 +65,9 @@ Checks if at least two consequent componentes are set to random.
 */
 function _isRandom(experiment) {
   var longestRandom = 0;
-  var prevRandom = false
+  var prevRandom = false;
 
-  if (typeof experiment.components == 'undefined') {
+  if (typeof experiment.components === 'undefined') {
     return false;
   } 
 
@@ -82,7 +81,7 @@ function _isRandom(experiment) {
     else {
       longestRandom = 0;
     } 
-  };
+  }
 
   return false;
 }
@@ -104,12 +103,12 @@ var mongoHandler = {
       function(reply) {
         console.log("Setting user index");
         console.log(JSON.stringify(reply));
-      })
+      });
   },
 
   ensureAdmin: function() {
 
-    var pass = _hashPassword("admin")
+    var pass = _hashPassword("admin");
     vertx.eventBus.send(mongoAddress, {"action":"save",
     "collection":"users", "document":{"_id": 1,
                                       "username":"admin",
@@ -130,7 +129,7 @@ var user = {
     "collection":"users", "document":{"username":username, "password":pass, "admin":false}},
      function(reply) {
       response(reply);
-     })
+     });
   },
 
   get: function(userid, response) {
@@ -147,7 +146,7 @@ var user = {
       "collection":"users","matcher":{"_id":userid}},
       function(reply) {
         //console.log(JSON.stringify(reply));
-        response(reply.result);
+        callback(reply.result);
       });
   },
 
@@ -163,7 +162,7 @@ var user = {
     vertx.eventBus.send(mongoAddress, {"action":"findone",
       "collection":"users", "matcher":{"forgottenPasswordToken":token}},
       function(reply) {
-        response(reply)
+        response(reply);
       });
   },
 
@@ -198,8 +197,8 @@ var user = {
       console.log("Finding user");
 
       //No user found, incorrect credentials
-      if(reply.result==null) {
-        reply.status="notfound";
+      if(reply.result == null) {
+        reply.status = "notfound";
         reply.token = false;
         response(reply);
       } 
@@ -224,13 +223,13 @@ var user = {
           }, function(replyNested) {
             //console.log(JSON.stringify(replyNested));
             response(reply);
-          })
+          });
         } 
         else {
           response(reply);
         }
       }
-    })
+    });
   },
 
   /*Generates a token that can be used to access the password reset page*/
@@ -246,9 +245,9 @@ var user = {
       "multi":false
     }, function(reply) {
       console.log("Setting forgott password token for user: " + username + "to: " + token);
-      reply.token = token
-      response(reply)
-    })
+      reply.token = token;
+      response(reply);
+    });
   },
 
   resetPassword: function(token, password,response) {
@@ -263,7 +262,7 @@ var user = {
     }, function(reply) {
       console.log("Setting new password using reset token");
       response(reply);
-    })
+    });
   },
 
   fromSession: function(session, response) {
@@ -288,10 +287,10 @@ var user = {
                   "phase": "0" }},
       function(replyData) {
         //Formdata
-        var expIDs = []
+        var expIDs = [];
         for(var i = 0; i<replyData.results.length; i++) {
-          expIDs.push(replyData.results[i].expId)
-          console.log("Pushing formid: " + replyData.results[i].expId + " i: " + i)
+          expIDs.push(replyData.results[i].expId);
+          console.log("Pushing formid: " + replyData.results[i].expId + " i: " + i);
         }
         console.log(JSON.stringify(expIDs));
 
@@ -303,9 +302,9 @@ var user = {
             exps.list = expIDs;
             response(exps);
           }
-        )
+        );
       }
-    )
+    );
   },
 
   //Returns a list of all completed and incompleted experiments for the current user. And a
@@ -322,8 +321,8 @@ var user = {
              incompleted: incompleted.results, 
              expList:     idList
            });
-      })
-    }) 
+      });
+    }) ;
   },
 
   status: function(userID, response) {
@@ -335,8 +334,9 @@ var user = {
         response({newExps:r2.results, complete: r.completed, incomplete:r.incompleted});
       });
     }); 
-  },
-}
+  }
+
+};
 
 
 var Experiment = {
@@ -361,7 +361,7 @@ var Experiment = {
       {"action":"delete", 
        "collection":"experiment","matcher":{"_id":id}},
        function(reply){
-      callback(reply)
+      callback(reply);
     });
   },
 
@@ -383,7 +383,7 @@ var Experiment = {
     var doc = {};
     doc.phase = phase;
     doc.expId = experimentid;
-    doc.userid = userid
+    doc.userid = userid;
     doc.confirmed = false;
     doc.data = data;
 
@@ -412,7 +412,7 @@ var Experiment = {
           },
         }, function(reply2) {
            callback(reply);
-        })
+        });
       });
     }
     
@@ -421,15 +421,19 @@ var Experiment = {
       var type = r.result.components[phase].type;
       doc.type = type;
 
-      if (exp.israndom) {
-        Experiment.getUserData(userid, experimentid, function(userdata) {
+      Experiment.getUserData(userid, experimentid, function(userdata) {
+        if (exp.israndom) { 
           doc.phase = userdata.randomorder[phase];
-          save(doc);
-        })
-      }
-      else {
-        save(doc);
-      }
+        }
+        console.log("CURRENT PHASE: " + doc.phase);
+        Experiment.userCompletedPhase(userid, experimentid, doc.phase, function(shouldProceed) {
+          if(shouldProceed){
+            save(doc);
+          } else {
+            callback(r);
+          }
+        });
+      });
     });
   },
 
@@ -443,12 +447,12 @@ var Experiment = {
         "_id":expId,
       },
       "objNew":{"$set":qString}
-    }
+    };
 
     vertx.eventBus.send(mongoAddress, query, function(reply) {
         console.log(JSON.stringify(reply));
         response(reply);
-    })
+    });
   },
 
   generateRandomOrder: function(exp) {
@@ -458,13 +462,13 @@ var Experiment = {
 
     for (var i = 0; i < exp.components.length; i++) {
       if (exp.components[i].random > 0) {
-        randomList[i] = exp.components[i].random 
+        randomList[i] = exp.components[i].random;
         randomGroups[exp.components[i].random] = 1;
       } else {
-        randomList[i] = 0
+        randomList[i] = 0;
       }
       randomMapping[i] = i;
-    };
+    }
 
 
    /* console.log(JSON.stringify(randomList))
@@ -479,26 +483,26 @@ var Experiment = {
       for (var i = 0; i < arrSlice.length; i++) {
         randomList[i + index] = arrSlice[i];
         randomMapping[i + index] = arrSlice[i];
-      };
+      }
     }
 
     function randomizeGroup(array, groupMapping, groupNo) {
       var tempArr = [];
       for (var i = 0; i < array.length; i++) {
         if(groupMapping[i]===groupNo) {
-          tempArr.push(array[i])
+          tempArr.push(array[i]);
           array[i] = null;
         }
-      };
+      }
 
       //console.log(JSON.stringify(array))
       tempArr = utils.shuffle(tempArr);
 
-      for (var i = 0; i < array.length; i++) {
-        if(array[i] === null) {
-          array[i] = tempArr.pop();
+      for (var j = 0; j < array.length; j++) {
+        if(array[j] === null) {
+          array[j] = tempArr.pop();
         }
-      };
+      }
 
       return array;
 
@@ -521,9 +525,9 @@ var Experiment = {
     */
     for (var i = 0; i < randomGroups.length; i++) {
       if(randomGroups[i]===1) {
-        randomMapping = randomizeGroup(randomMapping, randomList, i)
+        randomMapping = randomizeGroup(randomMapping, randomList, i);
       }
-    };
+    }
     return randomMapping;
   },
 
@@ -550,26 +554,31 @@ var Experiment = {
     vertx.eventBus.send(mongoAddress, {"action":"find",
     "collection":dataCollection,
     "matcher":{"expId":id, "confirmed":true, "type":"form"},
-    "keys": {"confirmed":0}},  // Projection
+    "keys": {"confirmed":0},  // Projection
+    //TODO: Handle larger replies.
+    "batch_size":1000  
+    }, 
      function(reply) {
       Experiment.phaseCount(id, function(phases) {
         reply.phases = phases.result.values;
         response(reply);
-      })
-    })
+      });
+    });
   },
 
   testData: function(id, response) {
     vertx.eventBus.send(mongoAddress, {"action":"find", 
       "collection":dataCollection,
       "matcher": {"expId":id, "confirmed":true, "type":"test"},
-      "keys": {"confirmed": 0},
-      "sort": {"phase":1}
-      },   // Projection
+      "keys": {"confirmed": 0}, // Projection
+      "sort": {"phase":1}, 
+      //TODO: Handle larger replies.
+     "batch_size":1000
+      },   
       function(reply) {
         response(reply);
       }
-    )
+    );
   },
 
   rawTestData: function(expId, phase, response) {
@@ -578,11 +587,14 @@ var Experiment = {
         "action":"find",
         "collection":dataCollection,
         "matcher":{"expId":expId, "phase":phase, "confirmed":true},
-        "keys": {"data":1, "userid":1}},
+        "keys": {"data":1, "userid":1},
+        //TODO: Handle larger replies.
+        "batch_size":1000
+      },
       function(reply) {
         response(reply);
       }
-    )
+    );
   },
 
   addForm: function(expid,formid, name,response) {
@@ -605,7 +617,7 @@ var Experiment = {
       //console.log(JSON.stringify(reply))
       response(reply);
 
-    })
+    });
   },
 
   addTest: function(expid,testid, name,response) {
@@ -628,7 +640,7 @@ var Experiment = {
       //console.log(JSON.stringify(reply))
       response(reply);
 
-    })
+    });
   },
 
 /*
@@ -648,12 +660,12 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
         "components.id":formid
       },
       "objNew":{"$set":{"components.$.name":name}}
-      }
+      };
     //var command = "db.experiment.update({'_id':'"+expid+"','components.id':'"+formid+"'},{$set:{'components.$.name':'"+name+"''}})";
     // console.log("\n"+command+"\n");
     vertx.eventBus.send(mongoAddress, query, function(reply){
       response(reply);
-    })
+    });
   },
 
   // http://stackoverflow.com/questions/4588303/in-mongodb-how-do-you-remove-an-array-element-by-its-index
@@ -678,7 +690,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
 
   deleteComponentByIndex: function(expid, index, response) {
 
-    var comp = {}
+    var comp = {};
     comp["components."+index] = 1;
     console.log(comp);
 
@@ -725,7 +737,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
         }
       }
       response(reply);
-    })
+    });
   },
 
   save: function(exp,response){
@@ -733,7 +745,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
     vertx.eventBus.send(mongoAddress, {"action":"save", 
       "collection":"experiment", "document":exp}, function(reply){
         response(reply);
-      })
+      });
   },
 
   update: function(exp, id, response){
@@ -741,7 +753,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       "collection":"experiment", "criteria":{"_id":id},
       "objNew":{"$set":exp}}, function(reply){
         response(reply);
-      })
+      });
   },
 
 /*
@@ -762,12 +774,12 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
         /*console.log("------Latest userData-----");
         console.log(JSON.stringify(userdata));*/
         var currentPhase = -1;
-        var nextPhase = -1
+        var nextPhase = -1;
         var ran = 0;
 
         callback(userdata);
       }
-    )
+    );
   },
 
   getUserData: function(userid, experimentid, callback) {
@@ -781,14 +793,36 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
         /*"type":"$not('general')"*/
       }},
       function(data) {
-        if (data.status == "error" ||
-            typeof data.result == "undefined") {
+        if (data.status === "error" ||
+            typeof data.result === "undefined") {
           return callback(false);
         }else {
-          callback(data.result)
+          callback(data.result);
         }
       }
-    )
+    );
+  },
+
+  /*Returns true if user has completed this phase already*/
+  userCompletedPhase: function(userid, experimentid, phase,callback) {
+    console.log("SHOULD PROCEED: " + experimentid + "   p:" + phase + "  u: " + userid);
+    vertx.eventBus.send(mongoAddress, {
+      "action":"findone",
+      "collection":dataCollection,
+      "matcher":{
+        "userid":userid.toString(),
+        "expId":experimentid,
+        "phase":parseInt(phase)
+      }},
+      function(data) {
+        if (data.status === "error" ||
+            typeof data.result === "undefined") {
+          return callback(true);
+        }else {
+          callback(false);
+        }
+      }
+    );
   },
 
   initUserData: function(data, userid, experimentid, callback) {
@@ -805,7 +839,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       "document":data
     },function(reply) {
       callback(reply);
-    })
+    });
   },
 
   _randomToRealPhase: function(randomOrder, phase) {
@@ -816,7 +850,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       if(randomOrder[i] == phase) {
         return i;
       }
-    };
+    }
     return 0;
   },
 
@@ -841,7 +875,7 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
       //console.log(reply);
       console.log("Identifying persontoken: " + personToken + " as user " + userid);
       response(reply);
-    })
+    });
   },
 
 
@@ -875,11 +909,11 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
             response({"confirmed":confirmed, 
                     "total": total});
           }
-        )
+        );
       }
-    )
+    );
   }
-}
+};
 /*
   Tests as in visual tests
 */
@@ -914,8 +948,8 @@ var Test = {
     }
     vertx.eventBus.send(mongoAddress, {"action":"save",
     "collection":"tests","document":test}, function(reply) {
-      response(reply)
-    })
+      response(reply);
+    });
   },
 
   update: function(test,response) {
@@ -927,8 +961,8 @@ var Test = {
         "compiled":test.compiled
       }
     }}, function(reply) {
-      response(reply)
-    })
+      response(reply);
+    });
   },
 
   editName: function(test, name, response) {
@@ -940,15 +974,15 @@ var Test = {
         "_id":test
       },
       "objNew":{"$set":{"name":name}}
-      }
+      };
     //var command = "db.experiment.update({'_id':'"+expid+"','components.id':'"+formid+"'},{$set:{'components.$.name':'"+name+"''}})";
     // console.log("\n"+command+"\n");
     vertx.eventBus.send(mongoAddress, query, function(reply){
       response(reply);
-    })
+    });
   }
 
-}
+};
 
 //Refactoring Done
 var Form = {
@@ -957,24 +991,24 @@ var Form = {
     vertx.eventBus.send("vertx.mongo-persistor", {"action":"findone",
     "collection":"forms","matcher":{"_id":id}}, function(reply) {
       callback(reply);
-    })
+    });
   },
 
   delete: function(id, callback){
     vertx.eventBus.send("vertx.mongo-persistor", {"action":"delete",
     "collection":"forms","matcher":{"_id":id}}, function(reply) {
       callback(reply);
-    })
+    });
   },
 
   //Saves a form, does 
   save: function(form, id, callback) {
     vertx.eventBus.send("vertx.mongo-persistor",{"action":"save",
       "collection":"forms","document":{"form":form}}, function(reply){
-        callback(reply)
-      })
+        callback(reply);
+      });
   }
-}
+};
 
 module.exports.mongoHandler = mongoHandler;
 module.exports.user = user;
