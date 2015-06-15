@@ -141,13 +141,13 @@ qdata_nonempty_text_widget(id) ::= <<
   // UNUSED: $id$ 
 >>
 
-dropdownmenu(id, label, required,options) ::= <<
+dropdownmenu(id, label, required,options, inline) ::= <<
 
-<div>
+
+<div $if(inline)$ class="inlineDropdown" $endif$>
 
 $if(label)$
 <label for="$id$">$label$</label>
-$separator$
 $endif$
 <select id="$id$" name="$id$"
         required="$required$"
