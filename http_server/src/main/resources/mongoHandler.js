@@ -401,7 +401,7 @@ var Experiment = {
 
         vertx.eventBus.send(mongoAddress, {"action":"update", 
           "collection":dataCollection, "criteria":{
-            "expId":document.experimentid,
+            "expId":document.expId,
             "userid":document.userid,
             "type":"general"
           },
