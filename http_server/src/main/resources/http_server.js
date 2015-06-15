@@ -828,10 +828,18 @@ customMatcher.get('/experiment/:id/end', function(request) {
     userID = request.session.loggedIn().id;
   }
 
+
   mongo.experiment.confirmData(expID, userID, function(r) {
     console.log("confirmed submitted data");
     console.log(JSON.stringify(r));
-    templateManager.render_template('end', {},request);
+    mongo.experiment.get(expID, function(exp) {
+
+      var endMessage = exp.result.endmessage;
+      if(typeof endMessage !== 'undefined') {
+        endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      }
+      templateManager.render_template('end', {"endmessage":endMessage},request);
+    });
   });
 
 });
