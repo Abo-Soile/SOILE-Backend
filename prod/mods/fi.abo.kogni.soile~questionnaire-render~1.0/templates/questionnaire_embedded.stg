@@ -236,7 +236,7 @@ slider(id, labels, minimum, maximum, increment, select, count) ::= <<
 
 select(columns) ::= <<
 
-<div class="selectionBase" style="margin-bottom: 1cm; display: block; width: 600px;">
+<div class="selectionBase" style="margin-bottom: 1cm; display: block;">
  $columns:{col | $col.content$}; separator="\n"$
 </div>
  
