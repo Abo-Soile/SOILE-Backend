@@ -2,6 +2,10 @@ var vertx = require('vertx');
 var console = require('vertx/console');
 var utils = require('utils');
 
+var container = require('vertx/container');
+var config = container.config;
+
+
 // TODO: Load this from config
 var mongoAddress = "vertx.mongo-persistor";
 
@@ -108,12 +112,16 @@ var mongoHandler = {
 
   ensureAdmin: function() {
 
-    var pass = _hashPassword("admin");
+    var username = config.adminuser;
+    var pass = _hashPassword(config.adminpassword);
+    console.log("Initializing admin:" + config.adminuser + " - " + config.adminpassword);
     vertx.eventBus.send(mongoAddress, {"action":"save",
     "collection":"users", "document":{"_id": 1,
-                                      "username":"admin",
+                                      "username":username,
                                       "password": pass,
-                                      "admin":true }},
+                                      "admin":true,
+                                      "superuser":true
+                                       }},
     function(reply) {
       console.log("Generated admin");
     });
