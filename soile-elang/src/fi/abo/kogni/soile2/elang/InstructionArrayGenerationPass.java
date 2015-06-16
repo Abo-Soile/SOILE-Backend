@@ -684,7 +684,7 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
         String fname1 = "showmsg";
         fcall.setHost(functionHost(fname1));
         fcall.setName(fname1);
-        fcall.setParams(quote("END"));
+        fcall.setParams(quote(""));
         piArray.add(fcall);
         piFcall(fcall);
         Eoc eoc = new ProgramInstruction.Eoc(nextIndex());
