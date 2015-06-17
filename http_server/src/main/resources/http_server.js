@@ -834,13 +834,21 @@ customMatcher.get('/experiment/:id/end', function(request) {
     console.log(JSON.stringify(r));
     mongo.experiment.get(expID, function(exp) {
 
-      var endMessage = exp.result.endmessage;
+      exp = exp.result;
+      var endMessage = exp.endmessage;
       var endTitle = endMessage.split('\n')[0];
       endMessage = endMessage.split("\n").slice(1).join("\n");
       if(typeof endMessage !== 'undefined') {
         endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />');
       }
-      templateManager.render_template('end', {"endtitle":endTitle, "endmessage":endMessage},request);
+
+      var context = {"endtitle":endTitle, "endmessage":endMessage};
+      
+      if (typeof exp.hidelogin !== 'undefined') {
+        context.hideLogin = exp.hidelogin;
+      }
+
+      templateManager.render_template('end', context,request);
     });
   });
 
