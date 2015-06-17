@@ -835,10 +835,12 @@ customMatcher.get('/experiment/:id/end', function(request) {
     mongo.experiment.get(expID, function(exp) {
 
       var endMessage = exp.result.endmessage;
+      var endTitle = endMessage.split('\n')[0];
+      endMessage = endMessage.split("\n").slice(1).join("\n");
       if(typeof endMessage !== 'undefined') {
         endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />');
       }
-      templateManager.render_template('end', {"endmessage":endMessage},request);
+      templateManager.render_template('end', {"endtitle":endTitle, "endmessage":endMessage},request);
     });
   });
 
