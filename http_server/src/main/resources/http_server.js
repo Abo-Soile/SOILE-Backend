@@ -464,9 +464,21 @@ customMatcher.get('/experiment/:id', function(request){
         else { 
           console.log("No userdata");
 
+          var referer = "direct";
+
+          if(typeof request.headers().get("Referer") != 'undefined'){
+            referer  = request.headers().get("Referer");
+          }
+
+          var userAgent = request.headers().get("User-Agent");
+
           var userdata = {};
           userdata.position = 0;
           userdata.randomorder = false;
+
+          userdata.userAgent = userAgent;
+
+          userdata.referer = referer;
 
           if (exp.israndom) {
             var order = mongo.experiment.generateRandomOrder(exp);
