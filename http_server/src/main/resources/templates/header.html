@@ -58,7 +58,12 @@
     <body class="dbootstrap">
     <nav class="navbar navbar-default" role="navigation">
       <div class="container">
+
+        {?hideLogin}
+          
+        {:else}
         <a class="navbar-brand" href="/">Soile</a>
+        {/hideLogin}
 
         <ul class="nav navbar-nav navbar-right">
         {?loggedIn}
