@@ -85,6 +85,7 @@ p {
 	padding-left: 0px;
 	display: inline;
 	line-height: 1;
+  cursor: default;
 }
 
 #code {
