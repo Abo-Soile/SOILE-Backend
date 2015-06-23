@@ -27,6 +27,7 @@ command singleselect {
     default_value: String,
     colalign: Boolean(true),
     inline: Boolean(false),
+    optional: Boolean(true),
     dbcolumn: String,
     options: [ [ {
     		  dbvalue: String, 
