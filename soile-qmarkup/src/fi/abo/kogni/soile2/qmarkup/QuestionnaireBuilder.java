@@ -249,7 +249,8 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Value value = Value.parse(args.get(0));
                 Validator validator = Validator.validatorFor(command);
                 validator.validate(value);
-                ST tmpl = group.getInstanceOf("select");
+                //ST tmpl = group.getInstanceOf("select");
+                ST tmpl = group.getInstanceOf("selectradio");
                 SingleselectWidgetData sswd = this.new SingleselectWidgetData();
                 String colname = createColumnName(questionnaireId(),
                         value.getValue("dbcolumn").toString());
@@ -257,6 +258,9 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 String defaultValue = value.getValue("default_value").toString();
                 Boolean inline = ((BooleanValue) value.getValue("inline")).asBoolean();
                 Boolean colalign = ((BooleanValue) value.getValue("colalign")).asBoolean();
+                Boolean optional = ((BooleanValue) value.getValue("optional")).asBoolean();
+
+                tmpl.add("optional", optional);
 
                 if(!inline){
                     closeParagraph();
@@ -300,6 +304,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                             checked = null;
                         }
                         optTmpl.add("checked", checked);
+                        //optTmpl.add("optional", optional);
                         columnTmpl.addAggr("elems.{content}", optTmpl.render());
                         sswd.addId(id);
                         sswd.addValue(dbvalue);

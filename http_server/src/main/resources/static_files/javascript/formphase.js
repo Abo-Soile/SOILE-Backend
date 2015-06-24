@@ -47,7 +47,7 @@ require(["dijit/form/HorizontalSlider",
            ready) {
 
   ready(function() {
-    parser.parse();
+    //parser.parse();
 
     //Disable mousewheel events on spinners to prevent the user from
     //editing an answer when scrolling
@@ -82,7 +82,7 @@ require(["dijit/form/HorizontalSlider",
     var testdata = {};
 
     var dojoForm = registry.byId("formcol");
-    console.log(dojoForm);
+    //console.log(dojoForm);
 
     var is_checked = function(id) {
       var widget = registry.byId(id);
@@ -223,7 +223,7 @@ require(["dijit/form/HorizontalSlider",
         }
       }
       return qdata;
-    }
+    };
 
     if (dom.byId('showData')) {
       on(dom.byId('showData'), "click", function() {
@@ -232,13 +232,16 @@ require(["dijit/form/HorizontalSlider",
 
         var d = loadData();
 
+        formcol.validate();
+
         show_saved_data(d);
 
         //console.log("Widgets:");
         //console.log(widgets);
 
       });
-    };
+    }
+
     if (dom.byId("submitButton")) {
       on(dom.byId("submitButton"), "click", function() { 
         console.log("submitbutton");

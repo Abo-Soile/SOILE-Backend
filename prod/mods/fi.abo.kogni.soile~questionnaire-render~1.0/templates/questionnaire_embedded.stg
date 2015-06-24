@@ -61,7 +61,7 @@ questionnaire_html(title, body, stmts) ::= <<
                ready) {
 
         ready(function() {
-          parser.parse();
+          //parser.parse();
           
           var qdata = {};
 
@@ -242,6 +242,16 @@ select(columns) ::= <<
  
 >>
 
+selectradio(columns, optional) ::= <<
+
+<div class="selectionBase" style="margin-bottom: 1cm; display: block;">
+  <div class="selectionContainer" data-dojo-type="myWidgets/ValidationRadioButton" optional="$optional$">
+    $columns:{col | $col.content$}; separator="\n"$
+  </div>
+</div>
+ 
+>>
+
 selection_column(elems, width) ::= <<
 
 <div style="width: $width$%; float: left; display: block">
@@ -253,7 +263,7 @@ selection_column(elems, width) ::= <<
 radiobutton(id, name, value, label, checked) ::= <<
  <div class="innerSelect">
  <input type="radio" id="$id$" name="$name$" value="$value$" $if(checked)$ checked $endif$
-        data-dojo-type="dijit/form/RadioButton" />
+    data-dojo-type="dijit/form/RadioButton" />
  $if(label)$
     <label for="$id$">$label$</label>
  $endif$

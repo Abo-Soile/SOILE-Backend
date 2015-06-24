@@ -655,3 +655,12 @@ dBootstrap fixes
 .inlineDropdown {
   display: inline-block;
 }
+
+.selectionBase .selectError {
+  border: red dotted 2px;
+  float: left;
+}
+
+.selectionBase .selectionContainer {
+  float: left;
+}
