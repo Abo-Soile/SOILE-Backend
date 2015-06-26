@@ -14,7 +14,12 @@
     "tests"
   ],
   "dependencies": {
-    "angular-ui-ace": "~0.2.3",
-    "angular-file-upload": "~1.1.5"
-  }
+    "angular-bootstrap": "~0.13.0",
+    "angular-ui-tree": "~2.5.0",
+    "angular-ui-select": "~0.12.0",
+    "angular-xeditable": "~0.1.9"
+  },
+  "moduleType": [
+    "globals"
+  ]
 }
