@@ -1,9 +1,17 @@
 {>header_nodojo /}
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-sanitize.js"></script>
 
 <link rel="stylesheet" href="/javascript/bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
 <script type="text/javascript" src="/javascript/bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+
+
+<script type="text/javascript" src="/javascript/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+<script type="text/javascript" src="/javascript/bower_components/angular-ui-select/dist/select.js"></script>
+<link rel="stylesheet" type="text/css" href="
+/javascript/bower_components/angular-ui-select/dist/select.css">
 
 <script type="text/javascript" src="/javascript/a_experimentedit.js"></script>
 
@@ -16,25 +24,27 @@
         <label>Description</label>
         <textarea class="form-control" ng-model="experiment.description"> </textarea>
 
-        <label>Description</label>
+        <label>End message</label>
         <textarea class="form-control" ng-model="experiment.endmessage"> </textarea>
     </div> 
     <div class="col-md-12">
       <br>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
+        <label>Start date</label>
       <p class="input-group">
-        <input type="text" class="form-control" ng-model="startDate" is-open="opened" min-date="endDate" ng-required="true" close-text="Close" />
+        <input type="text" class="form-control" ng-model="startdate" ng-required:"true" is-open="opened" options="dateOptions" close-text="Close" datepicker-popup="[([format])]" />
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
         </span>
       </p>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
+        <label>End Date</label>
       <p class="input-group">
-        <input type="date" class="form-control" ng-model="endDate" is-open="opened" min-date="startdate"  ng-required="true" close-text="Close" />
+        <input type="text" class="form-control" ng-model="enddate" ng-required:"true" is-open="opened" min-date="startdate" options="dateOptions"  close-text="Close" datepicker-popup="[([format])]"/>
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
         </span>
@@ -42,17 +52,21 @@
     </div>
 
     <div class="col-md-12">
-      <div class="panel panel-fancy ng-controller="componentController"">
+      <div class="panel panel-fancy" ng-controller="componentController">
         <h5>Components</h5>
         <div ui-tree>
           <ul ui-tree-nodes="" ng-model="experiment.components" class="fancyList angularcomponentlist"> 
             <li class=" " ng-repeat="comp in experiment.components" ui-tree-node>
               <div class="dragHandle" ui-tree-handle><i class="fa fa-bars"></i></div>
                <div class="form-inline">
+              
+              <!-- IF TEST -->
               <span ng-if="comp.type == 'test'">
                 <input class="form-control" ng-model=comp.name readonly>
+                <label><input type="checkbox" ng-model=comp.random></label>
               </span>
 
+              <!--IF FORM -->
               <span ng-if="comp.type == 'form'">
                 <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
                 <button class="btn btn-warning">Edit</button>
@@ -68,19 +82,32 @@
 
         </div>
       </div>
+    </div>
       
-      <div>
-          <button class="btn btn-default">Add form</button>
-          <input>
-          <button class="btn btn-default">Add test</button>
-      </div>
+    <div class="col-md-12">
+      <p>Selected: [([test.selected.name])]</p>
+      <button class="btn btn-default" ng-click="addForm()">Add form</button>
 
-      <button class="btn btn-success"ng-click="save()">Save</button>
+      <div class="form-group">
+        <ui-select ng-model="test.selected"  theme="bootstrap" ng-disabled="disabled" style="min-width: 300px; max-width: 300px; display: inline-block">
+          <ui-select-match placeholder="Select an experiment">[([$select.selected.name])]</ui-select-match>
+          <ui-select-choices repeat="test in tests | filter:{name:$select.search}">
+            <div ng-bind-html="test.name | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+        <button class="btn btn-default" ng-disabled="test.selected == null" ng-click="addTest()">Add test</button>
+      </div>
+        
+      </form>
+
+    </div>
+
+    <div class="col-md-12">
+    <button class="btn btn-success" ng-click="save()">Save</button>
+      
     </div>
   </div>
-  <div class="row">
-      asdsadsadsad dfgfd gfd
-  </div>
+
 </div>
 
 

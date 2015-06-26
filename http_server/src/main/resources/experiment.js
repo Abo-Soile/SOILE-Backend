@@ -1,5 +1,6 @@
 var vertx = require("vertx");
 var console = require('vertx/console');
+var utils = require("utils");
 
 var CustomMatcher = require('router');
 var customMatcher = new CustomMatcher();
@@ -9,6 +10,8 @@ var templateManager = require('templateManager');
 var experimentModel = require("models/Models").Experiment;
 var experimentDAO = require("models/DAObjects").ExperimentDAO;
 experimentDAO = new experimentDAO();
+
+var formModel = require("models/Models").Form;
 
 
 function merge_options(obj1,obj2){
@@ -54,5 +57,28 @@ customMatcher.get("/a_experiment/:id/json", function(request) {
 
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(js);
-  })
-})
+  });
+});
+
+customMatcher.post("/a_experiment/:id/addform", function(request) {
+  var id = request.params().get('id');
+  var address = utils.get_address('questionnaire_render');
+
+  var msg = {
+    'markup': "",
+    'action': "save"
+  };
+
+  vertx.eventBus.send(address, msg, function(reply) {
+    var response = {};
+    var id = reply.id;
+
+    var form = new formModel();
+    form._id = id;
+    form.name = "";
+    form.save(function() {
+      request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+      request.response.end(form.toJson());
+    });
+  });
+}); 
