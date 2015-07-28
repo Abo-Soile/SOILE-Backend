@@ -23,6 +23,17 @@ app.filter('propsFilter', function() {
   };
 });
 
+app.filter('range', function() {
+  return function(input, min, max) {
+    min = parseInt(min); //Make string input int
+    max = parseInt(max);
+    for (var i=min; i<max; i++){
+          input.push(i);
+        }
+    return input;
+  };
+});
+
 app.controller('componentController', function($scope, $http, $location) {
     var baseUrl = $location.absUrl();
 
@@ -48,6 +59,13 @@ app.controller('experimentController', function($scope, $http, $location) {
 
           $scope.startdate = new Date($scope.experiment.startDate);
           $scope.enddate = new Date($scope.experiment.endDate);
+
+          for (var i = 0; i < $scope.experiment.components.length; i++) {
+            if($scope.experiment.components[i].random) {
+              $scope.experiment.components[i].randomgroup = $scope.experiment.components[i].random 
+              $scope.experiment.components[i].random = true
+            }
+          };
       });
     }
 
@@ -72,6 +90,14 @@ app.controller('experimentController', function($scope, $http, $location) {
         data.startDate = $scope.startdate.toISOString();
         data.endDate = $scope.enddate.toISOString();
 
+        for (var i = 0; i < data.components.length; i++) {
+          if(data.components[i].random) {
+            data.components[i].random = data.components[i].randomgroup
+          }else {
+            delete data.components[i].randomgroup
+          }
+        };
+
         $http.post(baseUrl, data)
 
     }
@@ -92,6 +118,7 @@ app.controller('experimentController', function($scope, $http, $location) {
     }
 
     $scope.addTest = function() {
+      console.log($scope)
       var compObject = {};
       compObject.name = $scope.test.selected.name;
       compObject._id = $scope.test.selected._id;

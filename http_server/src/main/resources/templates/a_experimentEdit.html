@@ -63,14 +63,18 @@
               <!-- IF TEST -->
               <span ng-if="comp.type == 'test'">
                 <input class="form-control" ng-model=comp.name readonly>
-                <label><input type="checkbox" ng-model=comp.random></label>
+                <label><input type="checkbox" ng-model="comp.random" ng-true-value="true" ng-false-value="false"></label> [([comp.random])]
+                <span ng-if="comp.random">
+                  aa:[([comp.random])]
+                  <select ng-model="comp.randomgroup" ng-options="n for n in [] | range:1:10"></select>
+                </span>
               </span>
 
               <!--IF FORM -->
               <span ng-if="comp.type == 'form'">
                 <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
                 <button class="btn btn-warning">Edit</button>
-                <button class="btn btn-warning">in new window</button>
+                <a class="btn btn-warning" href="/questionnaire/mongo/[([comp.id])]" target="_blank">in new window</a>
               </span>
 
               <button ng-click="delComponent(key, $index)" class="btn btn-danger pull-right " type="submit">Delete</button>
