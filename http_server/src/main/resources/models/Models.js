@@ -73,7 +73,11 @@ TRAINING
 */
 function Training(arg) {
 
-    this.components = [];
+    this.components = {};
+
+    this.components.pre = [];
+    this.components.training = [];
+    this.components.post = [];
 
     BaseModel.call(this, arg);
 
