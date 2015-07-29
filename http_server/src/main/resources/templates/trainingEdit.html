@@ -25,20 +25,30 @@
             
             <ul ui-tree-nodes="" ng-model="components" class="fancyList angularcomponentlist"> 
               <li class=" " ng-repeat="comp in components" ui-tree-node>
-                <div class="dragHandle" ui-tree-handle><i class="fa fa-bars"></i>
-</div>
+                <div class="dragHandle" ui-tree-handle><i class="fa fa-bars"></i></div>
                  <div class="form-inline">
-                <span ng-if="comp.type == 'test'">
-                  <input class="form-control" ng-model=comp.name readonly>
-                </span>
 
-                <span ng-if="comp.type == 'form'">
-                  <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
-                  <button class="btn btn-warning">Edit</button>
-                  <button class="btn btn-warning">in new window</button>
-                </span>
+                  <span ng-if="comp.type == 'test'">
+                    <input class="form-control" ng-model=comp.name readonly>
+                    
+                    <span class="checkbox-inline">
+                      <label class="checkbox-inline">
+                        <input style="width: 20px; height: 20px" type="checkbox" ng-model="comp.random" ng-true-value="true" ng-false-value="false">
+                        </label>
+                    </span>
 
-                <button ng-click="delComponent(key, $index)" class="btn btn-danger pull-right " type="submit">Delete</button>
+                    <span ng-if="comp.random">
+                      <span>Group</span>
+                      <select class="form-control input-sm" name="Random group" ng-model="comp.randomgroup" ng-options="n for n in [] | range:1:10"></select>
+                    </span>
+                  </span>
+
+                  <span ng-if="comp.type == 'form'">
+                    <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
+                    <button class="btn btn-warning">Edit</button>
+                  </span>
+
+                  <button ng-click="delComponent(key, $index)" class="btn btn-danger pull-right " type="submit">Delete</button>
 
                 </div>
               </li>
@@ -49,7 +59,6 @@
         </div>
         
     <div class="col-md-12">
-      <p>Selected: [([test.selected.name])]</p>
       <button class="btn btn-default" ng-click="addForm()">Add form</button>
 
       <div class="form-group">
