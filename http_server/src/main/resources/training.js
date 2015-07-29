@@ -7,6 +7,8 @@ var customMatcher = new CustomMatcher();
 
 var trainingModel = require("models/Models").Training;
 var trainingDAO = require("models/DAObjects").TrainingDAO;
+
+var formModel = require("models/Models").Form;
 trainingDAO = new trainingDAO();
 
 /*
@@ -128,10 +130,29 @@ customMatcher.post("/training/:id/edit", function(request) {
 
       training.save(function() {
         request.response.end(200);
+      });
+    });
+  });
+});
+
+customMatcher.post("/training/:id/addform", function(request) {
+  var id = request.params().get('id');
+
+  var newForm = new formModel();
+
+  newForm.saveAndRender(function(status) {
+
+      trainingDAO.get(id, function(training) {
+
+        training.components.training.push({"type":"form", "name": "Unamed Form", "_id":newForm.id});
+
+        training.save(function(stat) {
+          request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+          request.response.end(JSON.stringify({"id":newForm.id}));
+        })
       })
-    })
-  })
-})
+  });
+});
 
 
 customMatcher.get("/training/:id/json", function(request) {

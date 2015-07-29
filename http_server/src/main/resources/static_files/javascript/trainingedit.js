@@ -16,6 +16,17 @@ app.filter("reverse", function(){
     };
 });
 
+app.filter('range', function() {
+  return function(input, min, max) {
+    min = parseInt(min); //Make string input int
+    max = parseInt(max);
+    for (var i=min; i<max; i++){
+          input.push(i);
+        }
+    return input;
+  };
+});
+
 app.controller('componentController', function($scope, $http, $location) {
     var baseUrl = $location.absUrl();
 
@@ -59,14 +70,15 @@ app.controller('componentController', function($scope, $http, $location) {
       .then(function(response) {
         var data = response.data;
 
-        var compObject = {};
+        /*var compObject = {};
         compObject.name = "";
         compObject.id = data._id;
         compObject.type = "form";
 
         $scope.training.components.push(compObject);
-
-        $scope.save();
+            
+        $scope.save(); */
+        loadData();
       });
     };
 

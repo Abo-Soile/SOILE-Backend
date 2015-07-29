@@ -12,6 +12,7 @@ typ User-dao.getUserWithPass() returnerar ett user object.
 
 */
 
+var vertx = require('vertx')
 var console = require('vertx/console');
 
 var utils = require('utils');
@@ -108,14 +109,41 @@ Test.collection = "tests";
 FORM
 */
 function Form(arg) {
-    BaseModel.call(this, arg);
+  this.markup = "";
+  BaseModel.call(this, arg);
 
-    this._collection = Form.collection;
+  this._collection = Form.collection;
 }
 
 Form.prototype = new BaseModel();
 Form.prototype.constructor = Form;
 Form.collection = "forms";
+
+
+Form.prototype.saveAndRender = function(callback) {
+    var address = utils.get_address("questionnaire_render");
+
+    var msg = {
+      'markup':this.markup,
+      "action":"save"
+    };
+
+    var newForm = false;
+
+    if (typeof this.id !== undefined) {
+      msg.id = this.id;
+      newForm = true;
+    }
+
+    var that = this;
+    vertx.eventBus.send(address, msg, function(reply) {
+      var id = reply.id;
+      if (newForm) {
+        that.id = id;
+      }
+      callback(reply);
+    });
+};
 
 
 /*
@@ -140,4 +168,4 @@ module.exports.User = User;
 module.exports.Test = Test;
 module.exports.Form = Form;
 module.exports.Experiment = Experiment;
-module.exports.Training = Training
+module.exports.Training = Training;

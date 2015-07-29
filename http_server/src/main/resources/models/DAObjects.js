@@ -70,6 +70,9 @@ function TrainingDAO() {
 TrainingDAO.prototype = new BaseDAO();
 TrainingDAO.prototype.constructor = TrainingDAO;
 
+TrainingDAO.prototype.addform = function(first_argument) {
+    // body...
+};
 
 module.exports.BaseDAO = BaseDAO;
 
