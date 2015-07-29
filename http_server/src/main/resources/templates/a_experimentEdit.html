@@ -56,40 +56,45 @@
         <h5>Components</h5>
         <div ui-tree>
           <ul ui-tree-nodes="" ng-model="experiment.components" class="fancyList angularcomponentlist"> 
-            <li class=" " ng-repeat="comp in experiment.components" ui-tree-node>
+
+            <li class="" ng-repeat="comp in experiment.components" ui-tree-node>
               <div class="dragHandle" ui-tree-handle><i class="fa fa-bars"></i></div>
                <div class="form-inline">
               
-              <!-- IF TEST -->
-              <span ng-if="comp.type == 'test'">
-                <input class="form-control" ng-model=comp.name readonly>
-                <label><input type="checkbox" ng-model="comp.random" ng-true-value="true" ng-false-value="false"></label> [([comp.random])]
-                <span ng-if="comp.random">
-                  aa:[([comp.random])]
-                  <select ng-model="comp.randomgroup" ng-options="n for n in [] | range:1:10"></select>
+                <!-- IF TEST -->
+                <span ng-if="comp.type == 'test'">
+                  <input class="form-control" ng-model=comp.name readonly>
+
+                  <span class="checkbox-inline">
+                    <label class="checkbox-inline">
+                      <input style="width: 20px; height: 20px" type="checkbox" ng-model="comp.random" ng-true-value="true" ng-false-value="false">
+                    </label>
+                  </span>
+
+                  <span ng-if="comp.random">
+                    <span>Group</span>
+                    <select class="form-control input-sm" name="Random group" ng-model="comp.randomgroup" ng-options="n for n in [] | range:1:10"></select>
+                  </span>
+
                 </span>
-              </span>
 
-              <!--IF FORM -->
-              <span ng-if="comp.type == 'form'">
-                <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
-                <button class="btn btn-warning">Edit</button>
-                <a class="btn btn-warning" href="/questionnaire/mongo/[([comp.id])]" target="_blank">in new window</a>
-              </span>
+                <!--IF FORM -->
+                <span ng-if="comp.type == 'form'">
+                  <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
+                  <a class="btn btn-warning" href="/questionnaire/mongo/[([comp.id])]" target="_blank">Edit</a>
+                </span>
 
-              <button ng-click="delComponent(key, $index)" class="btn btn-danger pull-right " type="submit">Delete</button>
+                <button ng-click="delComponent(key, $index)" class="btn btn-danger pull-right " type="submit">Delete</button>
 
               </div>
             </li>
+
           </ul>
-
-
         </div>
       </div>
     </div>
       
     <div class="col-md-12">
-      <p>Selected: [([test.selected.name])]</p>
       <button class="btn btn-default" ng-click="addForm()">Add form</button>
 
       <div class="form-group">

@@ -62,10 +62,10 @@ app.controller('experimentController', function($scope, $http, $location) {
 
           for (var i = 0; i < $scope.experiment.components.length; i++) {
             if($scope.experiment.components[i].random) {
-              $scope.experiment.components[i].randomgroup = $scope.experiment.components[i].random 
-              $scope.experiment.components[i].random = true
+              $scope.experiment.components[i].randomgroup = $scope.experiment.components[i].random;
+              $scope.experiment.components[i].random = true;
             }
-          };
+          }
       });
     }
 
@@ -85,16 +85,15 @@ app.controller('experimentController', function($scope, $http, $location) {
 
     $scope.save = function save() {
         console.log("SSSSAAAVVE")
-        var data = $scope.experiment;
+        var data = JSON.parse(JSON.stringify($scope.experiment));
 
         data.startDate = $scope.startdate.toISOString();
         data.endDate = $scope.enddate.toISOString();
 
         for (var i = 0; i < data.components.length; i++) {
           if(data.components[i].random) {
-            data.components[i].random = data.components[i].randomgroup
-          }else {
-            delete data.components[i].randomgroup
+            data.components[i].random = data.components[i].randomgroup;
+            delete data.components[i].randomgroup;
           }
         };
 
