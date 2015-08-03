@@ -22,6 +22,9 @@ SOILE2 = (function(){
 
   var allReady = false;
 
+  var testDuration = 0;
+  var startTime = 0;
+
   soile2.defs = defs;
   soile2.rt = rt;
   soile2.bin = bin;
@@ -184,12 +187,12 @@ SOILE2 = (function(){
     var msg = rt.mergeToString(args);
     if(msg.length > 0) {
       if(logFunc) {
-        logFunc(msg)
+        logFunc(msg);
       } else {
-        console.log(msg)
+        console.log(msg);
       }
     }
-  }
+  };
 
   bin.msgbox = function(msg, _size){
     var id = soile2.rt.uniqueid(); 
@@ -205,10 +208,12 @@ SOILE2 = (function(){
       "id": id,
       "class": "hiddenelem",
       "style": "font-size:"+size+"px",
-      "text": msg
+      /*"text": msg*/
       //"src": url
     };
-    jQuery("<p/>", props).appendTo(soile2.util.getid("display"));
+    var box = jQuery("<p/>", props);
+    box.append(msg);
+    box.appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
     return id;
   };
@@ -241,7 +246,7 @@ SOILE2 = (function(){
     jQuery("<div/>", props).appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
     return id;
-  }
+  };
 
   bin.not = function(arg){
     var args = Array.prototype.slice.call(arguments);
@@ -939,7 +944,7 @@ SOILE2 = (function(){
       //console.log(e.keyCode);
       if(keyfunctions[e.keyCode]) {
         lastActiveKey = e.keyCode;
-        keyfunctions[e.keyCode].call();
+        keyfunctions[e.keyCode].apply(null, [lastKey]);
       }
 
       //console.log(anykeyfunctions);
@@ -951,7 +956,7 @@ SOILE2 = (function(){
         // the bound function
         if(anykeyfunctions[i].ignoreFunc(e.keyCode)) {
           lastActiveKey = e.keyCode;
-          anykeyfunctions[i].func.call("key");
+          anykeyfunctions[i].func.apply(null, [key]);
         }
       }
     }
@@ -1723,7 +1728,7 @@ SOILE2 = (function(){
 
     var d = soile2.rt.dataHandler.getData();
 
-    console.log("The end");
+    SOILE2.testDuration = Date.now() - SOILE2.startTime;
     endFunc(soile2.rt.dataHandler.getData());
   }
   
@@ -1907,6 +1912,8 @@ SOILE2 = (function(){
       if(startFunc !== null) {
         startFunc();
       }
+      SOILE2.startTime = Date.now();
+
       $("#loadAnim").toggleClass("hidden", true);
       SOILE2.rt.exec_pi();
     }

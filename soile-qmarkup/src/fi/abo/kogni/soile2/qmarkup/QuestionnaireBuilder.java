@@ -105,8 +105,13 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                     closeParagraph();
                 }
                 tmpl.add("id", id);
-                tmpl.add("label", value.getValue("label").toString());
+                String label = value.getValue("label").toString();
+                if (label.isEmpty() == true) {
+                    label = null;
+                }
+                tmpl.add("label", label);
                 tmpl.add("required", (!optional));
+                tmpl.add("inline", inline);
                 String field = createColumnName(questionnaireId(),
                         value.getValue("dbcolumn").toString());
                 ddmwd.setColumn(encrypt(field));
@@ -173,7 +178,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                         String id = idGen.generate();
                         optTmpl.add("id", id);
                         optTmpl.add("name", name);
-                        String dbvalue = opt.getValue("dbvalue").toString();
+                        String dbvalue = opt.getValue("dbvalue").toString().replace("\n", "");
                         optTmpl.add("value", dbvalue);
                         optTmpl.add("label", opt.getValue("text"));
                         Boolean checked = (Boolean) opt.getValue("checked").asJavaObject();
@@ -287,7 +292,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                         String id = idGen.generate();
                         optTmpl.add("id", id);
                         optTmpl.add("name", name);
-                        String dbvalue = opt.getValue("dbvalue").toString();
+                        String dbvalue = opt.getValue("dbvalue").toString().replace("\n", "");
                         optTmpl.add("value", dbvalue);
                         optTmpl.add("label", opt.getValue("text"));
                         Boolean checked = (Boolean) opt.getValue("checked").asJavaObject();
@@ -648,6 +653,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
     }
     
     private String createColumnName(String qid, String col) {
+        col = col.replace(".", "").replace("\n", "");
         int len = qid.length() + col.length() + 1;
         StringBuilder sb = new StringBuilder(len);
         sb.append(qid);

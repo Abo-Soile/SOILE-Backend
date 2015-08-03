@@ -11,9 +11,12 @@ echo "Fetching dependencies"
 if [ ! -d "fi.abo.kogni.soile~vertx-mod-template-engines~1.0
 " ]; then
 	#git clone git@github.com:danielwarna/vertx-mod-template-engines.git
+  echo "Cloning dust"
 	git clone https://github.com/danielwarna/vertx-mod-template-engines.git
-	echo "Renaming folder"
-	mv vertx-mod-template-engines $domain~vertx-mod-template-engines~$version
+	echo "Renaming folder to $domain~vertx-mod-template-engines~$version"
+
+  rm $domain~vertx-mod-template-engines~$version -rf
+	mv -vf vertx-mod-template-engines $domain~vertx-mod-template-engines~$version
 fi
 
 #Vertex mongo persistor

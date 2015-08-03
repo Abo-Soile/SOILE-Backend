@@ -19,6 +19,7 @@ import fi.abo.kogni.soile2.qmarkup.ObjectValue;
 import fi.abo.kogni.soile2.qmarkup.StringValue;
 import fi.abo.kogni.soile2.qmarkup.Value;
 
+
 @SuppressWarnings("unused")
 public abstract class Validator {
 
@@ -354,6 +355,12 @@ public abstract class Validator {
         }
         else {
             object.put("inline", defaultBooleanValue( false ));
+        }
+        if (object.containsKey("optional")) {
+            validateBoolean(object.get("optional"));
+        }
+        else {
+            object.put("optional", defaultBooleanValue( true ));
         }
         if (object.containsKey("dbcolumn")) {
             validateString(object.get("dbcolumn"));

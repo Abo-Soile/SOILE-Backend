@@ -45,6 +45,7 @@ function(dom,
 
 		var name = registry.byId("name");
 		var description = registry.byId("description");
+		var endMsg = registry.byId("endmsg");
 		var loginRequired = registry.byId("loginrequired");
 		var hideLogin = registry.byId("hidelogin");
 
@@ -197,6 +198,7 @@ function(dom,
 				var resp= {};
 				resp.name = name.get("value");
 				resp.description = description.get("value");
+				resp.endmessage = endMsg.get("value");
 				//resp.loginrequired = loginRequired.get("value");
 				resp.loginrequired = false;
 				if (loginRequired.get("value")) {

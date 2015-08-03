@@ -37,16 +37,16 @@
 				{?exp.loginrequired}
 <!-- 					<p>LOGGED IN REQUIRED</p> -->
 					 {?loggedIn}
-					 	<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start test!</a>
+					 	<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start experiment</a>
 					 {:else}
 					 	<p><strong>You need to sign in to participate in this test, <a href="/login">click here</a> to login or create an account</strong></p>
 					 {/loggedIn}
 				{:else}
 <!-- 					<p">NOT LOGGEN IN REQUIRED</p> -->
-					<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start test!</a>
+					<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start experiment</a>
 				{/exp.loginrequired}
 			{:else}
-			<button class="btn btn-primary btn-lg" disabled="disabled" role="button">Start test!</button>
+			<button class="btn btn-primary btn-lg" disabled="disabled" role="button">Start experiment</button>
 
 			<p> This experiment hasn't started yet</p>
 

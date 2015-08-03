@@ -465,9 +465,21 @@ customMatcher.get('/experiment/:id', function(request){
         else { 
           console.log("No userdata");
 
+          var referer = "direct";
+
+          if(typeof request.headers().get("Referer") != 'undefined'){
+            referer  = request.headers().get("Referer");
+          }
+
+          var userAgent = request.headers().get("User-Agent");
+
           var userdata = {};
           userdata.position = 0;
           userdata.randomorder = false;
+
+          userdata.userAgent = userAgent;
+
+          userdata.referer = referer;
 
           if (exp.israndom) {
             var order = mongo.experiment.generateRandomOrder(exp);
@@ -812,9 +824,13 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
   request.endHandler(function() {
     var postData = data.getString(0, data.length());
     var postJson = JSON.parse(postData);
-    console.log(postData);
 
-    mongo.experiment.saveData(phase, expID, postJson, userID, function(r){
+    var expData = postJson.exp;
+    var duration = postJson.duration;
+
+    console.log(expData);
+
+    mongo.experiment.saveData(phase, expID, expData, duration,userID, function(r){
       console.log(JSON.stringify(r));
       request.response.end("Data \n" + postData);
     });
@@ -829,10 +845,28 @@ customMatcher.get('/experiment/:id/end', function(request) {
     userID = request.session.loggedIn().id;
   }
 
+
   mongo.experiment.confirmData(expID, userID, function(r) {
     console.log("confirmed submitted data");
     console.log(JSON.stringify(r));
-    templateManager.render_template('end', {},request);
+    mongo.experiment.get(expID, function(exp) {
+
+      exp = exp.result;
+      var endMessage = exp.endmessage;
+      var endTitle = endMessage.split('\n')[0];
+      endMessage = endMessage.split("\n").slice(1).join("\n");
+      if(typeof endMessage !== 'undefined') {
+        endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      }
+
+      var context = {"endtitle":endTitle, "endmessage":endMessage};
+      
+      if (typeof exp.hidelogin !== 'undefined') {
+        context.hideLogin = exp.hidelogin;
+      }
+
+      templateManager.render_template('end', context,request);
+    });
   });
 
 });

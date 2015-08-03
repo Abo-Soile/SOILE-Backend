@@ -44,6 +44,7 @@ var templateManager = (function() {
     'render_template': function(templateName, data, request) {
 
       data.URI = String(request.absoluteURI());
+      //data.URI = String(request.path());
       data.token = request.session.getPersonToken();
       if(request.session.loggedIn()) {
         data.loggedIn = true;

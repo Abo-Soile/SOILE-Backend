@@ -141,13 +141,13 @@ qdata_nonempty_text_widget(id) ::= <<
   // UNUSED: $id$ 
 >>
 
-dropdownmenu(id, label, required,options) ::= <<
+dropdownmenu(id, label, required,options, inline) ::= <<
 
-<div>
+
+<div $if(inline)$ class="inlineDropdown" $endif$>
 
 $if(label)$
 <label for="$id$">$label$</label>
-$separator$
 $endif$
 <select id="$id$" name="$id$"
         required="$required$"
@@ -160,19 +160,17 @@ $endif$
 >>
 
 numberfield(id, 
-	    name, 
-	    label, 
-	    value, 
-	    width, 
-	    minimum, 
-	    maximum, 
-	    increment) ::= <<
+      name, 
+      label, 
+      value, 
+      width, 
+      minimum, 
+      maximum, 
+      increment) ::= <<
 
-Label = ($label$)
 $if(label)$
 <label for="$id$">$label$</label>
 $separator$
-$else$
 $endif$
 <input  data-dojo-type="dijit/form/NumberSpinner"
         id="$id$" name="someNumber" value="$value$"
@@ -238,7 +236,7 @@ slider(id, labels, minimum, maximum, increment, select, count) ::= <<
 
 select(columns) ::= <<
 
-<div class="selectionBase" style="margin-bottom: 1cm; display: block; width: 600px;">
+<div class="selectionBase" style="margin-bottom: 1cm; display: block;">
  $columns:{col | $col.content$}; separator="\n"$
 </div>
  

@@ -9,8 +9,6 @@ function(
 	ready
 	) {
 	ready(function() {
-		console.log("Ready");
-
 		//Preventing scroll on arrowkeys 37-40 and navigation on backspace 8
 		document.addEventListener("keydown", function (e) {
 			if([37,38,39,40,8].indexOf(e.keyCode) > -1){
@@ -28,8 +26,13 @@ function(
 			console.log("Test over");
 			console.log(expdata);
 
+			var d = {};
+			d = {};
+			d.exp = expdata;
+			d.duration = SOILE2.testDuration;
+
 			//Send data xhr,
-			xhr.post(document.URL, {data:JSON.stringify(expdata)}).then(
+			xhr.post(document.URL, {data:JSON.stringify(d)}).then(
 				function(response) {
 					console.log(response);
 
