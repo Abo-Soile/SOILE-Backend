@@ -387,12 +387,13 @@ var Experiment = {
   /*
     Saves data and updated the user's position in the test. 
   */
-  saveData: function(phase, experimentid ,data, userid, callback) {
+  saveData: function(phase, experimentid ,data, duration,userid, callback) {
     var doc = {};
     doc.phase = phase;
     doc.expId = experimentid;
     doc.userid = userid;
     doc.confirmed = false;
+    doc.duration = duration;
     doc.data = data;
 
     var timeStamp = new Date();

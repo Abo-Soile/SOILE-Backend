@@ -823,9 +823,13 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
   request.endHandler(function() {
     var postData = data.getString(0, data.length());
     var postJson = JSON.parse(postData);
-    console.log(postData);
 
-    mongo.experiment.saveData(phase, expID, postJson, userID, function(r){
+    var expData = postJson.exp;
+    var duration = postJson.duration;
+
+    console.log(expData);
+
+    mongo.experiment.saveData(phase, expID, expData, duration,userID, function(r){
       console.log(JSON.stringify(r));
       request.response.end("Data \n" + postData);
     });

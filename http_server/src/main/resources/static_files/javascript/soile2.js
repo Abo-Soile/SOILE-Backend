@@ -22,6 +22,9 @@ SOILE2 = (function(){
 
   var allReady = false;
 
+  var testDuration = 0;
+  var startTime = 0;
+
   soile2.defs = defs;
   soile2.rt = rt;
   soile2.bin = bin;
@@ -1723,7 +1726,7 @@ SOILE2 = (function(){
 
     var d = soile2.rt.dataHandler.getData();
 
-    console.log("The end");
+    SOILE2.testDuration = Date.now() - SOILE2.startTime;
     endFunc(soile2.rt.dataHandler.getData());
   }
   
@@ -1907,6 +1910,8 @@ SOILE2 = (function(){
       if(startFunc !== null) {
         startFunc();
       }
+      SOILE2.startTime = Date.now();
+
       $("#loadAnim").toggleClass("hidden", true);
       SOILE2.rt.exec_pi();
     }

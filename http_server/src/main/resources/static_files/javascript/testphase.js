@@ -23,8 +23,16 @@ function(
 		}
 
 		function end(expdata) {
+			console.log("Test over");
+			console.log(expdata);
+
+			var d = {};
+			d = {};
+			d.exp = expdata;
+			d.duration = SOILE2.testDuration;
+
 			//Send data xhr,
-			xhr.post(document.URL, {data:JSON.stringify(expdata)}).then(
+			xhr.post(document.URL, {data:JSON.stringify(d)}).then(
 				function(response) {
 					console.log(response);
 
