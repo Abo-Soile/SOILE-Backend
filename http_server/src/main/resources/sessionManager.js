@@ -182,6 +182,17 @@ var sessionManager =  {
 
     sessionMap.put(sessionID, JSON.stringify(sessionData));
 
+  },
+  /*
+    Returns userid, or usertoken, depending if the user is logged in or not
+  */
+  getUserId: function() {
+    var userID = this.getPersonToken();
+
+    if(this.loggedIn()) {
+      userID = this.loggedIn().id;
+    }
+    return userID;
   }
 
 };

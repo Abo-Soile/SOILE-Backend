@@ -27,33 +27,43 @@ app.filter('range', function() {
   };
 });
 
-app.controller('componentController', function($scope, $http, $location) {
+app.controller('trainingController', function($scope, $http, $location) {
     var baseUrl = $location.absUrl();
-
-    $scope.test = {};
+    $scope.training = {};
 
     $scope.saveTraining = function save() {
         console.log("SSSSAAAVVE");
         var data = $scope.training;
 
+        console.log($scope.training);
+
         $http.post(baseUrl, data);
+    };
+
+    $scope.loadData = function() {
+        $http.get("json").success(function(data,status) {
+            console.log(data);
+            $scope.training = data;
+            console.log($scope);
+        });
     }
+
+    $scope.loadData();
+
+})
+
+app.controller('componentController', function($scope, $http, $location) {
+
+    $scope.test = {};
 
     $scope.delComponent = function(type,index) {
         console.log("Deleting " + type + " : " + index);
         $scope.training.components[type].splice(index, 1);
-    }
-
-    function loadData() {
-        $http.get("json").success(function(data,status) {
-            console.log(data);
-            $scope.training = data;
-        });
-    }
+    };
 
 
     $scope.addTest = function() {
-      console.log($scope)
+      console.log($scope);
       var compObject = {};
       compObject.name = $scope.test.selected.name;
       compObject._id = $scope.test.selected._id;
@@ -61,33 +71,25 @@ app.controller('componentController', function($scope, $http, $location) {
 
       $scope.training.components.training.push(compObject);
 
-      $scope.test.selected = null
+      $scope.test.selected = null;
 
-    }
+    };
 
     $scope.addForm = function() {
       $http.post('addform')
       .then(function(response) {
         var data = response.data;
 
-        /*var compObject = {};
-        compObject.name = "";
-        compObject.id = data._id;
-        compObject.type = "form";
-
-        $scope.training.components.push(compObject);
-            
-        $scope.save(); */
-        loadData();
+        $scope.loadData();
       });
     };
 
-    loadTests = function() {
+    var loadTests = function() {
       return $http.get('/test/json')
       .then(function(response) {
         $scope.tests = response.data;
       });
-    }
+    };
 
     $scope.refreshTests = function(search) {
       return $http.get('/test/json')
@@ -95,7 +97,7 @@ app.controller('componentController', function($scope, $http, $location) {
         $scope.tests = response.data;
         console.log($scope.tests);
       });
-    }
+    };
 
 /*
     var arr = [];
@@ -117,7 +119,6 @@ app.controller('componentController', function($scope, $http, $location) {
 
     $scope.training.components = $scope.components;
 */
-    loadData();
     loadTests();
 
 });
