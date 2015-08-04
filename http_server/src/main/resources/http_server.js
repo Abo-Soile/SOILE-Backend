@@ -852,9 +852,12 @@ customMatcher.get('/experiment/:id/end', function(request) {
 
       exp = exp.result;
       var endMessage = exp.endmessage;
-      var endTitle = endMessage.split('\n')[0];
-      endMessage = endMessage.split("\n").slice(1).join("\n");
+      var endTitle = "";
       if(typeof endMessage !== 'undefined') {
+
+        endTitle = endMessage.split('\n')[0];
+        endMessage = endMessage.split("\n").slice(1).join("\n");
+
         endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />');
       }
 
