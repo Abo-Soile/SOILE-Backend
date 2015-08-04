@@ -20,6 +20,8 @@ var logger = container.logger;
 
 var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 
+var testDAO = require("models/DAObjects").TestDAO;
+
 var a = new java.lang.String("sdfsdfs");
 console.log(a.hashCode());
 console.log(JSON.stringify(container.config));
@@ -520,6 +522,7 @@ customMatcher.get('/experiment/:id/edit', requireAdmin(function(request){
 
 customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
     var data = new vertx.Buffer();
+    var id = request.params().get('id');
 
     request.dataHandler(function(buffer){
       data.appendBuffer(buffer);
@@ -527,7 +530,6 @@ customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
 
     request.endHandler(function() {
 
-      var id = request.params().get('id');
       var jsonData = JSON.parse(data.getString(0, data.length()));
       console.log(data.getString(0, data.length())); 
 
@@ -754,14 +756,15 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
             context.form = form;
 
             templateManager.render_template("formphase", context, request);
-
           });
         }
         //Testphases, rendering test template
         if(phase.type === "test") {
           console.log("test");
 
+
           mongo.test.get(phase.id, function(r2) {
+            console.log(JSON.stringify(r2));
             var experiments = r2.result.js;
             context.experiment = experiments.replace(/(\r\n|\n|\r)/gm,"");
 
@@ -1388,6 +1391,11 @@ customMatcher.get('/test/json', function(request) {
   });
 });
 
+customMatcher.get("/test/json/compiled", function(request) {
+  testDAO.list({"compiled":true}, function(result) {
+    request.response.end(JSON.stringify(result)); 
+  });
+});
 
 customMatcher.post("/test", requireAdmin(function(request) {
   var data = new vertx.Buffer();

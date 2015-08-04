@@ -110,7 +110,7 @@ app.controller('experimentController', function($scope, $http, $location) {
     }
 
     loadTests = function() {
-      return $http.get('/test/json')
+      return $http.get('/test/json/compiled')
       .then(function(response) {
         $scope.tests = response.data;
       });

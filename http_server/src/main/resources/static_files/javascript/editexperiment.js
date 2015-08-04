@@ -90,7 +90,7 @@ function(dom,
 			return false;
 		};
 
-		xhr.get("/test/json").then(function(jsonData) {
+		xhr.get("/test/json/compiled").then(function(jsonData) {
 			var experimentList = json.parse(jsonData);
 			experimentStore = new Memory({
 				data: experimentList

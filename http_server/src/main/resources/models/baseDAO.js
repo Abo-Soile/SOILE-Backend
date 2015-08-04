@@ -117,8 +117,8 @@ BaseDAO.prototype.sendToMongo = function(arg, callback) {
     eb.send(this._mongoAddress,
             arg,
             function(reply) {
-                console.log("####Result from mongo");
-                console.log(JSON.stringify(reply));
+                //console.log("####Result from mongo");
+                //console.log(JSON.stringify(reply));
                 callback(reply);
             }
     );

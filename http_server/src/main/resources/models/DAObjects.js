@@ -101,7 +101,7 @@ module.exports.BaseDAO = BaseDAO;
 
 module.exports.UserDAO = UserDAO;
 
-module.exports.TestDAO = TestDAO;
+module.exports.TestDAO = new TestDAO();
 module.exports.FormDAO = FormDAO;
 
 module.exports.ExperimentDAO = ExperimentDAO;

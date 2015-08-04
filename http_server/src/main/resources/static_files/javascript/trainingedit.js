@@ -85,14 +85,14 @@ app.controller('componentController', function($scope, $http, $location) {
     };
 
     var loadTests = function() {
-      return $http.get('/test/json')
+      return $http.get('/test/json/compiled')
       .then(function(response) {
         $scope.tests = response.data;
       });
     };
 
     $scope.refreshTests = function(search) {
-      return $http.get('/test/json')
+      return $http.get('/test/json/compiled')
       .then(function(response) {
         $scope.tests = response.data;
         console.log($scope.tests);

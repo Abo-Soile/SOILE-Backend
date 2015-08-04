@@ -176,12 +176,17 @@ TrainingData.prototype = new BaseModel();
 TrainingData.prototype.constructor = TrainingData;
 TrainingData.collection = "trainingdata";
 
+
+/*
+  Sets the general datafiled to the initial state. 
+*/
 TrainingData.prototype.initGeneral = function() {
   this.type = "general";
 
   this.mode = "pre";
   this.position = "0";
 
+  //When the next session is opened
   this.nextTask = 0;
 };
 
@@ -189,6 +194,9 @@ TrainingData.prototype.initGeneral = function() {
 module.exports.User = User;
 module.exports.Test = Test;
 module.exports.Form = Form;
+
 module.exports.Experiment = Experiment;
+module.exports.Data = Data;
+
 module.exports.Training = Training;
 module.exports.TrainingData = TrainingData;
