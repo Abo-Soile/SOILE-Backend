@@ -11,6 +11,8 @@ var User = models.User;
 var Test = models.Test;
 var Form = models.Form;
 var Experiment = models.Experiment;
+var Training = models.Training;
+var TrainingData = models.TrainingData;
 
 
 function UserDAO() {
@@ -52,6 +54,7 @@ function FormDAO() {
 FormDAO.prototype = new BaseDAO();
 FormDAO.prototype.constructor = FormDAO;
 
+
 function DataDAO() {
     BaseDAO.call(this);
     this._baseObject = models.Form;
@@ -60,6 +63,7 @@ function DataDAO() {
 
 DataDAO.prototype = new BaseDAO();
 DataDAO.prototype.constructor = DataDAO;
+
 
 function TrainingDAO() {
     BaseDAO.call(this);
@@ -74,11 +78,34 @@ TrainingDAO.prototype.addform = function(first_argument) {
     // body...
 };
 
+
+function TrainingDataDAO() {
+    BaseDAO.call(this);
+    this._baseObject = models.Training;
+    this._collection = this._baseObject.collection;
+}
+
+TrainingDataDAO.prototype = new BaseDAO();
+TrainingDataDAO.prototype.constructor = TrainingDataDAO;
+
+TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId) {
+  var that = this;
+  that.get({userid:userid, type:"general", trainingid:trainingId}, function(training, message) {
+    if (training === "") {
+        var data = new TrainingData();
+    }
+  });
+};
+
 module.exports.BaseDAO = BaseDAO;
 
 module.exports.UserDAO = UserDAO;
+
 module.exports.TestDAO = TestDAO;
-module.exports.ExperimentDAO = ExperimentDAO;
 module.exports.FormDAO = FormDAO;
+
+module.exports.ExperimentDAO = ExperimentDAO;
 module.exports.DataDAO = DataDAO;
+
 module.exports.TrainingDAO = TrainingDAO;
+module.exports.TrainingDataDAO = TrainingDataDAO;

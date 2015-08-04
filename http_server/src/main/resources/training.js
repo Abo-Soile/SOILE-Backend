@@ -11,6 +11,8 @@ var trainingDAO = require("models/DAObjects").TrainingDAO;
 var formModel = require("models/Models").Form;
 trainingDAO = new trainingDAO();
 
+var trainingDataDAO = require("models/DAObjects").TrainingDataDAO;
+trainingDataDAO = new trainingDataDAO();
 /*
 Architectural ideas. 
 
@@ -57,14 +59,6 @@ function handleResultData(data, datatype, callback) {
 customMatcher.get("/training", function(request) {
   console.log("TRAAAAINNNING!!!")
 
-  var tra = new trainingModel();
-  tra.name = "TestTraining" + Math.floor((Math.random() * 1000) + 1);
-
-  tra.save(function(r) {
-    console.log(tra._id);
-    var newUrl = "/training/" + tra._id + "/edit/";
-    return request.redirect(newUrl)
-  })
 });
 
 //Create a new training task 
@@ -74,7 +68,16 @@ customMatcher.post("/training", function(request) {
 
 //View  training experiment
 customMatcher.get("/training/:id", function(request) {
+  var id = request.params().get('id');
+  var userid = request.session.getUserId();
 
+  // Get training
+  trainingDAO.get(id, function(trainingObject) {
+
+    trainingDataDAO.getOrGenerateGeneral(userid);
+
+    templateManager.render_template('trainingUser', {training:trainingObject}, request);
+  });
 });
 
 //Save data to the experiment

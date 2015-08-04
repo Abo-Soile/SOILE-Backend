@@ -164,8 +164,31 @@ Data.collection = "data";
 
 //Form.collection = "forms"
 
+function TrainingData(arg) {
+  this.confirmed = false;
+  this.timestamp = new new Date().toISOString();
+
+  BaseModel.call(this, arg);
+  this._collection = Data.collection;
+}
+
+TrainingData.prototype = new BaseModel();
+TrainingData.prototype.constructor = TrainingData;
+TrainingData.collection = "trainingdata";
+
+TrainingData.prototype.initGeneral = function() {
+  this.type = "general";
+
+  this.mode = "pre";
+  this.position = "0";
+
+  this.nextTask = 0;
+};
+
+
 module.exports.User = User;
 module.exports.Test = Test;
 module.exports.Form = Form;
 module.exports.Experiment = Experiment;
 module.exports.Training = Training;
+module.exports.TrainingData = TrainingData;
