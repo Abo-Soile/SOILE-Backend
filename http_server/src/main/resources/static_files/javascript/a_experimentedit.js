@@ -93,8 +93,8 @@ app.controller('experimentController', function($scope, $http, $location) {
         for (var i = 0; i < data.components.length; i++) {
           if(data.components[i].random) {
             data.components[i].random = data.components[i].randomgroup;
-            delete data.components[i].randomgroup;
           }
+          delete data.components[i].randomgroup;
         };
 
         $http.post(baseUrl, data)
