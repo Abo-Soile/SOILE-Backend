@@ -72,10 +72,15 @@ customMatcher.get("/training/:id", function(request) {
   var userid = request.session.getUserId();
 
   // Get training
-  trainingDAO.get(id, function(trainingObject) {
+  trainingDAO.get(id, function(training) {
 
-    trainingDataDAO.getOrGenerateGeneral(userid, id,function(training) {
-      templateManager.render_template('trainingUser', {training:trainingObject}, request);
+    trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
+
+      var status = {};
+      status.open = false;
+
+
+      templateManager.render_template('trainingUser', {training:training, status:status}, request);
     });
 
   });

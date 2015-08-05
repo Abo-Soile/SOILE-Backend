@@ -88,15 +88,22 @@ function TrainingDataDAO() {
 TrainingDataDAO.prototype = new BaseDAO();
 TrainingDataDAO.prototype.constructor = TrainingDataDAO;
 
-TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, callback) {
+TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, controlGroup,callback) {
   var that = this;
   that.get({userId:userid, type:"general", trainingId:trainingId}, function(training, message) {
     if (training === "") {
-        console.log("Generating new data object")
+        //console.log("Generating new data object");
         training = new TrainingData();
 
         training.userId = userid;
         training.initGeneral(trainingId);
+        if (controlGroup) {
+            training.control = false;
+            // 50/50 chance to be put in control group
+            if (Math.floor(Math.random() * 2 + 1) === 1) {
+                training.control = true
+            }
+        }
 
         training.save(function(err) {
             return callback(training);
