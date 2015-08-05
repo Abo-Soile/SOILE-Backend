@@ -78,7 +78,8 @@ customMatcher.get("/training/:id", function(request) {
 
       var status = {};
       status.open = false;
-
+      status.state = trainingData.mode;
+      status.nextRound = training.nextTask;
 
       templateManager.render_template('trainingUser', {training:training, status:status}, request);
     });

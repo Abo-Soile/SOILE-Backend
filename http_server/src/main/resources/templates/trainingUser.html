@@ -7,6 +7,20 @@
       <h1>{training.name}  </h1>
       <p> {training.description|s}</p>
 
+
+      {?status.open}
+        <p>OPEN</p>
+      {:else}
+        <p>CLOSE</p>
+      {/status.open}
+      {status.state}
+
+      {?status.nextRound}
+        sadsada
+      {:else}
+        wwwwwwwwwwww
+      {/status.nextRound}
+
     </div>
   </div>
 </div>
