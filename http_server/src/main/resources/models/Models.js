@@ -164,12 +164,12 @@ Data.collection = "data";
 
 //Form.collection = "forms"
 
-function TrainingData(arg) {
+function TrainingData(arg) {  
   this.confirmed = false;
-  this.timestamp = new new Date().toISOString();
+  this.timestamp = new Date().toISOString();
 
   BaseModel.call(this, arg);
-  this._collection = Data.collection;
+  this._collection = TrainingData.collection;
 }
 
 TrainingData.prototype = new BaseModel();
@@ -180,7 +180,7 @@ TrainingData.collection = "trainingdata";
 /*
   Sets the general datafiled to the initial state. 
 */
-TrainingData.prototype.initGeneral = function() {
+TrainingData.prototype.initGeneral = function(trainingid) {
   this.type = "general";
 
   this.mode = "pre";
@@ -188,6 +188,8 @@ TrainingData.prototype.initGeneral = function() {
 
   //When the next session is opened
   this.nextTask = 0;
+
+  this.trainingId = trainingid;
 };
 
 

@@ -23,8 +23,10 @@ BaseDAO.prototype.get = function(matcher, callback) {
     //mongoCommand.collection = this._collection;
 
     this.sendToMongo(mongoCommand, function(mongoReply) {
-        if (mongoReply.status === "ok") {
-            //console.log(JSON.stringify(mongoReply));
+        console.log("From get")
+        console.log(JSON.stringify(mongoReply));
+        console.log(typeof mongoReply.result)
+        if (mongoReply.status === "ok" && (typeof mongoReply.result !== "undefined")) {
             var obj = new that._baseObject(mongoReply.result);
             //obj._id = mongoReply.result._id;
             callback(obj);
@@ -117,8 +119,8 @@ BaseDAO.prototype.sendToMongo = function(arg, callback) {
     eb.send(this._mongoAddress,
             arg,
             function(reply) {
-                //console.log("####Result from mongo");
-                //console.log(JSON.stringify(reply));
+                console.log("####Result from mongo");
+                console.log(JSON.stringify(reply));
                 callback(reply);
             }
     );

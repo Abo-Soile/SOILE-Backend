@@ -81,19 +81,32 @@ TrainingDAO.prototype.addform = function(first_argument) {
 
 function TrainingDataDAO() {
     BaseDAO.call(this);
-    this._baseObject = models.Training;
+    this._baseObject = models.TrainingData;
     this._collection = this._baseObject.collection;
 }
 
 TrainingDataDAO.prototype = new BaseDAO();
 TrainingDataDAO.prototype.constructor = TrainingDataDAO;
 
-TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId) {
+TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, callback) {
   var that = this;
-  that.get({userid:userid, type:"general", trainingid:trainingId}, function(training, message) {
+  that.get({userid:userid, type:"general", trainingId:trainingId}, function(training, message) {
     if (training === "") {
-        var data = new TrainingData();
+        console.log("Generating new data object")
+        training = new TrainingData();
+
+        training.userid = userid;
+        training.initGeneral(trainingId);
+
+        training.save(function(err) {
+            return callback(training);
+
+        });
+    } else {
+        console.log("Training existssss ");
+        callback(training);
     }
+
   });
 };
 

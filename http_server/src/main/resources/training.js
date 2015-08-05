@@ -74,11 +74,14 @@ customMatcher.get("/training/:id", function(request) {
   // Get training
   trainingDAO.get(id, function(trainingObject) {
 
-    trainingDataDAO.getOrGenerateGeneral(userid);
+    trainingDataDAO.getOrGenerateGeneral(userid, id,function(training) {
+      templateManager.render_template('trainingUser', {training:trainingObject}, request);
+    });
 
-    templateManager.render_template('trainingUser', {training:trainingObject}, request);
   });
 });
+
+
 
 //Save data to the experiment
 customMatcher.post("/training/:id", function(request) {
@@ -152,8 +155,8 @@ customMatcher.post("/training/:id/addform", function(request) {
         training.save(function(stat) {
           request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
           request.response.end(JSON.stringify({"id":newForm.id}));
-        })
-      })
+        });
+      });
   });
 });
 
@@ -166,5 +169,5 @@ customMatcher.get("/training/:id/json", function(request) {
 
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(js);
-  })
-})
+  });
+});
