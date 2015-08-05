@@ -46,7 +46,16 @@ app.controller('trainingController', function($scope, $http, $location) {
             $scope.training = data;
             console.log($scope);
         });
-    }
+    };
+
+    $scope.toggleControlGroup = function(event) {
+        console.log(event);
+        if ($scope.training.controlgroup) {
+            $scope.training.components.control = [];
+        } else {
+            delete($scope.training.components.control);
+        }
+    };
 
     $scope.loadData();
 
