@@ -831,10 +831,10 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
     var expData = postJson.exp;
     var duration = postJson.duration;
 
-    console.log(expData);
+    //console.log(expData);
 
     mongo.experiment.saveData(phase, expID, expData, duration,userID, function(r){
-      console.log(JSON.stringify(r));
+      //console.log(JSON.stringify(r));
       request.response.end("Data \n" + postData);
     });
   });
