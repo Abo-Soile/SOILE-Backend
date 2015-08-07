@@ -38,10 +38,15 @@ function(
 
           //Navigate to next phase
           var url = document.URL;
-                
-                currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
-                url = url.slice(0, url.lastIndexOf("/")+1);
-                window.location.href = url+(currentPhase+1);
+            var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
+            url = url.slice(0, url.lastIndexOf("/")+1);
+
+            if(!isNaN(currentPhase)) {
+              console.log("Redirecting " + isNaN(currentPhase))
+              window.location.href = url+(currentPhase+1);
+            }else {
+              location.reload();
+            }
         })
 
     }
