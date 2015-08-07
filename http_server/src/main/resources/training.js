@@ -8,6 +8,8 @@ var router = new CustomMatcher();
 var trainingModel = require("models/Models").Training;
 var trainingDAO = require("models/DAObjects").TrainingDAO;
 
+var TrainingData = require("models/Models").TrainingData;
+
 var formModel = require("models/Models").Form;
 trainingDAO = new trainingDAO();
 
@@ -108,7 +110,7 @@ function getTrainingAndUserData(trainingid, userid, callback) {
 
       console.log(JSON.stringify(data));
 
-      callback(data)
+      callback(data.training, data.trainingData);
     });
   })
 }
@@ -161,10 +163,7 @@ router.get("/training/:id/execute", function(request) {
   var id = request.params().get('id');
   var userid = request.session.getUserId();
 
-  getTrainingAndUserData(id, userid, function(d) {
-    var training = d.training;
-    var trainingData = d.trainingData;
-
+  getTrainingAndUserData(id, userid, function(training, trainingData) {
     var modeComponents = training.components[trainingData.mode];
     var positionInMode = trainingData.position;
 
@@ -184,7 +183,38 @@ router.get("/training/:id/execute", function(request) {
 
 //Recieve and stora data from training phase
 router.post("/training/:id/execute", function(request) {
-  
+  var id = request.params().get('id');
+  var userid = request.session.getUserId();
+  var postData = new vertx.Buffer();
+
+  request.dataHandler(function(buffer){
+    postData.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    getTrainingAndUserData(id, userid, function(training, generalData) {
+      var jsonData = JSON.parse(postData.getString(0, postData.length()));
+
+      var modeComponents = training.components[generalData.mode];
+      var positionInMode = generalData.position;
+
+      var phasesLeft = modeComponents.length - positionInMode;
+
+      var tData = new TrainingData();
+      tData.data = jsonData;
+      tData.mode = generalData.mode;
+      tData.phase = generalData.position;
+
+      console.log(JSON.stringify(jsonData))
+
+      tData.save(function() {
+        generalData.completePhase(training);
+        request.response.end(200);
+      });
+    
+    });
+  });
 });
 
 //Execute current training phase

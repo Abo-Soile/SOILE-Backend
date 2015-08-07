@@ -185,11 +185,17 @@ TrainingData.prototype.initGeneral = function(trainingid) {
 
   this.mode = "pre";
   this.position = 0;
+  this.trainingIteration = 0;
 
   //When the next session is opened
   this.nextTask = 0;
 
   this.trainingId = trainingid;
+};
+
+/*Increment use position when a phase is completed*/
+TrainingData.prototype.completePhase = function(training) {
+  console.log("Completing phase data");
 };
 
 
