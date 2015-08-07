@@ -120,7 +120,7 @@ app.controller('experimentController', function($scope, $http, $location) {
       console.log($scope)
       var compObject = {};
       compObject.name = $scope.test.selected.name;
-      compObject._id = $scope.test.selected._id;
+      compObject.id = $scope.test.selected._id;
       compObject.type = "test";
 
       $scope.experiment.components.push(compObject);

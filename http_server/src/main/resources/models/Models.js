@@ -184,7 +184,7 @@ TrainingData.prototype.initGeneral = function(trainingid) {
   this.type = "general";
 
   this.mode = "pre";
-  this.position = "0";
+  this.position = 0;
 
   //When the next session is opened
   this.nextTask = 0;

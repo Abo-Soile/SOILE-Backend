@@ -3,7 +3,7 @@ var CustomMatcher = require('router');
 var console = require('vertx/console');
 
 var templateManager = require('templateManager');
-var customMatcher = new CustomMatcher();
+var router = new CustomMatcher();
 
 var trainingModel = require("models/Models").Training;
 var trainingDAO = require("models/DAObjects").TrainingDAO;
@@ -13,6 +13,9 @@ trainingDAO = new trainingDAO();
 
 var trainingDataDAO = require("models/DAObjects").TrainingDataDAO;
 trainingDataDAO = new trainingDataDAO();
+
+var testDAO = require("models/DAObjects").TestDAO;
+var formDAO = require("models/DAObjects").FormDAO;
 /*
 Architectural ideas. 
 
@@ -56,18 +59,18 @@ function handleResultData(data, datatype, callback) {
 }
 
 //Admin view, show list of training experiments
-customMatcher.get("/training", function(request) {
+router.get("/training", function(request) {
   console.log("TRAAAAINNNING!!!")
 
 });
 
 //Create a new training task 
-customMatcher.post("/training", function(request) {
+router.post("/training", function(request) {
 
 });
 
 //View  training experiment
-customMatcher.get("/training/:id", function(request) {
+router.get("/training/:id", function(request) {
   var id = request.params().get('id');
   var userid = request.session.getUserId();
 
@@ -90,26 +93,142 @@ customMatcher.get("/training/:id", function(request) {
 
 
 //Save data to the experiment
-customMatcher.post("/training/:id", function(request) {
+router.post("/training/:id", function(request) {
 
 });
 
+function getTrainingAndUserData(trainingid, userid, callback) {
+
+  trainingDAO.get(trainingid, function(training) {
+
+    trainingDataDAO.get({userId:userid, trainingId:trainingid, type:"general"}, function(trainingData) {
+      var data = {}
+      data.training = training;
+      data.trainingData = trainingData;
+
+      console.log(JSON.stringify(data));
+
+      callback(data)
+    });
+  })
+}
+
+function renderTrainingPhase(components, position ,request) {
+
+  var component = components[position];
+  var id = component.id;
+  var template = "";
+  var dao = {};
+  var context = {};
+  var contextObj = "";
+  var childObj = 0;
+
+  var phasesLeft = components.length - position;
+
+  if(component.type === "form") {
+    dao =formDAO;
+    template = "formphase";
+    contextObj = "form";
+    childObj = "form"
+  }
+
+  if(component.type === "test") {
+    dao = testDAO;
+    template = "testphase";
+    contextObj = "test";
+  }
+
+  context.completed = ((position+1)/components.length * 100);
+  context.phasesLeft = (parseInt(position) + 1) + "/" + components.length;
+
+  dao.get(id, function(phase) {
+
+    context[contextObj] = phase;
+
+    if (childObj !== 0) {
+      context[contextObj] = phase[childObj];
+    }
+
+    console.log(JSON.stringify(context));
+
+    templateManager.render_template(template, context, request);
+  });
+
+}
+
+//Execute current training phase
+router.get("/training/:id/execute", function(request) {
+  var id = request.params().get('id');
+  var userid = request.session.getUserId();
+
+  getTrainingAndUserData(id, userid, function(d) {
+    var training = d.training;
+    var trainingData = d.trainingData;
+
+    var modeComponents = training.components[trainingData.mode];
+    var positionInMode = trainingData.position;
+
+    var phasesLeft = modeComponents.length - positionInMode;
+
+    console.log("Executin training");
+    console.log("mode = " + trainingData.mode + " position:" + positionInMode);
+    console.log("Component:" + JSON.stringify(modeComponents[positionInMode]));
+    if (phasesLeft = 0) {
+
+    } else {
+      renderTrainingPhase(modeComponents, positionInMode, request);
+    }
+  });
+
+});
+
+//Recieve and stora data from training phase
+router.post("/training/:id/execute", function(request) {
+  
+});
+
+//Execute current training phase
+/*
+router.get("/training/:id/execute/json", function(request) {
+  var id = request.params().get('id');
+  var userid = request.session.getUserId();
+
+  getTrainingAndUserData(id, userid, function(d) {
+    var modeComponents = training.components[trainingData.mode];
+    var positionInMode = trainingData.position;
+
+    var phasesLeft = modeComponents.length - positionInMode;
+
+    console.log("Executin training");
+    console.log("mode = " + trainingData.mode + " position:" + positionInMode);
+    console.log("Component:" + JSON.stringify(modeComponents[positionInMode]));
+    if (phasesLeft = 0) {
+
+    } else {
+      renderTrainingPhase(modeComponents, positionInMode, request);
+    }
+  });
+
+});
+*/
+
+
 //Pre test
-customMatcher.get("/training/:id/pre", function(request) {
+router.get("/training/:id/pre", function(request) {
 
 });
 
 //Post test
-customMatcher.get("/training/:id/post", function(request) {
+router.get("/training/:id/post", function(request) {
 
 });
 
 //Repeated training task 
-customMatcher.get("/training/:id/task", function(request) {
+router.get("/training/:id/task", function(request) {
 
 })
 
-customMatcher.get("/training/:id/edit", function(request) {
+router.get("/training/:id/edit", function(request) {
 
   templateManager.render_template('trainingEdit', {}, request);
 
@@ -124,7 +243,7 @@ customMatcher.get("/training/:id/edit", function(request) {
 }
 */
 
-customMatcher.post("/training/:id/edit", function(request) {
+router.post("/training/:id/edit", function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -147,7 +266,7 @@ customMatcher.post("/training/:id/edit", function(request) {
   });
 });
 
-customMatcher.post("/training/:id/addform", function(request) {
+router.post("/training/:id/addform", function(request) {
   var id = request.params().get('id');
 
   var newForm = new formModel();
@@ -156,7 +275,7 @@ customMatcher.post("/training/:id/addform", function(request) {
 
       trainingDAO.get(id, function(training) {
 
-        training.components.training.push({"type":"form", "name": "Unamed Form", "_id":newForm.id});
+        training.components.training.push({"type":"form", "name": "Unamed Form", "id":newForm.id});
 
         training.save(function(stat) {
           request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
@@ -167,7 +286,7 @@ customMatcher.post("/training/:id/addform", function(request) {
 });
 
 
-customMatcher.get("/training/:id/json", function(request) {
+router.get("/training/:id/json", function(request) {
   var id = request.params().get('id');
 
   trainingDAO.get(id, function(training) {

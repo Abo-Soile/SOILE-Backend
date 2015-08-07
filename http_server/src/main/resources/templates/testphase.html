@@ -36,11 +36,13 @@
             </div>
 
         </div>
+    {?test.js}
+    <script type="text/javascript">
+        window.testJs = {test.js|s|js};
+    </script>
+    {/test.js}
     </div>
 
-    <script type="text/javascript">
-        window.testJS = '{experiment}'
-    </script>
-    <script type="text/javascript" src="/javascript/testphase.js"></script>
+    <script type="text/javascript" src="/javascript/testphase2.js"></script>
 
 {>footer /}
