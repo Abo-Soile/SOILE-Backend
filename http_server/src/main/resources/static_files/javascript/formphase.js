@@ -81,6 +81,8 @@ require(["dijit/form/HorizontalSlider",
     var qdata = {};
     var testdata = {};
 
+    var startTime = new Date();
+
     var dojoForm = registry.byId("formcol");
     console.log(dojoForm);
 
@@ -249,7 +251,13 @@ require(["dijit/form/HorizontalSlider",
           var formdata = loadData();
           send_questionnaire_data(formdata);
 
-          xhr.post(document.URL,{data:JSON.stringify(formdata)}).then(function(response) {
+          var duration = Date.now() - startTime;
+
+          var d = {}
+          d.exp = formdata;
+          d.duration = duration;
+
+          xhr.post(document.URL,{data:JSON.stringify(d)}).then(function(response) {
             console.log(response);
 
             var url = document.URL;
