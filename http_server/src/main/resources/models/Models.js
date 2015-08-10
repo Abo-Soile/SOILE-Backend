@@ -12,7 +12,7 @@ typ User-dao.getUserWithPass() returnerar ett user object.
 
 */
 
-var vertx = require('vertx')
+var vertx = require('vertx');
 var console = require('vertx/console');
 
 var utils = require('utils');
@@ -180,22 +180,95 @@ TrainingData.collection = "trainingdata";
 /*
   Sets the general datafiled to the initial state. 
 */
-TrainingData.prototype.initGeneral = function(trainingid) {
+TrainingData.prototype.initGeneral = function(trainingid, control) {
   this.type = "general";
 
   this.mode = "pre";
   this.position = 0;
   this.trainingIteration = 0;
 
-  //When the next session is opened
-  this.nextTask = 0;
+  this.inControlGroup = false;
+
+  if (control) {
+    this.inControlGroup = false;
+    // 50/50 chance to be put in control group
+    if (Math.floor(Math.random() * 2 + 1) === 1) {
+        this.inControlGroup = true;
+    }
+  }
+
+  //When the next session is opened// DATE
+  this.nextTask = Date.now();
 
   this.trainingId = trainingid;
 };
 
+
+//Adds x hours to a date object
+Date.prototype.addHours= function(h){
+    this.setHours(this.getHours()+h);
+    return this;
+};
+
 /*Increment use position when a phase is completed*/
 TrainingData.prototype.completePhase = function(training) {
-  console.log("Completing phase data");
+  //If last phase, complete the whole set.
+  //  If pre -> go to training + waittime
+  //           -> or to control 
+  //  If training -> training if iterations left
+  //              -> post if no iterations left
+  //  if post -> finish experiment
+  //If not last phase -> phase += 1
+  var mode = this.mode;
+  var components = training.components[mode];
+  
+  var lastPhase = false;
+
+  if(components.length === (this.position + 1)) {
+    lastPhase = true;
+  }
+
+  //LastPhase
+  if (lastPhase) {
+
+    console.log("IN LAST PHASE")
+
+    if (mode === "pre") {
+      console.log(this.nextTask);
+      this.nextTask = new Date().addHours(training.repeatpause);
+
+      console.log(this.nextTask.valueOf());
+      // TODO: The date i buggy somehow, is set too long into the future
+      //       for some reason
+
+      if (this.inControlGroup) {
+        this.mode = "control";
+      } else {
+        this.mode = "training";
+      }
+    }
+
+
+    if (mode === "training" || mode === "control") {
+      this.nextTask = new Date().addHours(training.repeatpause);
+
+      if (training.repeatcount === this.trainingIteration) {
+        this.mode = "post";
+      } else {
+        this.trainingIteration += 1;
+      }
+    }
+
+    if (mode === "post") {
+      mode = "done";
+    } 
+
+    //Resetting task position
+    this.position = 0;
+
+  } else {
+    this.position += 1;
+  }
 };
 
 

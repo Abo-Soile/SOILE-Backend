@@ -104,7 +104,7 @@ function getTrainingAndUserData(trainingid, userid, callback) {
   trainingDAO.get(trainingid, function(training) {
 
     trainingDataDAO.get({userId:userid, trainingId:trainingid, type:"general"}, function(trainingData) {
-      var data = {}
+      var data = {};
       data.training = training;
       data.trainingData = trainingData;
 
@@ -112,7 +112,7 @@ function getTrainingAndUserData(trainingid, userid, callback) {
 
       callback(data.training, data.trainingData);
     });
-  })
+  });
 }
 
 function renderTrainingPhase(components, position ,request) {
@@ -131,7 +131,7 @@ function renderTrainingPhase(components, position ,request) {
     dao =formDAO;
     template = "formphase";
     contextObj = "form";
-    childObj = "form"
+    childObj = "form";
   }
 
   if(component.type === "test") {
@@ -167,14 +167,19 @@ router.get("/training/:id/execute", function(request) {
     var modeComponents = training.components[trainingData.mode];
     var positionInMode = trainingData.position;
 
-    var phasesLeft = modeComponents.length - positionInMode;
+    var phasesLeft = modeComponents.length - (positionInMode);
 
     console.log("Executin training");
     console.log("mode = " + trainingData.mode + " position:" + positionInMode);
     console.log("Component:" + JSON.stringify(modeComponents[positionInMode]));
-    if (phasesLeft = 0) {
 
-    } else {
+    var nextTaskTime = new Date(trainingData.nextTask);
+
+    //if (phasesLeft == 0) {
+    if(Date.now() - nextTaskTime < 0) {
+      return request.redirect("/training/" + id);
+    }
+     else {
       renderTrainingPhase(modeComponents, positionInMode, request);
     }
   });
@@ -193,24 +198,26 @@ router.post("/training/:id/execute", function(request) {
 
   request.endHandler(function() {
 
+    //Figures out the current phase and creates a data object.
     getTrainingAndUserData(id, userid, function(training, generalData) {
       var jsonData = JSON.parse(postData.getString(0, postData.length()));
 
-      var modeComponents = training.components[generalData.mode];
-      var positionInMode = generalData.position;
-
-      var phasesLeft = modeComponents.length - positionInMode;
+      //var modeComponents = training.components[generalData.mode];
+      //var positionInMode = generalData.position;
 
       var tData = new TrainingData();
       tData.data = jsonData;
       tData.mode = generalData.mode;
       tData.phase = generalData.position;
 
-      console.log(JSON.stringify(jsonData))
+      console.log(JSON.stringify(jsonData));
 
       tData.save(function() {
         generalData.completePhase(training);
-        request.response.end(200);
+
+        generalData.save(function() {
+          request.response.end(200);
+        });
       });
     
     });

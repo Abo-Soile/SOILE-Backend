@@ -90,28 +90,22 @@ TrainingDataDAO.prototype.constructor = TrainingDataDAO;
 
 TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, controlGroup,callback) {
   var that = this;
-  that.get({userId:userid, type:"general", trainingId:trainingId}, function(training, message) {
-    if (training === "") {
+  that.get({userId:userid, type:"general", trainingId:trainingId}, 
+        function(trainingData, message) {
+    if (trainingData === "") {
         //console.log("Generating new data object");
-        training = new TrainingData();
+        trainingData = new TrainingData();
 
-        training.userId = userid;
-        training.initGeneral(trainingId);
-        if (controlGroup) {
-            training.control = false;
-            // 50/50 chance to be put in control group
-            if (Math.floor(Math.random() * 2 + 1) === 1) {
-                training.control = true
-            }
-        }
+        trainingData.userId = userid;
+        trainingData.initGeneral(trainingId, controlGroup);
 
-        training.save(function(err) {
-            return callback(training);
+        trainingData.save(function(err) {
+            return callback(trainingData);
 
         });
     } else {
-        console.log("Training existssss ");
-        callback(training);
+        console.log("Training exists");
+        callback(trainingData);
     }
 
   });
