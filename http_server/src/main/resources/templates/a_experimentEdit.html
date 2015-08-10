@@ -52,6 +52,21 @@
     </div>
 
     <div class="col-md-12">
+        <label class="checkbox-inline">
+          Require login
+          <input style="width: 15px; height: 15px" type="checkbox" ng-model="experiment.loginrequired" ng-true-value="true" ng-false-value="false">
+        </label>
+        <label class="checkbox-inline">
+          Hide login
+          <input style="width: 15px; height: 15px" type="checkbox" ng-model="experiment.hidelogin" ng-true-value="true" ng-false-value="false">
+        </label>
+        <label class="checkbox-inline">
+          Enable Mechanical Turk
+          <input style="width: 15px; height: 15px" type="checkbox" ng-model="experiment.mechanicalTurkEnabled" ng-true-value="true" ng-false-value="false">
+        </label>
+    </div>
+
+    <div class="col-md-12">
       <div class="panel panel-fancy" ng-controller="componentController">
         <h5>Components</h5>
         <div ui-tree>
