@@ -48,6 +48,7 @@ function(dom,
 		var endMsg = registry.byId("endmsg");
 		var loginRequired = registry.byId("loginrequired");
 		var hideLogin = registry.byId("hidelogin");
+		var mechTurkEnabled = registry.byId("mechanicalTurkEnabled");
 
 		var startDate = registry.byId("startDate");
 		var endDate = registry.byId("endDate");
@@ -209,8 +210,12 @@ function(dom,
 				if (hideLogin.get("value")) {
 					resp.hidelogin = true;
 				}
+				console.log(resp.loginrequired);
 
-				console.log(resp.loginrequired)
+				resp.mechanicalTurkEnabled = false;
+				if (mechTurkEnabled.get("value")) {
+					resp.mechanicalTurkEnabled = true;
+				}
 
 				resp.startDate = sDate.toISOString();
 				resp.endDate = eDate.toISOString();

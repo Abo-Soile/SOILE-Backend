@@ -553,8 +553,8 @@ var Experiment = {
       }},
     "multi":true
     }, function(reply) {
-      console.log("confirming data");
-      console.log(JSON.stringify(reply));
+      //console.log("confirming data");
+      //console.log(JSON.stringify(reply));
       response(reply);   
     });
   },
