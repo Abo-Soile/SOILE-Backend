@@ -18,6 +18,8 @@ trainingDataDAO = new trainingDataDAO();
 
 var testDAO = require("models/DAObjects").TestDAO;
 var formDAO = require("models/DAObjects").FormDAO;
+
+var moment = require("libs/moment");
 /*
 Architectural ideas. 
 
@@ -85,6 +87,15 @@ router.get("/training/:id", function(request) {
       status.open = false;
       status.state = trainingData.mode;
       status.nextRound = training.nextTask;
+
+      trainingData.nextTask = new Date(trainingData.nextTask);
+
+      var timeString = false;
+      if(trainingData.nextTask - Date.now() > 0) {
+        timeString = moment(trainingData.nextTask).fromNow();
+      }
+
+      status.timeLeft = timeString;
 
       templateManager.render_template('trainingUser', {training:training, status:status}, request);
     });
