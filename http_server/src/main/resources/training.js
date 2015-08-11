@@ -164,6 +164,11 @@ router.get("/training/:id/execute", function(request) {
   var userid = request.session.getUserId();
 
   getTrainingAndUserData(id, userid, function(training, trainingData) {
+
+    if(trainingData.mode === "done") {
+      return request.redirect("/training/" + id);
+    }
+
     var modeComponents = training.components[trainingData.mode];
     var positionInMode = trainingData.position;
 
@@ -176,7 +181,7 @@ router.get("/training/:id/execute", function(request) {
     var nextTaskTime = new Date(trainingData.nextTask);
 
     //if (phasesLeft == 0) {
-    if(Date.now() - nextTaskTime < 0) {
+    if(Date.now() - nextTaskTime < 0 || trainingData.mode === "done") {
       return request.redirect("/training/" + id);
     }
      else {
@@ -209,10 +214,12 @@ router.post("/training/:id/execute", function(request) {
       tData.data = jsonData;
       tData.mode = generalData.mode;
       tData.phase = generalData.position;
+      tData.trainingId = id;
 
       console.log(JSON.stringify(jsonData));
 
-      tData.save(function() {
+      tData.save(function(status) {
+        console.log("SAVED TDATA" + JSON.stringify(status));
         generalData.completePhase(training);
 
         generalData.save(function() {

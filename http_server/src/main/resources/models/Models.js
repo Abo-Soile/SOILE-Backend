@@ -198,17 +198,20 @@ TrainingData.prototype.initGeneral = function(trainingid, control) {
   }
 
   //When the next session is opened// DATE
-  this.nextTask = Date.now();
+  this.nextTask = new Date();
 
   this.trainingId = trainingid;
 };
 
 
-//Adds x hours to a date object
-Date.prototype.addHours= function(h){
-    this.setHours(this.getHours()+h);
-    return this;
-};
+function hoursFromNow(hours) {
+  var date = new Date();
+  console.log("\n\nIncrementing time")
+  console.log(date.toUTCString())
+  date.setHours(hours + date.getHours());
+  console.log(date.toUTCString());
+  return date;
+}
 
 /*Increment use position when a phase is completed*/
 TrainingData.prototype.completePhase = function(training) {
@@ -234,12 +237,7 @@ TrainingData.prototype.completePhase = function(training) {
     console.log("IN LAST PHASE")
 
     if (mode === "pre") {
-      console.log(this.nextTask);
-      this.nextTask = new Date().addHours(training.repeatpause);
-
-      console.log(this.nextTask.valueOf());
-      // TODO: The date i buggy somehow, is set too long into the future
-      //       for some reason
+      this.nextTask = hoursFromNow(training.repeatpause);
 
       if (this.inControlGroup) {
         this.mode = "control";
@@ -250,9 +248,9 @@ TrainingData.prototype.completePhase = function(training) {
 
 
     if (mode === "training" || mode === "control") {
-      this.nextTask = new Date().addHours(training.repeatpause);
+      this.nextTask = hoursFromNow(training.repeatpause);
 
-      if (training.repeatcount === this.trainingIteration) {
+      if (training.repeatcount == (this.trainingIteration + 1)) {
         this.mode = "post";
       } else {
         this.trainingIteration += 1;
@@ -260,7 +258,7 @@ TrainingData.prototype.completePhase = function(training) {
     }
 
     if (mode === "post") {
-      mode = "done";
+      this.mode = "done";
     } 
 
     //Resetting task position
