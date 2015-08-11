@@ -204,12 +204,15 @@ TrainingData.prototype.initGeneral = function(trainingid, control) {
 };
 
 
+/*
+  Generates a date x hours in the future
+*/
 function hoursFromNow(hours) {
   var date = new Date();
-  console.log("\n\nIncrementing time")
-  console.log(date.toUTCString())
+
+  hours = parseInt(hours);
   date.setHours(hours + date.getHours());
-  console.log(date.toUTCString());
+
   return date;
 }
 
