@@ -104,7 +104,6 @@ router.get("/training/:id", function(request) {
 });
 
 
-
 //Save data to the experiment
 router.post("/training/:id", function(request) {
 

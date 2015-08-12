@@ -82,6 +82,10 @@ function Training(arg) {
 
     BaseModel.call(this, arg);
 
+    this.repeatpause = 0;
+    this.repeatCount = 1;
+    this.maxpause = 1
+
     this._collection = Training.collection;
 }
 
@@ -164,6 +168,10 @@ Data.collection = "data";
 
 //Form.collection = "forms"
 
+
+/*
+TRAINING DATA
+*/
 function TrainingData(arg) {  
   this.confirmed = false;
   this.timestamp = new Date().toISOString();

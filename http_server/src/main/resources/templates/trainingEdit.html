@@ -27,14 +27,19 @@
         <label>End message</label>
         <textarea class="form-control" ng-model="training.endmessage"> </textarea>
         <div class="row">
-          <div class="col-md-6 ">
+          <div class="col-md-4 ">
             <label>Repeat training</label>
-            <input  class="form-control"  ng-model="training.repeatcount">
+            <input class="form-control"  ng-model="training.repeatcount">
           </div>
 
-          <div class="col-md-6 ">
+          <div class="col-md-4 ">
             <label>Pause between tries</label>
-            <input  class="form-control"  ng-model="training.repeatpause">
+            <input class="form-control"  ng-model="training.repeatpause">
+          </div>
+
+          <div class="col-md-4 ">
+            <label>Max pause</label>
+            <input class="form-control"  ng-model="training.maxpause">
           </div>
           
         </div>
