@@ -697,3 +697,22 @@ dBootstrap fixes
 .inlineDropdown {
   display: inline-block;
 }
+
+/*USER TRAINING*/
+
+.infopanel {
+  background-color:gray;
+  color: white;
+}
+
+.infopanel h4 {
+  text-align: center;
+  margin: 10px 10px 5px 10px;
+  padding-top: 5px;
+}
+
+.infopanel p {
+  text-align: center;
+  font-size:36px;
+  margin: 0px 10px;
+}
