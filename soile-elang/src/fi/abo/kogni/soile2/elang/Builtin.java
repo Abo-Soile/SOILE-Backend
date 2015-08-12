@@ -97,6 +97,14 @@ public class Builtin {
         builtinFunctions.add("outliers");
         builtinFunctions.add("count");
 
+        //Score
+        builtinFunctions.add("savescore");
+
+        //Persistant data
+        builtinFunctions.add("savevariable");
+        builtinFunctions.add("loadvariable");
+
+        //Keys
         builtinFunctions.add("onkeypress");
         builtinFunctions.add("resumeonkey");
         builtinFunctions.add("onanykey");
