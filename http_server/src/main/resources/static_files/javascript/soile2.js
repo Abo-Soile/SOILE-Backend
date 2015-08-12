@@ -711,6 +711,33 @@ SOILE2 = (function(){
       }
     }
   }
+
+  /*
+    Saves score that is displayed to the user,
+    named scores are displayed separately from the standard unnamed on
+  */
+  bin.savescore = function(mName, mScore) {
+    var name = mName;
+    var score = mScore
+
+    if(typeof score === "undefined"){
+      name = "score";
+      score = mName;
+    }
+
+    // TODO: Store it somewhere and send it with the data
+  }
+
+  bin.savevariable = function(varName, value) {
+    //TODO: Store it somewhere and send it to server...
+  }
+
+  bin.loadvariable = function(varName) {
+    //TODO: Load the value from the server...
+    var value = 1
+    return value
+  }
+
   /*
   ---------------------------------------------
   */
