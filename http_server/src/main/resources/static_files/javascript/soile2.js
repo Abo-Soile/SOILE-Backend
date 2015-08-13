@@ -723,18 +723,31 @@ SOILE2 = (function(){
     if(typeof score === "undefined"){
       name = "score";
       score = mName;
+      soile2.rt.scoreHandler.save(score);
+    } else {
+      soile2.rt.scoreHandler.saveNamed(name, score);
     }
+
 
     // TODO: Store it somewhere and send it with the data
   }
 
   bin.savevariable = function(varName, value) {
+    soile2.rt.persistantDataHandler.save(varName, value)
     //TODO: Store it somewhere and send it to server...
   }
 
-  bin.loadvariable = function(varName) {
-    //TODO: Load the value from the server...
-    var value = 1
+  bin.loadvariable = function(varName, defaultValue) {
+    if (typeof defaultValue === "undefined") {
+      defaultValue = 0;    
+    }
+
+    var value = soile2.rt.persistantDataHandler.load(varName)
+
+    if (value === undefined) {
+      return defaultValue
+    }
+
     return value
   }
 
@@ -1330,6 +1343,58 @@ SOILE2 = (function(){
         _setData();
       }
 
+    }
+  })();
+
+  rt.scoreHandler = (function() {
+    var _score = {};
+
+    function _saveGeneralScore(score) {
+      _score.score = score;
+    }
+
+    function _saveNamedScore(name, score) {
+      _score[name] = score;
+    }
+
+    return {
+      'save': function(score) {
+        _saveGeneralScore(score)
+      },
+      'saveNamed':function(name, score) {
+        _saveNamedScore(name, score)
+      },
+      'get': function(){
+        return _score;
+      }
+    }
+  })();
+
+  rt.persistantDataHandler = (function() {
+    var _variables = {};
+
+    return {
+      'save': function(name, value) {
+        name = name.toString();
+        _variables[name] = value;
+      },
+      'load': function(name) {
+        console.log("LOADING VARIABLE " + JSON.stringify(_variables));
+        name = name.toString();
+        console.log("VAR." + name + " = " + _variables[name])
+
+        if (typeof _variables[name] === 'undefined') {
+          return undefined;
+        }
+
+        return _variables[name]; 
+      },
+      'get': function(){
+        return _variables;
+      },
+      'set':function(data) {
+        _variables = data;
+      }
     }
   })();
 
