@@ -727,14 +727,10 @@ SOILE2 = (function(){
     } else {
       soile2.rt.scoreHandler.saveNamed(name, score);
     }
-
-
-    // TODO: Store it somewhere and send it with the data
   }
 
   bin.savevariable = function(varName, value) {
     soile2.rt.persistantDataHandler.save(varName, value)
-    //TODO: Store it somewhere and send it to server...
   }
 
   bin.loadvariable = function(varName, defaultValue) {

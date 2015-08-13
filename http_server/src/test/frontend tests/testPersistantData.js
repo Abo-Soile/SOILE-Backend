@@ -32,6 +32,4 @@ describe("persistant data", function() {
     expect(var2).toBe(2);
     expect(var3).toBe(99);
   });
-  
-
 });
