@@ -11,8 +11,6 @@ describe("persistant data", function() {
     SOILE2.bin.savevariable("test", 10);
 
     var variable = SOILE2.bin.loadvariable("test");
-    console.log("VARIABLE: " + SOILE2.rt.persistantDataHandler.get().test + " - " + variable)
-
     expect(variable).toBe(10);
   });
 

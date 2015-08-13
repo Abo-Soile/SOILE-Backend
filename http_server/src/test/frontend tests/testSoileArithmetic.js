@@ -13,20 +13,20 @@ describe("Builtin plus +", function() {
     expect(stringString).toBe(8);
     expect(intString).toBe(8);
     expect(stringInt).toBe(8);
-  })
+  });
 
   it("Doesn't fail on invalid input", function() {
     var na = SOILE2.bin.plus("fdsgds", "3242");
     expect(na).toEqual(NaN);
-  })
+  });
 
   it("works with many arguments", function(){
     var num = SOILE2.bin.plus(1,2,3,4,5,6,7,8);
-    var num2 = SOILE2.bin.plus(1,2,"3",4,"5",6,7,"8")
+    var num2 = SOILE2.bin.plus(1,2,"3",4,"5",6,7,"8");
     expect(num).toBe(1+2+3+4+5+6+7+8);
     expect(num2).toBe(1+2+3+4+5+6+7+8);
-  })
-})
+  });
+});
 
 describe("Builtin minus -", function() {
 
@@ -36,8 +36,8 @@ describe("Builtin minus -", function() {
 
     expect(num).toBe(1);
     expect(num2).toBe(-1);
-  }
-)
+  });
+
   it("subtracts strings with numbers", function() {
     var stringString = SOILE2.bin.minus("4","3");
     var intString = SOILE2.bin.minus(4,"3");
@@ -46,20 +46,20 @@ describe("Builtin minus -", function() {
     expect(stringString).toBe(1);
     expect(intString).toBe(1);
     expect(stringInt).toBe(1);
-  })
+  });
 
   it("Doesn't fail on invalid input", function() {
     var na = SOILE2.bin.minus("fdsgds", "3242");
     expect(na).toEqual(NaN);
-  })
+  });
 
   it("works with many arguments", function(){
     var num = SOILE2.bin.minus(50,2,3,4,5,6,7,8);
-    var num2 = SOILE2.bin.minus(50,2,"3",4,"5",6,7,"8")
+    var num2 = SOILE2.bin.minus(50,2,"3",4,"5",6,7,"8");
     expect(num).toBe(50-2-3-4-5-6-7-8);
     expect(num2).toBe(50-2-3-4-5-6-7-8);
-  })
-})
+  });
+});
 
 describe("Builtin multiply *", function() {
 
@@ -76,20 +76,20 @@ describe("Builtin multiply *", function() {
     expect(stringString).toBe(16);
     expect(intString).toBe(16);
     expect(stringInt).toBe(16);
-  })
+  });
 
   it("Doesn't fail on invalid input", function() {
     var na = SOILE2.bin.multiply("fdsgds", "3242");
     expect(na).toEqual(NaN);
-  })
+  });
 
   it("works with many arguments", function(){
     var num = SOILE2.bin.multiply(1,2,3,4,5,6,7,8);
-    var num2 = SOILE2.bin.multiply(1,2,"3",4,"5",6,7,"8")
+    var num2 = SOILE2.bin.multiply(1,2,"3",4,"5",6,7,"8");
     expect(num).toBe(1*2*3*4*5*6*7*8);
     expect(num2).toBe(1*2*3*4*5*6*7*8);
-  })
-})
+  });
+});
 
 describe("Builtin division /", function() {
 
@@ -106,13 +106,13 @@ describe("Builtin division /", function() {
     expect(stringString).toBe(2);
     expect(intString).toBe(2);
     expect(stringInt).toBe(2);
-  })
+  });
 
   it("Doesn't fail on invalid input", function() {
     var na = SOILE2.bin.multiply("fdsgds", "3242");
     expect(na).toEqual(NaN);
-  })
-})
+  });
+});
 
 describe("Builtin modulo %", function() {
 
@@ -122,6 +122,6 @@ describe("Builtin modulo %", function() {
 
     expect(mod1).toBe(3%8);
     expect(mod2).toBe(4%8);
-  })
+  });
 
-})
+});
