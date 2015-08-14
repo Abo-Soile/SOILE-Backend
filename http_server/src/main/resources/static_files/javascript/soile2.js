@@ -1814,10 +1814,17 @@ SOILE2 = (function(){
     $("#display").off(); // Removing all clickhandlers
     $("#display").children().off();
 
-    var d = soile2.rt.dataHandler.getData();
 
     SOILE2.testDuration = Date.now() - SOILE2.startTime;
-    endFunc(soile2.rt.dataHandler.getData());
+
+    var data = soile2.rt.dataHandler.getData();
+    var duration = SOILE2.testDuration;
+    var score = soile2.rt.scoreHandler.get();
+    var persistantData = soile2.rt.persistantDataHandler.get();
+
+    //endFunc(soile2.rt.dataHandler.getData());
+    endFunc(data, duration, score, persistantData);
+
   }
   
   rt.seal = (function(){

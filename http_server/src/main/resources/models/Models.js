@@ -224,6 +224,16 @@ function hoursFromNow(hours) {
   return date;
 }
 
+TrainingData.prototype.isLastPhase = function(training) {
+  var isLast = false;
+  var components = training.components[this.mode];
+  if(components.length === (this.position + 1)) {
+    isLast = true;
+  }
+
+  return isLast;
+};
+
 /*Increment use position when a phase is completed*/
 TrainingData.prototype.completePhase = function(training) {
   //If last phase, complete the whole set.

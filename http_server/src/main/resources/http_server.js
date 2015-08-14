@@ -830,12 +830,13 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
 
     var expData = postJson.exp;
     var duration = postJson.duration;
+    var score = postJson.score;
 
     //console.log(expData);
 
-    mongo.experiment.saveData(phase, expID, expData, duration,userID, function(r){
+    mongo.experiment.saveData(phase, expID, expData, duration, score,userID, function(r){
       //console.log(JSON.stringify(r));
-      request.response.end("Data \n" + postData);
+      request.response.end(200);
     });
   });
 });

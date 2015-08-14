@@ -221,19 +221,31 @@ router.post("/training/:id/execute", function(request) {
       //var positionInMode = generalData.position;
 
       var tData = new TrainingData();
-      tData.data = jsonData;
+      tData.data = jsonData.exp;
       tData.mode = generalData.mode;
       tData.phase = generalData.position;
       tData.trainingId = id;
+
+      tData.duration = jsonData.duration;
+      tData.score = jsonData.score;
 
       console.log(JSON.stringify(jsonData));
 
       tData.save(function(status) {
         console.log("SAVED TDATA" + JSON.stringify(status));
+
+        var isLastPhase = generalData.isLastPhase(training);
         generalData.completePhase(training);
 
         generalData.save(function() {
-          request.response.end(200);
+          
+          if (isLastPhase) {
+            request.jsonRedirect("/training/"+id+"/score");
+          }
+          else {
+            request.jsonRedirect("/training/"+id+"/execute");
+          }
+
         });
       });
     
@@ -266,6 +278,15 @@ router.get("/training/:id/execute/json", function(request) {
 });
 */
 
+router.get("/training/:id/score", function(request) {
+  var id = request.params().get('id');
+  var userid = request.session.getUserId();
+
+  getTrainingAndUserData(id, userid, function(d) {
+    request.response.end("SCORE!!!")
+  });
+
+});
 
 //Pre test
 router.get("/training/:id/pre", function(request) {

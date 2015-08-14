@@ -387,7 +387,7 @@ var Experiment = {
   /*
     Saves data and updated the user's position in the test. 
   */
-  saveData: function(phase, experimentid ,data, duration,userid, callback) {
+  saveData: function(phase, experimentid ,data, duration, score,userid, callback) {
     var doc = {};
     doc.phase = phase;
     doc.expId = experimentid;
@@ -395,6 +395,7 @@ var Experiment = {
     doc.confirmed = false;
     doc.duration = duration;
     doc.data = data;
+    doc.score = score;
 
     var timeStamp = new Date();
     doc.timeStamp = timeStamp.toISOString();

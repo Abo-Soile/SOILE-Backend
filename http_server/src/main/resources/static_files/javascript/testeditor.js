@@ -116,7 +116,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   };
 
-  $scope.endFunc = function(data) {
+  $scope.endFunc = function(data, duration, score, persistantData) {
       console.log("it's over");
       console.log(data);
 
