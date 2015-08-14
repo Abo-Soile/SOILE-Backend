@@ -22,31 +22,43 @@ function(
       console.log("Starting!!!");
     }
 
-    function end(expdata) {
+    function end(expdata, duration, score, persistantData) {
       console.log("Test over");
       console.log(expdata);
 
       var d = {};
       d = {};
       d.exp = expdata;
-      d.duration = SOILE2.testDuration;
+      d.duration = duration;
+      d.score = score;
+      d.persistantData = persistantData;
 
       //Send data xhr,
       xhr.post(document.URL, {data:JSON.stringify(d)}).then(
         function(response) {
-          console.log(response);
+          
+          if (typeof response !== 'undefined') {
+          	response = JSON.parse(response);
+          }
 
-          //Navigate to next phase
-          var url = document.URL;
-            var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
-            url = url.slice(0, url.lastIndexOf("/")+1);
+          if(response.redirect) {
+          	console.log("JSON_REDIRECTING");
+          	window.location.replace(response.redirect);
+          }
 
-            if(!isNaN(currentPhase)) {
-              console.log("Redirecting " + isNaN(currentPhase))
-              window.location.href = url+(currentPhase+1);
-            }else {
-              location.reload();
-            }
+          else {
+	          //Navigate to next phase
+	          var url = document.URL;
+	          var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
+	          url = url.slice(0, url.lastIndexOf("/")+1);
+
+	          if(!isNaN(currentPhase)) {
+	            console.log("Redirecting " + isNaN(currentPhase))
+	            window.location.href = url+(currentPhase+1);
+	          }else {
+	            location.reload();
+	          }
+          }
         })
 
     }

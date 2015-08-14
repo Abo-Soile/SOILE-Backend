@@ -31,6 +31,17 @@ function extendRequest(request, func) {
     this.response.end();
   };
 
+  request.jsonRedirect = function(url) {
+    console.log("JSON redirecting to " + url);
+
+    var json = {};
+    json.redirect = url;
+
+    this.response.statusCode(200);
+    this.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    this.response.end(JSON.stringify(json));
+  };
+
   request.unauthorized = function() {
     this.response.statusCode(401);
 

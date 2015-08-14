@@ -250,21 +250,30 @@ require(["dijit/form/HorizontalSlider",
           send_questionnaire_data(formdata);
 
           xhr.post(document.URL,{data:JSON.stringify(formdata)}).then(function(response) {
-            console.log(response);
+            if (typeof response !== 'undefined') {
+              response = JSON.parse(response)
+            }
 
             var url = document.URL;
-            
-            //currentPhase = parseInt(document.URL.slice(76));
-            var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
 
-            url = url.slice(0, url.lastIndexOf("/")+1);
-            if (!isNaN(currentPhase)) {
-              window.location.href = url+(currentPhase+1);
+            if(response.redirect) {
+              console.log("JSON_REDIRECTING");
+              window.location.replace(response.redirect);
             }
+            
             else {
-              location.reload();
-            }
-            //window.location.assign("../");
+              //currentPhase = parseInt(document.URL.slice(76));
+              var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
+
+              url = url.slice(0, url.lastIndexOf("/")+1);
+              if (!isNaN(currentPhase)) {
+                window.location.href = url+(currentPhase+1);
+              }
+              else {
+                location.reload();
+              }
+              //window.location.assign("../");
+            }  
           });
         }
 
