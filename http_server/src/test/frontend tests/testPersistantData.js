@@ -1,5 +1,12 @@
 describe("persistant data", function() {
 
+  it("returns null if no variables are set", function() {
+    var variable = SOILE2.rt.persistantDataHandler.get();
+
+    expect(variable).toBeNull();
+
+  })
+
   it("saves variable", function() {
     SOILE2.bin.savevariable("test", 100);
 

@@ -1361,6 +1361,9 @@ SOILE2 = (function(){
         _saveNamedScore(name, score)
       },
       'get': function(){
+        if (_.isEmpty(_score)) {
+          return null;
+        }
         return _score;
       }
     }
@@ -1386,6 +1389,9 @@ SOILE2 = (function(){
         return _variables[name]; 
       },
       'get': function(){
+        if (_.isEmpty(_variables)) {
+          return null;
+        }
         return _variables;
       },
       'set':function(data) {
@@ -1996,6 +2002,10 @@ SOILE2 = (function(){
       }
     };
   };
+
+  util.setPersistantData = function(data) {
+    soile2.rt.persistantDataHandler.set(data);
+  }
 
   soile2.bin = soile2.rt.seal(bin);
 
