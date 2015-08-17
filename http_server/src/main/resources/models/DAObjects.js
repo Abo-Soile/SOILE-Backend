@@ -88,6 +88,8 @@ function TrainingDataDAO() {
 TrainingDataDAO.prototype = new BaseDAO();
 TrainingDataDAO.prototype.constructor = TrainingDataDAO;
 
+
+
 TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, controlGroup,callback) {
   var that = this;
   that.get({userId:userid, type:"general", trainingId:trainingId}, 
@@ -109,6 +111,53 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, co
     }
 
   });
+};
+
+TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
+    var iteration = 0;
+    var mode = null;
+    var that = this;
+
+    that.get({userId:userid, type:"general", trainingId:trainingId}, function(general) {
+        if(general.mode === "training" && general.trainingIteration > 0) {
+            iteration = general.trainingIteration - 1;
+        }
+        else if (general.mode === "post") {
+            mode = "training";
+            iteration = general.trainingIteration;
+        }
+
+        else if (general.mode === "done") {
+            mode = "post";
+        } else {
+            general.mode = "pre";
+        }
+
+        var matcher = {
+            "trainingId":general.trainingId,
+            "userId":general.userId
+        };
+
+        if(mode) {
+            matcher.mode = mode;
+        }
+
+        if(iteration) {
+            matcher.trainingIteration = iteration;
+        }
+
+        that.list({"mode":mode, "userId":userid, "trainingId":trainingId}, function(scoreList) {
+            var totalScore = 0;
+            var scores = [];
+
+            for (var i = 0; i < scoreList.length; i++) {
+                totalScore += scoreList[i].score.score;
+                scores.push(scoreList[i].score);
+            }
+            
+            callback(totalScore, scores); 
+        });
+    });
 };
 
 module.exports.BaseDAO = BaseDAO;

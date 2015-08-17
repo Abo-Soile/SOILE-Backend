@@ -294,9 +294,39 @@ router.get("/training/:id/score", function(request) {
   var id = request.params().get('id');
   var userid = request.session.getUserId();
 
-  getTrainingAndUserData(id, userid, function(d) {
-    request.response.end("SCORE!!!")
+  var context = {};
+
+  trainingDataDAO.getScore(id, userid, function(totalScore, scores) {
+
+    console.log(JSON.stringify(scores));
+    var scoreContext = {};
+
+    scoreContext.totalScore = totalScore;
+    scoreContext.scores = [];
+
+    for (var i = 0; i < scores.length; i++) {
+      var s = scores[i];
+      scoreContext.scores[i] = {"score":s.score};
+      scoreContext.scores[i].subscores = [];
+      for(var key in s) {
+        if (key !== "score") {
+          var subScore = {};
+          subScore.name = key;
+          subScore.score = s[key];
+
+          scoreContext.scores[i].subscores.push(subScore);
+        }
+      }
+    }
+
+    context.score = scoreContext;
+
+    JSON.stringify(scoreContext);
+
+    templateManager.render_template("endoftrainingphase", context, request);
   });
+    //request.response.end("SCORE!!!")
+
 
 });
 
