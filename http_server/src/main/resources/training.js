@@ -228,8 +228,14 @@ router.post("/training/:id/execute", function(request) {
       tData.phase = generalData.position;
       tData.trainingId = id;
 
+      tData.userId = generalData.userId;
+
       tData.duration = jsonData.duration;
       tData.score = jsonData.score;
+
+      if(generalData.mode === "training") {
+        tData.trainingIteration = generalData.trainingIteration;
+      }
 
       console.log(JSON.stringify(jsonData));
 
