@@ -41,6 +41,13 @@
         window.testJs = {test.js|s|js};
     </script>
     {/test.js}
+
+    {?persistantData}
+    <script type="text/javascript">
+        window.persistantData = {persistantData|s|js};
+    </script>
+    {/persistantData}
+
     </div>
 
     <script type="text/javascript" src="/javascript/testphase.js"></script>

@@ -59,7 +59,7 @@ function(
 	            location.reload();
 	          }
           }
-        })
+    	})
 
     }
 
@@ -71,6 +71,11 @@ function(
       SOILE2.util.eval(data);
 
       SOILE2.util.setEndFunction(end);
+
+      if(typeof window.persistantData !== "undefined") {
+      	SOILE2.util.setPersistantData(window.persistantData);
+      }
+
 
       SOILE2.start();
     }

@@ -20,6 +20,7 @@ var testDAO = require("models/DAObjects").TestDAO;
 var formDAO = require("models/DAObjects").FormDAO;
 
 var moment = require("libs/moment");
+
 /*
 Architectural ideas. 
 
@@ -125,7 +126,7 @@ function getTrainingAndUserData(trainingid, userid, callback) {
   });
 }
 
-function renderTrainingPhase(components, position ,request) {
+function renderTrainingPhase(components, position, request, persistantData) {
 
   var component = components[position];
   var id = component.id;
@@ -148,6 +149,7 @@ function renderTrainingPhase(components, position ,request) {
     dao = testDAO;
     template = "testphase";
     contextObj = "test";
+    context.persistantData = persistantData;
   }
 
   context.completed = ((position+1)/components.length * 100);
@@ -195,7 +197,7 @@ router.get("/training/:id/execute", function(request) {
       return request.redirect("/training/" + id);
     }
      else {
-      renderTrainingPhase(modeComponents, positionInMode, request);
+      renderTrainingPhase(modeComponents, positionInMode, request, trainingData.persistantData);
     }
   });
 
@@ -237,8 +239,12 @@ router.post("/training/:id/execute", function(request) {
         var isLastPhase = generalData.isLastPhase(training);
         generalData.completePhase(training);
 
+        generalData.persistantData = merge_options(generalData.persistantData,
+                                                   jsonData.persistantData);
+
         generalData.save(function() {
           
+          //TODO: Check if there is any stored score
           if (isLastPhase) {
             request.jsonRedirect("/training/"+id+"/score");
           }
