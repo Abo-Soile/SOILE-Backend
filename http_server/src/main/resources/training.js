@@ -98,6 +98,9 @@ router.get("/training/:id", function(request) {
 
       status.timeLeft = timeString;
 
+      status.totalTimeLeft = 2;
+      status.roundsLeft = training.trainingIteration + "/" + (trainingData.position +1);
+
       templateManager.render_template('trainingUser', {training:training, status:status}, request);
     });
 
