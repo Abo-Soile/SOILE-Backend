@@ -666,6 +666,13 @@ SOILE2 = (function(){
   };
 
   bin.append = function(str1, str2) {
+
+    if(_.isArray(str1) && _.isArray(str2)) {
+      str1.push.apply(str1, str2);
+      return str1
+    }
+
+
     //console.log("str1: " + str1 + " " + typeof str1 + " ||str2 " + str2 + " " + typeof str2)
     if(typeof str1 === "undefined") {
       var temp = []
