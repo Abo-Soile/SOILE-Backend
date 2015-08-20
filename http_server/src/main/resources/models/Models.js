@@ -80,12 +80,13 @@ function Training(arg) {
     this.components.training = [];
     this.components.post = [];
 
-    BaseModel.call(this, arg);
 
     this.repeatpause = 0;
-    this.repeatCount = 1;
+    this.repeatcount = 1;
     this.maxpause = 1
 
+    BaseModel.call(this, arg);
+    
     this._collection = Training.collection;
 }
 
