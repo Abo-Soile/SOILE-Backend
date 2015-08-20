@@ -184,6 +184,10 @@ router.get("/training/:id/execute", function(request) {
       return request.redirect("/training/" + id);
     }
 
+    if(trainingData.mode === "training" && trainingData.inControlGroup) {
+      trainingData.mode = "control";
+    }
+
     var modeComponents = training.components[trainingData.mode];
     var positionInMode = trainingData.position;
 

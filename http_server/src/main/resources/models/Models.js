@@ -262,7 +262,8 @@ TrainingData.prototype.completePhase = function(training) {
       this.nextTask = hoursFromNow(training.repeatpause);
 
       if (this.inControlGroup) {
-        this.mode = "control";
+        //this.mode = "control";
+        this.mode = "training";
       } else {
         this.mode = "training";
       }
