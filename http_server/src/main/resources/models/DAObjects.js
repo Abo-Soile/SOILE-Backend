@@ -114,13 +114,14 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, co
 };
 
 TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
-    var iteration = 0;
+    var iteration = null;
     var mode = null;
     var that = this;
 
     that.get({userId:userid, type:"general", trainingId:trainingId}, function(general) {
         if(general.mode === "training" && general.trainingIteration > 0) {
             iteration = general.trainingIteration - 1;
+            mode = "training"
         }
         else if (general.mode === "post") {
             mode = "training";
@@ -130,7 +131,7 @@ TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
         else if (general.mode === "done") {
             mode = "post";
         } else {
-            general.mode = "pre";
+            mode = "pre"
         }
 
         var matcher = {
@@ -142,11 +143,11 @@ TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
             matcher.mode = mode;
         }
 
-        if(iteration) {
+        if(iteration !== null) {
             matcher.trainingIteration = iteration;
         }
 
-        that.list({"mode":mode, "userId":userid, "trainingId":trainingId}, function(scoreList) {
+        that.list(matcher, function(scoreList) {
             var totalScore = 0;
             var scores = [];
 

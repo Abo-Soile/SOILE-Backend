@@ -81,6 +81,8 @@ router.get("/training/:id", function(request) {
 
   // Get training
   trainingDAO.get(id, function(training) {
+    console.log("##### FIRST TRAINING")
+    console.log(JSON.stringify(training));
 
     trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
 
@@ -94,12 +96,43 @@ router.get("/training/:id", function(request) {
       var timeString = false;
       if(trainingData.nextTask - Date.now() > 0) {
         timeString = moment(trainingData.nextTask).fromNow();
+        console.log("Timestring " + timeString);
       }
 
       status.timeLeft = timeString;
 
-      status.totalTimeLeft = 2;
-      status.roundsLeft = training.trainingIteration + "/" + (trainingData.position +1);
+      var tasksLeft = parseInt(training.repeatcount) - parseInt(trainingData.position);
+      var hoursLeft = tasksLeft * parseInt(training.repeatpause);
+
+      console.log("HOURS LEFT " + hoursLeft  + " taskleft " + tasksLeft + " repeat " + training.repeatcount + " pause " + training.repeatpause);
+
+      //status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow();
+      status.totalTimeLeft = moment(Date.now()).add(hoursLeft, "hours").fromNow(true);
+      if(timeString) {
+        status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow(true);
+      }
+
+      var totalRounds = parseInt(training.repeatcount) + 2;
+      var roundsDone = 0;
+
+      if (trainingData.mode === "training") {
+        roundsDone = trainingData.trainingIteration + 1;
+      }
+
+      if (trainingData.mode == "post") {
+        roundsDone = totalRounds - 1;
+      }
+
+      if (trainingData.mode === "done") {
+        roundsDone = totalRounds;
+      }
+
+      status.roundsLeft = roundsDone + "/" + totalRounds;
+
+
+      status.roundType = trainingData.mode;
+      status.iteration = trainingData.trainingIteration;
+
 
       templateManager.render_template('trainingUser', {training:training, status:status}, request);
     });
@@ -378,8 +411,6 @@ router.post("/training/:id/edit", function(request) {
   request.endHandler(function() {
     var dataObj = JSON.parse(data.getString(0, data.length()));
     trainingDAO.get(id, function(training) {
-
-      console.log(JSON.stringify(training));
 
       training = merge_options(training, dataObj);
 
