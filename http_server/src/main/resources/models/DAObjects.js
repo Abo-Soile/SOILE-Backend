@@ -172,34 +172,34 @@ TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
 TrainingDataDAO.prototype.getScoreHistory = function(trainingId, userid, callback) {
     var that = this;
 
-    that.get({userId:userid, trainingId:trainingId}, function(general) {
        
-        var matcher = {
-            "trainingId":trainingId,
-            "userId":userid,
-            "mode":"training"
-        };
+    var matcher = {
+        "trainingId":trainingId,
+        "userId":userid,
+        "mode":"training"
+    };
 
-        that.list(matcher, function(scoreList) {
-            var iterationScores = [];
+    that.list(matcher, function(scoreList) {
+        var iterationScores = [];
 
-            for (var i = 0; i < scoreList.length; i++) {
-                if(typeof scoreList[i].score !== "undefined") {
-                    if (typeof iterationScores[scoreList[i].trainingIteration] === "undefined") {
-                        iterationScores[scoreList[i].trainingIteration] = 0;
-                    }
-                    iterationScores[scoreList[i].trainingIteration] += scoreList[i].score.score;
+        for (var i = 0; i < scoreList.length; i++) {
+            if(typeof scoreList[i].score !== "undefined") {
+                if (typeof iterationScores[scoreList[i].trainingIteration] === "undefined") {
+                    iterationScores[scoreList[i].trainingIteration] = 0;
                 }
+                iterationScores[scoreList[i].trainingIteration] += scoreList[i].score.score;
             }
-            
-            callback(iterationScores); 
-        });
+        }
+        
+        callback(iterationScores); 
     });
 
 };
 
 TrainingDataDAO.prototype.getPrePostScore = function(trainingId, userid, callback) {
     var that = this;
+
+
 
 };
 
