@@ -113,6 +113,9 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, co
   });
 };
 
+/*
+    Returns score from the previous training phase. 
+*/
 TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
     var iteration = null;
     var mode = null;
@@ -121,7 +124,7 @@ TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
     that.get({userId:userid, type:"general", trainingId:trainingId}, function(general) {
         if(general.mode === "training" && general.trainingIteration > 0) {
             iteration = general.trainingIteration - 1;
-            mode = "training"
+            mode = "training";
         }
         else if (general.mode === "post") {
             mode = "training";
@@ -131,7 +134,7 @@ TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
         else if (general.mode === "done") {
             mode = "post";
         } else {
-            mode = "pre"
+            mode = "pre";
         }
 
         var matcher = {
@@ -152,13 +155,52 @@ TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
             var scores = [];
 
             for (var i = 0; i < scoreList.length; i++) {
-                totalScore += scoreList[i].score.score;
-                scores.push(scoreList[i].score);
+                if(typeof scoreList[i].score !== "undefined") {
+                    totalScore += scoreList[i].score.score;
+                    scores.push(scoreList[i].score);
+                }
             }
             
             callback(totalScore, scores); 
         });
     });
+};
+
+/*
+    Returns score statistics. 
+*/
+TrainingDataDAO.prototype.getScoreHistory = function(trainingId, userid, callback) {
+    var that = this;
+
+    that.get({userId:userid, trainingId:trainingId}, function(general) {
+       
+        var matcher = {
+            "trainingId":trainingId,
+            "userId":userid,
+            "mode":"training"
+        };
+
+        that.list(matcher, function(scoreList) {
+            var iterationScores = [];
+
+            for (var i = 0; i < scoreList.length; i++) {
+                if(typeof scoreList[i].score !== "undefined") {
+                    if (typeof iterationScores[scoreList[i].trainingIteration] === "undefined") {
+                        iterationScores[scoreList[i].trainingIteration] = 0;
+                    }
+                    iterationScores[scoreList[i].trainingIteration] += scoreList[i].score.score;
+                }
+            }
+            
+            callback(iterationScores); 
+        });
+    });
+
+};
+
+TrainingDataDAO.prototype.getPrePostScore = function(trainingId, userid, callback) {
+    var that = this;
+
 };
 
 module.exports.BaseDAO = BaseDAO;

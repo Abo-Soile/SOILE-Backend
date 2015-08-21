@@ -119,7 +119,7 @@ router.get("/training/:id", function(request) {
         roundsDone = trainingData.trainingIteration + 1;
       }
 
-      if (trainingData.mode == "post") {
+      if (trainingData.mode === "post") {
         roundsDone = totalRounds - 1;
       }
 
@@ -128,11 +128,17 @@ router.get("/training/:id", function(request) {
       }
 
       status.roundsLeft = roundsDone + "/" + totalRounds;
+      status.percentageLeft = roundsDone/totalRounds * 100;
 
 
       status.roundType = trainingData.mode;
       status.iteration = trainingData.trainingIteration;
 
+      trainingDataDAO.getScoreHistory(id, userid, function(score) {
+        console.log("###########SCORESCORE");
+        console.log(JSON.stringify(score));
+        status.scoreHistory = score;
+      });
 
       templateManager.render_template('trainingUser', {training:training, status:status}, request);
     });
