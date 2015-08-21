@@ -199,7 +199,30 @@ TrainingDataDAO.prototype.getScoreHistory = function(trainingId, userid, callbac
 TrainingDataDAO.prototype.getPrePostScore = function(trainingId, userid, callback) {
     var that = this;
 
+    var matcher = {
+        "trainingId":trainingId,
+        "userId":userid,
+        "$or":[{"mode":"pre"}, {"mode":"post"}]
+    };
 
+    that.list(matcher, function(scoreList) {
+        var preScore = 0;
+        var postScore = 0;
+
+        for (var i = 0; i < scoreList.length; i++) {
+            if(typeof scoreList[i].score !== "undefined") {
+                if (scoreList[i].mode === "pre") {
+                   preScore += scoreList[i].score.score;
+                }
+
+                if(scoreList[i].mode === "post") {
+                    postScore += scoreList[i].score.score;
+                }
+            }
+        }
+        
+        callback(preScore, postScore); 
+    });
 
 };
 

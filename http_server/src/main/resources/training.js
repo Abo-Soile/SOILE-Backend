@@ -135,10 +135,15 @@ router.get("/training/:id", function(request) {
       status.iteration = trainingData.trainingIteration;
 
       trainingDataDAO.getScoreHistory(id, userid, function(score) {
-        console.log("###########SCORESCORE");
-        console.log(JSON.stringify(score));
         status.scoreHistory = score;
       });
+
+      if (trainingData.mode === "done") {
+        trainingDataDAO.getPrePostScore(id, userid, function(pre, post) {
+          status.preScore = pre;
+          status.postScore = post;
+        });
+      }
 
       templateManager.render_template('trainingUser', {training:training, status:status}, request);
     });
