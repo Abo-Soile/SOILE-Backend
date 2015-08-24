@@ -735,7 +735,7 @@ dBootstrap fixes
   border:none;
 }
 
-.angularcomponentlist li:nth-child(2) {
+.angularcomponentlist li:nth-child(2n) {
   background-color: #E1E8E8;
 }
 
