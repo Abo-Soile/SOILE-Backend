@@ -239,7 +239,7 @@ testeditor styles
 
 #imagelist li {
 
-}
+} 
 
 #imagelist li .imgenlarge span {
   position: absolute;
@@ -719,12 +719,31 @@ dBootstrap fixes
 .angularcomponentlist {
 }
 
+.angularcomponentlist li:first-child {
+  margin-top: 0px;
+}
+
 .angularcomponentlist li {
   margin-left: 25px;
   padding-right: 10px;
   line-height: 40px;
-
+  border-bottom: 1px solid lightgray;
+  border-radius: 1px;
 }
+
+.angularcomponentlist li:last-child {
+  border:none;
+}
+
+.angularcomponentlist li:nth-child(2) {
+  background-color: #E1E8E8;
+}
+
+.angularcomponentlist li button {
+  margin-top: 3px;
+}
+
+
 .inlineDropdown {
   display: inline-block;
 }
