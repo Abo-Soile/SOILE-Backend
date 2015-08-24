@@ -221,6 +221,7 @@ testeditor styles
 	margin-left: 0;
 	max-height: 400px;
 	overflow-y:scroll;
+  overflow-x: visible;
 }
 
 #imagelist li{
@@ -235,6 +236,36 @@ testeditor styles
 #imagelist li span .dijitButtonNode {
 	padding: 5px 8px !important;
 }
+
+#imagelist li {
+
+}
+
+#imagelist li .imgenlarge span {
+  position: absolute;
+  right: -9999px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  background-color: yellow;
+  z-index: 300;
+}
+
+#imagelist li .imgenlarge span img {
+  max-height: 300px;
+  max-width: 300px;
+  width: auto;
+  height: auto;
+}
+
+
+#imagelist li .imgenlarge:hover span{ 
+  right: 280px; /*the distance from the bottom of the thumbnail to the top of the popup image*/
+  left: -300px;
+  left: auto;
+}
+
+
 
 /*
 Login
