@@ -26,17 +26,9 @@ var a = new java.lang.String("sdfsdfs");
 console.log(a.hashCode());
 console.log(JSON.stringify(container.config));
 
-//Decorator ish function to ensure that the user is admin
-function requireAdmin(func) {
-  return function(request) {
-    console.log("Require Admin running " + request.session.isAdmin());
-    if (!request.session.isAdmin()) {
-      request.unauthorized();
-    }else {
-      func(request);
-    }
-  };
-}
+var utils = require("utils");
+
+var requireAdmin = utils.requireAdmin;
 
 function sendEmail(subject, body, address, func) {
   var mailAddress = "soile.my_mailer";
@@ -76,7 +68,6 @@ var customMatcher = require('router')();
 // TODO: Load this from config
 var DEBUG = true;   //This variable could stored in configs
 
-var utils = require("utils");
 var mongo = require('mongoHandler');
 mongo.mongoHandler.init();
 
@@ -100,6 +91,8 @@ var sessionManager = require("sessionManager");
 require('testroute.js');
 require('training.js');
 require('experiment.js');
+
+require('questionnaire.js');
 
 customMatcher.get("/login", function(request) {
   var previous = request.headers().get("Referer");
@@ -1250,7 +1243,7 @@ customMatcher.post('/test/run', function(request) {
   });
 });
 
-
+/*
 customMatcher.get('/questionnaire', function(req) {
   var file = config.directory.concat('/questionnaire.html');
 
@@ -1315,69 +1308,10 @@ customMatcher.get('/questionnaire/generated/:id', function(request) {
 });
 
 
-customMatcher.get('/questionnaire/mongo/:id', requireAdmin(function(request){
-  var id = request.params().get('id');
-  mongo.form.get(id, function(r){
-    //console.log(JSON.stringify(r))
-    var form = r.result.form;
-    var markup = r.result.markup;
-    templateManager.render_template('displayForm', {"form":form,"markup":markup},request);
-  });
-}));
-
-
-customMatcher.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
-  var postdata = new vertx.Buffer();
-  var id = request.params().get("id");
-
-  request.dataHandler(function(data) {
-    postdata.appendBuffer(data);
-  });
-
-  request.endHandler(function() {
-    var markup = postdata.getString(0, postdata.length());
-
-    var address = utils.get_address("questionnaire_render");
-
-    var message = {
-      "markup": markup,
-      "action": "save",
-      "id": id
-    };
-
-    vertx.eventBus.send(address, message, function(reply) {
-      //console.log(JSON.stringify(reply));
-      var response = {};
-      if (reply.hasOwnProperty('error') === true) {
-        response.error = reply.error;
-      } else {
-        response = {
-          "test":"testresponse",
-          "data": reply.form
-          };
-      }
-
-      request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
-      request.response.end(JSON.stringify(response));
-    });
-  });
-}));
-
-
-customMatcher.get('/questionnaire/mongo/:id/getform', function(request) {
-  var id = request.params().get('id');
-  mongo.form.get(id,function(r) {
-    var form = r.result.form;
-    form = "<div id='formcol'>".concat(form,"</div>");
-    request.response.end(form);
-  });
-});
-
-
 customMatcher.post('questionnaire/generated/:id', function(request) {
   console.log(request.method);
 });
-
+*/
 
 customMatcher.get('/test', function(request) {
   mongo.test.list(function(r) {

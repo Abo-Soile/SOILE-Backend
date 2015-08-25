@@ -122,6 +122,18 @@ var utils = (function() {
       console.log(hexString);
 
       return hexString;
+    },
+
+    //Decorator ish function to ensure that the user is admin
+    'requireAdmin':function(func) {
+      return function(request) {
+        console.log("Require Admin running " + request.session.isAdmin());
+        if (!request.session.isAdmin()) {
+          request.unauthorized();
+        }else {
+          func(request);
+        }
+      };
     }
   };
 
