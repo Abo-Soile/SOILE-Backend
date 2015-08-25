@@ -729,6 +729,16 @@ SOILE2 = (function(){
     }
   }
 
+
+  /*
+    Toggle wether a standard score screen is displayed 
+    at the end of this test. 
+  */    
+  bin.showscore = function(bool) {
+    // TODO: Implement this
+    console.log("Showscore yes/no " + bool)
+  }
+
   bin.savevariable = function(varName, value) {
     soile2.rt.persistantDataHandler.save(varName, value)
   }

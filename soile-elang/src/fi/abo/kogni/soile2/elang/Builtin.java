@@ -99,6 +99,7 @@ public class Builtin {
 
         //Score
         builtinFunctions.add("savescore");
+        builtinFunctions.add("showscore");
 
         //Persistant data
         builtinFunctions.add("savevariable");
