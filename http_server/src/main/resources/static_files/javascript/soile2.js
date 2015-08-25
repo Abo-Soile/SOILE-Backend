@@ -46,7 +46,7 @@ SOILE2 = (function(){
           _inputid = id;
         }
         //_inputid = (_.isString(conf['inputid'])) ? conf['inputid'] : id;
-        _resettimer = (_.isBoolean(conf['resettimer'])) ? conf['resettimer'] : false;
+        _resettimer = (_.isBoolean(conf.resettimer)) ? conf.resettimer : false;
         if (_.isFunction(conf.action)) {
           action = conf.action;
           jQuery(_id).click(function(e){
@@ -75,7 +75,7 @@ SOILE2 = (function(){
   bin.onkeypress = function(key, func) {
     var keycode = soile2.rt.kbd.keycode(key);
     if(func) {
-      rt.keyhandler.add(keycode, func)
+      rt.keyhandler.add(keycode, func);
       }
     else {
       rt.keyhandler.remove(keycode);
@@ -92,7 +92,7 @@ SOILE2 = (function(){
     }else {
       rt.keyhandler.removeAny();
     }
-  }
+  };
 
   bin.getlastkey = function(active) {
     if (typeof active === 'undefined') {
@@ -100,7 +100,7 @@ SOILE2 = (function(){
     }else {
       return rt.keyhandler.lastKey();
     }
-  }
+  };
 
   bin.resumeonkey = function(key) {
     if (key) {
@@ -250,7 +250,7 @@ SOILE2 = (function(){
 
   bin.not = function(arg){
     var args = Array.prototype.slice.call(arguments);
-    if (args.length == 0){
+    if (args.length === 0){
       return undefined;
     }
     return ! (soile2.rt.truthvalue(args[0]));
@@ -258,7 +258,7 @@ SOILE2 = (function(){
 
   bin.and = function(){
     var args = Array.prototype.slice.call(arguments);
-    if (args.length == 0){
+    if (args.length === 0){
       return undefined;
     }
     return _.reduce(_.map(args, soile2.rt.truthvalue), function(cumul, elem){
@@ -268,15 +268,15 @@ SOILE2 = (function(){
 
   bin.or = function(){
     var args = Array.prototype.slice.call(arguments);
-    if (args.length == 0){
+    if (args.length === 0){
       return undefined;
     }
     return _.some(_.map(args, soile2.rt.truthvalue));
   };
 
-  bin.divide = function(x, y){
-    var x = Number(x)
-    var y = Number(y)
+  bin.divide = function(mX, mY){
+    var x = Number(mX);
+    var y = Number(mY);
 
     //if (_.isNumber(x) && _.isNumber(y)){
     if (util.can_be_number(x) && util.can_be_number(y)){
@@ -291,9 +291,9 @@ SOILE2 = (function(){
   bin.eq = function(x, y){
 
     if (_.isArray(x) && _.isArray(y)) {
-      var equalArr = _.isEqual(x.map(String), y.map(String))
+      var equalArr = _.isEqual(x.map(String), y.map(String));
       if (equalArr) {
-        return true
+        return true;
       }
     }
 
@@ -336,15 +336,15 @@ SOILE2 = (function(){
     jQuery(id).addClass("hiddenelem");
   };
   
-  bin.show = function(id){
+  bin.show = function(mId){
     var args = Array.prototype.slice.call(arguments);
     var id, pos;
     
-    if (args.length == 2){
+    if (args.length === 2){
       id = soile2.util.getid(args[0]);
       pos = args[1];
     }
-    else if (args.length == 1){
+    else if (args.length === 1){
       id = soile2.util.getid(args[0]);
     }
     
@@ -401,7 +401,7 @@ SOILE2 = (function(){
     console.log("Running resume");
     rt.schd.cancel();
     rt.schd.resume();
-  }
+  };
   
   bin.position = function(){
     var arr = Array.prototype.slice.call(arguments);
@@ -415,11 +415,9 @@ SOILE2 = (function(){
     args = arr.splice(1);
     id = soile2.util.getid(arr[0]);
 
-    if (args.length == 1){
-      if (typeof args[0] === 'object'
-          &&
-          args[0].hasOwnProperty('top')
-          &&
+    if (args.length === 1){
+      if (typeof args[0] === 'object' &&
+          args[0].hasOwnProperty('top') &&
           args[0].hasOwnProperty('left')) {
             
         top = args[0].top;
@@ -472,10 +470,10 @@ SOILE2 = (function(){
   bin.minus = function(){
     //var nums = _.filter(_.toArray(arguments), _.isNumber);
     var nums = _.filter(_.toArray(arguments), util.can_be_number);
-    if (nums.length == 0){
+    if (nums.length === 0){
       return undefined;
     }
-    if (nums.length == 1){
+    if (nums.length === 1){
       return nums[0];
     }
     return (parseFloat(nums[0]) + _.reduce(nums.slice(1), function(memo, num){
@@ -489,7 +487,7 @@ SOILE2 = (function(){
     if (_.isEmpty(nums)){
       return undefined;
     }
-    if (nums.length == 1){
+    if (nums.length === 1){
       return nums[0];
     }
     return _.reduce(nums, function(memo, num){
@@ -503,7 +501,7 @@ SOILE2 = (function(){
     if (_.isEmpty(nums)){
       return undefined;
     }
-    if (nums.length == 1){
+    if (nums.length === 1){
       return nums[0];
     }
     return _.reduce(nums, function(memo, num){
@@ -513,28 +511,28 @@ SOILE2 = (function(){
 
   bin.modulo = function(num1, num2) {
     var mod = num1 % num2;
-    return mod
+    return mod;
   };
 
   bin.round = function(num, op) {
     if(op==="floor") {
-      return Math.floor(num)
+      return Math.floor(num);
     }
     if(op==="ceil") {
-      return Math.ceil(num)
+      return Math.ceil(num);
     }
     return Math.round(num);
-  }
+  };
 
   /*
   Datahandling
   */
   bin.storesingle = function(field, value) {
     soile2.rt.dataHandler.storeSingle(field, value);
-  }
+  };
 
   bin.storerow =function(field, value) {
-    soile2.rt.dataHandler.storeRow(field,value)
+    soile2.rt.dataHandler.storeRow(field,value);
   };
 
   bin.newrow = function() {
@@ -544,7 +542,7 @@ SOILE2 = (function(){
   /*Statistics*/
   bin.average = function(field) {
     return soile2.rt.dataHandler.average(field);
-  }
+  };
 
   bin.count = function(field, value) {
     var res;
@@ -554,19 +552,19 @@ SOILE2 = (function(){
       res = soile2.rt.dataHandler.count(field);
     }
     return res;
-  }
+  };
 
   bin.outliers = function(field, multiplier, standarddeviation, externalAverage) {
     return soile2.rt.dataHandler.outlier(field, multiplier, standarddeviation, externalAverage);
-  }
+  };
 
   bin.median = function(field, value) {
     return soile2.rt.dataHandler.median(field);
-  }
+  };
 
   bin.standarddeviation = function(field) {
     return soile2.rt.dataHandler.standarddeviation(field);
-  }
+  };
 
   /*
   Functions related to time and timing
@@ -596,11 +594,11 @@ SOILE2 = (function(){
 
   bin.addstimuli = function(stim) {
     soile2.rt.stimuli.add(stim);
-  } 
+  } ;
 
   bin.emptystimuli = function() {
     soile2.rt.stimuli.empty();
-  }
+  };
 
   bin.shufflestimuli = function(count) {
     if(typeof count === 'undefined'){
@@ -614,8 +612,8 @@ SOILE2 = (function(){
   };
 
   bin.pickstimulisubset= function(count) {
-    soile2.rt.stimuli.subset(count)
-  }
+    soile2.rt.stimuli.subset(count);
+  };
   
   bin.length = function(o){
     if(_.isNumber(o)) {
@@ -641,12 +639,12 @@ SOILE2 = (function(){
 
   bin.randominteger = function(min, max) {
     if(_.isNumber(min) && _.isNumber(max)) {
-      return Math.floor(rt.random.get()*(max-min+1)+min)
+      return Math.floor(rt.random.get()*(max-min+1)+min);
     } 
     else {
       return Math.floor(rt.random.get(1,1000000));
     }
-  }
+  };
 
   bin.randomnumber = function(min, max) {
     if(_.isNumber(min) && _.isNumber(max)) {
@@ -655,11 +653,11 @@ SOILE2 = (function(){
     else {
       return rt.random.get(1, 1000000);
     }
-  }
+  };
 
   bin.seedrandom = function(seed) {
     rt.random.seed(seed);
-  }
+  };
   
   bin.timeout = function(dur){
     soile2.rt.schd.suspend(dur);
@@ -668,15 +666,15 @@ SOILE2 = (function(){
   bin.append = function(str1, str2) {
     //console.log("str1: " + str1 + " " + typeof str1 + " ||str2 " + str2 + " " + typeof str2)
     if(typeof str1 === "undefined") {
-      var temp = []
+      var temp = [];
       temp.push(str2);
       return temp;
-      return([].push(str2));
+      //return([].push(str2));
     }
 
     if(typeof str1 !== "object") {
       //console.log("Appending strings " + str1 + str2);       
-      var result = ""
+      var result = "";
       if(!_.isUndefined(str1) && !_.isUndefined(str2)) {
         return str1.toString() + str2.toString();
       }
@@ -695,11 +693,11 @@ SOILE2 = (function(){
       str1.push(str2);
       return str1;
     }
-  }
+  };
 
-  bin.elementatindex = function(value, index) {
-    var index = parseInt(index)
-    if(typeof value != 'undefined' && _.isNumber(index)) {
+  bin.elementatindex = function(value, mIndex) {
+    var index = parseInt(mIndex);
+    if(typeof value !== 'undefined' && _.isNumber(index)) {
       if(index>value.length) {
         return false;
       }
@@ -710,7 +708,7 @@ SOILE2 = (function(){
         return value.toString()[index];
       }
     }
-  }
+  };
 
   /*
     Saves score that is displayed to the user,
@@ -718,7 +716,7 @@ SOILE2 = (function(){
   */
   bin.savescore = function(mName, mScore) {
     var name = mName;
-    var score = mScore
+    var score = mScore;
 
     if(typeof score === "undefined"){
       name = "score";
@@ -727,7 +725,7 @@ SOILE2 = (function(){
     } else {
       soile2.rt.scoreHandler.saveNamed(name, score);
     }
-  }
+  };
 
 
   /*
@@ -736,26 +734,26 @@ SOILE2 = (function(){
   */    
   bin.showscore = function(bool) {
     // TODO: Implement this
-    console.log("Showscore yes/no " + bool)
-  }
+    console.log("Showscore yes/no " + bool);
+  };
 
   bin.savevariable = function(varName, value) {
-    soile2.rt.persistantDataHandler.save(varName, value)
-  }
+    soile2.rt.persistantDataHandler.save(varName, value);
+  };
 
   bin.loadvariable = function(varName, defaultValue) {
     if (typeof defaultValue === "undefined") {
       defaultValue = 0;    
     }
 
-    var value = soile2.rt.persistantDataHandler.load(varName)
+    var value = soile2.rt.persistantDataHandler.load(varName);
 
     if (value === undefined) {
-      return defaultValue
+      return defaultValue;
     }
 
-    return value
-  }
+    return value;
+  };
 
   /*
   ---------------------------------------------
@@ -838,7 +836,7 @@ SOILE2 = (function(){
     }, "");
 
     return msg;
-  }
+  };
   
   rt.kbd = (function(){
     var name2keycode = soile2.rt.freeze({
@@ -963,16 +961,16 @@ SOILE2 = (function(){
   // The keyhandler captures all keystrokes and executes a callback
   // function if a key is bound to one.
   rt.keyhandler = (function() {
-    var keyfunctions = {}
-    var anykeyfunctions = []
-    var lastKey = ""
-    var lastActiveKey = ""
+    var keyfunctions = {};
+    var anykeyfunctions = [];
+    var lastKey = "";
+    var lastActiveKey = "";
 
     // Special ignore case
     // Nothing ignored
     var anything = function(keyCode) {
       return true;
-    }
+    };
 
     // Special ignore case
     // Checks if keyCode is a letter
@@ -983,7 +981,7 @@ SOILE2 = (function(){
       else {
         return true;
       }
-    }
+    };
 
     var keyFunction = function(e) {
       lastKey = soile2.rt.kbd.name(e.keyCode);
@@ -995,7 +993,7 @@ SOILE2 = (function(){
 
       //console.log(anykeyfunctions);
       for(var i = 0; i<anykeyfunctions.length; i++) {
-        var key = soile2.rt.kbd.name(e.keyCode)
+        var key = soile2.rt.kbd.name(e.keyCode);
 
         //console.log(anykeyfunctions[i].ignoreFunc(e.keyCode));
         //Check if the click key is ignored before calling
@@ -1005,7 +1003,7 @@ SOILE2 = (function(){
           anykeyfunctions[i].func.apply(null, [key]);
         }
       }
-    }
+    };
 
     document.onkeydown = keyFunction;
 
@@ -1019,33 +1017,33 @@ SOILE2 = (function(){
       'reset': function() {
         keyfunctions = {};
         anykeyfunctions = [];
-        lastKey = ""
-        lastActiveKey = ""
+        lastKey = "";
+        lastActiveKey = "";
         // document.onkeydown = null;
       },
       'resume': function(key) {
         var ignoreFunc = anything;
+        var onkey = null;
         if(key) {
           var keycode = soile2.rt.kbd.keycode(key);
 
-          var onkey = function() {
+          onkey = function() {
             soile2.bin.resume();
             keyfunctions[keycode] = null;
-          }
+          };
+
           keyfunctions[keycode] = onkey;
         } else {
-          var onkey = null
           onkey = function(key) {
-            soile2.bin.resume()
+            soile2.bin.resume();
             var index = anykeyfunctions.indexOf(onkey);
             anykeyfunctions.splice(index, 1);
-          }
+          };
 
           anykeyfunctions.push({"func":onkey, "ignoreFunc":ignoreFunc});
         }
       },
 
-      //
       'addAny': function(func, ignore) {
         var ignoreFunc = anything;
 
@@ -1060,14 +1058,14 @@ SOILE2 = (function(){
           }
           console.log(ignore);
 
-          var ignoreFunc = function(keyCode) {
+          ignoreFunc = function(keyCode) {
             if (ignore.indexOf(keyCode) === -1) {
               return true;
             }
             else {
               return false;
             }
-          }
+          };
         }
 
         anykeyfunctions.push({"func":func,"ignoreFunc":ignoreFunc});
@@ -1080,10 +1078,10 @@ SOILE2 = (function(){
       },
       'lastActiveKey': function() {
         var key = soile2.rt.kbd.name(lastActiveKey);
-        lastActiveKey = ""
+        lastActiveKey = "";
         return key;
       }
-    }
+    };
   })();
 
   /*
@@ -1107,7 +1105,7 @@ SOILE2 = (function(){
       for(var i =0; i<len;i++) {
         f(data.rows[i]);
       }
-    }
+    };
 
     /* Returns an arroy with data from the current field
        if field is an array do nothign and return it.
@@ -1119,11 +1117,11 @@ SOILE2 = (function(){
       var arr = [];
       _iterateRows(function(row){
         if(row.hasOwnProperty(field)) {
-          arr.push(row[field])
+          arr.push(row[field]);
         }
       });
       return arr;
-    }
+    };
 
     var _setData = function() {
       data = {};
@@ -1132,53 +1130,52 @@ SOILE2 = (function(){
       data.single = {};
       data.rows = [];
       data.rows.push({});
-    }
+    };
 
     var _average = function(array) {
-      if(!array instanceof Array) {
+      if(!(array instanceof Array)) {
         return 0; 
       }
       var sum =  array.reduce(function(sum, value) {
-        return sum + value
-      }, 0)
+        return sum + value;
+      }, 0);
 
       var avg = sum/array.length;
       return avg;
-    }
+    };
 
     /*
       Calculates sum of array divided by n-1, used when calculating
       sample standarddeviation.
     */
     var _avNminusOne = function(array) {
-      if(!array instanceof Array) {
+      if(!(array instanceof Array)) {
         return 0; 
       }
       var sum =  array.reduce(function(sum, value) {
-        return sum + value
-      }, 0)
+        return sum + value;
+      }, 0);
 
       var avg = sum/(array.length-1);
       return avg;
-    }
+    };
 
     /* Using population standard deviation */
     var _standardDeviation = function(array) {
-        var avg = _average(array);
+      var avg = _average(array);
 
-        //Calcualting squarediffs
-        var squareDiffs = array.map(function(value) {
-          var diff = value - avg;
-          var sqr = diff * diff;
-          return sqr;
-        })
+      //Calcualting squarediffs
+      var squareDiffs = array.map(function(value) {
+        var diff = value - avg;
+        var sqr = diff * diff;
+        return sqr;
+      });
 
+      //var standardDev = Math.sqrt(_average(squareDiffs));
+      var standardDev = Math.sqrt(_avNminusOne(squareDiffs));
 
-        //var standardDev = Math.sqrt(_average(squareDiffs));
-        var standardDev = Math.sqrt(_avNminusOne(squareDiffs));
-
-        return standardDev;
-    }
+      return standardDev;
+    };
 
     var _median = function(array) {
       var median = 0;
@@ -1186,13 +1183,14 @@ SOILE2 = (function(){
       array.sort( function(a,b) {return a - b;} );
       var half = Math.floor(array.length/2);
 
-      if(array.length % 2)
-          median = array[half];
-      else
-          median = (array[half-1] + array[half]) / 2.0;
-
+      if(array.length % 2){
+        median = array[half];
+      }
+      else{
+        median = (array[half-1] + array[half]) / 2.0;
+      }
       return median;
-    }
+    };
 
     _setData();
 
@@ -1215,40 +1213,19 @@ SOILE2 = (function(){
         var sum = 0;
 
         return _average(_fieldToArray(field));
-
-       /* _iterateRows(function(row) {
-          if(row.hasOwnProperty(field)&& util.is_number(row[field])) {
-            sum += row[field];
-            noOfvalues += 1;
-          }
-        });
-        console.log("average is " + sum/noOfvalues);
-        data.single["average_"+field] = sum/noOfvalues;*/
       },
       'count': function(field) {
         var count = 0;
-        var arr = _fieldToArray(field)
+        var arr = _fieldToArray(field);
 
-        /*_.each(arr, function(row) {
-          if(row.hasOwnProperty(field)) {
-            count += 1;
-          }
-        });*/
         console.log(arr);
         console.log(arr.length);
 
-        return arr.length
-        
-       /* _iterateRows(function(row) {
-          if(row.hasOwnProperty(field)) {
-            count += 1;
-          }
-        });
-        data.single["count_"+field] = count;*/
+        return arr.length;
       },
       'countValue': function(field, value) {
         var count = 0;
-        var arr = _fieldToArray(field)
+        var arr = _fieldToArray(field);
 
         _.each(arr, function(val) {
           if(val === value) {
@@ -1257,30 +1234,13 @@ SOILE2 = (function(){
         });
 
         return count;
-
-        /*_iterateRows(function(row) {
-          if(row.hasOwnProperty(field) && row[field]===value) {
-            count += 1;
-          }
-        });
-
-        data.single["count_"+field+"_"+value] = count;*/
       },
       'median': function(field) {
-
         var values = _fieldToArray(field); 
         var median; 
 
-        /*_iterateRows(function(row) {
-          if(row.hasOwnProperty(field) && util.is_number(row[field])) {
-            values.push(row[field]);
-          }
-        })*/
-
         median = _median(values);
         return median;
-
-        //data.single["median_"+field] = median;
       },
       'standarddeviation':function(field) {
         var values = _fieldToArray(field);
@@ -1327,12 +1287,12 @@ SOILE2 = (function(){
             //console.log("Outlier value: " + row[field])
             row[field+"_outlier"] = row[field];
           }
-        })
+        });
 
         for(var i =0; i<arr.length;i++) {
           if(util.is_number(arr[i]) &&
               (arr[i] < upperLimit && arr[i] > lowerLimit)) {
-            reminder.push(arr[i])
+            reminder.push(arr[i]);
           }
         }
         //console.log("Reminder: "+reminder);
@@ -1349,7 +1309,7 @@ SOILE2 = (function(){
         _setData();
       }
 
-    }
+    };
   })();
 
   rt.scoreHandler = (function() {
@@ -1365,10 +1325,10 @@ SOILE2 = (function(){
 
     return {
       'save': function(score) {
-        _saveGeneralScore(score)
+        _saveGeneralScore(score);
       },
       'saveNamed':function(name, score) {
-        _saveNamedScore(name, score)
+        _saveNamedScore(name, score);
       },
       'get': function(){
         if (_.isEmpty(_score)) {
@@ -1376,7 +1336,7 @@ SOILE2 = (function(){
         }
         return _score;
       }
-    }
+    };
   })();
 
   rt.persistantDataHandler = (function() {
@@ -1390,7 +1350,7 @@ SOILE2 = (function(){
       'load': function(name) {
         console.log("LOADING VARIABLE " + JSON.stringify(_variables));
         name = name.toString();
-        console.log("VAR." + name + " = " + _variables[name])
+        console.log("VAR." + name + " = " + _variables[name]);
 
         if (typeof _variables[name] === 'undefined') {
           return undefined;
@@ -1407,7 +1367,7 @@ SOILE2 = (function(){
       'set':function(data) {
         _variables = data;
       }
-    }
+    };
   })();
 
   // Seedable randomfunction based on Math.sin. appears to produce sufficienlty
@@ -1419,7 +1379,7 @@ SOILE2 = (function(){
     var _randomFunction = function() {
       var x = Math.sin(_seed++) * 10000;
       return x - Math.floor(x);
-    }
+    };
 
     return {
       'seed': function(seed) {
@@ -1428,7 +1388,7 @@ SOILE2 = (function(){
       'get': function() {
         return _randomFunction();
       }
-    }
+    };
   })();
 
   // Simple single timer function.
@@ -1441,11 +1401,11 @@ SOILE2 = (function(){
       },
       'elapsedTime': function() {
         if(startTime) {
-          var elapsed = soile2.rt.timestamp() - startTime
-          return elapsed
-        }else {return 0}
+          var elapsed = soile2.rt.timestamp() - startTime;
+          return elapsed;
+        }else {return 0;}
       }
-    }
+    };
 
   })();
   
@@ -1478,7 +1438,7 @@ SOILE2 = (function(){
             //console.log("Popping stimuli");
             _iterationStimuli = _stimuli.pop();
 
-            if(_iterationStimuli === undefined) {_iterationStimuli = null}
+            if(_iterationStimuli === undefined) {_iterationStimuli = null;}
          }
          return _iterationStimuli;
 
@@ -1522,11 +1482,11 @@ SOILE2 = (function(){
       'subset':function(stimuliCount) {
         this.shuffle();
         if(stimuliCount < _stimuli.length) {
-          var removeCount = _stimuli.length - stimuliCount
+          var removeCount = _stimuli.length - stimuliCount;
           for (var i = 0; i < (removeCount); i++) {
             _stimuli.pop(0);
             //console.log("Popping stimuli " + i);
-          };
+          }
         }
       },
       'empty' : function() {
@@ -1634,8 +1594,6 @@ SOILE2 = (function(){
       pi = soile2.rt.get_pi(idx);
       opcode = soile2.rt.pi_opcode(pi);
 
-      //console.log("Current index: " + idx + "  Instruction: " + JSON.stringify(pi) + " Params: " + pi.params);
-
       if (opcode < 0){
         // TODO
         rt.finish();
@@ -1720,30 +1678,30 @@ SOILE2 = (function(){
       var delay = msleft(ts);
       //console.log("Delay = " + delay)
       if (delay < 6) {
-        return 1
+        return 1;
       }
       if (delay < 14){
-        return 2
-        return MINDELAY;
+        return 2;
+        //return MINDELAY;
       }
       if (delay < 50){
-        return 10
-        return MINDELAY * 5;
+        return 10;
+        //return MINDELAY * 5;
       }
       if (delay < 100){
-        return 20
-        return MINDELAY * 10;
+        return 20;
+        //return MINDELAY * 10;
       }
       if (delay < 500){
-        return 50
-        return MINDELAY * 15;
+        return 50;
+        //return MINDELAY * 15;
       }
       if (delay < 1000){
-        return 100
-        return MINDELAY * 30;
+        return 100;
+        //return MINDELAY * 30;
       }
-      return 300
-      return MINDELAY * 40;
+      return 300;
+      //return MINDELAY * 40;
     };
     
     var schedule = function(delay){
@@ -1840,8 +1798,7 @@ SOILE2 = (function(){
 
     //endFunc(soile2.rt.dataHandler.getData());
     endFunc(data, duration, score, persistantData);
-
-  }
+  };
   
   rt.seal = (function(){
     if (Object.seal !== undefined || typeof Object.seal === 'function') {
@@ -1937,23 +1894,23 @@ SOILE2 = (function(){
   
   util.setEndFunction = function(f) {
     endFunc = f;
-  }
+  };
 
   util.enableLoadScreen = function () {
     console.log("Enabling loadscreen");
     var a = $("#loadAnim").toggleClass("hidden", false);
-    a.removeClass("hidden")
+    a.removeClass("hidden");
     console.log(a);
     loadScreen = true;
-  }
+  };
 
   util.setStartFunction = function(f) {
     startFunc = f;
-  }
+  };
 
   util.setLogFunction = function(f) {
     logFunc = f;
-  }
+  };
 
   //Resets collected data, should be when a test is rerun when
   //debugging
@@ -1962,7 +1919,7 @@ SOILE2 = (function(){
     soile2.rt.keyhandler.reset();
 
     allReady = false;
-  }
+  };
 
   util.getid = function(s) {
     if (typeof s === 'string') {
@@ -1990,7 +1947,7 @@ SOILE2 = (function(){
   };
 
   util.can_be_number = function (i) {
-    var n = parseFloat(i)
+    var n = parseFloat(i);
     return _.isNumber(n);
   };
 
@@ -2010,12 +1967,12 @@ SOILE2 = (function(){
       if(allReady) {
         soile2.start();
       }
-    };
+    }
   };
 
   util.setPersistantData = function(data) {
     soile2.rt.persistantDataHandler.set(data);
-  }
+  };
 
   soile2.bin = soile2.rt.seal(bin);
 
@@ -2032,7 +1989,7 @@ SOILE2 = (function(){
       $("#loadAnim").toggleClass("hidden", true);
       SOILE2.rt.exec_pi();
     }
-  }
+  };
   
   return soile2;
 })();

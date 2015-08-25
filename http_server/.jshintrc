@@ -11,6 +11,8 @@
     "SOILE2":true,
     "it":true,
     "describe":true,
-    "expect":true
+    "expect":true,
+    "_":true,
+    "jQuery":true
   }
 }
