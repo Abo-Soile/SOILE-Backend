@@ -103,13 +103,11 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, co
 
         trainingData.save(function(err) {
             return callback(trainingData);
-
         });
     } else {
         console.log("Training exists");
         callback(trainingData);
     }
-
   });
 };
 

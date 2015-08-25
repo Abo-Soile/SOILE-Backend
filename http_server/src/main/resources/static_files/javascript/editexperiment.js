@@ -210,8 +210,6 @@ function(dom,
 					resp.hidelogin = true;
 				}
 
-				console.log(resp.loginrequired)
-
 				resp.startDate = sDate.toISOString();
 				resp.endDate = eDate.toISOString();
 

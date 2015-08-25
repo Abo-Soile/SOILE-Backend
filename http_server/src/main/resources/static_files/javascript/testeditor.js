@@ -24,10 +24,10 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
 		var imgUrl = baseUrl + "/imageupload"
 		var onComplete = function(item, response, status, headers) {
 			loadImages();
-		}
+		};
 
 		$scope.uploader = new FileUploader({url:imgUrl});
-		$scope.images = []
+		$scope.images = [];
 
 		$scope.uploader.autoUpload = true;
 		$scope.uploader.removeAfterUpload = true;
@@ -59,9 +59,9 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
 		$scope.useImage = function(image) {
 			var name = image.name;
       var humanName = name.substring(0, name.lastIndexOf("."));
-      var url = "/" + image.url
+      var url = "/" + image.url;
 
-      var str = "val "+ humanName +' <- imagefile("'+ url+ '") \n'
+      var str = "val "+ humanName +' <- imagefile("'+ url+ '") \n';
 
 			$scope.editor.insert(str);
 		};
@@ -75,7 +75,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   $scope.savebutton = "Save&Compile";
   $scope.runbutton = "Run";
-  $scope.compiled = false
+  $scope.compiled = false;
 
   ace.config.set("modePath", "/javascript");
 
@@ -100,7 +100,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       $scope.compileErrors = data.errors;
   		$scope.compiledCode = data.code;
 
-      if (typeof data.errors == 'undefined') {
+      if (typeof data.errors === 'undefined') {
         $scope.compiled = true;
       }else {
         $scope.compiled = false;
@@ -138,7 +138,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       }
 
 
-      for (var i = 0; i<rowCount; i++) {
+      for (i = 0; i<rowCount; i++) {
         for(var s in set) {
           if ( data.rows[i].hasOwnProperty(s) ) {
             set[s].data.push(data.rows[i][s]);
@@ -146,21 +146,21 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
             set[s].data.push("-");
           }
         }
-      };
+      }
 
-      var headers = []
-      var rows = []
+      var headers = [];
+      var rows = [];
 
       for(var col in set) {
         headers.push(col);
       }
 
-      for (var i = 0; i < rowCount; i++) {
-      	rows[i] = []
-      	for(var col in set) {
-		      rows[i].push(JSON.stringify(set[col].data[i]));
-      		//rows[i][col] = JSON.stringify(set[col].data[i]);
-      	}
+      for (i = 0; i < rowCount; i++) {
+        rows[i] = [];
+        for(col in set) {
+          rows[i].push(JSON.stringify(set[col].data[i]));
+          //rows[i][col] = JSON.stringify(set[col].data[i]);
+        }
       }
 
       $scope.singleData = data.single;
@@ -174,31 +174,28 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   };
 
   $scope.runTest = function() {
-      $scope.runbutton = "Running";
+    $scope.runbutton = "Running";
 
-      $scope.soileLog = [];
-  		$scope.testStartTime = Date.now();
+    $scope.soileLog = [];
+		$scope.testStartTime = Date.now();
 
-      //console.log($scope.compiledCode);
-      console.log("Executing soile");
-      
-      SOILE2.util.eval($scope.compiledCode);
-      SOILE2.util.setEndFunction($scope.endFunc);
-      SOILE2.util.setLogFunction($scope.logFunc);
+    //console.log($scope.compiledCode);
+    console.log("Executing soile");
 
-      SOILE2.util.resetData();
-      $timeout(function() {
-        //SOILE2.run()
-        SOILE2.rt.exec_pi();
-      }, 1500);
+    SOILE2.util.eval($scope.compiledCode);
+    SOILE2.util.setEndFunction($scope.endFunc);
+    SOILE2.util.setLogFunction($scope.logFunc);
+
+    SOILE2.util.resetData();
+    $timeout(function() {
+      //SOILE2.run()
+      SOILE2.rt.exec_pi();
+    }, 1500);
   };
-
 });
 
 app.controller('editNameController', function($scope, $http, $location) {
   var editnameurl = $location.absUrl() + "/editname";
-
-  console.log($scope.testname)
 
   $scope.updatename = function(data) {
     console.log("Updating " + $scope.testname + "    " + data);
@@ -210,10 +207,7 @@ app.controller('editNameController', function($scope, $http, $location) {
     console.log("initing name: " + name);
     $scope.testname = name;
   };
-
 });
-
-
 
 //Showing mouse coordinates when hovering over the test display
 var mousePos = document.getElementById("mouseposition");
@@ -225,7 +219,6 @@ var mouseMove = function (e){
   var cursor = "Mouse Position: Top " + y.toFixed(0) + " Left: " + x.toFixed(0) ;
   mousePos.innerHTML = cursor;
 };
-
 
 function stopTracking(){
     mousePos.innerHTML="";

@@ -31,7 +31,6 @@ User.prototype = new BaseModel();
 User.prototype.constructor = User;
 User.collection = "users";
 
-
 //User.collection = "user";
 
 User.prototype.setPassword = function(password) {
@@ -83,7 +82,7 @@ function Training(arg) {
 
     this.repeatpause = 0;
     this.repeatcount = 1;
-    this.maxpause = 1
+    this.maxpause = 1;
 
     BaseModel.call(this, arg);
     
@@ -256,7 +255,7 @@ TrainingData.prototype.completePhase = function(training) {
   //LastPhase
   if (lastPhase) {
 
-    console.log("IN LAST PHASE")
+    console.log("IN LAST PHASE");
 
     if (mode === "pre") {
       this.nextTask = hoursFromNow(training.repeatpause);

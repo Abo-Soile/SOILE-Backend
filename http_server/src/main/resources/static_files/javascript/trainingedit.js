@@ -28,106 +28,104 @@ app.filter('range', function() {
 });
 
 app.controller('trainingController', function($scope, $http, $location) {
-    var baseUrl = $location.absUrl();
-    $scope.training = {};
+  var baseUrl = $location.absUrl();
+  $scope.training = {};
 
-    $scope.saveTraining = function save() {
-        console.log("SSSSAAAVVE");
-        var data = $scope.training;
+  $scope.saveTraining = function save() {
+      console.log("SSSSAAAVVE");
+      var data = $scope.training;
 
-        console.log($scope.training);
+      console.log($scope.training);
 
-        $http.post(baseUrl, data);
-    };
+      $http.post(baseUrl, data);
+  };
 
-    $scope.loadData = function() {
-        $http.get("json").success(function(data,status) {
-            console.log(data);
-            $scope.training = data;
-            console.log($scope);
-        });
-    };
+  $scope.loadData = function() {
+      $http.get("json").success(function(data,status) {
+          console.log(data);
+          $scope.training = data;
+          console.log($scope);
+      });
+  };
 
-    $scope.toggleControlGroup = function(event) {
-        console.log(event);
-        if ($scope.training.controlgroup) {
-            $scope.training.components.control = [];
-        } else {
-            delete($scope.training.components.control);
-        }
-    };
+  $scope.toggleControlGroup = function(event) {
+      console.log(event);
+      if ($scope.training.controlgroup) {
+          $scope.training.components.control = [];
+      } else {
+          delete($scope.training.components.control);
+      }
+  };
 
-    $scope.loadData();
-
-})
+  $scope.loadData();
+});
 
 app.controller('componentController', function($scope, $http, $location) {
 
-    $scope.test = {};
+  $scope.test = {};
 
-    $scope.delComponent = function(type,index) {
-        console.log("Deleting " + type + " : " + index);
-        $scope.training.components[type].splice(index, 1);
-    };
+  $scope.delComponent = function(type,index) {
+      console.log("Deleting " + type + " : " + index);
+      $scope.training.components[type].splice(index, 1);
+  };
 
 
-    $scope.addTest = function() {
-      console.log($scope);
-      var compObject = {};
-      compObject.name = $scope.test.selected.name;
-      compObject.id = $scope.test.selected._id;
-      compObject.type = "test";
+  $scope.addTest = function() {
+    console.log($scope);
+    var compObject = {};
+    compObject.name = $scope.test.selected.name;
+    compObject.id = $scope.test.selected._id;
+    compObject.type = "test";
 
-      $scope.training.components.training.push(compObject);
+    $scope.training.components.training.push(compObject);
 
-      $scope.test.selected = null;
+    $scope.test.selected = null;
 
-    };
+  };
 
-    $scope.addForm = function() {
-      $http.post('addform')
-      .then(function(response) {
-        var data = response.data;
+  $scope.addForm = function() {
+    $http.post('addform')
+    .then(function(response) {
+      var data = response.data;
 
-        $scope.loadData();
-      });
-    };
+      $scope.loadData();
+    });
+  };
 
-    var loadTests = function() {
-      return $http.get('/test/json/compiled')
-      .then(function(response) {
-        $scope.tests = response.data;
-      });
-    };
+  var loadTests = function() {
+    return $http.get('/test/json/compiled')
+    .then(function(response) {
+      $scope.tests = response.data;
+    });
+  };
 
-    $scope.refreshTests = function(search) {
-      return $http.get('/test/json/compiled')
-      .then(function(response) {
-        $scope.tests = response.data;
-        console.log($scope.tests);
-      });
-    };
+  $scope.refreshTests = function(search) {
+    return $http.get('/test/json/compiled')
+    .then(function(response) {
+      $scope.tests = response.data;
+      console.log($scope.tests);
+    });
+  };
 
 /*
-    var arr = [];
-    arr.push({name:"aaa", type:"test"});
-    arr.push({name:"bbb", type:"form"});
-    arr.push({name:"ccc", type:"test"});
+  var arr = [];
+  arr.push({name:"aaa", type:"test"});
+  arr.push({name:"bbb", type:"form"});
+  arr.push({name:"ccc", type:"test"});
 
-    $scope.training = {};
-    $scope.training.name = "TESTNAME";
+  $scope.training = {};
+  $scope.training.name = "TESTNAME";
 
-    $scope.components = {};
-    $scope.components.pre = [];
-    $scope.components.training = [];
-    $scope.components.post = [];
+  $scope.components = {};
+  $scope.components.pre = [];
+  $scope.components.training = [];
+  $scope.components.post = [];
 
-    $scope.components.pre = arr;
-    $scope.components.training = arr;
-    $scope.components.post = arr;
+  $scope.components.pre = arr;
+  $scope.components.training = arr;
+  $scope.components.post = arr;
 
-    $scope.training.components = $scope.components;
+  $scope.training.components = $scope.components;
 */
-    loadTests();
-
+  loadTests();
 });

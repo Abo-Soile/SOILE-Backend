@@ -196,10 +196,10 @@ require(["dijit/form/HorizontalSlider",
     var send_questionnaire_data = function(data){
       console.log(JSON.stringify(data));
 
-    }
+    };
     var loadData = function() {
       var funcArray = window.funcArray;
-      qdata = {}
+      qdata = {};
 
       for(var i = 0; i<funcArray.length; i++) {
         console.log(funcArray[i]);
@@ -223,7 +223,7 @@ require(["dijit/form/HorizontalSlider",
         }
       }
       return qdata;
-    }
+    };
 
     if (dom.byId('showData')) {
       on(dom.byId('showData'), "click", function() {
@@ -238,7 +238,8 @@ require(["dijit/form/HorizontalSlider",
         //console.log(widgets);
 
       });
-    };
+    }
+
     if (dom.byId("submitButton")) {
       on(dom.byId("submitButton"), "click", function() { 
         console.log("submitbutton");
@@ -251,7 +252,7 @@ require(["dijit/form/HorizontalSlider",
 
           xhr.post(document.URL,{data:JSON.stringify(formdata)}).then(function(response) {
             if (typeof response !== 'undefined') {
-              response = JSON.parse(response)
+              response = JSON.parse(response);
             }
 
             var url = document.URL;
@@ -276,8 +277,7 @@ require(["dijit/form/HorizontalSlider",
             }  
           });
         }
-
       });
-    };
+    }
   });
 });

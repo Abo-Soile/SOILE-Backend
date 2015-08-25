@@ -53,21 +53,20 @@ function(
 	          url = url.slice(0, url.lastIndexOf("/")+1);
 
 	          if(!isNaN(currentPhase)) {
-	            console.log("Redirecting " + isNaN(currentPhase))
+	            console.log("Redirecting " + isNaN(currentPhase));
 	            window.location.href = url+(currentPhase+1);
 	          }else {
 	            location.reload();
 	          }
           }
-    	})
-
+    	});
     }
 
     function startSoile(data) {
-      console.log("Starting soile")
+      console.log("Starting soile");
       SOILE2.util.enableLoadScreen();
 
-      SOILE2.util.setStartFunction(startFunc)
+      SOILE2.util.setStartFunction(startFunc);
       SOILE2.util.eval(data);
 
       SOILE2.util.setEndFunction(end);
@@ -83,23 +82,20 @@ function(
     console.log(typeof window.testJs);
 
     if (window.testJs !== undefined) {
-      console.log("fdslkfdsklfjdsl")
+      console.log("fdslkfdsklfjdsl");
       var data = window.testJs;
       startSoile(data);
     }
     else {
-      console.log("dklfjd")
+      console.log("dklfjd");
       var jsonUrl = document.URL + "/json";
       xhr.get(jsonUrl).then(function(data) {
         
-        startSoile(data)
+        startSoile(data);
         //setTimeout(function() {
         //  SOILE2.rt.exec_pi();
         //}, 1500);
-      })
-      
+      });
     }
-      
-
   });
-})
+});

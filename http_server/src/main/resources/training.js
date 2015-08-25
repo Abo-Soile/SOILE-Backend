@@ -65,7 +65,7 @@ function handleResultData(data, datatype, callback) {
 
 //Admin view, show list of training experiments
 router.get("/training", function(request) {
-  console.log("TRAAAAINNNING!!!")
+  console.log("TRAAAAINNNING!!!");
 
 });
 
@@ -81,7 +81,7 @@ router.get("/training/:id", function(request) {
 
   // Get training
   trainingDAO.get(id, function(training) {
-    console.log("##### FIRST TRAINING")
+    console.log("##### FIRST TRAINING");
     console.log(JSON.stringify(training));
 
     trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
@@ -394,13 +394,13 @@ router.get("/training/:id/post", function(request) {
 //Repeated training task 
 router.get("/training/:id/task", function(request) {
 
-})
+});
 
 router.get("/training/:id/edit", function(request) {
 
   templateManager.render_template('trainingEdit', {}, request);
 
-})
+});
 
 //JSON structure
 /*
