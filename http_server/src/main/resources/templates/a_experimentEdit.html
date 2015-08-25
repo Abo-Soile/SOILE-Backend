@@ -80,9 +80,10 @@
                 <span ng-if="comp.type == 'test'">
                   <input class="form-control" ng-model=comp.name readonly>
 
-                  <span class="checkbox-inline">
-                    <label class="checkbox-inline">
-                      <input style="width: 20px; height: 20px" type="checkbox" ng-model="comp.random" ng-true-value="true" ng-false-value="false">
+                  <span class="checkbox">
+                    <label class="componentcheckbox">
+                      Randomize
+                      <input type="checkbox" ng-model="comp.random" ng-true-value="true" ng-false-value="false">
                     </label>
                   </span>
 

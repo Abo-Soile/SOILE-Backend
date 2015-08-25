@@ -772,3 +772,26 @@ dBootstrap fixes
 #chartcontainer {
   margin-top: 15px;
 }
+
+
+
+/*Big checkbox*/
+
+.bigcheckbox {
+  margin-left: 5px;
+}
+
+.bigcheckbox input {
+  width: 20px;
+  height: 20px;
+  margin: 0px;
+}
+
+.componentcheckbox input[type="checkbox"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  position:relative;
+  top:3px;
+  left:3px;
+}
