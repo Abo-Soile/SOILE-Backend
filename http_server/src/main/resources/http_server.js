@@ -482,6 +482,12 @@ customMatcher.get('/experiment/:id', function(request){
             console.log("Generated random order " + JSON.stringify(order));
             userdata.randomorder = order; 
           }
+
+          //Generating token if this is a turk experiment
+          if (exp.mechanicalTurkEnabled) {
+            userdata.mechanicalTurkToken = utils.randomAlphaNumeric(10);
+          }
+
           mongo.experiment.initUserData(userdata, userID, exp._id, function(r2){
             renderExp(r);
           });
@@ -826,7 +832,7 @@ customMatcher.post('/experiment/:id/phase/:phase', function(request) {
     var duration = postJson.duration;
     var score = postJson.score;
 
-    //console.log(expData);
+    console.log(JSON.stringify(postJson));
 
     mongo.experiment.saveData(phase, expID, expData, duration, score,userID, function(r){
       //console.log(JSON.stringify(r));
@@ -866,7 +872,17 @@ customMatcher.get('/experiment/:id/end', function(request) {
         context.hideLogin = exp.hidelogin;
       }
 
-      templateManager.render_template('end', context,request);
+      if (exp.mechanicalTurkEnabled) {
+        mongo.experiment.userPosition(userID, expID, function(userData) {
+          
+          context.endmessage = context.endmessage.replace("{turkToken}", userData.mechanicalTurkToken);
+
+          return templateManager.render_template('end', context, request);
+        });
+      }
+      else {
+        return templateManager.render_template('end', context, request);
+      }
     });
   });
 

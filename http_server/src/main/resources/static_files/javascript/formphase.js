@@ -81,6 +81,8 @@ require(["dijit/form/HorizontalSlider",
     var qdata = {};
     var testdata = {};
 
+    var startTime = new Date();
+
     var dojoForm = registry.byId("formcol");
     console.log(dojoForm);
 
@@ -250,18 +252,22 @@ require(["dijit/form/HorizontalSlider",
           var formdata = loadData();
           send_questionnaire_data(formdata);
 
-          xhr.post(document.URL,{data:JSON.stringify(formdata)}).then(function(response) {
-            if (typeof response !== 'undefined') {
-              response = JSON.parse(response);
-            }
+          var duration = Date.now() - startTime;
 
-            var url = document.URL;
+          var d = {}
+          d.exp = formdata;
+          d.duration = duration;
+
+          xhr.post(document.URL,{data:JSON.stringify(d)}).then(function(response) {
+            console.log(response);
+
+			var url = document.URL;
 
             if(response.redirect) {
               console.log("JSON_REDIRECTING");
               window.location.replace(response.redirect);
             }
-            
+	            
             else {
               //currentPhase = parseInt(document.URL.slice(76));
               var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
@@ -277,7 +283,8 @@ require(["dijit/form/HorizontalSlider",
             }  
           });
         }
+    };
       });
-    }
+    };
   });
 });

@@ -123,7 +123,6 @@ var utils = (function() {
 
       return hexString;
     },
-
     //Decorator ish function to ensure that the user is admin
     'requireAdmin':function(func) {
       return function(request) {
@@ -134,6 +133,14 @@ var utils = (function() {
           func(request);
         }
       };
+    },
+    'randomString': function(length, chars) {
+      var result = '';
+      for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+      return result;
+    },
+    'randomAlphaNumeric': function(length) {
+      return this.randomString(length, "1234567890abcdefghijklmnopqrstuvwxyz");
     }
   };
 

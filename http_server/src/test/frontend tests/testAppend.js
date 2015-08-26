@@ -31,4 +31,15 @@ describe("Builtin append", function() {
     expect(arrEmpty).toContain("d");
   
   });
+
+  it("concateneates two array", function() {
+    var arr1 = [1,2,3];
+    var arr2 = ["a","b","c"];
+
+    var c = app(arr1, arr2);
+    
+    expect(arr1).toContain("a");
+    expect(arr1).toContain("b");
+    expect(arr1).toContain("c");
+  });
 });

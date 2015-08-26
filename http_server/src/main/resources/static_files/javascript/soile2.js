@@ -370,7 +370,7 @@ SOILE2 = (function(){
     var img = jQuery('<img />', props).appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
     if(loadScreen) {  
-      console.log(performance.now() + " LOADING IMAGE");
+      //console.log(performance.now() + " LOADING IMAGE");
       toLoad += 1;
       img.on('load', soile2.util.onImageLoad);
     }
@@ -664,6 +664,13 @@ SOILE2 = (function(){
   };
 
   bin.append = function(str1, str2) {
+
+    if(_.isArray(str1) && _.isArray(str2)) {
+      str1.push.apply(str1, str2);
+      return str1
+    }
+
+
     //console.log("str1: " + str1 + " " + typeof str1 + " ||str2 " + str2 + " " + typeof str2)
     if(typeof str1 === "undefined") {
       var temp = [];
@@ -1962,7 +1969,7 @@ SOILE2 = (function(){
   util.onImageLoad = function() {
     toLoad -= 1;
 
-    console.log(performance.now() + " Image Loaded, images left:" + toLoad + " allready: " + allReady);
+    //console.log(performance.now() + " Image Loaded, images left:" + toLoad + " allready: " + allReady);
     if (toLoad === 0) {
       if(allReady) {
         soile2.start();

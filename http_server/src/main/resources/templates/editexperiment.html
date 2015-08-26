@@ -35,13 +35,22 @@
 				 {/exp.loginrequired}
 				 />
 
-				 <label for="hidelogin">Hide Login</label>
+				<label for="hidelogin">Hide Login</label>
 				<input type="text" name="hidelogin" id="hidelogin" data-dojo-type="dijit/form/CheckBox" 
 				 {#exp.hidelogin}
 				 	data-dojo-props="checked: true"
 				 {:else}
 				 	data-dojo-props="checked: false"
 				 {/exp.hidelogin}
+				 />
+
+ 				<label for="mechanicalTurkEnabled">Mechanical Turk</label>
+				<input type="text" name="mechanicalTurkEnabled" id="mechanicalTurkEnabled" data-dojo-type="dijit/form/CheckBox" 
+				 {#exp.mechanicalTurkEnabled}
+				 	data-dojo-props="checked: true"
+				 {:else}
+				 	data-dojo-props="checked: false"
+				 {/exp.mechanicalTurkEnabled}
 				 />
 
 				<br>
