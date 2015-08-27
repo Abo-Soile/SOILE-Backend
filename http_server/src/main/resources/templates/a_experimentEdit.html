@@ -109,10 +109,12 @@
         </div>
       </div>
     </div>
-      
-    <div class="col-md-12">
+  </div>
+  <div class="row">      
+    <div class="col-md-1">
       <button class="btn btn-default" ng-click="addForm()">Add form</button>
-
+    </div>
+    <div class="col-md-10">
       <div class="form-group">
         <ui-select ng-model="test.selected"  theme="bootstrap" ng-disabled="disabled" style="min-width: 300px; max-width: 300px; display: inline-block">
           <ui-select-match placeholder="Select an experiment">[([$select.selected.name])]</ui-select-match>
