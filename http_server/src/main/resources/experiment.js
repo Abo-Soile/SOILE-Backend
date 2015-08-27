@@ -3,7 +3,7 @@ var console = require('vertx/console');
 var utils = require("utils");
 
 var CustomMatcher = require('router');
-var customMatcher = new CustomMatcher();
+var router = new CustomMatcher();
 
 var templateManager = require('templateManager');
 
@@ -21,11 +21,40 @@ function merge_options(obj1,obj2){
     return obj3;
 }
 
-customMatcher.get("/a_experiment/:id/edit", function(request) {
+router.get("/experiment", function(request){
+  experimentDAO.list(function(r){
+
+    templateManager.render_template("experimentList", {"experiments":r}, request);
+  });
+});
+
+
+router.get("/experiment/new", function(request){
+  //templateManager.render_template("experimentform", {},request);
+  var sDate = Date.now();
+  var eDate = Date.now() + (1000*60*60*24*30);  //30 days in the future
+
+  var expData = {};
+
+  var newExp = new experimentModel();
+  newExp.startDate = new Date(sDate);
+  newExp.endDate = new Date(eDate);
+  newExp.name = "";
+
+  newExp.save(function(r){
+      console.log(JSON.stringify(r));
+
+      request.redirect("/experiment/"+newExp._id+"/edit");
+      request.response.end();
+
+    });
+});
+
+router.get("/experiment/:id/edit", function(request) {
   templateManager.render_template('a_experimentEdit', {}, request);
 });
 
-customMatcher.post("/a_experiment/:id/edit", function(request) {
+router.post("/experiment/:id/edit", function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -49,7 +78,7 @@ customMatcher.post("/a_experiment/:id/edit", function(request) {
 });
 
 
-customMatcher.get("/a_experiment/:id/json", function(request) {
+router.get("/experiment/:id/json", function(request) {
   var id = request.params().get('id');
 
   experimentDAO.get(id, function(experiment) {
@@ -60,7 +89,7 @@ customMatcher.get("/a_experiment/:id/json", function(request) {
   });
 });
 
-customMatcher.post("/a_experiment/:id/addform", function(request) {
+router.post("/experiment/:id/addform", function(request) {
   var id = request.params().get('id');
   var address = utils.get_address('questionnaire_render');
 

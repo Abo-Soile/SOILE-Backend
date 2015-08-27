@@ -17,7 +17,7 @@ var config = container.config;
 var testImages = config.directory + "/testimages";
 
 
-router.get("/experiment", function(request){
+router.get("/old_experiment", function(request){
   mongo.experiment.list([], function(r){
 
     templateManager.render_template("experimentList", {"experiments":r.results}, request);
@@ -29,7 +29,7 @@ router.get("/experiment", function(request){
 Creates a new empty experiment and redirects the user to the new 
 experiments' edit page
 */
-router.get("/experiment/new", function(request){
+router.get("/old_experiment/new", function(request){
   //templateManager.render_template("experimentform", {},request);
   var sDate = Date.now();
   var eDate = Date.now() + (1000*60*60*24*30);  //30 days in the future
@@ -192,7 +192,7 @@ router.get('/experiment/:id', function(request){
 });
 
 
-router.get('/experiment/:id/edit', requireAdmin(function(request){
+router.get('/old_experiment/:id/edit', requireAdmin(function(request){
 
   var id = request.params().get('id');
   console.log(id);
@@ -206,7 +206,7 @@ router.get('/experiment/:id/edit', requireAdmin(function(request){
 }));
 
 
-router.post('/experiment/:id/edit', requireAdmin(function(request){
+router.post('/old_experiment/:id/edit', requireAdmin(function(request){
     var data = new vertx.Buffer();
     var id = request.params().get('id');
 
@@ -238,7 +238,7 @@ router.post('/experiment/:id/edit', requireAdmin(function(request){
     });
 }));
 
-router.post('/experiment/:id/addform', requireAdmin(function(request){
+router.post('/old_experiment/:id/addform', requireAdmin(function(request){
 
   var address = utils.get_address('questionnaire_render');
   var expId = request.params().get('id');
@@ -359,7 +359,7 @@ router.post('/experiment/:id/deletecomponent', requireAdmin(function(request) {
 }));
 
 
-router.get('/experiment/:id/json', function(request){
+router.get('/old_experiment/:id/json', function(request){
   var expId = request.params().get('id');
 
   mongo.experiment.get(expId, function(r){
