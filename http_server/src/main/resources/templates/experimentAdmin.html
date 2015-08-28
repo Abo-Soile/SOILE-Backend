@@ -1,0 +1,32 @@
+{>header /}
+<div id="main" class="container">
+  <div class="row">
+    <div id="expview" class="col-md-10"> 
+      <h1>{exp.name}   <a class="btn btn-default" href="{URI}/edit">Edit</a></h1>
+      <p> {exp.description|s}</p>
+      <ol class="componentlist fancyList">
+        {#exp.components uri=URI}
+        <li><a class="phaselistlink" href="{uri}/phase/{$idx}">phase {$idx} - {name}</a>
+          {@eq key=type value="test"}
+          <span class="label label-info">{type}</span>
+            <a href="{uri}/phase/{$idx}/rawdata" type="button" class="btn btn-default btn-xs">Raw data</a>
+            <a href="{uri}/phase/{$idx}/rawdata_pivot" type="button" class="btn btn-default btn-xs">Sorted data</a>
+          {:else}
+            <span class="label label-default">{type}</span>
+          {/eq}
+        </li>
+        {/exp.components}
+      </ol>
+      <p>
+        <a role="button" class="btn btn-info" href="{URI}/data">Download form data</a>
+
+        <a role="button" class="btn btn-info" href="{URI}/testdata">Download test data</a>
+      </p>
+
+      <p> Confirmed: {exp.participants.confirmed} </p>
+      <p> Total:  {exp.participants.total}</p> 
+    </div>
+  </div>
+</div>
+
+{>footer /}

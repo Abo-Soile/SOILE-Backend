@@ -96,7 +96,7 @@ router.get('/experiment/:id', function(request){
   var id = request.params().get('id');
 
   //Keeping stuff DRY
-  function renderExp(r) {
+  function renderExp(r, admin) {
     var experiment = r.result;
     var hidelogin = false;
 
@@ -111,7 +111,11 @@ router.get('/experiment/:id', function(request){
       experiment.description = experiment.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
     }
     //console.log(JSON.stringify(r));
-    templateManager.render_template("experiment", {"exp":experiment, "hideLogin":hidelogin},request);
+    if (admin) {
+      templateManager.render_template("experimentAdmin", {"exp":experiment, "hideLogin":hidelogin},request);
+    } else{
+      templateManager.render_template("experiment", {"exp":experiment, "hideLogin":hidelogin},request);
+    }
   }
 
   mongo.experiment.get(id,function(r){
@@ -175,7 +179,7 @@ router.get('/experiment/:id', function(request){
           }
 
           mongo.experiment.initUserData(userdata, userID, exp._id, function(r2){
-            renderExp(r);
+            renderExp(r, false);
           });
         }
       });
@@ -185,7 +189,7 @@ router.get('/experiment/:id', function(request){
       mongo.experiment.countParticipants(id, function(r2) {
         r.result.participants = r2;
         console.log(JSON.stringify(r));
-        renderExp(r); 
+        renderExp(r, true); 
       });
     }
   });
