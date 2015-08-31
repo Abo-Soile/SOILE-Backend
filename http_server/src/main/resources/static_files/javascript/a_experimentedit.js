@@ -1,10 +1,8 @@
 var app = angular.module('experimentEdit', ['ui.tree', 'ui.bootstrap', 'ui.select', 'ngSanitize']);
 
-
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
 });
-
 
 /*Marks html as safe*/
 app.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
@@ -40,8 +38,7 @@ app.controller('componentController', function($scope, $http, $location) {
     $scope.delComponent = function(type,index) {
         console.log("Deleting " + type + " : " + index);
         $scope.experiment.components.splice(index, 1);
-    }
-
+    };
 });
 
 app.controller('experimentController', function($scope, $http, $location) {
@@ -54,7 +51,7 @@ app.controller('experimentController', function($scope, $http, $location) {
 
     function loadData() {
       $http.get("json").success(function(data,status) {
-          console.log(data)
+          console.log(data);
           $scope.experiment = data;
 
           $scope.startdate = new Date($scope.experiment.startDate);
@@ -84,22 +81,20 @@ app.controller('experimentController', function($scope, $http, $location) {
     };
 
     $scope.save = function save() {
-        console.log("SSSSAAAVVE")
-        var data = JSON.parse(JSON.stringify($scope.experiment));
+      var data = JSON.parse(JSON.stringify($scope.experiment));
 
-        data.startDate = $scope.startdate.toISOString();
-        data.endDate = $scope.enddate.toISOString();
+      data.startDate = $scope.startdate.toISOString();
+      data.endDate = $scope.enddate.toISOString();
 
-        for (var i = 0; i < data.components.length; i++) {
-          if(data.components[i].random) {
-            data.components[i].random = data.components[i].randomgroup;
-          }
-          delete data.components[i].randomgroup;
-        };
+      for (var i = 0; i < data.components.length; i++) {
+        if(data.components[i].random) {
+          data.components[i].random = data.components[i].randomgroup;
+        }
+        delete data.components[i].randomgroup;
+      }
 
-        $http.post(baseUrl, data)
-
-    }
+      $http.post(baseUrl, data);
+    };
 
     $scope.refreshTests = function(search) {
       return $http.get('/test/json')
@@ -107,17 +102,17 @@ app.controller('experimentController', function($scope, $http, $location) {
         $scope.tests = response.data;
         console.log($scope.tests);
       });
-    }
+    };
 
-    loadTests = function() {
+    var loadTests = function() {
       return $http.get('/test/json/compiled')
       .then(function(response) {
         $scope.tests = response.data;
       });
-    }
+    };
 
     $scope.addTest = function() {
-      console.log($scope)
+      console.log($scope);
       var compObject = {};
       compObject.name = $scope.test.selected.name;
       compObject.id = $scope.test.selected._id;
@@ -125,9 +120,9 @@ app.controller('experimentController', function($scope, $http, $location) {
 
       $scope.experiment.components.push(compObject);
 
-      $scope.test.selected = null
+      $scope.test.selected = null;
 
-    }
+    };
 
     $scope.addForm = function() {
       $http.post('addform')
@@ -143,7 +138,7 @@ app.controller('experimentController', function($scope, $http, $location) {
 
         $scope.save();
       });
-    }
+    };
 
     //$scope.startdate = new Date();
     //$scope.enddate = new Date();
