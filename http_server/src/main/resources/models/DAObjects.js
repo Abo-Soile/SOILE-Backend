@@ -226,13 +226,13 @@ TrainingDataDAO.prototype.getPrePostScore = function(trainingId, userid, callbac
 
 module.exports.BaseDAO = BaseDAO;
 
-module.exports.UserDAO = UserDAO;
+module.exports.UserDAO = new UserDAO();
 
 module.exports.TestDAO = new TestDAO();
 module.exports.FormDAO = new FormDAO();
 
-module.exports.ExperimentDAO = ExperimentDAO;
-module.exports.DataDAO = DataDAO;
+module.exports.ExperimentDAO = new ExperimentDAO();
+module.exports.DataDAO = new DataDAO();
 
-module.exports.TrainingDAO = TrainingDAO;
-module.exports.TrainingDataDAO = TrainingDataDAO;
+module.exports.TrainingDAO = new TrainingDAO();
+module.exports.TrainingDataDAO = new TrainingDataDAO();

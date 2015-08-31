@@ -9,7 +9,6 @@ var templateManager = require('templateManager');
 
 var experimentModel = require("models/Models").Experiment;
 var experimentDAO = require("models/DAObjects").ExperimentDAO;
-experimentDAO = new experimentDAO();
 
 var formModel = require("models/Models").Form;
 

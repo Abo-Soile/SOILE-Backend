@@ -11,10 +11,8 @@ var trainingDAO = require("models/DAObjects").TrainingDAO;
 var TrainingData = require("models/Models").TrainingData;
 
 var formModel = require("models/Models").Form;
-trainingDAO = new trainingDAO();
 
 var trainingDataDAO = require("models/DAObjects").TrainingDataDAO;
-trainingDataDAO = new trainingDataDAO();
 
 var testDAO = require("models/DAObjects").TestDAO;
 var formDAO = require("models/DAObjects").FormDAO;

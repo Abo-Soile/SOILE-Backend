@@ -21,6 +21,7 @@ var logger = container.logger;
 var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 
 var testDAO = require("models/DAObjects").TestDAO;
+var experimentDAO = require("models/DAObjects").ExperimentDAO;
 
 var a = new java.lang.String("sdfsdfs");
 console.log(a.hashCode());
