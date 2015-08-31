@@ -440,9 +440,9 @@ customMatcher.post('/user', function(request) {
 customMatcher.get('/', function(request) {
   // Admin showing admin controls
   if (request.session.isAdmin()) {
-    mongo.experiment.list([], function(r) {
-      mongo.test.list(function(s) {
-        templateManager.render_template('admin', {"experiments":r.results,"tests":s.results},request);
+    experimentDAO.list(function(experiments) {
+      testDAO.list(function(tests) {
+        templateManager.render_template('admin', {"experiments":experiments,"tests":tests},request);
         //templateManager.render_template('testlist', {"tests":r.results},request);
       });
     });

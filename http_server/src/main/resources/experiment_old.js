@@ -16,6 +16,7 @@ var container = require('vertx/container');
 var config = container.config;
 var testImages = config.directory + "/testimages";
 
+var babyparser = require("libs/babyparse");
 
 router.get("/old_experiment", function(request){
   mongo.experiment.list([], function(r){
@@ -916,7 +917,7 @@ router.get('/experiment/:id/phase/:phase/rawdata_pivot', requireAdmin(function(r
   });
 }));
 
-
+/*
 router.get('/test/demo', function(request) {
   var file = 'demo.html';
   request.response.sendFile(utils.file_from_serverdir(file));
@@ -948,4 +949,7 @@ router.post('/test/run', function(request) {
       request.response.end(JSON.stringify(response));
     });
   });
+  *
 });
+
+*/
