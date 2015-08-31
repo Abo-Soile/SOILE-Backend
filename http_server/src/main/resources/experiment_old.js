@@ -268,7 +268,7 @@ router.post('/old_experiment/:id/addform', requireAdmin(function(request){
 }));
 
 
-router.post('/experiment/:id/editformname', requireAdmin(function(request){
+router.post('/old_experiment/:id/editformname', requireAdmin(function(request){
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -291,7 +291,7 @@ router.post('/experiment/:id/editformname', requireAdmin(function(request){
 }));
 
 
-router.post("/experiment/:id/addtest", requireAdmin(function(request) {
+router.post("/old_experiment/:id/addtest", requireAdmin(function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -321,7 +321,7 @@ router.post("/experiment/:id/addtest", requireAdmin(function(request) {
 }));
 
 
-router.post("/experiment/:id/randomizeorder", requireAdmin(function(request) {
+router.post("/old_experiment/:id/randomizeorder", requireAdmin(function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -342,7 +342,7 @@ router.post("/experiment/:id/randomizeorder", requireAdmin(function(request) {
 }));
 
 
-router.post('/experiment/:id/deletecomponent', requireAdmin(function(request) {
+router.post('/old_experiment/:id/deletecomponent', requireAdmin(function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
