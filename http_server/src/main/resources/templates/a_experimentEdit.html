@@ -15,6 +15,11 @@
 
 <script type="text/javascript" src="/javascript/a_experimentedit.js"></script>
 
+<link rel="stylesheet" href="/javascript/bower_components/ladda/dist/ladda-themeless.min.css">
+<script src="/javascript/bower_components/ladda/js/spin.js"></script>
+<script src="/javascript/bower_components/ladda/js/ladda.js"></script>
+<script src="/javascript/bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
+
 <div class="container" id="main" ng-app="experimentEdit" ng-controller="experimentController">
   <div class="row">
     <div class="col-md-12">    
@@ -128,7 +133,7 @@
     </div>
 
     <div class="col-md-12">
-    <button class="btn btn-success" ng-click="save()">Save</button>
+    <button class="btn btn-success" ng-click="save()" ladda="loading">Save</button>
       
     </div>
   </div>

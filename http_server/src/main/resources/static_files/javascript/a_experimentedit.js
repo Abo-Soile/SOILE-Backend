@@ -1,4 +1,4 @@
-var app = angular.module('experimentEdit', ['ui.tree', 'ui.bootstrap', 'ui.select', 'ngSanitize']);
+var app = angular.module('experimentEdit', ['ui.tree', 'ui.bootstrap', 'ui.select', 'ngSanitize', 'angular-ladda']);
 
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
@@ -86,6 +86,8 @@ app.controller('experimentController', function($scope, $http, $location) {
       data.startDate = $scope.startdate.toISOString();
       data.endDate = $scope.enddate.toISOString();
 
+      $scope.loading = true;
+
       for (var i = 0; i < data.components.length; i++) {
         if(data.components[i].random) {
           data.components[i].random = data.components[i].randomgroup;
@@ -93,7 +95,9 @@ app.controller('experimentController', function($scope, $http, $location) {
         delete data.components[i].randomgroup;
       }
 
-      $http.post(baseUrl, data);
+      $http.post(baseUrl, data).then(function(status) {
+        $scope.loading = false;
+      });
     };
 
     $scope.refreshTests = function(search) {
