@@ -41,11 +41,20 @@ BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
     var that = this;
     mongoCommand.action = "find";
     //mongoCommand.collection = this._collection;
-    if(matcher !== null) {
+    if(typeof matcher === 'object' || typeof matcher !== 'undefined') {
         mongoCommand.matcher = matcher;
     } else {
         mongoCommand.matcher = {};
     }
+
+/*
+    First parameter as callback if callback is undefined and matcher a
+    function
+*/
+    if(typeof matcher === 'function' && typeof callback === 'undefined') {
+        callback = matcher;
+    }
+
     if(typeof limit !== undefined && typeof limit === 'number') {
         mongoCommand.limit = limit;
     }
