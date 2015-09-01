@@ -134,13 +134,11 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       var set = {};
       var rowCount = data.rows.length;
 
-
       for (var i = 0; i<rowCount; i++) {
         for(var j in data.rows[i]) {
           set[j] = {valid:true, data:[]};
         }
       }
-
 
       for (i = 0; i<rowCount; i++) {
         for(var s in set) {
@@ -171,7 +169,6 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       $scope.rawHeaders = headers;
       $scope.rawData = rows;
 
-
       $scope.$apply();
 
       console.log($scope);
@@ -183,7 +180,6 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     $scope.soileLog = [];
 		$scope.testStartTime = Date.now();
 
-    //console.log($scope.compiledCode);
     console.log("Executing soile");
 
     SOILE2.util.eval($scope.compiledCode);
@@ -207,25 +203,6 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       }
     }
   });
-
-  /*$scope.$on('$routeChangeStart', function( event ) {
-    console.log("Navigating away")
-    console.log(event)
-
-    console.log($scope.editor.getValue() == $scope.lastSave);
-    event.preventDefault();
-
-    //console.log($scope.editor.getValue())
-    //console.log("\n\n")
-    //console.log($scope.lastSave);
-
-    if ($scope.editor.getValue() != $scope.lastSave) {
-      var answer = confirm("Are you sure you want to leave this page?")
-      if (!answer) {
-          event.preventDefault();
-      }
-    }
-*/
 });
 
 app.controller('editNameController', function($scope, $http, $location) {
