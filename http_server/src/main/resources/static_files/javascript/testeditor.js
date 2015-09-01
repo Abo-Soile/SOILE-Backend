@@ -69,7 +69,7 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
 		loadImages();
 });
 
-app.controller('expEditController', function($scope, $http, $location, $timeout, $sce) {
+app.controller('expEditController', function($scope, $http, $location, $timeout, $sce, $window) {
 	$scope.compileErrors = "";
 	$scope.soileLog  = [];
 
@@ -85,7 +85,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     //$scope.editor.config.set("modePath", "/javascript");
     $scope.editor.getSession().setMode("ace/mode/elanghighlightrules");
     $scope.editor.renderer.setShowGutter(true); 
-    //$scope.editor.getSession().setMode("ace/mode/javascript");
+
+    $scope.lastSave = $scope.editor.getValue();
+
   };
 
   $scope.compileTest = function() {
@@ -99,6 +101,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
       $scope.compileErrors = data.errors;
   		$scope.compiledCode = data.code;
+
+      $scope.lastSave = $scope.editor.getValue();
 
       if (typeof data.errors === 'undefined') {
         $scope.compiled = true;
@@ -192,6 +196,36 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       SOILE2.rt.exec_pi();
     }, 1500);
   };
+
+  var windowElement = angular.element($window);
+  windowElement.on('beforeunload', function (event) {
+    if ($scope.editor.getValue() != $scope.lastSave) {
+      var answer = confirm("Are you sure you want to leave this page?")
+      if (!answer) {
+        event.preventDefault();
+        return "There are unsaved changed, are you sure you want to leave this page?";
+      }
+    }
+  });
+
+  /*$scope.$on('$routeChangeStart', function( event ) {
+    console.log("Navigating away")
+    console.log(event)
+
+    console.log($scope.editor.getValue() == $scope.lastSave);
+    event.preventDefault();
+
+    //console.log($scope.editor.getValue())
+    //console.log("\n\n")
+    //console.log($scope.lastSave);
+
+    if ($scope.editor.getValue() != $scope.lastSave) {
+      var answer = confirm("Are you sure you want to leave this page?")
+      if (!answer) {
+          event.preventDefault();
+      }
+    }
+*/
 });
 
 app.controller('editNameController', function($scope, $http, $location) {
