@@ -1,4 +1,11 @@
-var app = angular.module('experimentEdit', ['ui.tree', 'ui.bootstrap', 'ui.select', 'ngSanitize', 'angular-ladda']);
+var app = angular.module('experimentEdit', 
+       ['ui.tree', 
+        'ui.bootstrap', 
+        'ui.select', 
+        'ngSanitize', 
+        'angular-ladda',
+        'monospaced.elastic'
+        ]);
 
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');

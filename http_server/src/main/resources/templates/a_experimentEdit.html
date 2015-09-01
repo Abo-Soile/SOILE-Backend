@@ -10,6 +10,9 @@
 <script type="text/javascript" src="/javascript/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 
 <script type="text/javascript" src="/javascript/bower_components/angular-ui-select/dist/select.js"></script>
+
+<script type="text/javascript" src="/javascript/bower_components/angular-elastic/elastic.js"></script>
+
 <link rel="stylesheet" type="text/css" href="
 /javascript/bower_components/angular-ui-select/dist/select.css">
 
@@ -27,10 +30,10 @@
         <input  class="form-control"  ng-model="experiment.name">
 
         <label>Description</label>
-        <textarea class="form-control" ng-model="experiment.description"> </textarea>
+        <textarea class="form-control animate" msd-elastic ng-model="experiment.description"> </textarea>
 
         <label>End message</label>
-        <textarea class="form-control" ng-model="experiment.endmessage"> </textarea>
+        <textarea class="form-control animate" msd-elastic ng-model="experiment.endmessage"> </textarea>
     </div> 
     <div class="col-md-12">
       <br>
