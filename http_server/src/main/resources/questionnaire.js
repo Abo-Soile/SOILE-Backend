@@ -8,17 +8,25 @@ var router = new CustomMatcher();
 var utils = require("utils");
 var mongo = require('mongoHandler');
 
+var formDAO = require("models/DAObjects").FormDAO;
+
 var requireAdmin = utils.requireAdmin;
 
 
 router.get('/questionnaire/mongo/:id', requireAdmin(function(request){
   var id = request.params().get('id');
-  mongo.form.get(id, function(r){
+  
+  formDAO.get(id, function(form) {
+    var markup = form.markup;
+    var html = form.form;
+    return templateManager.render_template('displayForm', {"form":html,"markup":markup},request);
+  });
+  /*form.get(id, function(r){
     //console.log(JSON.stringify(r))
     var form = r.result.form;
     var markup = r.result.markup;
     templateManager.render_template('displayForm', {"form":form,"markup":markup},request);
-  });
+  });*/
 }));
 
 
