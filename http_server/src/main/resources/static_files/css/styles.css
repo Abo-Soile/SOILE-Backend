@@ -795,3 +795,7 @@ dBootstrap fixes
   top:3px;
   left:3px;
 }
+
+#formdisplaydata {
+  margin: 10px 5px;
+}
