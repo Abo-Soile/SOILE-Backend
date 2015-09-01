@@ -82,6 +82,10 @@ router.get("/training/:id", function(request) {
     console.log("##### FIRST TRAINING");
     console.log(JSON.stringify(training));
 
+    if (request.session.isAdmin()) {
+      return templateManager.render_template("trainingAdmin", {training:training}, request);
+    }
+
     trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
 
       var status = {};
