@@ -83,7 +83,8 @@ router.get("/training/:id", function(request) {
     console.log(JSON.stringify(training));
 
     if (request.session.isAdmin()) {
-      return templateManager.render_template("trainingAdmin", {training:training}, request);
+      cData = [["Pre", 123], ["1", 63],["2", 55],["3", 32],["Post", 19]];
+      return templateManager.render_template("trainingAdmin", {training:training, chartData:cData}, request);
     }
 
     trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
