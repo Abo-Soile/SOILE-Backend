@@ -54,7 +54,7 @@ router.get("/old_experiment/new", function(request){
 });
 
 
-router.post("/experiment/new", function(request) {
+router.post("/old_experiment/new", function(request) {
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer){
@@ -93,7 +93,7 @@ router.post("/experiment/new", function(request) {
 });
 
 
-router.get('/experiment/:id', function(request){
+router.get('/old_experiment/:id', function(request){
   var id = request.params().get('id');
 
   //Keeping stuff DRY
@@ -376,7 +376,7 @@ router.get('/old_experiment/:id/json', function(request){
 
 //Shows a specific phase, if phase doesn't exist, assume last phase
 //and redirect to some kind of final page
-router.get('/experiment/:id/phase/:phase', function(request) {
+router.get('/old_experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phaseNo = request.params().get('phase');
   var phase;

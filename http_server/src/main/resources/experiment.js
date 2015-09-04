@@ -10,7 +10,12 @@ var templateManager = require('templateManager');
 var experimentModel = require("models/Models").Experiment;
 var experimentDAO = require("models/DAObjects").ExperimentDAO;
 
+var dataDAO = require("models/DAObjects").DataDAO;
+
 var formModel = require("models/Models").Form;
+
+var formDAO = require("models/DAObjects").FormDAO;
+var testDAO = require("models/DAObjects").TestDAO;
 
 
 function merge_options(obj1,obj2){
@@ -48,6 +53,160 @@ router.get("/experiment/new", function(request){
 
     });
 });
+
+router.get('/experiment/:id', function(request){
+  var id = request.params().get('id');
+
+  //Keeping stuff DRY
+  function renderExp(exp, admin) {
+    var experiment = exp;
+    var hidelogin = false;
+
+    if(typeof experiment.hidelogin !== undefined) {
+      if(experiment.hidelogin){
+        hidelogin = true;
+      }
+    }
+
+    //Replacing newlines with html linebreaks when displaying the description
+    if(typeof experiment.description !== 'undefined') {
+      experiment.description = experiment.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    }
+    //console.log(JSON.stringify(r));
+    if (admin) {
+      experimentDAO.countParticipants(id, function(count) {
+        experiment.participants = count;
+        console.log(JSON.stringify(count));
+  
+        templateManager.render_template("experimentAdmin", {"exp":experiment, "hideLogin":hidelogin},request);
+      });
+    } else{
+      templateManager.render_template("experiment", {"exp":experiment, "hideLogin":hidelogin},request);
+    }
+  }
+
+  experimentDAO.get(id, function(exp) {
+    //404 if experiment doesn't exist
+    if(exp === "") {
+      return request.notfound();
+    }
+
+    //If normal user, check if user has filled in something before
+    if(!request.session.isAdmin()) {
+      var userID = request.session.getPersonToken();
+
+      if(request.session.loggedIn()) {
+        userID = request.session.loggedIn().id;
+      }
+
+      /*
+      Checking for userdata and generating it when needed.
+      */
+      dataDAO.getOrGenerateGeneral(userID, exp, request, function(userdata) {
+        if(userdata.position > 0) {          
+            request.redirect(request.absoluteURI() + "/phase/" + (userdata.position));
+          }
+        else {
+          renderExp(exp, false);
+        }
+      });
+    }
+    //Admin, navigation controls dont apply here, just show the view
+    else {
+      renderExp(exp, true); 
+    }
+  });
+});
+
+router.get('/experiment/:id/phase/:phase', function(request) {
+  var expID = request.params().get('id');
+  var phaseNo = request.params().get('phase');
+  var phase;
+
+  var userID = request.session.getPersonToken();
+
+  dataDAO.get({"userid":userID, "expId": expID}, function(userdata) {
+    var reg = /phase\/\d*/;
+
+    //Checking if user has visited the landing page
+    if(userdata === "") {
+      console.log("No userdata, redirecting ");
+      return request.redirect(request.absoluteURI().toString().replace(reg,""));
+    }
+
+    //Checking if user is in the wrong phase
+    if(userdata.position != phaseNo) {
+      console.log("Wrong position, redirecting to phase " + userdata.position);
+      if (userdata.position == 0) {
+        return request.redirect(request.absoluteURI().toString().replace(reg,""));
+      }
+      return request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (userdata.position)));
+    } 
+
+    else {
+      experimentDAO.get(expID, function(exp) {
+        phase = exp.components[phaseNo];
+
+        //Redirecting to experiment end
+        if(phase===undefined) {
+          var url = request.absoluteURI().toString();
+          var cut = url.indexOf("/phase/");
+          url = url.substr(0,cut) + "/end";
+
+          return request.redirect(url);
+        }
+
+        if(exp.loginrequired && !request.session.loggedIn()) {
+          var url = "/experiment/"+expID;
+          return request.redirect(url);
+        }
+
+        //Calculating how much of the experiment is completed
+        var noOfPhases = parseInt(exp.components.length);
+        phaseNo = parseInt(phaseNo);
+        var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
+
+
+        if (typeof exp.hidelogin !== 'undefined') {
+          context.hideLogin = exp.hidelogin;
+        }
+
+        if (exp.israndom) {
+          console.log("------Translating phase number---------");
+          console.log(phaseNo + " -> " + userdata.randomorder[phaseNo]);
+          phase = exp.components[userdata.randomorder[phaseNo]]; 
+        }
+
+        //Formphase, rendering form template
+        if(phase.type === "form") {
+          console.log("Form ");
+
+          formDAO.get(phase.id, function(form) {
+            context.form = form.form;
+
+            templateManager.render_template("formphase", context, request);
+          });
+        }
+        //Testphases, rendering test template
+        if(phase.type === "test") {
+          console.log("test");
+
+          testDAO.get(phase.id, function(experiment) {
+            context.experiment = experiment.js.replace(/(\r\n|\n|\r)/gm,"");
+
+            templateManager.render_template("testphase", context, request);
+          });
+        }
+        
+        else {
+          console.log(phase.type);
+          console.log("Phase type is undefined");
+        }
+      });
+    }
+  });
+});
+
 
 router.get("/experiment/:id/edit", function(request) {
   templateManager.render_template('a_experimentEdit', {}, request);
