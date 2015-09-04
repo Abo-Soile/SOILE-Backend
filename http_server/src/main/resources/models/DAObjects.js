@@ -13,6 +13,7 @@ var Form = models.Form;
 var Experiment = models.Experiment;
 var Training = models.Training;
 var TrainingData = models.TrainingData;
+var ExpData = models.Data;
 
 
 function UserDAO() {
@@ -44,6 +45,25 @@ function ExperimentDAO() {
 ExperimentDAO.prototype = new BaseDAO();
 ExperimentDAO.prototype.constructor = ExperimentDAO;
 
+ExperimentDAO.prototype.countParticipants = function(expId, callback) {
+    var dataDAO = new DataDAO();
+
+    var confMatcher = {"expId":expId,
+                          "confirmed":true,
+                          "type":"general"
+                        };
+
+    var totalMatcher = {
+                        "expId":expId,
+                        "type":"general"
+                        };
+
+    dataDAO.count(confMatcher, function(confirmed) {
+        dataDAO.count(totalMatcher, function(total) {
+            callback({"confirmed":confirmed, "total":total})
+        });
+    });
+};
 
 function FormDAO() {
     BaseDAO.call(this);
@@ -57,12 +77,47 @@ FormDAO.prototype.constructor = FormDAO;
 
 function DataDAO() {
     BaseDAO.call(this);
-    this._baseObject = models.Form;
+    this._baseObject = models.Data;
     this._collection = this._baseObject.collection;
 }
 
 DataDAO.prototype = new BaseDAO();
 DataDAO.prototype.constructor = DataDAO;
+
+DataDAO.prototype.getOrGenerateGeneral = function(userid, exp, request, callback) {
+  var that = this;
+
+  that.get({userid:userid, type:"general", expId:exp._id}, 
+        function(data, message) {
+    if (data === "") {
+        //console.log("Generating new data object");
+        data = new ExpData();
+
+        data.userid = userid;
+        data.initGeneral(exp);
+
+        data.referer = "direct";
+
+
+        if(typeof request.headers().get("Referer") != 'undefined'){
+            data.referer  = request.headers().get("Referer");
+        }
+
+        data.userAgent = request.headers().get("User-Agent");
+
+        if (exp.mechanicalTurkEnabled) {
+            data.mechanicalTurkToken = utils.randomAlphaNumeric(10);
+        }
+
+        data.save(function(err) {
+            return callback(data);
+        });
+    } else {
+        console.log("ExpData exists");
+        callback(data);
+    }
+  });
+};
 
 
 function TrainingDAO() {

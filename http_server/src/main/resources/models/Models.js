@@ -45,11 +45,72 @@ function Experiment(arg) {
     BaseModel.call(this, arg);
 
     this._collection = Experiment.collection;
+
+    this.isActive();
+    this.isRandom();
 }
 
 Experiment.prototype = new BaseModel();
 Experiment.prototype.constructor = Experiment;
 Experiment.collection = "experiment";
+
+Experiment.prototype.isActive = function() {
+  var currentDate = new Date();
+  var millisecondsPerDay = 1000*3600*24;
+
+  var sDate = new Date(this.startDate);
+  var eDate = new Date(this.endDate);
+
+  if((sDate < currentDate)&&(currentDate<eDate)) {
+    this.active = true;
+    this.timedata = Math.ceil((eDate - currentDate)/millisecondsPerDay);
+  }
+  else{
+    this.active = false;
+    if(sDate > currentDate) {
+      this.timedata = Math.ceil((sDate - currentDate)/millisecondsPerDay);
+    }
+  }
+
+  //console.log("IS ACTIVE RUNNING");
+  // Experiment is inactive if no components exits
+  if(!this.hasOwnProperty("components")) {
+    //console.log("components doesn't exist");
+    this.active = false;
+  }
+  else {
+    if (this.components.length == 0) {
+      //console.log("components is empty");
+
+      this.active = false;
+    }
+  }
+};
+
+Experiment.prototype.isRandom = function() {
+  var longestRandom = 0;
+  var prevRandom = false;
+
+  if (typeof this.components === 'undefined') {
+    this.israndom = false;
+    return;
+  } 
+
+  for (var i = 0; i < this.components.length; i++) {
+    if(this.components[i].random) {
+      longestRandom +=1;
+      if (longestRandom > 1) {
+        this.israndom = true;
+        return;
+      }  
+    }
+    else {
+      longestRandom = 0;
+    } 
+  }
+  this.israndom = false;
+  return;
+};
 
 Experiment.prototype.addComponent = function(id, type, name) {
   var comp = {};
@@ -156,7 +217,7 @@ DATA
 */
 function Data(arg) {
   this.confirmed = false;
-  this.timestamp = new new Date().toISOString();
+  this.timestamp = new Date().toISOString();
 
   BaseModel.call(this, arg);
   this._collection = Data.collection;
@@ -165,6 +226,86 @@ function Data(arg) {
 Data.prototype = new BaseModel();
 Data.prototype.constructor = Data;
 Data.collection = "data";
+
+Data.prototype.initGeneral = function(exp) {
+  this.type = "general";
+  this.expId = exp._id;
+  this.position = 0;
+  this.randomorder = false;
+
+  var timeStamp = new Date();
+  this.starttime = timeStamp.toISOString();
+
+  if (exp.mechanicalTurkEnabled) {
+    this.mechanicalTurkToken = utils.randomAlphaNumeric(10);
+  }
+
+  if(exp.israndom) {
+    this.generateRandomOrder(exp);
+  }
+};
+
+
+Data.prototype.generateRandomOrder = function(exp) {
+  var randomList = [];
+  var randomMapping = [];
+  var randomGroups = [0,0,0,0,0,0,0,0,0,0];
+
+  for (var i = 0; i < exp.components.length; i++) {
+    if (exp.components[i].random > 0) {
+      randomList[i] = exp.components[i].random;
+      randomGroups[exp.components[i].random] = 1;
+    } else {
+      randomList[i] = 0;
+    }
+    randomMapping[i] = i;
+  }
+
+
+ /* console.log(JSON.stringify(randomList))
+  console.log(JSON.stringify(randomMapping))
+  console.log(JSON.stringify(randomGroups))
+*/
+  randomGroups[0] = 0;
+  var startRandomSequence = null;
+
+  function randomizePart(arrSlice, index) {
+    arrSlice = utils.shuffle(arrSlice);
+    for (var i = 0; i < arrSlice.length; i++) {
+      randomList[i + index] = arrSlice[i];
+      randomMapping[i + index] = arrSlice[i];
+    }
+  }
+
+  function randomizeGroup(array, groupMapping, groupNo) {
+    var tempArr = [];
+    for (var i = 0; i < array.length; i++) {
+      if(groupMapping[i]===groupNo) {
+        tempArr.push(array[i]);
+        array[i] = null;
+      }
+    }
+
+    //console.log(JSON.stringify(array))
+    tempArr = utils.shuffle(tempArr);
+
+    for (var j = 0; j < array.length; j++) {
+      if(array[j] === null) {
+        array[j] = tempArr.pop();
+      }
+    }
+
+    return array;
+
+  }
+
+  for (var i = 0; i < randomGroups.length; i++) {
+    if(randomGroups[i]===1) {
+      randomMapping = randomizeGroup(randomMapping, randomList, i);
+    }
+  }
+  this.randomorder = randomMapping;
+};
 
 //Form.collection = "forms"
 
