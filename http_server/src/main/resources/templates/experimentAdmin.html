@@ -1,9 +1,37 @@
 {>header /}
 <div id="main" class="container">
   <div class="row">
-    <div id="expview" class="col-md-10"> 
+    <div id="expview" class="col-md-12"> 
       <h1>{exp.name}   <a class="btn btn-default" href="{URI}/edit">Edit</a></h1>
       <p> {exp.description|s}</p>
+    </div>
+    <div class="col-md-12">
+      <div class="row"> 
+
+        <div class="col-md-3">
+          <div class="infopanel">
+            <h4>Page Views</h4>
+            <p>{exp.participants.total}</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="infopanel infopanel-success">
+            <h4>Completed</h4>
+            <p>{exp.participants.confirmed}</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="infopanel infopanel-warning">
+            <h4>Aborted</h4>
+            <p>{exp.participants.confirmed}</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-12">
       <ol class="componentlist fancyList">
         {#exp.components uri=URI}
         <li><a class="phaselistlink" href="{uri}/phase/{$idx}">phase {$idx} - {name}</a>

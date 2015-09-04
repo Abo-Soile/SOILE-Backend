@@ -752,7 +752,16 @@ dBootstrap fixes
 
 .infopanel {
   background-color:gray;
+  background-color: #61A8D1;
   color: white;
+}
+
+.infopanel-success {
+  background-color: #65AE72;
+}
+
+.infopanel-warning {
+  background-color: #D86A6A;
 }
 
 .infopanel h4 {
