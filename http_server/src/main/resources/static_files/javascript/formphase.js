@@ -233,6 +233,10 @@ require(["dijit/form/HorizontalSlider",
         var domContainer = dom.byId("formcol");
         var widgets = registry.findWidgets(domContainer);
 
+        var form = registry.byId("formcol");
+
+        var valid = form.validate(); 
+
         var d = loadData();
 
         show_saved_data(d);

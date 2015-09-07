@@ -76,7 +76,7 @@ require(["dijit/form/Button",
 				/*updating the div with the new form*/
 				//var renderedForm = jsonData.data;
 				//renderWindow.innerHTML = renderedForm;
-				var cont = "<div id=formcol>"+jsonData.data+"</div>"
+				var cont = '<div id=formcol data-dojo-type="dijit/form/Form">'+jsonData.data+"</div>"
 
 				/* Destroying and creating a new contentpane*/
 				contentPane.destroyRecursive();
