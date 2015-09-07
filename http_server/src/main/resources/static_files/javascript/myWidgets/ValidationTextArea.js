@@ -1,7 +1,7 @@
 define(["dojo/_base/declare", "dojo/_base/lang", "dijit/form/SimpleTextarea", "dijit/form/ValidationTextBox"],
   function(declare, lang, SimpleTextarea, ValidationTextBox) {
 
-    return declare('dijit.form.ValidationTextArea', [SimpleTextarea, ValidationTextBox], {
+    return declare('dijit.form.ValidationTextArea', [SimpleTextarea], {
       constructor: function(params){
         this.constraints = {};
         this.baseClass += ' dijitValidationTextArea';
