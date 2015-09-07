@@ -367,7 +367,8 @@ function hoursFromNow(hours) {
 
 TrainingData.prototype.isLastPhase = function(training) {
   var isLast = false;
-  var components = training.components[this.mode];
+  var components = training.components[this.getMode()];
+
   if(components.length === (this.position + 1)) {
     isLast = true;
   }
@@ -384,7 +385,7 @@ TrainingData.prototype.completePhase = function(training) {
   //              -> post if no iterations left
   //  if post -> finish experiment
   //If not last phase -> phase += 1
-  var mode = this.mode;
+  var mode = this.getMode();
   var components = training.components[mode];
   
   var lastPhase = false;
@@ -430,6 +431,15 @@ TrainingData.prototype.completePhase = function(training) {
   } else {
     this.position += 1;
   }
+};
+
+TrainingData.prototype.getMode = function() {
+  var mode = this.mode;
+  if (this.inControlGroup && this.mode==="training") {
+    mode = "control";
+  }
+  return mode;
+
 };
 
 

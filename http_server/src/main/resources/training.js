@@ -49,6 +49,27 @@ Urlar:
 /*
 Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
 */
+
+function periodicReminder() {
+  console.log("Running reminder");
+
+  /*
+    Select active trainings...
+
+    Select active users.
+
+    Find users who are near the dropout timelimit.
+
+    Send email
+  */
+}
+
+var timerID = vertx.setPeriodic(10000, function(timerID) {
+    periodicReminder();
+});
+
+
+
 function merge_options(obj1,obj2){
     var obj3 = {};
     for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
@@ -91,7 +112,7 @@ router.get("/training/:id", function(request) {
 
       var status = {};
       status.open = false;
-      status.state = trainingData.mode;
+      status.state = trainingData.getMode();
       status.nextRound = training.nextTask;
 
       trainingData.nextTask = new Date(trainingData.nextTask);
@@ -118,15 +139,17 @@ router.get("/training/:id", function(request) {
       var totalRounds = parseInt(training.repeatcount) + 2;
       var roundsDone = 0;
 
-      if (trainingData.mode === "training") {
+      var mode = trainingData.getMode();
+
+      if (mode === "training") {
         roundsDone = trainingData.trainingIteration + 1;
       }
 
-      if (trainingData.mode === "post") {
+      if (mode === "post") {
         roundsDone = totalRounds - 1;
       }
 
-      if (trainingData.mode === "done") {
+      if (mode === "done") {
         roundsDone = totalRounds;
       }
 
@@ -134,14 +157,14 @@ router.get("/training/:id", function(request) {
       status.percentageLeft = roundsDone/totalRounds * 100;
 
 
-      status.roundType = trainingData.mode;
+      status.roundType = mode;
       status.iteration = trainingData.trainingIteration;
 
       trainingDataDAO.getScoreHistory(id, userid, function(score) {
         status.scoreHistory = score;
       });
 
-      if (trainingData.mode === "done") {
+      if (mode === "done") {
         trainingDataDAO.getPrePostScore(id, userid, function(pre, post) {
           status.preScore = pre;
           status.postScore = post;
@@ -231,23 +254,23 @@ router.get("/training/:id/execute", function(request) {
       return request.redirect("/training/" + id);
     }
 
-    if(trainingData.mode === "training" && trainingData.inControlGroup) {
+  /* if(trainingData.mode === "training" && trainingData.inControlGroup) {
       trainingData.mode = "control";
-    }
+    }*/
 
-    var modeComponents = training.components[trainingData.mode];
+    var modeComponents = training.components[trainingData.getMode()];
     var positionInMode = trainingData.position;
 
     var phasesLeft = modeComponents.length - (positionInMode);
 
     console.log("Executin training");
-    console.log("mode = " + trainingData.mode + " position:" + positionInMode);
+    console.log("mode = " + trainingData.getMode() + " position:" + positionInMode);
     console.log("Component:" + JSON.stringify(modeComponents[positionInMode]));
 
     var nextTaskTime = new Date(trainingData.nextTask);
 
     //if (phasesLeft == 0) {
-    if(Date.now() - nextTaskTime < 0 || trainingData.mode === "done") {
+    if(Date.now() - nextTaskTime < 0 || trainingData.getMode() === "done") {
       return request.redirect("/training/" + id);
     }
      else {
