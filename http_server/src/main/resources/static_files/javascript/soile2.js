@@ -164,7 +164,7 @@ SOILE2 = (function(){
     jQuery(id).css('display', 'block');
     jQuery(id).css('left', '50px');
     jQuery(id).css('top', '50px');
-    jQuery(id).text(msg);
+    jQuery(id).html(msg);
   };
   /*
   bin.helptext = function(msg){
