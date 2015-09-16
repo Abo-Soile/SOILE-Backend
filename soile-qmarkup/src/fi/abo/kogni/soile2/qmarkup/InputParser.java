@@ -62,15 +62,12 @@ public class InputParser {
     
     private class ErrorListener extends BaseErrorListener {
 
-        @Override
         public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex,
                 int stopIndex, BitSet ambigAlts, ATNConfigSet configs) {}
 
-        @Override
         public void reportAttemptingFullContext(Parser recognizer, DFA dfa,
                 int startIndex, int stopIndex, ATNConfigSet configs) {}
 
-        @Override
         public void reportContextSensitivity(Parser recognizer, DFA dfa,
                 int startIndex, int stopIndex, ATNConfigSet configs) {}
 
