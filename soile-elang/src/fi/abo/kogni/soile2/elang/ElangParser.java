@@ -1,4 +1,4 @@
-// Generated from /Users/tuope/NetBeansProjects/AboExperimentLang/src/elang01/Elang.g4 by ANTLR 4.0
+// Generated from C:/Users/Danno/soileIDEA/soile2/soile-elang/src/fi/abo/kogni/soile2/elang\Elang.g4 by ANTLR 4.5.1
 package fi.abo.kogni.soile2.elang;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,11 +11,13 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ElangParser extends Parser {
+	static { RuntimeMetaData.checkVersion("4.5.1", RuntimeMetaData.VERSION); }
+
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__2=1, T__1=2, T__0=3, DOCQUOTE=4, SFN_PLUS=5, SFN_MINUS=6, SFN_MULTIPLY=7, 
+		T__0=1, T__1=2, T__2=3, DOCQUOTE=4, SFN_PLUS=5, SFN_MINUS=6, SFN_MULTIPLY=7, 
 		SFN_DIVIDE=8, SFN_LESSTHAN=9, SFN_GREATERTHAN=10, SFN_EQUAL=11, SFN_NEGATE=12, 
 		T_TRANSNAMEREPEAT=13, T_ARROWLEFT=14, T_ARROWRIGHT=15, T_BRACELEFT=16, 
 		T_BRACERIGHT=17, T_BRACKETLEFT=18, T_BRACKETRIGHT=19, T_BREAK=20, T_COLON=21, 
@@ -25,16 +27,6 @@ public class ElangParser extends Parser {
 		T_THEN=42, T_TRANSFINAL=43, T_TRANSITION=44, T_TRANSSTART=45, T_TRUE=46, 
 		T_VAL=47, T_VAR=48, T_WHILE=49, T_YES=50, ID=51, NUMBER=52, STRING=53, 
 		COMMENT=54, WS=55, NL=56;
-	public static final String[] tokenNames = {
-		"<INVALID>", "'intermezzo-phase'", "'information-phase'", "'interaction-phase'", 
-		"DOCQUOTE", "'+'", "'-'", "'*'", "'/'", "'<'", "'>'", "'='", "'!'", "'-\"-'", 
-		"'<-'", "'->'", "'{'", "'}'", "'['", "']'", "'break'", "':'", "','", "'continue'", 
-		"'do'", "'.'", "'else'", "'end'", "'false'", "'function'", "'fvar'", "'gvar'", 
-		"'#'", "'if'", "'no'", "'nothing'", "'null'", "'('", "')'", "'?'", "'\"'", 
-		"'return'", "'then'", "'final'", "'transition'", "'start'", "'true'", 
-		"'val'", "'var'", "'while'", "'yes'", "ID", "NUMBER", "STRING", "COMMENT", 
-		"WS", "NL"
-	};
 	public static final int
 		RULE_file = 0, RULE_toplevelStmt = 1, RULE_gvarDef = 2, RULE_valDef = 3, 
 		RULE_functionDef = 4, RULE_functionDefParams = 5, RULE_functionDefParam = 6, 
@@ -63,14 +55,67 @@ public class ElangParser extends Parser {
 		"number", "string"
 	};
 
+	private static final String[] _LITERAL_NAMES = {
+		null, "'information-phase'", "'intermezzo-phase'", "'interaction-phase'", 
+		null, "'+'", "'-'", "'*'", "'/'", "'<'", "'>'", "'='", "'!'", "'-\"-'", 
+		"'<-'", "'->'", "'{'", "'}'", "'['", "']'", "'break'", "':'", "','", "'continue'", 
+		"'do'", "'.'", "'else'", "'end'", "'false'", "'function'", "'fvar'", "'gvar'", 
+		"'#'", "'if'", "'no'", "'nothing'", "'null'", "'('", "')'", "'?'", "'\"'", 
+		"'return'", "'then'", "'final'", "'transition'", "'start'", "'true'", 
+		"'val'", "'var'", "'while'", "'yes'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, null, null, null, "DOCQUOTE", "SFN_PLUS", "SFN_MINUS", "SFN_MULTIPLY", 
+		"SFN_DIVIDE", "SFN_LESSTHAN", "SFN_GREATERTHAN", "SFN_EQUAL", "SFN_NEGATE", 
+		"T_TRANSNAMEREPEAT", "T_ARROWLEFT", "T_ARROWRIGHT", "T_BRACELEFT", "T_BRACERIGHT", 
+		"T_BRACKETLEFT", "T_BRACKETRIGHT", "T_BREAK", "T_COLON", "T_COMMA", "T_CONTINUE", 
+		"T_DO", "T_DOT", "T_ELSE", "T_END", "T_FALSE", "T_FUNCTION", "T_FVAR", 
+		"T_GVAR", "T_HASH", "T_IF", "T_NO", "T_NOTHING", "T_NULL", "T_PARENLEFT", 
+		"T_PARENRIGHT", "T_QMARK", "T_QUOTE", "T_RETURN", "T_THEN", "T_TRANSFINAL", 
+		"T_TRANSITION", "T_TRANSSTART", "T_TRUE", "T_VAL", "T_VAR", "T_WHILE", 
+		"T_YES", "ID", "NUMBER", "STRING", "COMMENT", "WS", "NL"
+	};
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
+
+	@Override
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
+
 	@Override
 	public String getGrammarFileName() { return "Elang.g4"; }
 
 	@Override
-	public String[] getTokenNames() { return tokenNames; }
+	public String[] getRuleNames() { return ruleNames; }
 
 	@Override
-	public String[] getRuleNames() { return ruleNames; }
+	public String getSerializedATN() { return _serializedATN; }
 
 	@Override
 	public ATN getATN() { return _ATN; }
@@ -80,18 +125,18 @@ public class ElangParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class FileContext extends ParserRuleContext {
-		public ToplevelStmtContext toplevelStmt(int i) {
-			return getRuleContext(ToplevelStmtContext.class,i);
-		}
 		public PhaseDefsContext phaseDefs() {
 			return getRuleContext(PhaseDefsContext.class,0);
-		}
-		public TransitionDefsContext transitionDefs() {
-			return getRuleContext(TransitionDefsContext.class,0);
 		}
 		public TerminalNode EOF() { return getToken(ElangParser.EOF, 0); }
 		public List<ToplevelStmtContext> toplevelStmt() {
 			return getRuleContexts(ToplevelStmtContext.class);
+		}
+		public ToplevelStmtContext toplevelStmt(int i) {
+			return getRuleContext(ToplevelStmtContext.class,i);
+		}
+		public TransitionDefsContext transitionDefs() {
+			return getRuleContext(TransitionDefsContext.class,0);
 		}
 		public FileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -125,23 +170,27 @@ public class ElangParser extends Parser {
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T_FUNCTION) | (1L << T_GVAR) | (1L << T_VAL))) != 0)) {
 				{
 				{
-				setState(100); toplevelStmt();
+				setState(100);
+				toplevelStmt();
 				}
 				}
 				setState(105);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(106); phaseDefs();
+			setState(106);
+			phaseDefs();
 			setState(108);
 			_la = _input.LA(1);
 			if (_la==T_TRANSITION) {
 				{
-				setState(107); transitionDefs();
+				setState(107);
+				transitionDefs();
 				}
 			}
 
-			setState(110); match(EOF);
+			setState(110);
+			match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -156,14 +205,14 @@ public class ElangParser extends Parser {
 	}
 
 	public static class ToplevelStmtContext extends ParserRuleContext {
-		public FunctionDefContext functionDef() {
-			return getRuleContext(FunctionDefContext.class,0);
-		}
 		public GvarDefContext gvarDef() {
 			return getRuleContext(GvarDefContext.class,0);
 		}
 		public ValDefContext valDef() {
 			return getRuleContext(ValDefContext.class,0);
+		}
+		public FunctionDefContext functionDef() {
+			return getRuleContext(FunctionDefContext.class,0);
 		}
 		public ToplevelStmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -194,17 +243,20 @@ public class ElangParser extends Parser {
 			switch (_input.LA(1)) {
 			case T_GVAR:
 				{
-				setState(112); gvarDef();
+				setState(112);
+				gvarDef();
 				}
 				break;
 			case T_VAL:
 				{
-				setState(113); valDef();
+				setState(113);
+				valDef();
 				}
 				break;
 			case T_FUNCTION:
 				{
-				setState(114); functionDef();
+				setState(114);
+				functionDef();
 				}
 				break;
 			default:
@@ -224,11 +276,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class GvarDefContext extends ParserRuleContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public GvarDefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -255,10 +307,14 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(117); match(T_GVAR);
-			setState(118); identifier();
-			setState(119); match(T_ARROWLEFT);
-			setState(120); expr(0);
+			setState(117);
+			match(T_GVAR);
+			setState(118);
+			identifier();
+			setState(119);
+			match(T_ARROWLEFT);
+			setState(120);
+			expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -273,11 +329,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class ValDefContext extends ParserRuleContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public ValDefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -304,10 +360,14 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(122); match(T_VAL);
-			setState(123); identifier();
-			setState(124); match(T_ARROWLEFT);
-			setState(125); expr(0);
+			setState(122);
+			match(T_VAL);
+			setState(123);
+			identifier();
+			setState(124);
+			match(T_ARROWLEFT);
+			setState(125);
+			expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -322,11 +382,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class FunctionDefContext extends ParserRuleContext {
-		public FunctionBodyContext functionBody() {
-			return getRuleContext(FunctionBodyContext.class,0);
-		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
+		}
+		public FunctionBodyContext functionBody() {
+			return getRuleContext(FunctionBodyContext.class,0);
 		}
 		public FunctionDefParamsContext functionDefParams() {
 			return getRuleContext(FunctionDefParamsContext.class,0);
@@ -357,20 +417,27 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(127); match(T_FUNCTION);
-			setState(128); identifier();
-			setState(129); match(T_PARENLEFT);
+			setState(127);
+			match(T_FUNCTION);
+			setState(128);
+			identifier();
+			setState(129);
+			match(T_PARENLEFT);
 			setState(131);
 			_la = _input.LA(1);
 			if (_la==ID) {
 				{
-				setState(130); functionDefParams();
+				setState(130);
+				functionDefParams();
 				}
 			}
 
-			setState(133); match(T_PARENRIGHT);
-			setState(134); functionBody();
-			setState(135); match(T_END);
+			setState(133);
+			match(T_PARENRIGHT);
+			setState(134);
+			functionBody();
+			setState(135);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -385,11 +452,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class FunctionDefParamsContext extends ParserRuleContext {
-		public FunctionDefParamContext functionDefParam(int i) {
-			return getRuleContext(FunctionDefParamContext.class,i);
-		}
 		public List<FunctionDefParamContext> functionDefParam() {
 			return getRuleContexts(FunctionDefParamContext.class);
+		}
+		public FunctionDefParamContext functionDefParam(int i) {
+			return getRuleContext(FunctionDefParamContext.class,i);
 		}
 		public FunctionDefParamsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -417,14 +484,16 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(137); functionDefParam();
+			setState(137);
+			functionDefParam();
 			setState(141);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==ID) {
 				{
 				{
-				setState(138); functionDefParam();
+				setState(138);
+				functionDefParam();
 				}
 				}
 				setState(143);
@@ -471,7 +540,8 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(144); match(ID);
+			setState(144);
+			match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -486,14 +556,14 @@ public class ElangParser extends Parser {
 	}
 
 	public static class FunctionBodyContext extends ParserRuleContext {
+		public BlockContext block() {
+			return getRuleContext(BlockContext.class,0);
+		}
 		public FvarDefsContext fvarDefs() {
 			return getRuleContext(FvarDefsContext.class,0);
 		}
 		public VarDefsContext varDefs() {
 			return getRuleContext(VarDefsContext.class,0);
-		}
-		public BlockContext block() {
-			return getRuleContext(BlockContext.class,0);
 		}
 		public FunctionBodyContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -525,7 +595,8 @@ public class ElangParser extends Parser {
 			_la = _input.LA(1);
 			if (_la==T_FVAR) {
 				{
-				setState(146); fvarDefs();
+				setState(146);
+				fvarDefs();
 				}
 			}
 
@@ -533,11 +604,13 @@ public class ElangParser extends Parser {
 			_la = _input.LA(1);
 			if (_la==T_VAR) {
 				{
-				setState(149); varDefs();
+				setState(149);
+				varDefs();
 				}
 			}
 
-			setState(152); block();
+			setState(152);
+			block();
 			}
 		}
 		catch (RecognitionException re) {
@@ -590,7 +663,8 @@ public class ElangParser extends Parser {
 			do {
 				{
 				{
-				setState(154); fvarDef();
+				setState(154);
+				fvarDef();
 				}
 				}
 				setState(157); 
@@ -611,11 +685,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class FvarDefContext extends ParserRuleContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public FvarDefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -642,10 +716,14 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(159); match(T_FVAR);
-			setState(160); identifier();
-			setState(161); match(T_ARROWLEFT);
-			setState(162); expr(0);
+			setState(159);
+			match(T_FVAR);
+			setState(160);
+			identifier();
+			setState(161);
+			match(T_ARROWLEFT);
+			setState(162);
+			expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -660,11 +738,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class VarDefsContext extends ParserRuleContext {
-		public VarDefContext varDef(int i) {
-			return getRuleContext(VarDefContext.class,i);
-		}
 		public List<VarDefContext> varDef() {
 			return getRuleContexts(VarDefContext.class);
+		}
+		public VarDefContext varDef(int i) {
+			return getRuleContext(VarDefContext.class,i);
 		}
 		public VarDefsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -698,7 +776,8 @@ public class ElangParser extends Parser {
 			do {
 				{
 				{
-				setState(164); varDef();
+				setState(164);
+				varDef();
 				}
 				}
 				setState(167); 
@@ -719,11 +798,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class VarDefContext extends ParserRuleContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public VarDefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -750,10 +829,14 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(169); match(T_VAR);
-			setState(170); identifier();
-			setState(171); match(T_ARROWLEFT);
-			setState(172); expr(0);
+			setState(169);
+			match(T_VAR);
+			setState(170);
+			identifier();
+			setState(171);
+			match(T_ARROWLEFT);
+			setState(172);
+			expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -768,11 +851,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class BlockContext extends ParserRuleContext {
-		public StmtContext stmt(int i) {
-			return getRuleContext(StmtContext.class,i);
-		}
 		public List<StmtContext> stmt() {
 			return getRuleContexts(StmtContext.class);
+		}
+		public StmtContext stmt(int i) {
+			return getRuleContext(StmtContext.class,i);
 		}
 		public BlockContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -806,7 +889,8 @@ public class ElangParser extends Parser {
 			do {
 				{
 				{
-				setState(174); stmt();
+				setState(174);
+				stmt();
 				}
 				}
 				setState(177); 
@@ -827,59 +911,14 @@ public class ElangParser extends Parser {
 	}
 
 	public static class ExprContext extends ParserRuleContext {
-		public int _p;
-		public ExprContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public ExprContext(ParserRuleContext parent, int invokingState, int _p) {
+		public ExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
-			this._p = _p;
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
 	 
 		public ExprContext() { }
 		public void copyFrom(ExprContext ctx) {
 			super.copyFrom(ctx);
-			this._p = ctx._p;
-		}
-	}
-	public static class ExprIndexingContext extends ExprContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public IdentifierContext identifier() {
-			return getRuleContext(IdentifierContext.class,0);
-		}
-		public ExprIndexingContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterExprIndexing(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitExprIndexing(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitExprIndexing(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class ExprIdContext extends ExprContext {
-		public IdentifierContext identifier() {
-			return getRuleContext(IdentifierContext.class,0);
-		}
-		public ExprIdContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterExprId(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitExprId(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitExprId(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ExprFcallContext extends ExprContext {
@@ -898,6 +937,48 @@ public class ElangParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitExprFcall(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ExprProprefContext extends ExprContext {
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
+		public ExprProprefContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterExprPropref(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitExprPropref(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitExprPropref(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ExprIndexingContext extends ExprContext {
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public ExprIndexingContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterExprIndexing(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitExprIndexing(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitExprIndexing(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -920,34 +1001,37 @@ public class ElangParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class ExprProprefContext extends ExprContext {
-		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+	public static class ExprIdContext extends ExprContext {
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
 		}
-		public ExprProprefContext(ExprContext ctx) { copyFrom(ctx); }
+		public ExprIdContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterExprPropref(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterExprId(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitExprPropref(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitExprId(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitExprPropref(this);
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitExprId(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ExprContext expr(int _p) throws RecognitionException {
+	public final ExprContext expr() throws RecognitionException {
+		return expr(0);
+	}
+
+	private ExprContext expr(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
 		int _parentState = getState();
-		ExprContext _localctx = new ExprContext(_ctx, _parentState, _p);
+		ExprContext _localctx = new ExprContext(_ctx, _parentState);
 		ExprContext _prevctx = _localctx;
 		int _startState = 26;
-		enterRecursionRule(_localctx, RULE_expr);
+		enterRecursionRule(_localctx, 26, RULE_expr, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -960,37 +1044,41 @@ public class ElangParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(180); functionCall();
+				setState(180);
+				functionCall();
 				}
 				break;
-
 			case 2:
 				{
 				_localctx = new ExprIndexingContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(181); identifier();
-				setState(182); match(T_BRACKETLEFT);
-				setState(183); expr(0);
-				setState(184); match(T_BRACKETRIGHT);
+				setState(181);
+				identifier();
+				setState(182);
+				match(T_BRACKETLEFT);
+				setState(183);
+				expr(0);
+				setState(184);
+				match(T_BRACKETRIGHT);
 				}
 				break;
-
 			case 3:
 				{
 				_localctx = new ExprIdContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(186); identifier();
+				setState(186);
+				identifier();
 				}
 				break;
-
 			case 4:
 				{
 				_localctx = new ExprLiteralContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(187); literal();
+				setState(187);
+				literal();
 				}
 				break;
 			}
@@ -998,18 +1086,20 @@ public class ElangParser extends Parser {
 			setState(195);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
-			while ( _alt!=2 && _alt!=-1 ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new ExprProprefContext(new ExprContext(_parentctx, _parentState, _p));
+					_localctx = new ExprProprefContext(new ExprContext(_parentctx, _parentState));
 					pushNewRecursionContext(_localctx, _startState, RULE_expr);
 					setState(190);
-					if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
-					setState(191); match(T_DOT);
-					setState(192); match(ID);
+					if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+					setState(191);
+					match(T_DOT);
+					setState(192);
+					match(ID);
 					}
 					} 
 				}
@@ -1057,7 +1147,8 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(198); match(ID);
+			setState(198);
+			match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1082,22 +1173,19 @@ public class ElangParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class StringLiteralContext extends LiteralContext {
-		public StringContext string() {
-			return getRuleContext(StringContext.class,0);
-		}
-		public StringLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
+	public static class NothingLiteralContext extends LiteralContext {
+		public NothingLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterStringLiteral(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterNothingLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitStringLiteral(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitNothingLiteral(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitStringLiteral(this);
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitNothingLiteral(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1117,6 +1205,57 @@ public class ElangParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitObjectLiteral(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class StringLiteralContext extends LiteralContext {
+		public StringContext string() {
+			return getRuleContext(StringContext.class,0);
+		}
+		public StringLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterStringLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitStringLiteral(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitStringLiteral(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class BooleanLiteralContext extends LiteralContext {
+		public BooleanLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterBooleanLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitBooleanLiteral(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitBooleanLiteral(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class YesNoLiteralContext extends LiteralContext {
+		public YesNoLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterYesNoLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitYesNoLiteral(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitYesNoLiteral(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1174,54 +1313,6 @@ public class ElangParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class NothingLiteralContext extends LiteralContext {
-		public NothingLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterNothingLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitNothingLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitNothingLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class YesNoLiteralContext extends LiteralContext {
-		public YesNoLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterYesNoLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitYesNoLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitYesNoLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class BooleanLiteralContext extends LiteralContext {
-		public BooleanLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterBooleanLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitBooleanLiteral(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitBooleanLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 
 	public final LiteralContext literal() throws RecognitionException {
 		LiteralContext _localctx = new LiteralContext(_ctx, getState());
@@ -1233,70 +1324,80 @@ public class ElangParser extends Parser {
 				_localctx = new StringLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(200); string();
+				setState(200);
+				string();
 				}
 				break;
 			case NUMBER:
 				_localctx = new NumberLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(201); number();
+				setState(201);
+				number();
 				}
 				break;
 			case T_BRACELEFT:
 				_localctx = new ObjectLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(202); object();
+				setState(202);
+				object();
 				}
 				break;
 			case T_BRACKETLEFT:
 				_localctx = new ArrayLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(203); array();
+				setState(203);
+				array();
 				}
 				break;
 			case T_TRUE:
 				_localctx = new BooleanLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(204); match(T_TRUE);
+				setState(204);
+				match(T_TRUE);
 				}
 				break;
 			case T_FALSE:
 				_localctx = new BooleanLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(205); match(T_FALSE);
+				setState(205);
+				match(T_FALSE);
 				}
 				break;
 			case T_YES:
 				_localctx = new YesNoLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(206); match(T_YES);
+				setState(206);
+				match(T_YES);
 				}
 				break;
 			case T_NO:
 				_localctx = new YesNoLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(207); match(T_NO);
+				setState(207);
+				match(T_NO);
 				}
 				break;
 			case T_NULL:
 				_localctx = new NullLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(208); match(T_NULL);
+				setState(208);
+				match(T_NULL);
 				}
 				break;
 			case T_NOTHING:
 				_localctx = new NothingLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(209); match(T_NOTHING);
+				setState(209);
+				match(T_NOTHING);
 				}
 				break;
 			default:
@@ -1315,11 +1416,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class FunctionCallContext extends ParserRuleContext {
-		public FunctionCallParamsContext functionCallParams() {
-			return getRuleContext(FunctionCallParamsContext.class,0);
-		}
 		public FunctionIdentifierContext functionIdentifier() {
 			return getRuleContext(FunctionIdentifierContext.class,0);
+		}
+		public FunctionCallParamsContext functionCallParams() {
+			return getRuleContext(FunctionCallParamsContext.class,0);
 		}
 		public FunctionCallContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1347,17 +1448,21 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(212); functionIdentifier();
-			setState(213); match(T_PARENLEFT);
+			setState(212);
+			functionIdentifier();
+			setState(213);
+			match(T_PARENLEFT);
 			setState(215);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T_BRACELEFT) | (1L << T_BRACKETLEFT) | (1L << T_FALSE) | (1L << T_NO) | (1L << T_NOTHING) | (1L << T_NULL) | (1L << T_TRUE) | (1L << T_YES) | (1L << ID) | (1L << NUMBER) | (1L << STRING))) != 0)) {
 				{
-				setState(214); functionCallParams();
+				setState(214);
+				functionCallParams();
 				}
 			}
 
-			setState(217); match(T_PARENRIGHT);
+			setState(217);
+			match(T_PARENRIGHT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1400,7 +1505,8 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(219); identifier();
+			setState(219);
+			identifier();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1415,11 +1521,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class FunctionCallParamsContext extends ParserRuleContext {
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
 		}
 		public FunctionCallParamsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1447,14 +1553,16 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(221); expr(0);
+			setState(221);
+			expr(0);
 			setState(225);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T_BRACELEFT) | (1L << T_BRACKETLEFT) | (1L << T_FALSE) | (1L << T_NO) | (1L << T_NOTHING) | (1L << T_NULL) | (1L << T_TRUE) | (1L << T_YES) | (1L << ID) | (1L << NUMBER) | (1L << STRING))) != 0)) {
 				{
 				{
-				setState(222); expr(0);
+				setState(222);
+				expr(0);
 				}
 				}
 				setState(227);
@@ -1510,29 +1618,33 @@ public class ElangParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(228); match(T_BRACELEFT);
+				setState(228);
+				match(T_BRACELEFT);
 				setState(230); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(229); pair();
+					setState(229);
+					pair();
 					}
 					}
 					setState(232); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==ID );
-				setState(234); match(T_BRACERIGHT);
+				setState(234);
+				match(T_BRACERIGHT);
 				}
 				break;
-
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(236); match(T_BRACELEFT);
-				setState(237); match(T_BRACERIGHT);
+				setState(236);
+				match(T_BRACELEFT);
+				setState(237);
+				match(T_BRACERIGHT);
 				}
 				break;
 			}
@@ -1549,11 +1661,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class ArrayContext extends ParserRuleContext {
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
 		}
 		public ArrayContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1584,29 +1696,33 @@ public class ElangParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(240); match(T_BRACKETLEFT);
+				setState(240);
+				match(T_BRACKETLEFT);
 				setState(242); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(241); expr(0);
+					setState(241);
+					expr(0);
 					}
 					}
 					setState(244); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T_BRACELEFT) | (1L << T_BRACKETLEFT) | (1L << T_FALSE) | (1L << T_NO) | (1L << T_NOTHING) | (1L << T_NULL) | (1L << T_TRUE) | (1L << T_YES) | (1L << ID) | (1L << NUMBER) | (1L << STRING))) != 0) );
-				setState(246); match(T_BRACKETRIGHT);
+				setState(246);
+				match(T_BRACKETRIGHT);
 				}
 				break;
-
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(248); match(T_BRACKETLEFT);
-				setState(249); match(T_BRACKETRIGHT);
+				setState(248);
+				match(T_BRACKETLEFT);
+				setState(249);
+				match(T_BRACKETRIGHT);
 				}
 				break;
 			}
@@ -1652,9 +1768,12 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(252); match(ID);
-			setState(253); match(T_COLON);
-			setState(254); expr(0);
+			setState(252);
+			match(ID);
+			setState(253);
+			match(T_COLON);
+			setState(254);
+			expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1679,79 +1798,22 @@ public class ElangParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class ContinueStatementContext extends StmtContext {
-		public StmtContinueContext stmtContinue() {
-			return getRuleContext(StmtContinueContext.class,0);
+	public static class BreakStatementContext extends StmtContext {
+		public StmtBreakContext stmtBreak() {
+			return getRuleContext(StmtBreakContext.class,0);
 		}
-		public ContinueStatementContext(StmtContext ctx) { copyFrom(ctx); }
+		public BreakStatementContext(StmtContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterContinueStatement(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterBreakStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitContinueStatement(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitBreakStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitContinueStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class AssignStatementContext extends StmtContext {
-		public StmtAssignContext stmtAssign() {
-			return getRuleContext(StmtAssignContext.class,0);
-		}
-		public AssignStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterAssignStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitAssignStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitAssignStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class IfElseStatementContext extends StmtContext {
-		public StmtIfElseContext stmtIfElse() {
-			return getRuleContext(StmtIfElseContext.class,0);
-		}
-		public IfElseStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterIfElseStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitIfElseStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitIfElseStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class ReturnStatementContext extends StmtContext {
-		public StmtReturnContext stmtReturn() {
-			return getRuleContext(StmtReturnContext.class,0);
-		}
-		public ReturnStatementContext(StmtContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterReturnStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitReturnStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitReturnStatement(this);
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitBreakStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1774,41 +1836,41 @@ public class ElangParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class BreakStatementContext extends StmtContext {
-		public StmtBreakContext stmtBreak() {
-			return getRuleContext(StmtBreakContext.class,0);
+	public static class ReturnStatementContext extends StmtContext {
+		public StmtReturnContext stmtReturn() {
+			return getRuleContext(StmtReturnContext.class,0);
 		}
-		public BreakStatementContext(StmtContext ctx) { copyFrom(ctx); }
+		public ReturnStatementContext(StmtContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterBreakStatement(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterReturnStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitBreakStatement(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitReturnStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitBreakStatement(this);
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitReturnStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class WhileStatementContext extends StmtContext {
-		public StmtWhileContext stmtWhile() {
-			return getRuleContext(StmtWhileContext.class,0);
+	public static class IfElseStatementContext extends StmtContext {
+		public StmtIfElseContext stmtIfElse() {
+			return getRuleContext(StmtIfElseContext.class,0);
 		}
-		public WhileStatementContext(StmtContext ctx) { copyFrom(ctx); }
+		public IfElseStatementContext(StmtContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterWhileStatement(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterIfElseStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitWhileStatement(this);
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitIfElseStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitWhileStatement(this);
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitIfElseStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1831,6 +1893,63 @@ public class ElangParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class WhileStatementContext extends StmtContext {
+		public StmtWhileContext stmtWhile() {
+			return getRuleContext(StmtWhileContext.class,0);
+		}
+		public WhileStatementContext(StmtContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterWhileStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitWhileStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitWhileStatement(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class AssignStatementContext extends StmtContext {
+		public StmtAssignContext stmtAssign() {
+			return getRuleContext(StmtAssignContext.class,0);
+		}
+		public AssignStatementContext(StmtContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterAssignStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitAssignStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitAssignStatement(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ContinueStatementContext extends StmtContext {
+		public StmtContinueContext stmtContinue() {
+			return getRuleContext(StmtContinueContext.class,0);
+		}
+		public ContinueStatementContext(StmtContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterContinueStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitContinueStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitContinueStatement(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 
 	public final StmtContext stmt() throws RecognitionException {
 		StmtContext _localctx = new StmtContext(_ctx, getState());
@@ -1842,63 +1961,64 @@ public class ElangParser extends Parser {
 				_localctx = new ReturnStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(256); stmtReturn();
+				setState(256);
+				stmtReturn();
 				}
 				break;
-
 			case 2:
 				_localctx = new ContinueStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(257); stmtContinue();
+				setState(257);
+				stmtContinue();
 				}
 				break;
-
 			case 3:
 				_localctx = new BreakStatementContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(258); stmtBreak();
+				setState(258);
+				stmtBreak();
 				}
 				break;
-
 			case 4:
 				_localctx = new AssignStatementContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(259); stmtAssign();
+				setState(259);
+				stmtAssign();
 				}
 				break;
-
 			case 5:
 				_localctx = new IfElseStatementContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(260); stmtIfElse();
+				setState(260);
+				stmtIfElse();
 				}
 				break;
-
 			case 6:
 				_localctx = new IfStatementContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(261); stmtIf();
+				setState(261);
+				stmtIf();
 				}
 				break;
-
 			case 7:
 				_localctx = new WhileStatementContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(262); stmtWhile();
+				setState(262);
+				stmtWhile();
 				}
 				break;
-
 			case 8:
 				_localctx = new FunctionCallStatementContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(263); functionCall();
+				setState(263);
+				functionCall();
 				}
 				break;
 			}
@@ -1915,11 +2035,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtAssignContext extends ParserRuleContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public StmtAssignContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1946,9 +2066,12 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(266); identifier();
-			setState(267); match(T_ARROWLEFT);
-			setState(268); expr(0);
+			setState(266);
+			identifier();
+			setState(267);
+			match(T_ARROWLEFT);
+			setState(268);
+			expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1988,7 +2111,8 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(270); match(T_CONTINUE);
+			setState(270);
+			match(T_CONTINUE);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2028,7 +2152,8 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(272); match(T_BREAK);
+			setState(272);
+			match(T_BREAK);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2071,8 +2196,10 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(274); match(T_RETURN);
-			setState(275); expr(0);
+			setState(274);
+			match(T_RETURN);
+			setState(275);
+			expr(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2087,14 +2214,14 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtIfElseContext extends ParserRuleContext {
-		public BlockContext block(int i) {
-			return getRuleContext(BlockContext.class,i);
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public List<BlockContext> block() {
 			return getRuleContexts(BlockContext.class);
 		}
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+		public BlockContext block(int i) {
+			return getRuleContext(BlockContext.class,i);
 		}
 		public StmtIfElseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2121,13 +2248,20 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(277); match(T_IF);
-			setState(278); expr(0);
-			setState(279); match(T_THEN);
-			setState(280); block();
-			setState(281); match(T_ELSE);
-			setState(282); block();
-			setState(283); match(T_END);
+			setState(277);
+			match(T_IF);
+			setState(278);
+			expr(0);
+			setState(279);
+			match(T_THEN);
+			setState(280);
+			block();
+			setState(281);
+			match(T_ELSE);
+			setState(282);
+			block();
+			setState(283);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2142,11 +2276,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtIfContext extends ParserRuleContext {
-		public BlockContext block() {
-			return getRuleContext(BlockContext.class,0);
-		}
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
+		}
+		public BlockContext block() {
+			return getRuleContext(BlockContext.class,0);
 		}
 		public StmtIfContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2173,11 +2307,16 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(285); match(T_IF);
-			setState(286); expr(0);
-			setState(287); match(T_THEN);
-			setState(288); block();
-			setState(289); match(T_END);
+			setState(285);
+			match(T_IF);
+			setState(286);
+			expr(0);
+			setState(287);
+			match(T_THEN);
+			setState(288);
+			block();
+			setState(289);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2192,11 +2331,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtWhileContext extends ParserRuleContext {
-		public BlockContext block() {
-			return getRuleContext(BlockContext.class,0);
-		}
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
+		}
+		public BlockContext block() {
+			return getRuleContext(BlockContext.class,0);
 		}
 		public StmtWhileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2223,11 +2362,16 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(291); match(T_WHILE);
-			setState(292); expr(0);
-			setState(293); match(T_DO);
-			setState(294); block();
-			setState(295); match(T_END);
+			setState(291);
+			match(T_WHILE);
+			setState(292);
+			expr(0);
+			setState(293);
+			match(T_DO);
+			setState(294);
+			block();
+			setState(295);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2242,11 +2386,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class PhaseDefsContext extends ParserRuleContext {
-		public PhaseDefContext phaseDef(int i) {
-			return getRuleContext(PhaseDefContext.class,i);
-		}
 		public List<PhaseDefContext> phaseDef() {
 			return getRuleContexts(PhaseDefContext.class);
+		}
+		public PhaseDefContext phaseDef(int i) {
+			return getRuleContext(PhaseDefContext.class,i);
 		}
 		public PhaseDefsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2280,13 +2424,14 @@ public class ElangParser extends Parser {
 			do {
 				{
 				{
-				setState(297); phaseDef();
+				setState(297);
+				phaseDef();
 				}
 				}
 				setState(300); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 2) | (1L << 3))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__1) | (1L << T__2))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -2311,25 +2456,6 @@ public class ElangParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class InteractionPhaseDefContext extends PhaseDefContext {
-		public InteractionPhaseContext interactionPhase() {
-			return getRuleContext(InteractionPhaseContext.class,0);
-		}
-		public InteractionPhaseDefContext(PhaseDefContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterInteractionPhaseDef(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitInteractionPhaseDef(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitInteractionPhaseDef(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class IntermezzoPhaseDefContext extends PhaseDefContext {
 		public IntermezzoPhaseContext intermezzoPhase() {
 			return getRuleContext(IntermezzoPhaseContext.class,0);
@@ -2346,6 +2472,25 @@ public class ElangParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitIntermezzoPhaseDef(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class InteractionPhaseDefContext extends PhaseDefContext {
+		public InteractionPhaseContext interactionPhase() {
+			return getRuleContext(InteractionPhaseContext.class,0);
+		}
+		public InteractionPhaseDefContext(PhaseDefContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).enterInteractionPhaseDef(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElangListener ) ((ElangListener)listener).exitInteractionPhaseDef(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElangVisitor ) return ((ElangVisitor<? extends T>)visitor).visitInteractionPhaseDef(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2375,25 +2520,28 @@ public class ElangParser extends Parser {
 		try {
 			setState(305);
 			switch (_input.LA(1)) {
-			case 2:
+			case T__0:
 				_localctx = new InformationPhaseDefContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(302); informationPhase();
+				setState(302);
+				informationPhase();
 				}
 				break;
-			case 1:
+			case T__1:
 				_localctx = new IntermezzoPhaseDefContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(303); intermezzoPhase();
+				setState(303);
+				intermezzoPhase();
 				}
 				break;
-			case 3:
+			case T__2:
 				_localctx = new InteractionPhaseDefContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(304); interactionPhase();
+				setState(304);
+				interactionPhase();
 				}
 				break;
 			default:
@@ -2412,11 +2560,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class InformationPhaseContext extends ParserRuleContext {
-		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public InformationPhaseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2442,10 +2590,14 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(307); match(2);
-			setState(308); match(ID);
-			setState(309); block();
-			setState(310); match(T_END);
+			setState(307);
+			match(T__0);
+			setState(308);
+			match(ID);
+			setState(309);
+			block();
+			setState(310);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2460,11 +2612,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class IntermezzoPhaseContext extends ParserRuleContext {
-		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public IntermezzoPhaseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2490,10 +2642,14 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(312); match(1);
-			setState(313); match(ID);
-			setState(314); block();
-			setState(315); match(T_END);
+			setState(312);
+			match(T__1);
+			setState(313);
+			match(ID);
+			setState(314);
+			block();
+			setState(315);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2508,11 +2664,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class InteractionPhaseContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public List<PhaseFunctionDefContext> phaseFunctionDef() {
 			return getRuleContexts(PhaseFunctionDefContext.class);
 		}
-		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
-		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
 		public PhaseFunctionDefContext phaseFunctionDef(int i) {
 			return getRuleContext(PhaseFunctionDefContext.class,i);
 		}
@@ -2542,22 +2698,26 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(317); match(3);
-			setState(318); match(ID);
+			setState(317);
+			match(T__2);
+			setState(318);
+			match(ID);
 			setState(320); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(319); phaseFunctionDef();
+				setState(319);
+				phaseFunctionDef();
 				}
 				}
 				setState(322); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==ID );
-			setState(324); match(T_END);
+			setState(324);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2572,10 +2732,10 @@ public class ElangParser extends Parser {
 	}
 
 	public static class PhaseSetVarContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
 		public PhaseSetVarValueContext phaseSetVarValue() {
 			return getRuleContext(PhaseSetVarValueContext.class,0);
 		}
-		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
 		public PhaseSetVarContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2601,9 +2761,12 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(326); match(ID);
-			setState(327); match(T_COLON);
-			setState(328); phaseSetVarValue();
+			setState(326);
+			match(ID);
+			setState(327);
+			match(T_COLON);
+			setState(328);
+			phaseSetVarValue();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2652,25 +2815,29 @@ public class ElangParser extends Parser {
 			case STRING:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(330); string();
+				setState(330);
+				string();
 				}
 				break;
 			case NUMBER:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(331); number();
+				setState(331);
+				number();
 				}
 				break;
 			case T_TRUE:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(332); match(T_TRUE);
+				setState(332);
+				match(T_TRUE);
 				}
 				break;
 			case T_FALSE:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(333); match(T_FALSE);
+				setState(333);
+				match(T_FALSE);
 				}
 				break;
 			default:
@@ -2689,11 +2856,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class PhaseFunctionDefContext extends ParserRuleContext {
-		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
+		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
 		public PhaseFunctionBodyContext phaseFunctionBody() {
 			return getRuleContext(PhaseFunctionBodyContext.class,0);
 		}
-		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public PhaseFunctionDefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2719,9 +2886,12 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(336); match(ID);
-			setState(337); phaseFunctionBody();
-			setState(338); match(T_END);
+			setState(336);
+			match(ID);
+			setState(337);
+			phaseFunctionBody();
+			setState(338);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2736,11 +2906,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class PhaseFunctionBodyContext extends ParserRuleContext {
-		public VarDefsContext varDefs() {
-			return getRuleContext(VarDefsContext.class,0);
-		}
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
+		}
+		public VarDefsContext varDefs() {
+			return getRuleContext(VarDefsContext.class,0);
 		}
 		public PhaseFunctionBodyContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2772,11 +2942,13 @@ public class ElangParser extends Parser {
 			_la = _input.LA(1);
 			if (_la==T_VAR) {
 				{
-				setState(340); varDefs();
+				setState(340);
+				varDefs();
 				}
 			}
 
-			setState(343); block();
+			setState(343);
+			block();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2791,11 +2963,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class TransitionDefsContext extends ParserRuleContext {
-		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
+		public TerminalNode T_TRANSITION() { return getToken(ElangParser.T_TRANSITION, 0); }
 		public TransitionsContext transitions() {
 			return getRuleContext(TransitionsContext.class,0);
 		}
-		public TerminalNode T_TRANSITION() { return getToken(ElangParser.T_TRANSITION, 0); }
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public TransitionDefsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2821,9 +2993,12 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(345); match(T_TRANSITION);
-			setState(346); transitions();
-			setState(347); match(T_END);
+			setState(345);
+			match(T_TRANSITION);
+			setState(346);
+			transitions();
+			setState(347);
+			match(T_END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2838,14 +3013,14 @@ public class ElangParser extends Parser {
 	}
 
 	public static class TransitionsContext extends ParserRuleContext {
+		public StartTransitionContext startTransition() {
+			return getRuleContext(StartTransitionContext.class,0);
+		}
 		public OtherTransitionsContext otherTransitions() {
 			return getRuleContext(OtherTransitionsContext.class,0);
 		}
 		public FinalTransitionContext finalTransition() {
 			return getRuleContext(FinalTransitionContext.class,0);
-		}
-		public StartTransitionContext startTransition() {
-			return getRuleContext(StartTransitionContext.class,0);
 		}
 		public TransitionsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2872,11 +3047,16 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(349); startTransition();
-			setState(350); match(T_COMMA);
-			setState(351); otherTransitions();
-			setState(352); match(T_COMMA);
-			setState(353); finalTransition();
+			setState(349);
+			startTransition();
+			setState(350);
+			match(T_COMMA);
+			setState(351);
+			otherTransitions();
+			setState(352);
+			match(T_COMMA);
+			setState(353);
+			finalTransition();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2920,10 +3100,14 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(355); match(T_TRANSSTART);
-			setState(356); match(T_PARENLEFT);
-			setState(357); identifier();
-			setState(358); match(T_PARENRIGHT);
+			setState(355);
+			match(T_TRANSSTART);
+			setState(356);
+			match(T_PARENLEFT);
+			setState(357);
+			identifier();
+			setState(358);
+			match(T_PARENRIGHT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2938,11 +3122,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class OtherTransitionsContext extends ParserRuleContext {
-		public TransitionContext transition(int i) {
-			return getRuleContext(TransitionContext.class,i);
-		}
 		public List<TransitionContext> transition() {
 			return getRuleContexts(TransitionContext.class);
+		}
+		public TransitionContext transition(int i) {
+			return getRuleContext(TransitionContext.class,i);
 		}
 		public OtherTransitionsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2970,16 +3154,19 @@ public class ElangParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(360); transition();
+			setState(360);
+			transition();
 			setState(365);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
-			while ( _alt!=2 && _alt!=-1 ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(361); match(T_COMMA);
-					setState(362); transition();
+					setState(361);
+					match(T_COMMA);
+					setState(362);
+					transition();
 					}
 					} 
 				}
@@ -3030,10 +3217,14 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(368); match(T_TRANSFINAL);
-			setState(369); match(T_PARENLEFT);
-			setState(370); identifier();
-			setState(371); match(T_PARENRIGHT);
+			setState(368);
+			match(T_TRANSFINAL);
+			setState(369);
+			match(T_PARENLEFT);
+			setState(370);
+			identifier();
+			setState(371);
+			match(T_PARENRIGHT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3083,15 +3274,20 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(373); transitionSrc();
-			setState(374); match(T_ARROWRIGHT);
-			setState(375); transitionTo();
+			setState(373);
+			transitionSrc();
+			setState(374);
+			match(T_ARROWRIGHT);
+			setState(375);
+			transitionTo();
 			setState(378);
 			_la = _input.LA(1);
 			if (_la==T_IF) {
 				{
-				setState(376); match(T_IF);
-				setState(377); transitionCond();
+				setState(376);
+				match(T_IF);
+				setState(377);
+				transitionCond();
 				}
 			}
 
@@ -3164,14 +3360,16 @@ public class ElangParser extends Parser {
 				_localctx = new TransitionSrcRepeatContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(380); match(T_TRANSNAMEREPEAT);
+				setState(380);
+				match(T_TRANSNAMEREPEAT);
 				}
 				break;
 			case ID:
 				_localctx = new TransitionSrcIdContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(381); match(ID);
+				setState(381);
+				match(ID);
 				}
 				break;
 			default:
@@ -3216,7 +3414,8 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(384); match(ID);
+			setState(384);
+			match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3290,19 +3489,24 @@ public class ElangParser extends Parser {
 				_localctx = new TransitionCondFcallContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(386); match(T_PARENLEFT);
-				setState(387); functionCall();
-				setState(388); match(T_PARENRIGHT);
+				setState(386);
+				match(T_PARENLEFT);
+				setState(387);
+				functionCall();
+				setState(388);
+				match(T_PARENRIGHT);
 				}
 				break;
-
 			case 2:
 				_localctx = new TransitionCondVarContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(390); match(T_PARENLEFT);
-				setState(391); identifier();
-				setState(392); match(T_PARENRIGHT);
+				setState(390);
+				match(T_PARENLEFT);
+				setState(391);
+				identifier();
+				setState(392);
+				match(T_PARENRIGHT);
 				}
 				break;
 			}
@@ -3345,7 +3549,8 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(396); match(NUMBER);
+			setState(396);
+			match(NUMBER);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3386,7 +3591,8 @@ public class ElangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(398); match(STRING);
+			setState(398);
+			match(STRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3402,66 +3608,69 @@ public class ElangParser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 13: return expr_sempred((ExprContext)_localctx, predIndex);
+		case 13:
+			return expr_sempred((ExprContext)_localctx, predIndex);
 		}
 		return true;
 	}
 	private boolean expr_sempred(ExprContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 0: return 5 >= _localctx._p;
+		case 0:
+			return precpred(_ctx, 5);
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\2\3:\u0193\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4"+
-		"\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20"+
-		"\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27"+
-		"\4\30\t\30\4\31\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36"+
-		"\4\37\t\37\4 \t \4!\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4"+
-		")\t)\4*\t*\4+\t+\4,\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62"+
-		"\4\63\t\63\3\2\7\2h\n\2\f\2\16\2k\13\2\3\2\3\2\5\2o\n\2\3\2\3\2\3\3\3"+
-		"\3\3\3\5\3v\n\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3"+
-		"\6\5\6\u0086\n\6\3\6\3\6\3\6\3\6\3\7\3\7\7\7\u008e\n\7\f\7\16\7\u0091"+
-		"\13\7\3\b\3\b\3\t\5\t\u0096\n\t\3\t\5\t\u0099\n\t\3\t\3\t\3\n\6\n\u009e"+
-		"\n\n\r\n\16\n\u009f\3\13\3\13\3\13\3\13\3\13\3\f\6\f\u00a8\n\f\r\f\16"+
-		"\f\u00a9\3\r\3\r\3\r\3\r\3\r\3\16\6\16\u00b2\n\16\r\16\16\16\u00b3\3\17"+
-		"\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u00bf\n\17\3\17\3\17\3\17"+
-		"\7\17\u00c4\n\17\f\17\16\17\u00c7\13\17\3\20\3\20\3\21\3\21\3\21\3\21"+
-		"\3\21\3\21\3\21\3\21\3\21\3\21\5\21\u00d5\n\21\3\22\3\22\3\22\5\22\u00da"+
-		"\n\22\3\22\3\22\3\23\3\23\3\24\3\24\7\24\u00e2\n\24\f\24\16\24\u00e5\13"+
-		"\24\3\25\3\25\6\25\u00e9\n\25\r\25\16\25\u00ea\3\25\3\25\3\25\3\25\5\25"+
-		"\u00f1\n\25\3\26\3\26\6\26\u00f5\n\26\r\26\16\26\u00f6\3\26\3\26\3\26"+
-		"\3\26\5\26\u00fd\n\26\3\27\3\27\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30"+
-		"\3\30\3\30\5\30\u010b\n\30\3\31\3\31\3\31\3\31\3\32\3\32\3\33\3\33\3\34"+
-		"\3\34\3\34\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\36\3\36\3\36\3\36"+
-		"\3\36\3\36\3\37\3\37\3\37\3\37\3\37\3\37\3 \6 \u012d\n \r \16 \u012e\3"+
-		"!\3!\3!\5!\u0134\n!\3\"\3\"\3\"\3\"\3\"\3#\3#\3#\3#\3#\3$\3$\3$\6$\u0143"+
-		"\n$\r$\16$\u0144\3$\3$\3%\3%\3%\3%\3&\3&\3&\3&\5&\u0151\n&\3\'\3\'\3\'"+
-		"\3\'\3(\5(\u0158\n(\3(\3(\3)\3)\3)\3)\3*\3*\3*\3*\3*\3*\3+\3+\3+\3+\3"+
-		"+\3,\3,\3,\7,\u016e\n,\f,\16,\u0171\13,\3-\3-\3-\3-\3-\3.\3.\3.\3.\3."+
-		"\5.\u017d\n.\3/\3/\5/\u0181\n/\3\60\3\60\3\61\3\61\3\61\3\61\3\61\3\61"+
-		"\3\61\3\61\5\61\u018d\n\61\3\62\3\62\3\63\3\63\3\63\2\64\2\4\6\b\n\f\16"+
-		"\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bd"+
-		"\2\2\u0191\2i\3\2\2\2\4u\3\2\2\2\6w\3\2\2\2\b|\3\2\2\2\n\u0081\3\2\2\2"+
-		"\f\u008b\3\2\2\2\16\u0092\3\2\2\2\20\u0095\3\2\2\2\22\u009d\3\2\2\2\24"+
-		"\u00a1\3\2\2\2\26\u00a7\3\2\2\2\30\u00ab\3\2\2\2\32\u00b1\3\2\2\2\34\u00be"+
-		"\3\2\2\2\36\u00c8\3\2\2\2 \u00d4\3\2\2\2\"\u00d6\3\2\2\2$\u00dd\3\2\2"+
-		"\2&\u00df\3\2\2\2(\u00f0\3\2\2\2*\u00fc\3\2\2\2,\u00fe\3\2\2\2.\u010a"+
-		"\3\2\2\2\60\u010c\3\2\2\2\62\u0110\3\2\2\2\64\u0112\3\2\2\2\66\u0114\3"+
-		"\2\2\28\u0117\3\2\2\2:\u011f\3\2\2\2<\u0125\3\2\2\2>\u012c\3\2\2\2@\u0133"+
-		"\3\2\2\2B\u0135\3\2\2\2D\u013a\3\2\2\2F\u013f\3\2\2\2H\u0148\3\2\2\2J"+
-		"\u0150\3\2\2\2L\u0152\3\2\2\2N\u0157\3\2\2\2P\u015b\3\2\2\2R\u015f\3\2"+
-		"\2\2T\u0165\3\2\2\2V\u016a\3\2\2\2X\u0172\3\2\2\2Z\u0177\3\2\2\2\\\u0180"+
-		"\3\2\2\2^\u0182\3\2\2\2`\u018c\3\2\2\2b\u018e\3\2\2\2d\u0190\3\2\2\2f"+
-		"h\5\4\3\2gf\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2jl\3\2\2\2ki\3\2\2\2"+
-		"ln\5> \2mo\5P)\2nm\3\2\2\2no\3\2\2\2op\3\2\2\2pq\7\1\2\2q\3\3\2\2\2rv"+
-		"\5\6\4\2sv\5\b\5\2tv\5\n\6\2ur\3\2\2\2us\3\2\2\2ut\3\2\2\2v\5\3\2\2\2"+
-		"wx\7!\2\2xy\5\36\20\2yz\7\20\2\2z{\5\34\17\2{\7\3\2\2\2|}\7\61\2\2}~\5"+
-		"\36\20\2~\177\7\20\2\2\177\u0080\5\34\17\2\u0080\t\3\2\2\2\u0081\u0082"+
-		"\7\37\2\2\u0082\u0083\5\36\20\2\u0083\u0085\7\'\2\2\u0084\u0086\5\f\7"+
-		"\2\u0085\u0084\3\2\2\2\u0085\u0086\3\2\2\2\u0086\u0087\3\2\2\2\u0087\u0088"+
-		"\7(\2\2\u0088\u0089\5\20\t\2\u0089\u008a\7\35\2\2\u008a\13\3\2\2\2\u008b"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3:\u0193\4\2\t\2\4"+
+		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
+		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
+		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
+		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
+		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4"+
+		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\3\2\7\2"+
+		"h\n\2\f\2\16\2k\13\2\3\2\3\2\5\2o\n\2\3\2\3\2\3\3\3\3\3\3\5\3v\n\3\3\4"+
+		"\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\5\6\u0086\n\6\3\6"+
+		"\3\6\3\6\3\6\3\7\3\7\7\7\u008e\n\7\f\7\16\7\u0091\13\7\3\b\3\b\3\t\5\t"+
+		"\u0096\n\t\3\t\5\t\u0099\n\t\3\t\3\t\3\n\6\n\u009e\n\n\r\n\16\n\u009f"+
+		"\3\13\3\13\3\13\3\13\3\13\3\f\6\f\u00a8\n\f\r\f\16\f\u00a9\3\r\3\r\3\r"+
+		"\3\r\3\r\3\16\6\16\u00b2\n\16\r\16\16\16\u00b3\3\17\3\17\3\17\3\17\3\17"+
+		"\3\17\3\17\3\17\3\17\5\17\u00bf\n\17\3\17\3\17\3\17\7\17\u00c4\n\17\f"+
+		"\17\16\17\u00c7\13\17\3\20\3\20\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21"+
+		"\3\21\3\21\5\21\u00d5\n\21\3\22\3\22\3\22\5\22\u00da\n\22\3\22\3\22\3"+
+		"\23\3\23\3\24\3\24\7\24\u00e2\n\24\f\24\16\24\u00e5\13\24\3\25\3\25\6"+
+		"\25\u00e9\n\25\r\25\16\25\u00ea\3\25\3\25\3\25\3\25\5\25\u00f1\n\25\3"+
+		"\26\3\26\6\26\u00f5\n\26\r\26\16\26\u00f6\3\26\3\26\3\26\3\26\5\26\u00fd"+
+		"\n\26\3\27\3\27\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\3\30\3\30\5\30"+
+		"\u010b\n\30\3\31\3\31\3\31\3\31\3\32\3\32\3\33\3\33\3\34\3\34\3\34\3\35"+
+		"\3\35\3\35\3\35\3\35\3\35\3\35\3\35\3\36\3\36\3\36\3\36\3\36\3\36\3\37"+
+		"\3\37\3\37\3\37\3\37\3\37\3 \6 \u012d\n \r \16 \u012e\3!\3!\3!\5!\u0134"+
+		"\n!\3\"\3\"\3\"\3\"\3\"\3#\3#\3#\3#\3#\3$\3$\3$\6$\u0143\n$\r$\16$\u0144"+
+		"\3$\3$\3%\3%\3%\3%\3&\3&\3&\3&\5&\u0151\n&\3\'\3\'\3\'\3\'\3(\5(\u0158"+
+		"\n(\3(\3(\3)\3)\3)\3)\3*\3*\3*\3*\3*\3*\3+\3+\3+\3+\3+\3,\3,\3,\7,\u016e"+
+		"\n,\f,\16,\u0171\13,\3-\3-\3-\3-\3-\3.\3.\3.\3.\3.\5.\u017d\n.\3/\3/\5"+
+		"/\u0181\n/\3\60\3\60\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\5\61\u018d"+
+		"\n\61\3\62\3\62\3\63\3\63\3\63\2\3\34\64\2\4\6\b\n\f\16\20\22\24\26\30"+
+		"\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bd\2\2\u0191\2i\3"+
+		"\2\2\2\4u\3\2\2\2\6w\3\2\2\2\b|\3\2\2\2\n\u0081\3\2\2\2\f\u008b\3\2\2"+
+		"\2\16\u0092\3\2\2\2\20\u0095\3\2\2\2\22\u009d\3\2\2\2\24\u00a1\3\2\2\2"+
+		"\26\u00a7\3\2\2\2\30\u00ab\3\2\2\2\32\u00b1\3\2\2\2\34\u00be\3\2\2\2\36"+
+		"\u00c8\3\2\2\2 \u00d4\3\2\2\2\"\u00d6\3\2\2\2$\u00dd\3\2\2\2&\u00df\3"+
+		"\2\2\2(\u00f0\3\2\2\2*\u00fc\3\2\2\2,\u00fe\3\2\2\2.\u010a\3\2\2\2\60"+
+		"\u010c\3\2\2\2\62\u0110\3\2\2\2\64\u0112\3\2\2\2\66\u0114\3\2\2\28\u0117"+
+		"\3\2\2\2:\u011f\3\2\2\2<\u0125\3\2\2\2>\u012c\3\2\2\2@\u0133\3\2\2\2B"+
+		"\u0135\3\2\2\2D\u013a\3\2\2\2F\u013f\3\2\2\2H\u0148\3\2\2\2J\u0150\3\2"+
+		"\2\2L\u0152\3\2\2\2N\u0157\3\2\2\2P\u015b\3\2\2\2R\u015f\3\2\2\2T\u0165"+
+		"\3\2\2\2V\u016a\3\2\2\2X\u0172\3\2\2\2Z\u0177\3\2\2\2\\\u0180\3\2\2\2"+
+		"^\u0182\3\2\2\2`\u018c\3\2\2\2b\u018e\3\2\2\2d\u0190\3\2\2\2fh\5\4\3\2"+
+		"gf\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2jl\3\2\2\2ki\3\2\2\2ln\5> \2m"+
+		"o\5P)\2nm\3\2\2\2no\3\2\2\2op\3\2\2\2pq\7\2\2\3q\3\3\2\2\2rv\5\6\4\2s"+
+		"v\5\b\5\2tv\5\n\6\2ur\3\2\2\2us\3\2\2\2ut\3\2\2\2v\5\3\2\2\2wx\7!\2\2"+
+		"xy\5\36\20\2yz\7\20\2\2z{\5\34\17\2{\7\3\2\2\2|}\7\61\2\2}~\5\36\20\2"+
+		"~\177\7\20\2\2\177\u0080\5\34\17\2\u0080\t\3\2\2\2\u0081\u0082\7\37\2"+
+		"\2\u0082\u0083\5\36\20\2\u0083\u0085\7\'\2\2\u0084\u0086\5\f\7\2\u0085"+
+		"\u0084\3\2\2\2\u0085\u0086\3\2\2\2\u0086\u0087\3\2\2\2\u0087\u0088\7("+
+		"\2\2\u0088\u0089\5\20\t\2\u0089\u008a\7\35\2\2\u008a\13\3\2\2\2\u008b"+
 		"\u008f\5\16\b\2\u008c\u008e\5\16\b\2\u008d\u008c\3\2\2\2\u008e\u0091\3"+
 		"\2\2\2\u008f\u008d\3\2\2\2\u008f\u0090\3\2\2\2\u0090\r\3\2\2\2\u0091\u008f"+
 		"\3\2\2\2\u0092\u0093\7\65\2\2\u0093\17\3\2\2\2\u0094\u0096\5\22\n\2\u0095"+
@@ -3479,8 +3688,8 @@ public class ElangParser extends Parser {
 		"\2\u00b7\u00b8\5\36\20\2\u00b8\u00b9\7\24\2\2\u00b9\u00ba\5\34\17\2\u00ba"+
 		"\u00bb\7\25\2\2\u00bb\u00bf\3\2\2\2\u00bc\u00bf\5\36\20\2\u00bd\u00bf"+
 		"\5 \21\2\u00be\u00b5\3\2\2\2\u00be\u00b7\3\2\2\2\u00be\u00bc\3\2\2\2\u00be"+
-		"\u00bd\3\2\2\2\u00bf\u00c5\3\2\2\2\u00c0\u00c1\6\17\2\3\u00c1\u00c2\7"+
-		"\33\2\2\u00c2\u00c4\7\65\2\2\u00c3\u00c0\3\2\2\2\u00c4\u00c7\3\2\2\2\u00c5"+
+		"\u00bd\3\2\2\2\u00bf\u00c5\3\2\2\2\u00c0\u00c1\f\7\2\2\u00c1\u00c2\7\33"+
+		"\2\2\u00c2\u00c4\7\65\2\2\u00c3\u00c0\3\2\2\2\u00c4\u00c7\3\2\2\2\u00c5"+
 		"\u00c3\3\2\2\2\u00c5\u00c6\3\2\2\2\u00c6\35\3\2\2\2\u00c7\u00c5\3\2\2"+
 		"\2\u00c8\u00c9\7\65\2\2\u00c9\37\3\2\2\2\u00ca\u00d5\5d\63\2\u00cb\u00d5"+
 		"\5b\62\2\u00cc\u00d5\5(\25\2\u00cd\u00d5\5*\26\2\u00ce\u00d5\7\60\2\2"+
@@ -3519,8 +3728,8 @@ public class ElangParser extends Parser {
 		"\u012d\5@!\2\u012c\u012b\3\2\2\2\u012d\u012e\3\2\2\2\u012e\u012c\3\2\2"+
 		"\2\u012e\u012f\3\2\2\2\u012f?\3\2\2\2\u0130\u0134\5B\"\2\u0131\u0134\5"+
 		"D#\2\u0132\u0134\5F$\2\u0133\u0130\3\2\2\2\u0133\u0131\3\2\2\2\u0133\u0132"+
-		"\3\2\2\2\u0134A\3\2\2\2\u0135\u0136\7\4\2\2\u0136\u0137\7\65\2\2\u0137"+
-		"\u0138\5\32\16\2\u0138\u0139\7\35\2\2\u0139C\3\2\2\2\u013a\u013b\7\3\2"+
+		"\3\2\2\2\u0134A\3\2\2\2\u0135\u0136\7\3\2\2\u0136\u0137\7\65\2\2\u0137"+
+		"\u0138\5\32\16\2\u0138\u0139\7\35\2\2\u0139C\3\2\2\2\u013a\u013b\7\4\2"+
 		"\2\u013b\u013c\7\65\2\2\u013c\u013d\5\32\16\2\u013d\u013e\7\35\2\2\u013e"+
 		"E\3\2\2\2\u013f\u0140\7\5\2\2\u0140\u0142\7\65\2\2\u0141\u0143\5L\'\2"+
 		"\u0142\u0141\3\2\2\2\u0143\u0144\3\2\2\2\u0144\u0142\3\2\2\2\u0144\u0145"+
@@ -3551,8 +3760,11 @@ public class ElangParser extends Parser {
 		"\u00d4\u00d9\u00e3\u00ea\u00f0\u00f6\u00fc\u010a\u012e\u0133\u0144\u0150"+
 		"\u0157\u016f\u017c\u0180\u018c";
 	public static final ATN _ATN =
-		ATNSimulator.deserialize(_serializedATN.toCharArray());
+		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
 		_decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
+		for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {
+			_decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
+		}
 	}
 }

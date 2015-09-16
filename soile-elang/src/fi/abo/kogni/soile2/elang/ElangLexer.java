@@ -1,4 +1,4 @@
-// Generated from /Users/tuope/NetBeansProjects/AboExperimentLang/src/elang01/Elang.g4 by ANTLR 4.0
+// Generated from C:/Users/Danno/soileIDEA/soile2/soile-elang/src/fi/abo/kogni/soile2/elang\Elang.g4 by ANTLR 4.5.1
 package fi.abo.kogni.soile2.elang;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -11,11 +11,13 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ElangLexer extends Lexer {
+	static { RuntimeMetaData.checkVersion("4.5.1", RuntimeMetaData.VERSION); }
+
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__2=1, T__1=2, T__0=3, DOCQUOTE=4, SFN_PLUS=5, SFN_MINUS=6, SFN_MULTIPLY=7, 
+		T__0=1, T__1=2, T__2=3, DOCQUOTE=4, SFN_PLUS=5, SFN_MINUS=6, SFN_MULTIPLY=7, 
 		SFN_DIVIDE=8, SFN_LESSTHAN=9, SFN_GREATERTHAN=10, SFN_EQUAL=11, SFN_NEGATE=12, 
 		T_TRANSNAMEREPEAT=13, T_ARROWLEFT=14, T_ARROWRIGHT=15, T_BRACELEFT=16, 
 		T_BRACERIGHT=17, T_BRACKETLEFT=18, T_BRACKETRIGHT=19, T_BREAK=20, T_COLON=21, 
@@ -29,19 +31,8 @@ public class ElangLexer extends Lexer {
 		"DEFAULT_MODE"
 	};
 
-	public static final String[] tokenNames = {
-		"<INVALID>",
-		"'intermezzo-phase'", "'information-phase'", "'interaction-phase'", "DOCQUOTE", 
-		"'+'", "'-'", "'*'", "'/'", "'<'", "'>'", "'='", "'!'", "'-\"-'", "'<-'", 
-		"'->'", "'{'", "'}'", "'['", "']'", "'break'", "':'", "','", "'continue'", 
-		"'do'", "'.'", "'else'", "'end'", "'false'", "'function'", "'fvar'", "'gvar'", 
-		"'#'", "'if'", "'no'", "'nothing'", "'null'", "'('", "')'", "'?'", "'\"'", 
-		"'return'", "'then'", "'final'", "'transition'", "'start'", "'true'", 
-		"'val'", "'var'", "'while'", "'yes'", "ID", "NUMBER", "STRING", "COMMENT", 
-		"WS", "NL"
-	};
 	public static final String[] ruleNames = {
-		"T__2", "T__1", "T__0", "DOCQUOTE", "SFN_PLUS", "SFN_MINUS", "SFN_MULTIPLY", 
+		"T__0", "T__1", "T__2", "DOCQUOTE", "SFN_PLUS", "SFN_MINUS", "SFN_MULTIPLY", 
 		"SFN_DIVIDE", "SFN_LESSTHAN", "SFN_GREATERTHAN", "SFN_EQUAL", "SFN_NEGATE", 
 		"T_TRANSNAMEREPEAT", "T_ARROWLEFT", "T_ARROWRIGHT", "T_BRACELEFT", "T_BRACERIGHT", 
 		"T_BRACKETLEFT", "T_BRACKETRIGHT", "T_BREAK", "T_COLON", "T_COMMA", "T_CONTINUE", 
@@ -53,6 +44,59 @@ public class ElangLexer extends Lexer {
 		"ID_LETTER", "DIGIT"
 	};
 
+	private static final String[] _LITERAL_NAMES = {
+		null, "'information-phase'", "'intermezzo-phase'", "'interaction-phase'", 
+		null, "'+'", "'-'", "'*'", "'/'", "'<'", "'>'", "'='", "'!'", "'-\"-'", 
+		"'<-'", "'->'", "'{'", "'}'", "'['", "']'", "'break'", "':'", "','", "'continue'", 
+		"'do'", "'.'", "'else'", "'end'", "'false'", "'function'", "'fvar'", "'gvar'", 
+		"'#'", "'if'", "'no'", "'nothing'", "'null'", "'('", "')'", "'?'", "'\"'", 
+		"'return'", "'then'", "'final'", "'transition'", "'start'", "'true'", 
+		"'val'", "'var'", "'while'", "'yes'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, null, null, null, "DOCQUOTE", "SFN_PLUS", "SFN_MINUS", "SFN_MULTIPLY", 
+		"SFN_DIVIDE", "SFN_LESSTHAN", "SFN_GREATERTHAN", "SFN_EQUAL", "SFN_NEGATE", 
+		"T_TRANSNAMEREPEAT", "T_ARROWLEFT", "T_ARROWRIGHT", "T_BRACELEFT", "T_BRACERIGHT", 
+		"T_BRACKETLEFT", "T_BRACKETRIGHT", "T_BREAK", "T_COLON", "T_COMMA", "T_CONTINUE", 
+		"T_DO", "T_DOT", "T_ELSE", "T_END", "T_FALSE", "T_FUNCTION", "T_FVAR", 
+		"T_GVAR", "T_HASH", "T_IF", "T_NO", "T_NOTHING", "T_NULL", "T_PARENLEFT", 
+		"T_PARENRIGHT", "T_QMARK", "T_QUOTE", "T_RETURN", "T_THEN", "T_TRANSFINAL", 
+		"T_TRANSITION", "T_TRANSSTART", "T_TRUE", "T_VAL", "T_VAR", "T_WHILE", 
+		"T_YES", "ID", "NUMBER", "STRING", "COMMENT", "WS", "NL"
+	};
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
+
+	@Override
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
+
 
 	public ElangLexer(CharStream input) {
 		super(input);
@@ -63,10 +107,10 @@ public class ElangLexer extends Lexer {
 	public String getGrammarFileName() { return "Elang.g4"; }
 
 	@Override
-	public String[] getTokenNames() { return tokenNames; }
+	public String[] getRuleNames() { return ruleNames; }
 
 	@Override
-	public String[] getRuleNames() { return ruleNames; }
+	public String getSerializedATN() { return _serializedATN; }
 
 	@Override
 	public String[] getModeNames() { return modeNames; }
@@ -74,68 +118,48 @@ public class ElangLexer extends Lexer {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-	@Override
-	public void action(RuleContext _localctx, int ruleIndex, int actionIndex) {
-		switch (ruleIndex) {
-		case 53: COMMENT_action((RuleContext)_localctx, actionIndex); break;
-
-		case 54: WS_action((RuleContext)_localctx, actionIndex); break;
-		}
-	}
-	private void WS_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 1: _channel = HIDDEN;  break;
-		}
-	}
-	private void COMMENT_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 0: skip();  break;
-		}
-	}
-
 	public static final String _serializedATN =
-		"\2\4:\u01a3\b\1\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t"+
-		"\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20"+
-		"\t\20\4\21\t\21\4\22\t\22\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27"+
-		"\t\27\4\30\t\30\4\31\t\31\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36"+
-		"\t\36\4\37\t\37\4 \t \4!\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4"+
-		"(\t(\4)\t)\4*\t*\4+\t+\4,\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62"+
-		"\t\62\4\63\t\63\4\64\t\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4"+
-		":\t:\4;\t;\4<\t<\4=\t=\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2"+
-		"\3\2\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4"+
-		"\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3"+
-		"\t\3\n\3\n\3\13\3\13\3\f\3\f\3\r\3\r\3\16\3\16\3\16\3\16\3\17\3\17\3\17"+
-		"\3\20\3\20\3\20\3\21\3\21\3\22\3\22\3\23\3\23\3\24\3\24\3\25\3\25\3\25"+
-		"\3\25\3\25\3\25\3\26\3\26\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\3\30"+
-		"\3\30\3\30\3\31\3\31\3\31\3\32\3\32\3\33\3\33\3\33\3\33\3\33\3\34\3\34"+
-		"\3\34\3\34\3\35\3\35\3\35\3\35\3\35\3\35\3\36\3\36\3\36\3\36\3\36\3\36"+
-		"\3\36\3\36\3\36\3\37\3\37\3\37\3\37\3\37\3 \3 \3 \3 \3 \3!\3!\3\"\3\""+
-		"\3\"\3#\3#\3#\3$\3$\3$\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3&\3&\3\'\3\'\3("+
-		"\3(\3)\3)\3*\3*\3*\3*\3*\3*\3*\3+\3+\3+\3+\3+\3,\3,\3,\3,\3,\3,\3-\3-"+
-		"\3-\3-\3-\3-\3-\3-\3-\3-\3-\3.\3.\3.\3.\3.\3.\3/\3/\3/\3/\3/\3\60\3\60"+
-		"\3\60\3\60\3\61\3\61\3\61\3\61\3\62\3\62\3\62\3\62\3\62\3\62\3\63\3\63"+
-		"\3\63\3\63\3\64\3\64\3\64\7\64\u016b\n\64\f\64\16\64\u016e\13\64\3\65"+
-		"\5\65\u0171\n\65\3\65\6\65\u0174\n\65\r\65\16\65\u0175\3\66\3\66\3\66"+
-		"\7\66\u017b\n\66\f\66\16\66\u017e\13\66\3\66\3\66\3\67\3\67\7\67\u0184"+
-		"\n\67\f\67\16\67\u0187\13\67\3\67\3\67\3\67\3\67\38\68\u018e\n8\r8\16"+
-		"8\u018f\38\38\39\59\u0195\n9\39\39\3:\3:\3:\3;\3;\5;\u019e\n;\3<\3<\3"+
-		"=\3=\3\u0185>\3\3\1\5\4\1\7\5\1\t\6\1\13\7\1\r\b\1\17\t\1\21\n\1\23\13"+
-		"\1\25\f\1\27\r\1\31\16\1\33\17\1\35\20\1\37\21\1!\22\1#\23\1%\24\1\'\25"+
-		"\1)\26\1+\27\1-\30\1/\31\1\61\32\1\63\33\1\65\34\1\67\35\19\36\1;\37\1"+
-		"= \1?!\1A\"\1C#\1E$\1G%\1I&\1K\'\1M(\1O)\1Q*\1S+\1U,\1W-\1Y.\1[/\1]\60"+
-		"\1_\61\1a\62\1c\63\1e\64\1g\65\1i\66\1k\67\1m8\2o9\3q:\1s\2\1u\2\1w\2"+
-		"\1y\2\1\3\2\6\4$$^^\5\13\f\16\17\"\"\4$$^^\4C\\c|\u01a8\2\3\3\2\2\2\2"+
-		"\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2"+
-		"\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2\2\2\2"+
-		"\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2"+
-		"\2\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2\61\3\2\2\2"+
-		"\2\63\3\2\2\2\2\65\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2\2\2=\3\2\2"+
-		"\2\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2\2\2\2G\3\2\2\2\2I\3\2\2\2\2"+
-		"K\3\2\2\2\2M\3\2\2\2\2O\3\2\2\2\2Q\3\2\2\2\2S\3\2\2\2\2U\3\2\2\2\2W\3"+
-		"\2\2\2\2Y\3\2\2\2\2[\3\2\2\2\2]\3\2\2\2\2_\3\2\2\2\2a\3\2\2\2\2c\3\2\2"+
-		"\2\2e\3\2\2\2\2g\3\2\2\2\2i\3\2\2\2\2k\3\2\2\2\2m\3\2\2\2\2o\3\2\2\2\2"+
-		"q\3\2\2\2\3{\3\2\2\2\5\u008c\3\2\2\2\7\u009e\3\2\2\2\t\u00b0\3\2\2\2\13"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\2:\u01a3\b\1\4\2\t"+
+		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
+		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
+		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
+		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
+		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4"+
+		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t"+
+		"\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4:\t:\4;\t;\4<\t<\4=\t="+
+		"\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3"+
+		"\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3"+
+		"\4\3\5\3\5\3\5\3\5\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n\3\13\3\13\3"+
+		"\f\3\f\3\r\3\r\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\20\3\20\3\20\3\21"+
+		"\3\21\3\22\3\22\3\23\3\23\3\24\3\24\3\25\3\25\3\25\3\25\3\25\3\25\3\26"+
+		"\3\26\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\3\30\3\30\3\30\3\31\3\31"+
+		"\3\31\3\32\3\32\3\33\3\33\3\33\3\33\3\33\3\34\3\34\3\34\3\34\3\35\3\35"+
+		"\3\35\3\35\3\35\3\35\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\37"+
+		"\3\37\3\37\3\37\3\37\3 \3 \3 \3 \3 \3!\3!\3\"\3\"\3\"\3#\3#\3#\3$\3$\3"+
+		"$\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3&\3&\3\'\3\'\3(\3(\3)\3)\3*\3*\3*\3*"+
+		"\3*\3*\3*\3+\3+\3+\3+\3+\3,\3,\3,\3,\3,\3,\3-\3-\3-\3-\3-\3-\3-\3-\3-"+
+		"\3-\3-\3.\3.\3.\3.\3.\3.\3/\3/\3/\3/\3/\3\60\3\60\3\60\3\60\3\61\3\61"+
+		"\3\61\3\61\3\62\3\62\3\62\3\62\3\62\3\62\3\63\3\63\3\63\3\63\3\64\3\64"+
+		"\3\64\7\64\u016b\n\64\f\64\16\64\u016e\13\64\3\65\5\65\u0171\n\65\3\65"+
+		"\6\65\u0174\n\65\r\65\16\65\u0175\3\66\3\66\3\66\7\66\u017b\n\66\f\66"+
+		"\16\66\u017e\13\66\3\66\3\66\3\67\3\67\7\67\u0184\n\67\f\67\16\67\u0187"+
+		"\13\67\3\67\3\67\3\67\3\67\38\68\u018e\n8\r8\168\u018f\38\38\39\59\u0195"+
+		"\n9\39\39\3:\3:\3:\3;\3;\5;\u019e\n;\3<\3<\3=\3=\3\u0185\2>\3\3\5\4\7"+
+		"\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31\16\33\17\35\20\37\21!\22"+
+		"#\23%\24\'\25)\26+\27-\30/\31\61\32\63\33\65\34\67\359\36;\37= ?!A\"C"+
+		"#E$G%I&K\'M(O)Q*S+U,W-Y.[/]\60_\61a\62c\63e\64g\65i\66k\67m8o9q:s\2u\2"+
+		"w\2y\2\3\2\5\4\2$$^^\5\2\13\f\16\17\"\"\4\2C\\c|\u01a8\2\3\3\2\2\2\2\5"+
+		"\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2"+
+		"\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2\2\2\2\33"+
+		"\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2"+
+		"\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2\61\3\2\2\2\2"+
+		"\63\3\2\2\2\2\65\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2\2\2=\3\2\2\2"+
+		"\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2\2\2\2G\3\2\2\2\2I\3\2\2\2\2K"+
+		"\3\2\2\2\2M\3\2\2\2\2O\3\2\2\2\2Q\3\2\2\2\2S\3\2\2\2\2U\3\2\2\2\2W\3\2"+
+		"\2\2\2Y\3\2\2\2\2[\3\2\2\2\2]\3\2\2\2\2_\3\2\2\2\2a\3\2\2\2\2c\3\2\2\2"+
+		"\2e\3\2\2\2\2g\3\2\2\2\2i\3\2\2\2\2k\3\2\2\2\2m\3\2\2\2\2o\3\2\2\2\2q"+
+		"\3\2\2\2\3{\3\2\2\2\5\u008d\3\2\2\2\7\u009e\3\2\2\2\t\u00b0\3\2\2\2\13"+
 		"\u00b4\3\2\2\2\r\u00b6\3\2\2\2\17\u00b8\3\2\2\2\21\u00ba\3\2\2\2\23\u00bc"+
 		"\3\2\2\2\25\u00be\3\2\2\2\27\u00c0\3\2\2\2\31\u00c2\3\2\2\2\33\u00c4\3"+
 		"\2\2\2\35\u00c8\3\2\2\2\37\u00cb\3\2\2\2!\u00ce\3\2\2\2#\u00d0\3\2\2\2"+
@@ -148,14 +172,14 @@ public class ElangLexer extends Lexer {
 		"\3\2\2\2]\u0150\3\2\2\2_\u0155\3\2\2\2a\u0159\3\2\2\2c\u015d\3\2\2\2e"+
 		"\u0163\3\2\2\2g\u0167\3\2\2\2i\u0170\3\2\2\2k\u0177\3\2\2\2m\u0181\3\2"+
 		"\2\2o\u018d\3\2\2\2q\u0194\3\2\2\2s\u0198\3\2\2\2u\u019d\3\2\2\2w\u019f"+
-		"\3\2\2\2y\u01a1\3\2\2\2{|\7k\2\2|}\7p\2\2}~\7v\2\2~\177\7g\2\2\177\u0080"+
-		"\7t\2\2\u0080\u0081\7o\2\2\u0081\u0082\7g\2\2\u0082\u0083\7|\2\2\u0083"+
-		"\u0084\7|\2\2\u0084\u0085\7q\2\2\u0085\u0086\7/\2\2\u0086\u0087\7r\2\2"+
-		"\u0087\u0088\7j\2\2\u0088\u0089\7c\2\2\u0089\u008a\7u\2\2\u008a\u008b"+
-		"\7g\2\2\u008b\4\3\2\2\2\u008c\u008d\7k\2\2\u008d\u008e\7p\2\2\u008e\u008f"+
-		"\7h\2\2\u008f\u0090\7q\2\2\u0090\u0091\7t\2\2\u0091\u0092\7o\2\2\u0092"+
-		"\u0093\7c\2\2\u0093\u0094\7v\2\2\u0094\u0095\7k\2\2\u0095\u0096\7q\2\2"+
-		"\u0096\u0097\7p\2\2\u0097\u0098\7/\2\2\u0098\u0099\7r\2\2\u0099\u009a"+
+		"\3\2\2\2y\u01a1\3\2\2\2{|\7k\2\2|}\7p\2\2}~\7h\2\2~\177\7q\2\2\177\u0080"+
+		"\7t\2\2\u0080\u0081\7o\2\2\u0081\u0082\7c\2\2\u0082\u0083\7v\2\2\u0083"+
+		"\u0084\7k\2\2\u0084\u0085\7q\2\2\u0085\u0086\7p\2\2\u0086\u0087\7/\2\2"+
+		"\u0087\u0088\7r\2\2\u0088\u0089\7j\2\2\u0089\u008a\7c\2\2\u008a\u008b"+
+		"\7u\2\2\u008b\u008c\7g\2\2\u008c\4\3\2\2\2\u008d\u008e\7k\2\2\u008e\u008f"+
+		"\7p\2\2\u008f\u0090\7v\2\2\u0090\u0091\7g\2\2\u0091\u0092\7t\2\2\u0092"+
+		"\u0093\7o\2\2\u0093\u0094\7g\2\2\u0094\u0095\7|\2\2\u0095\u0096\7|\2\2"+
+		"\u0096\u0097\7q\2\2\u0097\u0098\7/\2\2\u0098\u0099\7r\2\2\u0099\u009a"+
 		"\7j\2\2\u009a\u009b\7c\2\2\u009b\u009c\7u\2\2\u009c\u009d\7g\2\2\u009d"+
 		"\6\3\2\2\2\u009e\u009f\7k\2\2\u009f\u00a0\7p\2\2\u00a0\u00a1\7v\2\2\u00a1"+
 		"\u00a2\7g\2\2\u00a2\u00a3\7t\2\2\u00a3\u00a4\7c\2\2\u00a4\u00a5\7e\2\2"+
@@ -224,14 +248,17 @@ public class ElangLexer extends Lexer {
 		"\u018f\3\2\2\2\u018f\u018d\3\2\2\2\u018f\u0190\3\2\2\2\u0190\u0191\3\2"+
 		"\2\2\u0191\u0192\b8\3\2\u0192p\3\2\2\2\u0193\u0195\7\17\2\2\u0194\u0193"+
 		"\3\2\2\2\u0194\u0195\3\2\2\2\u0195\u0196\3\2\2\2\u0196\u0197\7\f\2\2\u0197"+
-		"r\3\2\2\2\u0198\u0199\7^\2\2\u0199\u019a\t\4\2\2\u019at\3\2\2\2\u019b"+
+		"r\3\2\2\2\u0198\u0199\7^\2\2\u0199\u019a\t\2\2\2\u019at\3\2\2\2\u019b"+
 		"\u019e\5w<\2\u019c\u019e\7a\2\2\u019d\u019b\3\2\2\2\u019d\u019c\3\2\2"+
-		"\2\u019ev\3\2\2\2\u019f\u01a0\t\5\2\2\u01a0x\3\2\2\2\u01a1\u01a2\4\62"+
+		"\2\u019ev\3\2\2\2\u019f\u01a0\t\4\2\2\u01a0x\3\2\2\2\u01a1\u01a2\4\62"+
 		";\2\u01a2z\3\2\2\2\r\2\u016a\u016c\u0170\u0175\u017a\u017c\u0185\u018f"+
-		"\u0194\u019d";
+		"\u0194\u019d\4\b\2\2\2\3\2";
 	public static final ATN _ATN =
-		ATNSimulator.deserialize(_serializedATN.toCharArray());
+		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
 		_decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
+		for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {
+			_decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
+		}
 	}
 }

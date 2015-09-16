@@ -1,6 +1,6 @@
 grammar Elang;
 
-file: toplevelStmt* iteration EOF ;
+file: toplevelStmt* phaseDefs transitionDefs? EOF ;
 
 toplevelStmt : ( gvarDef | valDef | functionDef ) ;
 
@@ -41,7 +41,10 @@ literal : string              #StringLiteral
         | array               #ArrayLiteral
         | 'true'              #BooleanLiteral
         | 'false'             #BooleanLiteral
+        | 'yes'               #YesNoLiteral
+        | 'no'                #YesNoLiteral
         | 'null'              #NullLiteral
+        | 'nothing'           #NothingLiteral
         ;
 
 functionCall : functionIdentifier '(' functionCallParams? ')' ;
@@ -84,9 +87,52 @@ stmtIf : 'if' expr 'then' block 'end' ;
 
 stmtWhile : 'while' expr 'do' block 'end' ;
 
-iteration : T_ITERATION iterationBody T_END ;
+phaseDefs : phaseDef+ ;
 
-iterationBody : varDefs? block ;
+phaseDef : informationPhase     #InformationPhaseDef
+         | intermezzoPhase      #IntermezzoPhaseDef
+         | interactionPhase     #InteractionPhaseDef
+         ;
+
+informationPhase : 'information-phase' ID block T_END ;
+
+intermezzoPhase : 'intermezzo-phase' ID block T_END ;
+
+interactionPhase : 'interaction-phase' ID phaseFunctionDef+ T_END ;
+
+phaseSetVar : ID ':' phaseSetVarValue ;
+
+phaseSetVarValue : string
+                 | number
+                 | 'true'
+                 | 'false'
+                 ;
+
+phaseFunctionDef : ID phaseFunctionBody T_END ;
+
+phaseFunctionBody : varDefs? block ;
+
+transitionDefs : T_TRANSITION transitions T_END ;
+
+transitions : startTransition ',' otherTransitions ',' finalTransition ;
+
+startTransition : T_TRANSSTART '(' identifier ')' ;
+
+otherTransitions : transition (',' transition)* ;
+
+finalTransition : T_TRANSFINAL '(' identifier ')' ;
+
+transition : transitionSrc '->' transitionTo ('if' transitionCond)? ;
+
+transitionSrc : T_TRANSNAMEREPEAT    #TransitionSrcRepeat
+              | ID                   #TransitionSrcId
+              ;
+
+transitionTo : ID ;
+
+transitionCond : '(' functionCall ')'       #TransitionCondFcall
+               | '(' identifier ')'         #TransitionCondVar
+               ;
 
 number : NUMBER ;
 
@@ -106,7 +152,7 @@ SFN_NEGATE : '!' ;
 
 // Tokens.
 
-T_TRANNAMEREPEAT : '-"-' ;          // Repeat the source transition name.
+T_TRANSNAMEREPEAT : '-"-' ;          // Repeat the source transition name.
 T_ARROWLEFT : '<-' ;
 T_ARROWRIGHT : '->' ;
 T_BRACELEFT : '{' ;
@@ -127,8 +173,8 @@ T_FVAR : 'fvar' ;
 T_GVAR : 'gvar' ;
 T_HASH : '#' ;
 T_IF : 'if' ;
-T_INITTRANS : '|->' ;
-T_ITERATION : 'iteration';
+T_NO : 'no' ;
+T_NOTHING : 'nothing' ;
 T_NULL : 'null' ;
 T_PARENLEFT : '(' ;
 T_PARENRIGHT : ')' ;
@@ -136,11 +182,14 @@ T_QMARK : '?' ;
 T_QUOTE : '"' ;
 T_RETURN : 'return' ;
 T_THEN : 'then' ;
+T_TRANSFINAL : 'final' ;
 T_TRANSITION : 'transition' ;
+T_TRANSSTART : 'start' ;
 T_TRUE : 'true' ;
 T_VAL : 'val' ;
 T_VAR : 'var' ;
 T_WHILE : 'while' ;
+T_YES : 'yes' ;
 
 ID : ID_LETTER ( ID_CHAR | DIGIT )* ;
 
@@ -158,3 +207,4 @@ fragment ESC :   '\\' ["\\] ;
 fragment ID_CHAR : ID_LETTER | '_' ;
 fragment ID_LETTER : 'a' .. 'z' | 'A' .. 'Z' ;
 fragment DIGIT : '0' .. '9' ;
+
