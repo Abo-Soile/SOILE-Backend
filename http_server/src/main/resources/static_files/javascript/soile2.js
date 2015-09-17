@@ -248,6 +248,19 @@ SOILE2 = (function(){
     return id;
   };
 
+  bin.button = function(text, style) {
+    var id = soile2.rt.uniqueid();
+
+    var props = {
+      "id":id,
+      "class":"hiddenelem btn btn-primary",
+      "text":text
+    }
+
+    jQuery("<button/>", props).appendTo(soile2.util.getid("display"));
+    return id;
+  }
+
   bin.textbox = function(width) {
     var id = soile2.rt.uniqueid();
 

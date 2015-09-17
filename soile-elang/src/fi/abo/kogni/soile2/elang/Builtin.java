@@ -104,7 +104,10 @@ public class Builtin {
 
         builtinFunctions.add("elementatindex");
 
+        //Display elements
         builtinFunctions.add("rectangle");
+        builtinFunctions.add("button");
+
         //Text input
         builtinFunctions.add("textbox");
         builtinFunctions.add("readtext");
