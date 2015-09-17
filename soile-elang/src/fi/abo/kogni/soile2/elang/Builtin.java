@@ -39,8 +39,11 @@ public class Builtin {
         builtinFunctions.add("copydata");
         builtinFunctions.add("copystimulus");
         builtinFunctions.add("divide");
+
         builtinFunctions.add("eq");
         builtinFunctions.add("equals");
+        builtinFunctions.add("fuzzyequal");
+
         builtinFunctions.add("greaterthan");
         builtinFunctions.add("gt");
         builtinFunctions.add("helptext");

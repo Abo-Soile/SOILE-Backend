@@ -366,6 +366,10 @@ SOILE2 = (function(){
   
   bin.equals = bin.eq;
 
+  bin.fuzzyequal = function(obj1, obj2) {
+
+  }
+
   bin.gt = function(x, y){
     if (_.isNumber(x) && _.isNumber(y)){
       return (x > y);
