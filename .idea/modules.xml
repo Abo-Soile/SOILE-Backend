@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/eml01/eml01.iml" filepath="$PROJECT_DIR$/eml01/eml01.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-elang/soile-elang.iml" filepath="$PROJECT_DIR$/soile-elang/soile-elang.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-qmarkup/soile-qmarkup.iml" filepath="$PROJECT_DIR$/soile-qmarkup/soile-qmarkup.iml" />
       <module fileurl="file://$PROJECT_DIR$/soile-utils/soile-utils.iml" filepath="$PROJECT_DIR$/soile-utils/soile-utils.iml" />
@@ -10,4 +9,3 @@
     </modules>
   </component>
 </project>
-
