@@ -105,6 +105,10 @@ public class Builtin {
         builtinFunctions.add("elementatindex");
 
         builtinFunctions.add("rectangle");
+        //Text input
+        builtinFunctions.add("textbox");
+        builtinFunctions.add("readtext");
+        builtinFunctions.add("settext");
 
         builtinFunctions.add("shufflestimuli");
         builtinFunctions.add("pickstimulisubset");

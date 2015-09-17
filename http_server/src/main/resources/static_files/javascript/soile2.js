@@ -248,6 +248,40 @@ SOILE2 = (function(){
     return id;
   };
 
+  bin.textbox = function(width) {
+    var id = soile2.rt.uniqueid();
+
+    var props = {
+      "id": id,
+      "class": "hiddenelem",
+      "type":"text"
+    };
+
+    if(typeof width !== "undefined") {
+      props.style = "width:" + width + "px;";
+    }
+
+    jQuery("<input/>", props).appendTo(soile2.util.getid("display"));
+    soile2.rt.dyn.add(id);
+    return id;
+  };
+
+  bin.readtext = function(id, clear) {
+    var box = jQuery(soile2.util.getid(id));
+    var value = box.val();
+    
+    if (clear) {
+      box.val("");
+    }
+
+    return value;
+  };
+
+  bin.settext = function(id, text) {
+    var tbox = jQuery(soile2.util.getid(id));
+    box.val(text);
+  }
+
   bin.not = function(arg){
     var args = Array.prototype.slice.call(arguments);
     if (args.length == 0){
