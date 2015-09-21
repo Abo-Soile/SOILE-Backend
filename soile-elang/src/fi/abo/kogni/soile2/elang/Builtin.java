@@ -69,8 +69,7 @@ public class Builtin {
         builtinFunctions.add("starttimer");
         builtinFunctions.add("elapsedtime");
         builtinFunctions.add("seconds");
-        builtinFunctions.add("setstimuli");
-        builtinFunctions.add("addstimuli");
+
         builtinFunctions.add("show");
         builtinFunctions.add("showmsg");
         builtinFunctions.add("msgbox");
@@ -81,6 +80,9 @@ public class Builtin {
         builtinFunctions.add("resume");
 
         builtinFunctions.add("append");
+        builtinFunctions.add("join");
+        builtinFunctions.add("split");
+        builtinFunctions.add("shuffle");
 
         //time
         builtinFunctions.add("randominteger");
@@ -118,5 +120,7 @@ public class Builtin {
         builtinFunctions.add("shufflestimuli");
         builtinFunctions.add("pickstimulisubset");
         builtinFunctions.add("emptystimuli");
+        builtinFunctions.add("setstimuli");
+        builtinFunctions.add("addstimuli");
     }
 }

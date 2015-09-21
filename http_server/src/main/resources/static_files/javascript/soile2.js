@@ -702,6 +702,27 @@ SOILE2 = (function(){
     }
   };
 
+  bin.join = function(arr, sep) {
+    var separator = ",";
+    if (typeof sep !== "undefined") {
+      separator = sep;
+    }
+
+    if(_.isArray(arr)) {
+      return arr.join(separator);
+    }
+  };
+
+  bin.split = function(str, sep) {
+    if (typeof str === "string") {
+      if (typeof sep !== "undefined") {
+        return str.split(sep);
+      } else {
+        return str.split();
+      }
+    }
+  };
+
   bin.elementatindex = function(value, mIndex) {
     var index = parseInt(mIndex);
     if(typeof value !== 'undefined' && _.isNumber(index)) {
