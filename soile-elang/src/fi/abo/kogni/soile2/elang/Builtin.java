@@ -39,8 +39,11 @@ public class Builtin {
         builtinFunctions.add("copydata");
         builtinFunctions.add("copystimulus");
         builtinFunctions.add("divide");
+
         builtinFunctions.add("eq");
         builtinFunctions.add("equals");
+        builtinFunctions.add("fuzzyequal");
+
         builtinFunctions.add("greaterthan");
         builtinFunctions.add("gt");
         builtinFunctions.add("helptext");
@@ -115,7 +118,14 @@ public class Builtin {
 
         builtinFunctions.add("elementatindex");
 
+        //Display elements
         builtinFunctions.add("rectangle");
+        builtinFunctions.add("button");
+
+        //Text input
+        builtinFunctions.add("textbox");
+        builtinFunctions.add("readtext");
+        builtinFunctions.add("settext");
 
         builtinFunctions.add("shufflestimuli");
         builtinFunctions.add("pickstimulisubset");
