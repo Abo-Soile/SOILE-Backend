@@ -366,9 +366,21 @@ SOILE2 = (function(){
   
   bin.equals = bin.eq;
 
-  bin.fuzzyequal = function(obj1, obj2) {
+  bin.fuzzyequal = function(obj1, obj2, ignorecases) {
+    if(typeof obj1 !== "undefined" && typeof obj2 !== "undefined") {
+      var str1 = obj1.toString();
+      var str2 = obj2.toString();
 
-  }
+      if(ignorecases || typeof ignorecases === "undefined") {
+        str1 = obj1.toString().toLowerCase();       
+        str2 = obj2.toString().toLowerCase();      
+      }
+
+      return window.Levenshtein.get(str1, str2);      
+    }
+
+    return -1;
+  };
 
   bin.gt = function(x, y){
     if (_.isNumber(x) && _.isNumber(y)){

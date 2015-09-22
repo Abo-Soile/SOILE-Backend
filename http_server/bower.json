@@ -21,7 +21,8 @@
     "angular-ui-ace": "~0.2.3",
     "angular-ui-select": "~0.12.0",
     "angular-ui-tree": "~2.5.0",
-    "angular-xeditable": "~0.1.9"
+    "angular-xeditable": "~0.1.9",
+    "fast-levenshtein": "~1.0.7"
   },
   "moduleType": [
     "globals"

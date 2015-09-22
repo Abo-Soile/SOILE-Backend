@@ -15,11 +15,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      './src/test/frontend tests/*.js',
+      "./src/main/resources/static_files/javascript/bower_components/fast-levenshtein/levenshtein.js",
       './src/main/resources/static_files/javascript/soile2.js',
       'https://code.jquery.com/jquery-2.1.3.min.js',
       'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore.js',
-      'https://raw.githubusercontent.com/Rich-Harris/BabyParse/master/babyparse.js'
+      'https://raw.githubusercontent.com/Rich-Harris/BabyParse/master/babyparse.js',
+      './src/test/frontend tests/*.js'
     ],
 
 
