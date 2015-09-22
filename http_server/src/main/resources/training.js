@@ -64,10 +64,10 @@ function periodicReminder() {
   */
 }
 
-var timerID = vertx.setPeriodic(10000, function(timerID) {
+/*var timerID = vertx.setPeriodic(10000, function(timerID) {
     periodicReminder();
 });
-
+*/
 
 
 function merge_options(obj1,obj2){
