@@ -87,10 +87,11 @@ public class Builtin {
         builtinFunctions.add("split");
         builtinFunctions.add("shuffle");
 
-        //time
+        //Radnom
         builtinFunctions.add("randominteger");
         builtinFunctions.add("randomnumber");
         builtinFunctions.add("seedrandom");
+        builtinFunctions.add("randomize");
 
         //Data logging
         builtinFunctions.add("storesingle");

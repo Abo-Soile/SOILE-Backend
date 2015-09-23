@@ -721,6 +721,10 @@ SOILE2 = (function(){
   bin.seedrandom = function(seed) {
     rt.random.seed(seed);
   };
+
+  bin.shuffle = function(arr) {
+    return soile2.rt.shuffle(arr);
+  };
   
   bin.timeout = function(dur){
     soile2.rt.schd.suspend(dur);
@@ -1643,6 +1647,24 @@ SOILE2 = (function(){
    */
   rt.set_piarray = function(piafunc){
     soile2.rt.get_pi = piafunc;
+  };
+
+  rt.shuffle = function(array) {
+    var arr = array
+    if (arr.length > 0) {
+      var counter = arr.length;
+      var temp, index;
+      while(counter > 0) {
+        index = Math.floor(Math.random()*counter);
+
+        counter--;
+
+        temp = arr[counter];
+        arr[counter] = arr[index];
+        arr[index] = temp;
+      }
+      return arr;
+    }
   };
   
   rt.pi_opcode = function(pi){
