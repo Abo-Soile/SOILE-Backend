@@ -1,5 +1,11 @@
 var SOILE2;
 
+if (!('contains' in Array.prototype)) {
+  Array.prototype.contains = function(arr, startIndex) {
+    return ''.indexOf.call(this, arr, startIndex) !== -1;
+  };
+}
+
 if (SOILE2 !== undefined){
   throw new Error('SOILE2 already defined!');
 }
@@ -700,21 +706,51 @@ SOILE2 = (function(){
     return {};
   };
 
-  bin.randominteger = function(min, max) {
+  bin.randominteger = function(min, max, not) {
+
+    min = typeof min !== 'undefined' ? min:1;
+    max = typeof max !== 'undefined' ? max:10000000;
+
+    if (typeof not !== "undefined") {
+      if (!(_.isArray(not))) {
+        not = [not];
+      }
+    } else {
+      not = false;
+    }
+
     if(_.isNumber(min) && _.isNumber(max)) {
-      return Math.floor(rt.random.get()*(max-min+1)+min);
-    } 
-    else {
-      return Math.floor(rt.random.get(1,1000000));
+      var ran = Math.floor(rt.random.get()*(max-min+1)+min);
+
+      if(not == false || !not.contains(ran))
+        return ran;
+      else {
+       return  soile2.bin.randominteger(min,max,not);
+      } 
     }
   };
 
-  bin.randomnumber = function(min, max) {
-    if(_.isNumber(min) && _.isNumber(max)) {
-      return rt.random.get()*(max-min+1)+min;
+  bin.randomnumber = function(min, max, not) {
+
+    min = typeof min !== 'undefined' ? min:1;
+    max = typeof max !== 'undefined' ? max:10000000;
+
+    if (typeof not !== "undefined") {
+      if (!(_.isArray(not))) {
+        not = [not];
+      }
+    } else {
+      not = false;
     }
-    else {
-      return rt.random.get(1, 1000000);
+
+    if(_.isNumber(min) && _.isNumber(max)) {
+      var ran = rt.random.get()*(max-min+1)+min;
+
+      if(not == false || !not.contains(ran))
+        return ran;
+      else {
+        return soile2.bin.randomnumber(min,max,not);
+      }
     }
   };
 
