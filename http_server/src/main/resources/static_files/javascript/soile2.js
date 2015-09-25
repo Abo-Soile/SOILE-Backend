@@ -261,11 +261,12 @@ SOILE2 = (function(){
       "id":id,
       "class":"hiddenelem btn btn-primary",
       "text":text
-    }
+    };
 
     jQuery("<button/>", props).appendTo(soile2.util.getid("display"));
+    soile2.rt.dyn.add(id);
     return id;
-  }
+  };
 
   bin.textbox = function(width) {
     var id = soile2.rt.uniqueid();
@@ -299,7 +300,7 @@ SOILE2 = (function(){
   bin.settext = function(id, text) {
     var tbox = jQuery(soile2.util.getid(id));
     box.val(text);
-  }
+  };
 
   bin.not = function(arg){
     var args = Array.prototype.slice.call(arguments);
@@ -722,8 +723,9 @@ SOILE2 = (function(){
     if(_.isNumber(min) && _.isNumber(max)) {
       var ran = Math.floor(rt.random.get()*(max-min+1)+min);
 
-      if(not == false || !not.contains(ran))
+      if(not == false || !not.contains(ran)) {
         return ran;
+      }
       else {
        return  soile2.bin.randominteger(min,max,not);
       } 
@@ -746,8 +748,9 @@ SOILE2 = (function(){
     if(_.isNumber(min) && _.isNumber(max)) {
       var ran = rt.random.get()*(max-min+1)+min;
 
-      if(not == false || !not.contains(ran))
+      if(not == false || !not.contains(ran)) {
         return ran;
+      }
       else {
         return soile2.bin.randomnumber(min,max,not);
       }
@@ -770,7 +773,7 @@ SOILE2 = (function(){
 
     if(_.isArray(str1) && _.isArray(str2)) {
       str1.push.apply(str1, str2);
-      return str1
+      return str1;
     }
 
 
