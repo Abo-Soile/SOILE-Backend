@@ -241,10 +241,10 @@ var displayRect = display.getBoundingClientRect();
 display.onmousemove = mouseMove;
 display.onmouseout = stopTracking;
 
-/*
+
 document.addEventListener("keydown", function (e) {
-  if([37,38,39,40].indexOf(e.keyCode) > -1){
+  if([37/*,38,39*/,40].indexOf(e.keyCode) > -1){
     e.preventDefault();
     // Do whatever else you want with the keydown event (i.e. your navigation).
   }
-}, false);*/
+}, false);
