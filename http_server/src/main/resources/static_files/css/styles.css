@@ -250,6 +250,7 @@ testeditor styles
   border: 1px solid gray;
   background-color: lightgray;
   z-index: 300;
+  display: none;
 }
 
 #imagelist li .imgenlarge span img {
@@ -264,6 +265,7 @@ testeditor styles
   right: 280px; /*the distance from the bottom of the thumbnail to the top of the popup image*/
   left: -300px;
   left: auto;
+  display: block;
 }
 
 
