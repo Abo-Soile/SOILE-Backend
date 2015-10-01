@@ -251,6 +251,7 @@ testeditor styles
   background-color: lightgray;
   z-index: 300;
   display: none;
+  top:150px;
 }
 
 #imagelist li .imgenlarge span img {
