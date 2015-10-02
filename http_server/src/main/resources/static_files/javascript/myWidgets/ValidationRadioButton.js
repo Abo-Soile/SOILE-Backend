@@ -69,7 +69,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/on", "dijit/Tooltip",
         } else {
 
           for (var i = 0; i < selectedRadio.length; i++) {
-            selectedRadio[i].on("change", function() {that.validate();});
+            selectedRadio[i].on("click", function() {that.validate();});
           }
 
           return false;
@@ -98,7 +98,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/on", "dijit/Tooltip",
       },
 
       displayTooltip: function() {
-        console.log(event)
+        console.log("Displaying tootop")
         var message = "This question is required";
         var node = this.domNode;
         if (this.state == "valid") {
@@ -111,7 +111,16 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/on", "dijit/Tooltip",
          }
       },
 
-      _onFocus: function(){
+      _onInput: function(event) {
+        var isvalid = this.validate();
+
+        if(isvalid) {
+          this.displayMessage('');
+          this.inherited(arguments);
+        }
+      },
+
+      onMouseUp: function(){
         // the message still exists but for back-compat, and to erase the tooltip
         // (if the message is being displayed as a tooltip), call displayMessage('')
         var isvalid = this.validate();
