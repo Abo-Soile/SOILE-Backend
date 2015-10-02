@@ -247,7 +247,8 @@ select(columns) ::= <<
 <div class="selectionBase" style="margin-bottom: 1cm; display: block;">
  $columns:{col | $col.content$}; separator="\n"$
 </div>
- 
+
+>>
 
 selectradio(columns, optional) ::= <<
 
