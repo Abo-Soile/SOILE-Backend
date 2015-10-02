@@ -261,15 +261,12 @@ testeditor styles
   height: auto;
 }
 
-
 #imagelist li .imgenlarge:hover span{ 
   right: 280px; /*the distance from the bottom of the thumbnail to the top of the popup image*/
   left: -300px;
   left: auto;
   display: block;
 }
-
-
 
 /*
 Login
