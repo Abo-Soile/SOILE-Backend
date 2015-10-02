@@ -4,5 +4,17 @@
     label: "Ikä",
     minimum: 1,
     maximum: 120,
-    increment: 1
+    increment: 1,
+    optional:true
+}
+
+
+/numberfield {
+    dbcolumn: "ikä",
+    numeric: true,
+    label: "Ikä",
+    minimum: 1,
+    maximum: 120,
+    increment: 1,
+    optional:false
 }

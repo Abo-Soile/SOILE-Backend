@@ -55,7 +55,7 @@ command numberfield {
     numeric: Boolean(true),
     label: String,
     value: Integer(0),
-    empty:Boolean(false),
+    optional:Boolean(true),
     minimum: Integer,
     maximum: Integer,
     increment: Float,

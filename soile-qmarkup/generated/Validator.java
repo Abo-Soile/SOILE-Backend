@@ -513,11 +513,11 @@ public abstract class Validator {
                     else {
                         object.put("value", defaultIntegerValue( 0 ));
                     } 
-                    if (object.containsKey("empty")) {
-                        validateBoolean(object.get("empty"));
+                    if (object.containsKey("optional")) {
+                        validateBoolean(object.get("optional"));
                     } 
                     else {
-                        object.put("empty", defaultBooleanValue( false ));
+                        object.put("optional", defaultBooleanValue( true ));
                     } 
                     if (object.containsKey("minimum")) {
                         validateInteger(object.get("minimum"));

@@ -231,7 +231,9 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Value min = value.getValue("minimum");
                 Value max = value.getValue("maximum");
                 Value incr = value.getValue("increment");
-                Boolean empty = ((BooleanValue) value.getValue("empty")).asBoolean();
+                //Can be empty if optional==true
+                //Empty meaning that no value is set and that the field isn't required
+                Boolean empty = ((BooleanValue) value.getValue("optional")).asBoolean();
                 int width = max.toString().trim().length() + 2;
                 tmpl.add("minimum", min);
                 tmpl.add("maximum", max);
