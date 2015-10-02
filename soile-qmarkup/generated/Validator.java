@@ -511,8 +511,13 @@ public abstract class Validator {
                         validateInteger(object.get("value"));
                     } 
                     else {
-                        String msg = String.format("Missing object element: '%s'.", "value");
-                        throw new MalformedCommandException(msg);
+                        object.put("value", defaultIntegerValue( 0 ));
+                    } 
+                    if (object.containsKey("empty")) {
+                        validateBoolean(object.get("empty"));
+                    } 
+                    else {
+                        object.put("empty", defaultBooleanValue( false ));
                     } 
                     if (object.containsKey("minimum")) {
                         validateInteger(object.get("minimum"));

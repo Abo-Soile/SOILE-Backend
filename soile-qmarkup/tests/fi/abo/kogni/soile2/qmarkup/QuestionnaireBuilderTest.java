@@ -77,6 +77,14 @@ public class QuestionnaireBuilderTest extends TestCase {
 
     }
 
+    @Test
+    public void testNumberFieldEmpty() throws Exception {
+        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\testNumberField.qmarkup");
+        System.out.println(result);
+        assertTrue(succeeded);
+
+    }
+
 
     public String buildForm(String testPath) throws IOException {
         InputReader reader = new InputReader(readFile(testPath, Charset.defaultCharset()));

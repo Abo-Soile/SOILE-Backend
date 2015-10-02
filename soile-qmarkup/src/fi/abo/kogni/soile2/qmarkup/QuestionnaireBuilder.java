@@ -231,12 +231,14 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Value min = value.getValue("minimum");
                 Value max = value.getValue("maximum");
                 Value incr = value.getValue("increment");
+                Boolean empty = ((BooleanValue) value.getValue("empty")).asBoolean();
                 int width = max.toString().trim().length() + 2;
                 tmpl.add("minimum", min);
                 tmpl.add("maximum", max);
                 tmpl.add("increment", incr);
                 tmpl.add("width", width);
                 tmpl.add("value", value.getValue("value"));
+                tmpl.add("empty", empty);
                 addTag(tmpl.render());
                 validationCode(nfwd);
                 if(! inline) {
