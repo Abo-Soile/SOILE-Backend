@@ -34,6 +34,8 @@ require(["dijit/form/Button",
 
 	var lastViewerScrollPos = 0;
 
+	var getFormUrl = document.URL+"/getform"
+
 	var editor = ace.edit("editor");
 	editor.setTheme("ace/theme/dawn");
 	editor.getSession().setTabSize(2);
@@ -43,7 +45,10 @@ require(["dijit/form/Button",
 	var contentPane = new ContentPane({
 			content:"This is a contentpane"
 		}).placeAt("renderWindow");		
-	contentPane.set("href", document.URL+"/getform");
+
+	contentPane.set("href", getFormUrl);
+	contentPane.startup();
+
 
 	on(renderForm, "click", function() {
 		console.log("posting data");
@@ -76,12 +81,13 @@ require(["dijit/form/Button",
 				/*updating the div with the new form*/
 				//var renderedForm = jsonData.data;
 				//renderWindow.innerHTML = renderedForm;
-				var cont = '<div id=formcol data-dojo-type="dijit/form/Form">'+jsonData.data+"</div>"
+				var cont = "<div id=formcol data-dojo-type='dijit/form/Form' data-dojo-id='formcol'>"+jsonData.data+"</div>"
 
 				/* Destroying and creating a new contentpane*/
 				contentPane.destroyRecursive();
 				contentPane = new ContentPane({
 					"content":cont}).placeAt("renderWindow");
+				contentPane.startup();
 
 				$("#renderWindow").scrollTop(lastViewerScrollPos);
 			}

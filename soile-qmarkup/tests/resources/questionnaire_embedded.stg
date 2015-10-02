@@ -61,7 +61,7 @@ questionnaire_html(title, body, stmts) ::= <<
                ready) {
 
         ready(function() {
-          parser.parse();
+          //parser.parse();
           
           var qdata = {};
 
@@ -248,6 +248,15 @@ select(columns) ::= <<
  $columns:{col | $col.content$}; separator="\n"$
 </div>
  
+
+selectradio(columns, optional) ::= <<
+
+<div class="selectionBase" style="margin-bottom: 1cm; display: block;">
+<div class="selectionContainer" data-dojo-type="myWidgets/ValidationRadioButton" optional="$optional$">
+  $columns:{col | $col.content$}; separator="\n"$
+</div>
+</div>
+
 >>
 
 selection_column(elems, width) ::= <<

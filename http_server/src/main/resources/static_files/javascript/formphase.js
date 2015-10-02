@@ -47,7 +47,7 @@ require(["dijit/form/HorizontalSlider",
            ready) {
 
   ready(function() {
-    parser.parse();
+    //parser.parse();
 
     //Disable mousewheel events on spinners to prevent the user from
     //editing an answer when scrolling
@@ -84,7 +84,7 @@ require(["dijit/form/HorizontalSlider",
     var startTime = new Date();
 
     var dojoForm = registry.byId("formcol");
-    console.log(dojoForm);
+    //console.log(dojoForm);
 
     var is_checked = function(id) {
       var widget = registry.byId(id);
@@ -238,6 +238,8 @@ require(["dijit/form/HorizontalSlider",
         var valid = form.validate(); 
 
         var d = loadData();
+
+        formcol.validate();
 
         show_saved_data(d);
 

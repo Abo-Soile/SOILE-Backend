@@ -685,9 +685,7 @@ dBootstrap fixes
 @keyframes load3 {
   0% {
     -webkit-transform: rotate(0deg);
-    transform: rotate(0d {
-      }
-      eg);
+    transform: rotate(0deg);
   }
   100% {
     -webkit-transform: rotate(360deg);
@@ -748,6 +746,17 @@ dBootstrap fixes
 .inlineDropdown {
   display: inline-block;
 }
+
+.selectionBase .selectError {
+  border: red dotted 2px;
+  float: left;
+}
+
+.selectionBase .selectionContainer {
+  float: left;
+}
+
+
 
 /*USER TRAINING*/
 
