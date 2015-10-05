@@ -83,6 +83,10 @@ BaseModel.prototype.delete = function(callback  ) {
     console.log("DELETE " + this._collection);    // body...
 };
 
+BaseModel.prototype.softDelete = function(callback) {
+  console.log("Softdeleting stuff");  
+}
+
 /*
 Sends the specified command to mongo-persistor and returns
 calls the callback function when done. 
