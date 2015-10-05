@@ -1,4 +1,8 @@
-var app = angular.module('trainingEdit', ['ui.tree', 'ui.select', 'ngSanitize']);
+var app = angular.module('trainingEdit', 
+                      ['ui.tree',
+                       'ui.select',
+                       'ngSanitize',
+                       'ui.bootstrap']);
 
 
 app.config(function($interpolateProvider){
@@ -29,6 +33,10 @@ app.filter('range', function() {
 
 app.controller('trainingController', function($scope, $http, $location) {
   var baseUrl = $location.absUrl();
+
+  $scope.format = 'yyyy/MM/dd';
+
+
   $scope.training = {};
 
   $scope.saveTraining = function save() {
@@ -56,6 +64,21 @@ app.controller('trainingController', function($scope, $http, $location) {
           delete($scope.training.components.control);
       }
   };
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    console.log("OPEN");
+
+    $scope.opened = true;
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1
+  };
+
 
   $scope.loadData();
 });

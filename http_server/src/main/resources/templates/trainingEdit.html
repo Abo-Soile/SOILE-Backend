@@ -6,8 +6,9 @@
 
 <link rel="stylesheet" href="/javascript/bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
 <script type="text/javascript" src="/javascript/bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
-
 <script type="text/javascript" src="/javascript/bower_components/angular-ui-select/dist/select.js"></script>
+<script type="text/javascript" src="/javascript/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
 <link rel="stylesheet" type="text/css" href="
 /javascript/bower_components/angular-ui-select/dist/select.css">
 
@@ -25,6 +26,30 @@
 
       <label>End message</label>
       <textarea class="form-control" ng-model="training.endmessage"> </textarea>
+
+      <div class="row">
+        <div class="col-md-4">
+          <label>Start date</label>
+          <p class="input-group">
+            <input type="text" class="form-control" ng-model="training.startDate" ng-required:"true" is-open="opened" options="dateOptions" close-text="Close" datepicker-popup="[([format])]" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+        </div>
+
+        <div class="col-md-4">
+          <label>End Date</label>
+          <p class="input-group">
+            <input type="text" class="form-control" ng-model="training.endDate" ng-required:"true" is-open="opened" min-date="training.startDate" options="dateOptions"  close-text="Close" datepicker-popup="[([format])]"/>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+        </div>
+
+      </div>
+
       <div class="row">
         <div class="col-md-4 ">
           <label>Repeat training</label>
@@ -49,6 +74,17 @@
             <label class="bigcheckbox">
               Control group
               <input type="checkbox" ng-model="training.controlgroup" ng-true-value="true" ng-false-value="false"
+              ng-click="toggleControlGroup($event)"
+              >
+            </label>
+          </span>
+        </div>
+
+        <div class="col-md-3">
+          <span class="checkbox">
+            <label class="bigcheckbox">
+              Show score
+              <input type="checkbox" ng-model="training.showScore" ng-true-value="true" ng-false-value="false"
               ng-click="toggleControlGroup($event)"
               >
             </label>
