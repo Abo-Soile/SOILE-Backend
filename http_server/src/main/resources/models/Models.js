@@ -159,6 +159,8 @@ Training.collection = "training";
 TEST
 */
 function Test(arg) {
+    this.published = false;
+
     BaseModel.call(this, arg);
 
     this._collection = Test.collection;
@@ -369,10 +371,9 @@ TrainingData.prototype.isLastPhase = function(training) {
   var isLast = false;
   var components = training.components[this.getMode()];
 
-  if(components.length === (this.position + 1)) {
+  if(components.length === (this.position + 1) || components.length === 1) {
     isLast = true;
   }
-
   return isLast;
 };
 
@@ -433,6 +434,7 @@ TrainingData.prototype.completePhase = function(training) {
   }
 };
 
+//Returns the current mode
 TrainingData.prototype.getMode = function() {
   var mode = this.mode;
   if (this.inControlGroup && this.mode==="training") {

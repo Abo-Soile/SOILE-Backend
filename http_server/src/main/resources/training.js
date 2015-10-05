@@ -84,13 +84,31 @@ function handleResultData(data, datatype, callback) {
 
 //Admin view, show list of training experiments
 router.get("/training", function(request) {
-  console.log("TRAAAAINNNING!!!");
+  console.log("Training List is running ");
+
+  trainingDAO.list(function(training) {
+    templateManager.render_template("trainingList", {"trainings":training}, request);
+  });
 
 });
 
 //Create a new training task 
 router.post("/training", function(request) {
 
+  var sDate = Date.now() + (1000*60*60*24*2); //Two days in the future
+  var eDate = Date.now() + (1000*60*60*24*30);  //30 days in the future
+
+  var newTraining = new trainingModel();
+
+  newTraining.startDate = new Date(sDate);
+  newTraining.endDate = new Date(eDate);
+  newTraining.name = "";
+
+  newTraining.save(function(callback) {
+      request.redirect("/experiment/"+newTraining._id+"/edit");
+      request.response.end();
+
+  });
 });
 
 //View  training experiment
@@ -300,8 +318,9 @@ router.post("/training/:id/execute", function(request) {
       //var positionInMode = generalData.position;
 
       var tData = new TrainingData();
+      var oldMode = generalData.getMode();
       tData.data = jsonData.exp;
-      tData.mode = generalData.mode;
+      tData.mode = generalData.getMode();
       tData.phase = generalData.position;
       tData.trainingId = id;
 
@@ -328,12 +347,17 @@ router.post("/training/:id/execute", function(request) {
         generalData.save(function() {
           
           //TODO: Check if there is any stored score
-          if (isLastPhase) {
+        if (isLastPhase) {
+          if(training.showScore && oldMode !== "pre") {
             request.jsonRedirect("/training/"+id+"/score");
           }
           else {
-            request.jsonRedirect("/training/"+id+"/execute");
-          }
+            request.jsonRedirect("/training/"+id);
+          } 
+        }
+        else {
+          request.jsonRedirect("/training/"+id+"/execute");
+        }
 
         });
       });
