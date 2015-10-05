@@ -23,10 +23,10 @@ This is a title
 /dropdownmenu {
  dbcolumn: "continent",
  label: "Select Continent",
- options: [[{dbvalue: "EU", text: "Europe"},
+ options: [{dbvalue: "EU", text: "Europe"},
            {dbvalue: "AM", text: "America"},
            {dbvalue: "AS", text: "Asia"},
            {dbvalue: "AU", text: "Australia"},
            {dbvalue: "AF", text: "Africa"}
-           ]]
+           ]
 }
