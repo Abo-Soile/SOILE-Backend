@@ -268,6 +268,7 @@ require(["dijit/form/HorizontalSlider",
           xhr.post(document.URL,{data:JSON.stringify(d)}).then(function(response) {
             console.log(response);
             var url = document.URL;
+            var response = JSON.parse(response);
 
             if(response.redirect) {
               console.log("JSON_REDIRECTING");
