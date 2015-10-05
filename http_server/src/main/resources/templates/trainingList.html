@@ -1,0 +1,15 @@
+{>header /}
+
+<div id="main" class="container">
+  <div class="row">
+    <div class="col-md-10"> 
+      <ul>
+        {#trainings uri=URI}
+          <li><a href="{uri}/{_id}">{name}</a></li>
+        {/trainings}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{>footer /}
