@@ -419,6 +419,10 @@ body {
 	height: 700px;
 	overflow: auto;
 	padding-left: 5px;
+  border: 2px solid #DDD;
+  border-radius: 4px;
+  border-bottom-right-radius: 0px;
+  margin-top: 5px;
 }
 
 

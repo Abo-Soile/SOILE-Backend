@@ -6,7 +6,7 @@
 
 <div id="main" class="container">
 	<div class="row">
-		<div class="col-md-6"> 
+		<div class="col-md-6" id="editorParent"> 
 			<!--<div id="error-message" style="visibility: hidden;" class="alert alert-danger">
 
 			</div>
@@ -15,21 +15,23 @@
 				{markup}
 			</div>
 			<!--</textarea>-->
-			<button id="renderform" data-dojo-type="dijit/form/Button" type="button">	Update Form
-			</button>
 			
-			<div id="error-message-lower" style="visibility: hidden;" class="alert alert-danger"> </div>
+			<div id="error-message-lower" class="alert alert-danger hiddenelem"> </div>
 			<div id="result2"></div>
 		</div>
-		<div class="col-md-6" >
+		<div class="col-md-6" id="demoParent">
 			<div id="renderWindow">
 				
 			</div>
 		</div>
-
+	</div>
+	<div class="row">
 		<div class="col-md-6">
-			<button data-dojo-type="dijit/form/Button" type="button" id="showData"> Show data
-			</button>
+			<button id="renderform" data-dojo-type="dijit/form/Button" type="button">	Update Form</button>
+		</div>
+		<div id="resultParent" class="col-md-6">
+			<button id="expandButton" data-dojo-type="dijit/form/Button" type="button">Expand</button>
+			<button data-dojo-type="dijit/form/Button" type="button" id="showData"> Show data</button>
 			<div id="formdisplaydata">
 				<table id="" class="table table-striped table-bordered">
 					<thead>

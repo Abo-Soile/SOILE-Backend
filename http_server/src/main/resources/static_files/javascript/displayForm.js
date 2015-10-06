@@ -3,6 +3,7 @@ require(["dijit/form/Button",
 		"dojo/dom",
 		"dojo/dom-style",
 		"dojo/dom-construct",
+		"dojo/dom-class",
 		"dojo/request", 
 		"dijit/registry",
 		"dojo/on", 
@@ -15,6 +16,7 @@ require(["dijit/form/Button",
 		dom, 
 		domStyle,
 		domConstruct,
+		domClass,
 		request, 
 		registry,
 		on, 
@@ -36,6 +38,13 @@ require(["dijit/form/Button",
 
 	var getFormUrl = document.URL+"/getform"
 
+	var editorHidden = false;
+	var expandButton = registry.byId("expandButton");
+
+	var editorParent = dom.byId("editorParent");
+	var demoParent = dom.byId("demoParent");
+	var resultParent = dom.byId("resultParent");
+
 	var editor = ace.edit("editor");
 	editor.setTheme("ace/theme/dawn");
 	editor.getSession().setTabSize(2);
@@ -49,6 +58,29 @@ require(["dijit/form/Button",
 	contentPane.set("href", getFormUrl);
 	contentPane.startup();
 
+	on(expandButton,"click", function() {
+		console.log("EXPANDING " + editorHidden);
+		if(editorHidden) {
+			expandButton.set('label', "Expand");
+			editorHidden = !editorHidden;
+
+			domClass.toggle(editorParent,"hiddenelem");
+
+			domClass.toggle(demoParent,'col-md-12');
+			domClass.toggle(demoParent,'col-md-6');
+
+			//domClass.toggle(resultParent, 'col-md-offset-6');
+		} else {
+			expandButton.set('label',"Show Editor");
+			editorHidden = !editorHidden;
+
+			domClass.toggle(demoParent,'col-md-12');
+			domClass.toggle(demoParent,'col-md-6');
+			domClass.toggle(editorParent,"hiddenelem");
+
+			//domClass.toggle(resultParent, 'col-md-offset-6');
+		}
+	});
 
 	on(renderForm, "click", function() {
 		console.log("posting data");
@@ -60,7 +92,7 @@ require(["dijit/form/Button",
 		//errorFrame.innerHTML = "";
 		errorFrameLower.innerHTML = "";
 		//domStyle.set("error-message", "visibility", "hidden");
-		domStyle.set("error-message-lower","visibility","hidden");
+		domClass.add("error-message-lower","hiddenelem");
 
 		request.post(document.URL,{
 			//data: markup.get("value")
@@ -76,7 +108,8 @@ require(["dijit/form/Button",
 				//errorFrame.innerHTML = jsonData.error;
 				errorFrameLower.innerHTML = jsonData.error;
 				//domStyle.set("error-message","visibility","visible");
-				domStyle.set("error-message-lower","visibility","visible");
+				domClass.toggle("error-message-lower","hiddenelem");
+
 			}else {
 				/*updating the div with the new form*/
 				//var renderedForm = jsonData.data;
