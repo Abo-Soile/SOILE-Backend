@@ -17,6 +17,8 @@ var formModel = require("models/Models").Form;
 var formDAO = require("models/DAObjects").FormDAO;
 var testDAO = require("models/DAObjects").TestDAO;
 
+var requireAdmin = require('middleware').requireAdmin;
+
 
 function merge_options(obj1,obj2){
     var obj3 = {};
@@ -33,7 +35,7 @@ router.get("/experiment", function(request){
 });
 
 
-router.get("/experiment/new", function(request){
+router.get("/experiment/new", requireAdmin,function(request){
   //templateManager.render_template("experimentform", {},request);
   var sDate = Date.now();
   var eDate = Date.now() + (1000*60*60*24*30);  //30 days in the future
@@ -208,11 +210,11 @@ router.get('/experiment/:id/phase/:phase', function(request) {
 });
 
 
-router.get("/experiment/:id/edit", function(request) {
+router.get("/experiment/:id/edit", requireAdmin,function(request) {
   templateManager.render_template('a_experimentEdit', {}, request);
 });
 
-router.post("/experiment/:id/edit", function(request) {
+router.post("/experiment/:id/edit", requireAdmin,function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -247,7 +249,7 @@ router.get("/experiment/:id/json", function(request) {
   });
 });
 
-router.post("/experiment/:id/addform", function(request) {
+router.post("/experiment/:id/addform", requireAdmin,function(request) {
   var id = request.params().get('id');
   var address = utils.get_address('questionnaire_render');
 

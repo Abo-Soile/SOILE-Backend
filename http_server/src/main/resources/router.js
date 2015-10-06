@@ -119,16 +119,35 @@ CustomMatcher.prototype.handleArgs = function(arg) {
 // Runs middleware and 
 CustomMatcher.prototype.handleRequest = function(callback, middleware) {
   return function(request) {
-    
     request = extendRequest(request, function(req) {
 
-      for (var i = 0; i < middleware.length; i++) {
-        req = middleware[i](req);
+      //One middleware
+      if (typeof middleware === 'function') {
+        middleware(req, function(req, err) {
+          callback(req);
+        });
       }
-           
-      callback(req); 
-    });
 
+      //Multiple middleware
+      else if (typeof middleware === 'object' && middleware.length > 0){
+        var handleMiddlewareArray = function(n, request) {
+          if(n < middleware.length) {
+            middleware[n](req, function(newRequest) {
+              handleMiddlewareArray(n+1, newRequest);
+            });
+          }else {
+            callback(request);
+          }
+        };
+
+        handleMiddlewareArray(0);
+      }
+
+      //No middleware
+      else {
+        callback(req);
+      }
+    });
   }; 
 };
 
@@ -169,7 +188,6 @@ CustomMatcher.prototype.noMatch = function(handler) {
 function a() {
   return new CustomMatcher()
 }
-
 
 //module.exports = CustomMatcher;
 module.exports = function(){ 

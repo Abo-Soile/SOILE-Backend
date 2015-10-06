@@ -19,6 +19,11 @@ var formDAO = require("models/DAObjects").FormDAO;
 
 var moment = require("libs/moment");
 
+var requireAdmin = require('middleware').requireAdmin;
+
+var m1 = require('middleware').m1;
+var m2 = require('middleware').m2;
+
 /*
 Architectural ideas. 
 
@@ -83,7 +88,7 @@ function handleResultData(data, datatype, callback) {
 }
 
 //Admin view, show list of training experiments
-router.get("/training", function(request) {
+router.get("/training", requireAdmin,function(request) {
   console.log("Training List is running ");
 
   trainingDAO.list(function(training) {
@@ -93,7 +98,7 @@ router.get("/training", function(request) {
 });
 
 //Create a new training task 
-router.post("/training", function(request) {
+router.post("/training", requireAdmin,function(request) {
 
   var sDate = Date.now() + (1000*60*60*24*2); //Two days in the future
   var eDate = Date.now() + (1000*60*60*24*30);  //30 days in the future
@@ -112,7 +117,7 @@ router.post("/training", function(request) {
 });
 
 //View  training experiment
-router.get("/training/:id", function(request) {
+router.get("/training/:id", requireAdmin,function(request) {
   var id = request.params().get('id');
   var userid = request.session.getUserId();
 
@@ -461,7 +466,7 @@ router.get("/training/:id/edit", function(request) {
 }
 */
 
-router.post("/training/:id/edit", function(request) {
+router.post("/training/:id/edit", requireAdmin,function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -482,7 +487,7 @@ router.post("/training/:id/edit", function(request) {
   });
 });
 
-router.post("/training/:id/addform", function(request) {
+router.post("/training/:id/addform", requireAdmin,function(request) {
   var id = request.params().get('id');
 
   var newForm = new formModel();

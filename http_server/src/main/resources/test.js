@@ -8,13 +8,14 @@ var router = new CustomMatcher();
 var utils = require("utils");
 var mongo = require('mongoHandler');
 
-var requireAdmin = utils.requireAdmin;
-
 var testDAO = require("models/DAObjects").TestDAO;
 
 var container = require('vertx/container');
 var config = container.config;
 var testImages = config.directory + "/testimages";
+
+var requireAdmin = require('middleware').requireAdmin;
+
 
 
 router.get('/test', function(request) {
@@ -36,7 +37,7 @@ router.get("/test/json/compiled", function(request) {
   });
 });
 
-router.post("/test", requireAdmin(function(request) {
+router.post("/test", requireAdmin,function(request) {
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -65,10 +66,10 @@ router.post("/test", requireAdmin(function(request) {
       });
     });
   });
-}));
+});
 
 
-router.get('/test/:id', requireAdmin(function(request) {
+router.get('/test/:id', requireAdmin, function(request) {
   var id = request.params().get('id');
   var code = "sadas";
   var files = [];
@@ -90,10 +91,10 @@ router.get('/test/:id', requireAdmin(function(request) {
         {"code":code, "test":r.result, "files":files}, request);
     });
   });
-}));
+});
 
 
-router.post("/test/:id", requireAdmin(function(request) {
+router.post("/test/:id", requireAdmin, function(request) {
   var data = new vertx.Buffer();
   var id = request.params().get('id');
 
@@ -138,10 +139,10 @@ router.post("/test/:id", requireAdmin(function(request) {
       });
     });
   });
-}));
+});
 
 
-router.post("/test/:id/imageupload", function(request) {
+router.post("/test/:id/imageupload", requireAdmin,function(request) {
 
   request.expectMultiPart(true);
   var id = request.params().get('id');
@@ -170,7 +171,7 @@ router.post("/test/:id/imageupload", function(request) {
 });
 
 
-router.delete("/test/:id/imageupload/:imageName", function(request) {
+router.delete("/test/:id/imageupload/:imageName", requireAdmin,function(request) {
   var id = request.params().get('id');
   var imgName = request.params().get('imageName');
 
@@ -190,7 +191,7 @@ router.delete("/test/:id/imageupload/:imageName", function(request) {
 });
 
 
-router.get('/test/:id/imagelist', function(request) {
+router.get('/test/:id/imagelist', requireAdmin,function(request) {
   var id = request.params().get('id');
   var files = [];
 
@@ -212,7 +213,7 @@ router.get('/test/:id/imagelist', function(request) {
 });
 
 
-router.post('/test/:id/editname', requireAdmin(function(request) {
+router.post('/test/:id/editname', requireAdmin,function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -230,4 +231,4 @@ router.post('/test/:id/editname', requireAdmin(function(request) {
       request.response.end(JSON.stringify(r.result));
     });
   });
-}));
+});
