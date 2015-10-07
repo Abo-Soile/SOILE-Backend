@@ -229,7 +229,7 @@ require(["dijit/form/HorizontalSlider",
     };
 
     if (dom.byId('showData')) {
-      on(dom.byId('showData'), "click", function() {
+      on(registry.byId('showData'), "click", function() {
         var domContainer = dom.byId("formcol");
         var widgets = registry.findWidgets(domContainer);
 
@@ -250,7 +250,7 @@ require(["dijit/form/HorizontalSlider",
     }
 
     if (dom.byId("submitButton")) {
-      on(dom.byId("submitButton"), "click", function() { 
+      on(registry.byId("submitButton"), "click", function() { 
         console.log("submitbutton");
 
         var valid = formcol.validate();
