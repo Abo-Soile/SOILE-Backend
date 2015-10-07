@@ -166,7 +166,7 @@ numberfield(id,
       width, 
       minimum, 
       maximum,
-      empty,
+      optional,
       increment) ::= <<
 
 $if(label)$
@@ -175,13 +175,13 @@ $separator$
 $endif$
 <input  data-dojo-type="dijit/form/NumberSpinner"
         id="$id$" name="someNumber"
-        $if(empty)$
+        $if(optional)$
         value=""
         required="false"
         $else$
-        value="$value$"
         required="true"
         $endif$
+        value="$value$"
         style="width: $width$em;"
         data-dojo-props="smallDelta:$increment$, 
                          constraints:{min:$minimum$, max:$maximum$}"

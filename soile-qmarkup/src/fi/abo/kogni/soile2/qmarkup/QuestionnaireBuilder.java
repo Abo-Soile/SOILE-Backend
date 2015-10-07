@@ -233,14 +233,19 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Value incr = value.getValue("increment");
                 //Can be empty if optional==true
                 //Empty meaning that no value is set and that the field isn't required
-                Boolean empty = ((BooleanValue) value.getValue("optional")).asBoolean();
+                Boolean optional = ((BooleanValue) value.getValue("optional")).asBoolean();
+                Integer startValue = ((IntegerValue) value.getValue("value")).asInteger();
                 int width = max.toString().trim().length() + 2;
                 tmpl.add("minimum", min);
                 tmpl.add("maximum", max);
                 tmpl.add("increment", incr);
                 tmpl.add("width", width);
-                tmpl.add("value", value.getValue("value"));
-                tmpl.add("empty", empty);
+                if(startValue != 0) {
+                    tmpl.add("value", startValue);
+                } else {
+                    tmpl.add("value", "");
+                }
+                tmpl.add("optional", optional);
                 addTag(tmpl.render());
                 validationCode(nfwd);
                 if(! inline) {

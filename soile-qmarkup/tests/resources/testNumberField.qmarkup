@@ -1,5 +1,5 @@
 /numberfield {
-    dbcolumn: "ikä",
+    dbcolumn: "first",
     numeric: true,
     label: "Ikä",
     minimum: 1,
@@ -17,4 +17,15 @@
     maximum: 120,
     increment: 1,
     optional:false
+}
+
+/numberfield {
+    dbcolumn: "third",
+    numeric: true,
+    label: "Ikä",
+    minimum: 1,
+    maximum: 120,
+    increment: 1,
+    optional:false,
+    value:22
 }
