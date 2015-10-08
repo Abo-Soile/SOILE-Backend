@@ -166,6 +166,39 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, co
   });
 };
 
+
+TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, controlGroup,callback) {
+  var that = this;
+  that.get({userId:userid, type:"general", trainingId:trainingId}, 
+        function(trainingData, message) {
+    if (trainingData === "") {
+        //console.log("Generating new data object");
+        trainingData = new TrainingData();
+
+        trainingData.userId = userid;
+        trainingData.initGeneral(trainingId, controlGroup);
+
+        trainingData.save(function(err) {
+            return callback(trainingData);
+        });
+    } else {
+        callback(trainingData);
+    }
+  });
+};
+
+TrainingDataDAO.prototype.getGeneralData = function(userid, trainingId,callback) {
+  var that = this;
+  that.get({userId:userid, type:"general", trainingId:trainingId}, 
+        function(trainingData, message) {
+    if (trainingData === "") {
+        callback("")
+    } else {
+        callback(trainingData);
+    }
+  });
+};
+
 /*
     Returns score from the previous training phase. 
 */

@@ -117,7 +117,7 @@ router.post("/training", requireAdmin,function(request) {
 });
 
 //View  training experiment
-router.get("/training/:id", requireAdmin,function(request) {
+router.get("/training/:id",function(request) {
   var id = request.params().get('id');
   var userid = request.session.getUserId();
 
@@ -131,7 +131,12 @@ router.get("/training/:id", requireAdmin,function(request) {
       return templateManager.render_template("trainingAdmin", {training:training, chartData:cData}, request);
     }
 
-    trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
+    trainingDataDAO.getGeneralData(userid, id, function(trainingData) {
+
+      if(trainingData === "") {
+        templateManager.render_template('trainingLanding',{training:training},request);
+        return;
+      }
 
       var status = {};
       status.open = false;
@@ -202,8 +207,16 @@ router.get("/training/:id", requireAdmin,function(request) {
 
 
 //Save data to the experiment
-router.post("/training/:id", function(request) {
+router.post("/training/:id/participate", function(request) {
+  var id = request.params().get('id');
+  var userid = request.session.getUserId();
 
+  trainingDAO.get(id, function(training) {
+
+    trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
+      request.redirect("/training/" + id);
+    });
+  });
 });
 
 function getTrainingAndUserData(trainingid, userid, callback) {
