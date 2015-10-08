@@ -531,6 +531,24 @@ router.post("/training/:id/addform", requireAdmin,function(request) {
   });
 });
 
+router.get("/training/:id/useroverview", function(request) {
+  var id = request.params().get('id');
+
+  trainingDAO.get(id, function(training) {
+    
+    trainingDataDAO.list({type:"general"}, function(data) {
+
+      var response = {
+        training:training.toJson,
+        participants:data.map(function(obj){return obj.toJson();})
+      };
+
+      request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+      request.response.end(JSON.stringify(response));
+    });
+  });
+});
+
 
 router.get("/training/:id/json", function(request) {
   var id = request.params().get('id');
