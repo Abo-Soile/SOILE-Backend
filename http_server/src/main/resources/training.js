@@ -127,84 +127,96 @@ router.get("/training/:id",function(request) {
     console.log(JSON.stringify(training));
 
     if (request.session.isAdmin()) {
-      cData = [["Pre", 123], ["1", 63],["2", 55],["3", 32],["Post", 19]];
-      return templateManager.render_template("trainingAdmin", {training:training, chartData:cData}, request);
+      return trainingAdminView(request, training);
     }
 
-    trainingDataDAO.getGeneralData(userid, id, function(trainingData) {
-
-      if(trainingData === "") {
-        templateManager.render_template('trainingLanding',{training:training},request);
-        return;
-      }
-
-      var status = {};
-      status.open = false;
-      status.state = trainingData.getMode();
-      status.nextRound = training.nextTask;
-
-      trainingData.nextTask = new Date(trainingData.nextTask);
-
-      var timeString = false;
-      if(trainingData.nextTask - Date.now() > 0) {
-        timeString = moment(trainingData.nextTask).fromNow();
-        console.log("Timestring " + timeString);
-      }
-
-      status.timeLeft = timeString;
-
-      var tasksLeft = parseInt(training.repeatcount) - parseInt(trainingData.position);
-      var hoursLeft = tasksLeft * parseInt(training.repeatpause);
-
-      console.log("HOURS LEFT " + hoursLeft  + " taskleft " + tasksLeft + " repeat " + training.repeatcount + " pause " + training.repeatpause);
-
-      //status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow();
-      status.totalTimeLeft = moment(Date.now()).add(hoursLeft, "hours").fromNow(true);
-      if(timeString) {
-        status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow(true);
-      }
-
-      var totalRounds = parseInt(training.repeatcount) + 2;
-      var roundsDone = 0;
-
-      var mode = trainingData.getMode();
-
-      if (mode === "training") {
-        roundsDone = trainingData.trainingIteration + 1;
-      }
-
-      if (mode === "post") {
-        roundsDone = totalRounds - 1;
-      }
-
-      if (mode === "done") {
-        roundsDone = totalRounds;
-      }
-
-      status.roundsLeft = roundsDone + "/" + totalRounds;
-      status.percentageLeft = roundsDone/totalRounds * 100;
-
-
-      status.roundType = mode;
-      status.iteration = trainingData.trainingIteration;
-
-      trainingDataDAO.getScoreHistory(id, userid, function(score) {
-        status.scoreHistory = score;
-      });
-
-      if (mode === "done") {
-        trainingDataDAO.getPrePostScore(id, userid, function(pre, post) {
-          status.preScore = pre;
-          status.postScore = post;
-        });
-      }
-
-      templateManager.render_template('trainingUser', {training:training, status:status}, request);
-    });
-
+    return trainingView(request, training);
   });
 });
 
+function trainingView(request, training) {
+  var id = training._id;
+  var userid = request.session.getUserId();
+
+  trainingDataDAO.getGeneralData(userid, id, function(trainingData) {
+
+  if(trainingData === "") {
+    templateManager.render_template('trainingLanding',{training:training},request);
+    return;
+  }
+
+  var status = {};
+  status.open = false;
+  status.state = trainingData.getMode();
+  status.nextRound = training.nextTask;
+
+  trainingData.nextTask = new Date(trainingData.nextTask);
+
+  var timeString = false;
+  if(trainingData.nextTask - Date.now() > 0) {
+    timeString = moment(trainingData.nextTask).fromNow();
+    console.log("Timestring " + timeString);
+  }
+
+  status.timeLeft = timeString;
+
+  var tasksLeft = parseInt(training.repeatcount) - parseInt(trainingData.position);
+  var hoursLeft = tasksLeft * parseInt(training.repeatpause);
+
+  console.log("HOURS LEFT " + hoursLeft  + " taskleft " + tasksLeft + " repeat " + training.repeatcount + " pause " + training.repeatpause);
+
+  //status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow();
+  status.totalTimeLeft = moment(Date.now()).add(hoursLeft, "hours").fromNow(true);
+  if(timeString) {
+    status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow(true);
+  }
+
+  var totalRounds = parseInt(training.repeatcount) + 2;
+  var roundsDone = 0;
+
+  var mode = trainingData.getMode();
+
+  if (mode === "training") {
+    roundsDone = trainingData.trainingIteration + 1;
+  }
+
+  if (mode === "post") {
+    roundsDone = totalRounds - 1;
+  }
+
+  if (mode === "done") {
+    roundsDone = totalRounds;
+  }
+
+  status.roundsLeft = roundsDone + "/" + totalRounds;
+  status.percentageLeft = roundsDone/totalRounds * 100;
+
+
+  status.roundType = mode;
+  status.iteration = trainingData.trainingIteration;
+
+  trainingDataDAO.getScoreHistory(id, userid, function(score) {
+    status.scoreHistory = score;
+  });
+
+  if (mode === "done") {
+    trainingDataDAO.getPrePostScore(id, userid, function(pre, post) {
+      status.preScore = pre;
+      status.postScore = post;
+    });
+  }
+
+  templateManager.render_template('trainingUser', {training:training, status:status}, request);
+  });
+}
+
+function trainingAdminView(request, training) {
+  var id = training._id;
+  var userid = request.session.getUserId();
+
+  var cData = [["Pre", 123], ["1", 63],["2", 55],["3", 32],["Post", 19]];
+  return templateManager.render_template("trainingAdmin", {training:training, chartData:cData}, request);
+}
 
 //Save data to the experiment
 router.post("/training/:id/participate", function(request) {
