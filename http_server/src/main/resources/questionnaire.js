@@ -72,7 +72,9 @@ router.get('/questionnaire/mongo/:id/getform', function(request) {
   var id = request.params().get('id');
   mongo.form.get(id,function(r) {
     var form = r.result.form;
-    form = "<div id='formcol'>".concat(form,"</div>");
+    //form = "<div id='formcol' >".concat(form,"</div>");
+    form = "<div id=formcol data-dojo-type='dijit/form/Form' data-dojo-id='formcol'>".concat(form,"</div>");
+
     request.response.end(form);
   });
 });

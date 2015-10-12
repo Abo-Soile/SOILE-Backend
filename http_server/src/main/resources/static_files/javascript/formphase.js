@@ -230,8 +230,8 @@ require(["dijit/form/HorizontalSlider",
 
     if (dom.byId('showData')) {
       on(registry.byId('showData'), "click", function() {
-        var domContainer = dom.byId("formcol");
-        var widgets = registry.findWidgets(domContainer);
+        //var domContainer = dom.byId("formcol");
+        //var widgets = registry.findWidgets(domContainer);
 
         var form = registry.byId("formcol");
 
