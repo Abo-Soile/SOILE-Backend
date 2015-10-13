@@ -3,7 +3,7 @@
 	[
 		{
 			"path": ".",
-      "folder_exclude_patterns": ["build", "bower_components"]
+      "folder_exclude_patterns": ["build", "bower_components", "node_modules"]
 		}
 	],
 

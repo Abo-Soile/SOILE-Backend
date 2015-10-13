@@ -1,3 +1,134 @@
+/*Experiment admin view */
+#expview ul {
+  list-style-type: none; }
+
+#expview .btn {
+  margin-left: 1px;
+  margin-right: 3px; }
+
+.componentlist .label {
+  display: inline-block;
+  min-width: 40px; }
+
+.componentlist .phaselistlink {
+  display: inline-block;
+  min-width: 250px;
+  margin-top: 10px;
+  margin-bottom: 10px; }
+
+/*
+dBootstrap fixes
+*/
+.dbootstrap .dijitCheckBox, .dbootstrap .dijitRadio {
+  width: 20px;
+  height: 20px;
+  margin-left: 3px;
+  margin-right: 3px; }
+
+.dbootstrap label {
+  line-height: 100%;
+  margin-top: 5px;
+  font-weight: normal; }
+
+#formcol p {
+  min-height: 1px; }
+
+#formcol .selectionBase .dijitRadio, #formcol .selectionBase .dijitCheckBox {
+  float: left;
+  margin-top: 2px; }
+
+#formcol .selectionBase br {
+  clear: both; }
+
+#formcol .selectionBase label {
+  float: left;
+  max-width: 88%;
+  margin-right: 14px; }
+
+#formdisplaydata {
+  margin: 10px 5px; }
+
+.selectionBase .selectError {
+  border: red dotted 2px;
+  float: left; }
+
+.selectionBase .selectionContainer {
+  float: left;
+  width: 100%; }
+
+.dijitDialog {
+  width: 80% !important; }
+
+.dijitDialogPaneContent {
+  widows: 100% !important; }
+
+.dijit {
+  line-height: 18px; }
+
+/*Overriding dojo buttons*/
+.customDojo .dijitButton {
+  background-image: none;
+  border: solid 1px transparent;
+  /*height: 30px;*/ }
+  .customDojo .dijitButton .dijitButtonNode {
+    display: block;
+    padding: 6px 12px;
+    background-color: transparent;
+    background-image: none;
+    color: inherit; }
+
+.customDojo .dijitButtonText {
+  text-shadow: none;
+  line-height: 1.42857143; }
+
+.customDojo .dijitButton:hover {
+  background-image: none;
+  color: #333;
+  background-color: #EEEEEE; }
+
+.customDojo .dijitButton .dijitReset {
+  background-color: transparent; }
+
+.customDojo .dijitButton .btn {
+  border-style: solid;
+  border-width: 1px; }
+
+.customDojo .btn {
+  color: #fff; }
+  .customDojo .btn:hover {
+    color: #fff; }
+  .customDojo .btn .dijitButtonNode {
+    border: none; }
+
+.customDojo .btn-primary:hover {
+  background-color: #3276b1;
+  border-color: #285e8e; }
+
+.customDojo .btn-success:hover {
+  background-color: #5cb85c;
+  border-color: #4cae4c; }
+
+.customDojo .btn-info:hover {
+  background-color: #31b0d5;
+  border-color: #269abc; }
+
+.customDojo .btn-warning:hover {
+  background-color: #ec971f;
+  border-color: #d58512; }
+
+.customDojo .btn-danger:hover {
+  background-color: #c9302c;
+  border-color: #ac2925; }
+
+#renderWindow {
+  height: 700px;
+  overflow: auto;
+  padding-left: 5px;
+  border: 2px solid #DDD;
+  border-radius: 4px;
+  border-bottom-right-radius: 0px;
+  margin-top: 5px; }
+
 * {
   outline: none !important; }
 
@@ -627,6 +758,147 @@ dBootstrap fixes
 
 #RANDOMCLASS {
   background-color: red; }
+
+/*Image uploading and handling*/
+.imgname {
+  display: inline-block;
+  margin-right: 2px;
+  width: 45%; }
+
+#images ul {
+  /*list-style-type: none;*/
+  /*list-style-position: outside;*/
+  padding-left: 0;
+  margin-left: 0;
+  max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: visible; }
+
+#imagelist li {
+  min-height: 40px; }
+
+#imagelist img {
+  height: 30px;
+  width: 30px; }
+
+#imagelist li span .dijitButtonNode {
+  padding: 5px 8px !important; }
+
+#imagelist li .imgenlarge span {
+  position: absolute;
+  right: -9999px;
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  background-color: lightgray;
+  z-index: 300;
+  display: none;
+  top: 150px; }
+  #imagelist li .imgenlarge span img {
+    max-height: 300px;
+    max-width: 300px;
+    width: auto;
+    height: auto; }
+
+#imagelist li .imgenlarge:hover span {
+  right: 280px;
+  /*the distance from the bottom of the thumbnail to the top of the popup image*/
+  left: -300px;
+  left: auto;
+  display: block; }
+
+/*Logger styles */
+.overflow300 {
+  min-height: 100px !important;
+  max-height: 300px !important;
+  overflow: auto; }
+
+.overflow {
+  overflow: auto; }
+
+/*
+testeditor styles
+*/
+#mouseposition {
+  position: absolute;
+  background-color: #ebebeb;
+  border-bottom: 1px solid gray;
+  border-right: 1px solid gray; }
+
+#log td:first-child, #log th:first-child {
+  width: 100px; }
+
+/* Ace editor styling */
+#editor {
+  border: 2px solid #DDD;
+  border-radius: 4px;
+  border-bottom-right-radius: 0px;
+  margin-top: 5px;
+  position: relative;
+  height: 550px; }
+
+/*Phase*/
+#loadAnim {
+  position: absolute;
+  left: 400px;
+  top: 150px; }
+
+.loaderAnim {
+  font-size: 10px;
+  margin: 5em auto;
+  text-indent: -9999em;
+  width: 11em;
+  height: 11em;
+  border-radius: 50%;
+  background: gray;
+  background: -moz-linear-gradient(left, gray 10%, rgba(255, 255, 255, 0) 42%);
+  background: -webkit-linear-gradient(left, gray 10%, rgba(255, 255, 255, 0) 42%);
+  background: -o-linear-gradient(left, gray 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, gray 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, gray 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0); }
+  .loaderAnim:before {
+    width: 50%;
+    height: 50%;
+    background: gray;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: ''; }
+  .loaderAnim:after {
+    background: white;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0; }
+
+@-webkit-keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 
 .userProgress li {
   background-color: gray; }
