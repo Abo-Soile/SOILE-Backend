@@ -213,10 +213,11 @@ SOILE2 = (function(){
     var props = {
       "id": id,
       "class": "hiddenelem",
-      "style": "font-size:"+size+"px",
+      "style": "font-size:"+size+"px"
       /*"text": msg*/
       //"src": url
     };
+
     var box = jQuery("<p/>", props);
     box.append(msg);
     box.appendTo(soile2.util.getid("display"));
@@ -299,7 +300,7 @@ SOILE2 = (function(){
 
   bin.settext = function(id, text) {
     var tbox = jQuery(soile2.util.getid(id));
-    box.val(text);
+    tbox.val(text);
   };
 
   bin.not = function(arg){
@@ -723,7 +724,7 @@ SOILE2 = (function(){
     if(_.isNumber(min) && _.isNumber(max)) {
       var ran = Math.floor(rt.random.get()*(max-min+1)+min);
 
-      if(not == false || !not.contains(ran)) {
+      if(not === false || !not.contains(ran)) {
         return ran;
       }
       else {
@@ -748,7 +749,7 @@ SOILE2 = (function(){
     if(_.isNumber(min) && _.isNumber(max)) {
       var ran = rt.random.get()*(max-min+1)+min;
 
-      if(not == false || !not.contains(ran)) {
+      if(not === false || !not.contains(ran)) {
         return ran;
       }
       else {
@@ -1689,7 +1690,7 @@ SOILE2 = (function(){
   };
 
   rt.shuffle = function(array) {
-    var arr = array
+    var arr = array;
     if (arr.length > 0) {
       var counter = arr.length;
       var temp, index;
@@ -1753,45 +1754,45 @@ SOILE2 = (function(){
         // Program is over, remove listeners send data and navigate to next view
         break;
       }
-      if (opcode == opcodes.Assign){
+      if (opcode === opcodes.Assign){
         pi.host[pi.name] = (pi.value)();
         continue;
       }
-      else if (opcode == opcodes.Fcall){
+      else if (opcode === opcodes.Fcall){
         (pi.host[pi.name]).apply(pi.host, pi.params());
         continue;
       }
-      else if (opcode == opcodes.If){
+      else if (opcode === opcodes.If){
         if (pi.cond.call({}) === false){
           soile2.rt.pi_index.set(pi.jmp);
         }
         continue;
       }
-      else if (opcode == opcodes.While){
+      else if (opcode === opcodes.While){
         if ((pi.cond)() === false){
           soile2.rt.pi_index.set(pi.jmp);
         }
         continue;
       }
-      else if (opcode == opcodes.Goto){
+      else if (opcode === opcodes.Goto){
         soile2.rt.pi_index.set(pi.jmp);
         continue;
       }
-      else if (opcode == opcodes.Def){
+      else if (opcode === opcodes.Def){
 
         pi['func'].call({}, []);
         continue;
       }
-      else if (opcode == opcodes.Undef){
+      else if (opcode === opcodes.Undef){
         soile2.rt.clear_vars();
         continue;
       }
-      else if (opcode == opcodes.Suspend){
+      else if (opcode === opcodes.Suspend){
         scheduler.suspend();
         return;
       }
 
-      if (opcode == opcodes.Wait){
+      if (opcode === opcodes.Wait){
         dowait = true;
         waitfor = pi.ms();
         break;
@@ -1819,7 +1820,7 @@ SOILE2 = (function(){
     
     var msleft = function(ts){
       return ts - soile2.rt.timestamp();  
-      return Math.abs(ts - soile2.rt.timestamp());
+      //return Math.abs(ts - soile2.rt.timestamp());
     };
     
     var keep_waiting = function(ts){
@@ -1969,7 +1970,7 @@ SOILE2 = (function(){
   
   rt.timestamp = (function(){
     // http://stackoverflow.com/questions/221294/how-do-you-get-a-timestamp-in-javascript
-    if (Date.now !== undefined && typeof Date.now == 'function') {
+    if (Date.now !== undefined && typeof Date.now === 'function') {
       return function(){
         return Date.now();
       };
