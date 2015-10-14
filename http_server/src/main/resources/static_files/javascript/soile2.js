@@ -1071,7 +1071,7 @@ SOILE2 = (function(){
       87: "w",
       88: "x",
       89: "y",
-      90: "z",
+      90: "z"
     });
 
     var lookupf = function(key){
