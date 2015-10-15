@@ -12,6 +12,7 @@ var cssDest = "src/main/resources/static_files/css";
 var cssName = "styles.css";
 
 var gulp = require('gulp');
+var Server = require('karma').Server;
  
 gulp.task('default', ["sass"],function() {
   // place code for your default task here
@@ -26,3 +27,10 @@ gulp.task("sass", function(){
     //.pipe(rename("sassStyle.css"))
     .pipe(gulp.dest(cssDest));
 });
+
+gulp.task("test", function(done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
+})

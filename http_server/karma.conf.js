@@ -32,13 +32,19 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'src/main/resources/static_files/javascript/soile2.js': ['coverage']
     },
 
+        coverageReporter: {
+      type : 'html',
+      dir : 'coverage/'
+    },
 
+    browserNoActivityTimeout: 100000,
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress','coverage'],
 
 
     // web server port
