@@ -74,6 +74,8 @@ public class Builtin {
         builtinFunctions.add("seconds");
 
         builtinFunctions.add("show");
+        builtinFunctions.add("animate");
+
         builtinFunctions.add("showmsg");
         builtinFunctions.add("msgbox");
         builtinFunctions.add("stimulus");
@@ -122,6 +124,8 @@ public class Builtin {
         //Display elements
         builtinFunctions.add("rectangle");
         builtinFunctions.add("button");
+
+        builtinFunctions.add("countdownbar");
 
         //Text input
         builtinFunctions.add("textbox");

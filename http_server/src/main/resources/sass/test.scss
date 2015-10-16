@@ -2,6 +2,30 @@
 
 #uploader {}
 
+@keyframes countdown {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.animatedChild {
+  animation-play-state:inherit !important;
+}
+
+
+.pauseAnimation {
+  animation-play-state: paused !important;
+  -webkit-animation-play-state: paused !important;
+}
+
+.playAnimation {
+  animation-play-state: running !important;
+  -webkit-animation-play-state: running !important;
+}
+
 .imgname {
   display: inline-block;
   margin-right: 2px;
