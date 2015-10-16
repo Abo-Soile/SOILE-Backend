@@ -2,6 +2,9 @@ var vertx = require('vertx');
 var eb = vertx.eventBus;
 var utils = require('utils');
 
+var container = require('vertx/container');
+var logger = container.logger;
+
 var console = require('vertx/console');
 var mongoAddress = "vertx.mongo-persistor";
 
@@ -23,9 +26,6 @@ BaseDAO.prototype.get = function(matcher, callback) {
     //mongoCommand.collection = this._collection;
 
     this.sendToMongo(mongoCommand, function(mongoReply) {
-        //console.log("From get")
-        //console.log(JSON.stringify(mongoReply));
-        //console.log(typeof mongoReply.result)
         if (mongoReply.status === "ok" && (typeof mongoReply.result !== "undefined")) {
             var obj = new that._baseObject(mongoReply.result);
             //obj._id = mongoReply.result._id;
@@ -63,8 +63,15 @@ BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
         mongoCommand.sort = sort;
     }
 
-    this.sendToMongo(mongoCommand, function(mongoReply) {
-        if(mongoReply.status === "ok") {
+    this.sendToMongo(mongoCommand, function(mongoReply, replier) {
+        console.log("Find command done - " + mongoReply.status)
+        if(mongoReply.status === "more-exist"){
+            console.log("More exists")
+
+            replier({}, that.handleMore(that, mongoReply.results, callback))
+        }
+
+        else if(mongoReply.status === "ok") {
             var resultObjects = [];
 
             var start = new Date().getTime();
@@ -124,15 +131,38 @@ See documentation for mongo-persitor for avalable  commands
 */
 BaseDAO.prototype.sendToMongo = function(arg, callback) {
     arg.collection = this._collection;
-    console.log(JSON.stringify(arg));
+    logger.info("Mongo request: " + JSON.stringify(arg));
     eb.send(this._mongoAddress,
             arg,
-            function(reply) {
-                console.log("####Result from mongo");
-                console.log(JSON.stringify(reply));
-                callback(reply);
+            function(reply, replier) {
+                if(typeof arg.action !== 'undefined')
+                    console.log("####Result from mongo " + arg.action);
+                else {
+                    console.log("####Result from mongo ");
+                }
+                //console.log(arg.action);
+                callback(reply, replier);
             }
     );
+};
+
+BaseDAO.prototype.handleMore = function(obj, data, callback) {
+    //console.log("Building new replier")
+    return function(reply, replier) {
+        var result = data.concat(reply.results)
+
+        if(reply.status==="more-exist") {
+            replier({}, obj.handleMore(obj, result, callback))
+        }
+        else {
+            var resultObjects = [];
+            for (var i = 0; i < result.length; i++) {
+                resultObjects.push(new obj._baseObject(result[i]));
+            }
+            callback(resultObjects);
+        }
+        
+    }
 };
 
 module.exports = BaseDAO;
