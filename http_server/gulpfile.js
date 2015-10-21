@@ -34,3 +34,7 @@ gulp.task("test", function(done) {
     singleRun: true
   }, done).start();
 })
+
+gulp.task('watch', function() {
+  gulp.watch(sassFiles, ['sass']);
+});
