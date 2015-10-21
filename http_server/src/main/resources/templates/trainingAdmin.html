@@ -4,14 +4,22 @@
 <script type="text/javascript" src="http://www.amcharts.com/lib/3/serial.js"></script>
 <script type="text/javascript" src="http://www.amcharts.com/lib/3/themes/none.js"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-sanitize.js"></script>
+
+<script type="text/javascript" src="/javascript/trainingadmin.js"></script>
+
+<script src="/javascript/bower_components/moment/moment.js"></script>
+<script src="/javascript/bower_components/angular-moment/angular-moment.js"></script>
+
 <script type="text/javascript">
-  window.chartData={chartData|s|js}
-  console.log(window.chartData)
+  //window.chartData={chartData|s|js}
+  //console.log(window.chartData)
 </script>
 
-<div id="main" class="container">
+<div id="main" class="container" ng-app="trainingAdmin">
   <div class="row">
-    <div id="expview" class="col-md-offset-1 col-md-10"> 
+    <div id="trainingView" class="col-md-offset-1 col-md-10"> 
 
       <div class="row">
         <div class="col-md-12">
@@ -58,35 +66,85 @@
         </div>
       </div>
 
+
       <!--Graph-->
       <div class="row">
         <div id="chartdiv"></div>                   
       </div>
 
-      <!--Data-->
+   <!--   <div class="row">
+        <div class="col-md-12">
+          <div ng-controller="userProgressController">
+            <ul class="userProgress">
+              <li ng-repeat="(key,user) in participants" class="row">
+                <div class="col-md-6">
+                  <span>[([key])] ##</span>
+                  <span>[([user.userId])]</span> 
+                  <span>[([user.timestamp | date:'M/d/yyyy'])]</span>
+                  <span class="label label-danger ">[([user.mode])]</span>
+                  <span>---[([user.inControlGroup])]</span>
+                </div>
+                <div class="col-md-3">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[([user.percentageDone])]" aria-valuemin="0" aria-valuemax="100" style="width: [([user.percentageDone])]%">
+                      <span>[([user.percentageDone])]% </span>
+                    </div>
+                </div>
+                </span>
+
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>-->
+
       <div class="row">
         <div class="col-md-12">
-          <table class="table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>title1</th>
-                <th>title2</th>
-                <th>title3</th>
-                <th>title4</th>
-                <th>title5</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>content1</td>
-                <td>content2</td>
-                <td>content3</td>
-                <td>content4</td>
-                <td>content5</td>
-              </tr>
-            </tbody>
-          </table>
+          <div ng-controller="userProgressController" class="userProgress">
+
+            <table class="table table-striped ">
+              <thead>
+                <th>#</th>
+                <th>ID</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Status</th>
+                <th>Control</th>
+                <th>Progress</th>
+              </thead>
+              <tbody class="userProgress">
+                <tr ng-repeat="(key,user) in participants" ng-class="rowClass(user)"> 
+                  <td>[([key])]</td>
+                  <td>[([user.userId])]</td>
+                  <td>[([user.timestamp | date:'M/d/yyyy'])]</td>
+                  <td><span ng-if="user.mode != 'done'" am-time-ago="user.hoursTilDone"></span></td>
+                  <td><span class="label label-danger ">[([user.mode])]</span></td>
+                  <td ng-if="user.inControlGroup == true">
+                    <span class="label label-warning">Control</span>
+                  </td>
+                  <td ng-if="user.inControlGroup == false">
+                    <span class="label label-info">Training</span>
+                  </td>
+                  <td class="progressCell">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="[([user.percentageDone])]" aria-valuemin="0" aria-valuemax="100" style="width: [([user.percentageDone])]%">
+                        <span>[([user.percentageDone])]% </span>
+                      </div>
+                  </div>
+
+                  </td>
+                </tr>
+              </tbody>
+              
+            </table>
+
+          </div>
         </div>
+      </div>
+
+
+      <!--Data-->
+      <div class="row">
         
       </div>
     </div>

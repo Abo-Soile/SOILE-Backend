@@ -647,8 +647,39 @@ testeditor styles
 #trainingView ul {
   list-style-type: none; }
 
-#trainingView .userProgress li {
-  background-color: gray; }
+#trainingView .table-striped > tbody > tr:nth-child(odd) > td {
+  background-color: rgba(220, 215, 215, 0.55); }
 
-#trainingView .userProgress span {
-  padding: 5px; }
+#trainingView .userProgress {
+  /*padding-left: 0px;*/ }
+  #trainingView .userProgress .completed {
+    background-color: rgba(49, 161, 49, 0.35); }
+  #trainingView .userProgress table > div:first-child {
+    margin-top: 10px;
+    margin-bottom: 5px; }
+  #trainingView .userProgress table .progressCell {
+    width: 25%; }
+  #trainingView .userProgress table .progress {
+    height: 13px;
+    overflow: visible;
+    margin-right: 20px;
+    background-color: #DADADA;
+    margin-top: 4px;
+    margin-bottom: 0px; }
+  #trainingView .userProgress table .progress-bar {
+    height: 13px;
+    text-align: right;
+    border-radius: 4px;
+    position: relative; }
+    #trainingView .userProgress table .progress-bar span {
+      background-color: #575662;
+      color: white;
+      font-size: 12px;
+      border-radius: 2px;
+      font-weight: bold;
+      padding: 1px;
+      text-align: center;
+      position: absolute;
+      margin-top: -9px;
+      right: -13px;
+      top: 25%; }

@@ -539,9 +539,11 @@ router.get("/training/:id/useroverview", function(request) {
     trainingDataDAO.list({type:"general"}, function(data) {
 
       var response = {
-        training:training.toJson,
-        participants:data.map(function(obj){return obj.toJson();})
+        training:training.toJson(),
+        participants:(data.map(function(obj){return obj.toJson();}))
       };
+
+      console.log(JSON.stringify(response.participants))
 
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(response));
