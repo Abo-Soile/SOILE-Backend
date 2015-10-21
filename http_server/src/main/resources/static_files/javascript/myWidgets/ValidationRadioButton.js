@@ -98,7 +98,6 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/on", "dijit/Tooltip",
       },
 
       displayTooltip: function() {
-        console.log("Displaying tootop")
         var message = "This question is required";
         var node = this.domNode;
         if (this.state == "valid") {

@@ -311,8 +311,8 @@ SOILE2 = (function(){
       ' <div class="progress-bar animatedChild" style="animation:countdown '+time+'ms linear" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">',
       '   <span class="sr-only">Complete</span>',
       ' </div>',
-      '</div>',
-    ].join('\n')
+      '</div>'
+    ].join('\n');
 
     var jBar = jQuery(bar);
     jBar.css("width",(width + "px"));
@@ -322,7 +322,7 @@ SOILE2 = (function(){
 
     soile2.rt.dyn.add(id);
     return id;
-  }
+  };
 
   bin.not = function(arg){
     var args = Array.prototype.slice.call(arguments);
@@ -456,12 +456,11 @@ SOILE2 = (function(){
     var id = soile2.util.getid(mId);
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
-        console.log("Animating")
         jQuery(id).removeClass("pauseAnimation");
         jQuery(id).children().removeClass("pauseAnimation");
       }
     }
-  }
+  };
   
   bin.imagefile = function(url){
     var id = soile2.rt.uniqueid();
