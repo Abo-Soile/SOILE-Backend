@@ -21,9 +21,11 @@
 <!--     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css"> -->
 <!--     <link rel="stylesheet" type="text/css" href="/css/flat-ui.css"> -->
     <script src="https://cdn.ravenjs.com/1.1.22/jquery,native/raven.min.js"></script>
+    <script type="text/javascript">
+      Raven.config('https://02e33d5636ef4973b53cd96eb8121747@app.getsentry.com/55681').install();
+    </script>
 
     <script type="text/javascript">
-      Raven.config('https://02e33d5636ef4973b53cd96eb8121747@app.getsentry.com/55681').install()
       var dojoConfig = {
         baseUrl: "/javascript/",
         packages: [

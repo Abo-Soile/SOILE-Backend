@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">    
 
+    <script src="https://cdn.ravenjs.com/1.1.22/jquery,native/raven.min.js"></script>
+    <script type="text/javascript">
+      Raven.config('https://02e33d5636ef4973b53cd96eb8121747@app.getsentry.com/55681').install();
+    </script>
+
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
@@ -36,9 +41,9 @@
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
 
 
-    </head>
+  </head>
 
-    <body>
+  <body>
     <nav class="navbar navbar-default" role="navigation">
       <div class="container">
         <a class="navbar-brand" href="/">Soile</a>
