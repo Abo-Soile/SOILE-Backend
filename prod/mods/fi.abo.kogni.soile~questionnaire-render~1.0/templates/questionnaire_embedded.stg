@@ -128,12 +128,13 @@ $endif$
 <input  data-dojo-type="dijit/form/NumberSpinner"
         id="$id$" name="someNumber"
         $if(optional)$
-        value=""
         required="false"
         $else$
         required="true"
         $endif$
+        $if(value)$
         value="$value$"
+        $endif$
         style="width: $width$em;"
         data-dojo-props="smallDelta:$increment$, 
                          constraints:{min:$minimum$, max:$maximum$}"

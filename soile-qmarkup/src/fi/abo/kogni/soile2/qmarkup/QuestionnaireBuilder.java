@@ -243,7 +243,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 if(startValue != 0) {
                     tmpl.add("value", startValue);
                 } else {
-                    tmpl.add("value", "");
+                    tmpl.add("value", false);
                 }
                 tmpl.add("optional", optional);
                 addTag(tmpl.render());
