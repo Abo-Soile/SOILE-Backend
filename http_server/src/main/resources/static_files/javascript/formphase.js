@@ -47,7 +47,7 @@ require(["dijit/form/HorizontalSlider",
            ready) {
 
   ready(function() {
-    //parser.parse();
+    parser.parse();
 
     //Disable mousewheel events on spinners to prevent the user from
     //editing an answer when scrolling
