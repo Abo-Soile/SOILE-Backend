@@ -1,6 +1,14 @@
 var app = angular.module('testEditor', ['ui.ace', 'angularFileUpload', 'xeditable'])
 
 
+var disp = document.getElementById("display");
+
+window.onkeydown = function(e) {
+  if (e.keyCode == 32 && e.target == document.body||e.target == disp) {
+    e.preventDefault();
+  }
+};
+
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });

@@ -15,8 +15,14 @@ function(
     window.Levenshtein = levenshtein;
     //Preventing scroll on arrowkeys 37-40 and navigation on backspace 8
     document.addEventListener("keydown", function (e) {
-      if([37,38,39,40,8].indexOf(e.keyCode) > -1){
+      if([37,38,39,40,8,32].indexOf(e.keyCode) > -1){
+        //console.log(e);
+        if(e.target.tagName == "INPUT" || e.target.type == "text") {
+          return
+        } 
+        
         e.preventDefault();
+
         // Do whatever else you want with the keydown event (i.e. your navigation).
       }
     }, false);
