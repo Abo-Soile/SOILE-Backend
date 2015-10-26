@@ -456,6 +456,7 @@ SOILE2 = (function(){
     var id = soile2.util.getid(mId);
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
+        console.log("Animating")
         jQuery(id).removeClass("pauseAnimation");
         jQuery(id).children().removeClass("pauseAnimation");
       }
@@ -1006,6 +1007,7 @@ SOILE2 = (function(){
   
   rt.kbd = (function(){
     var name2keycode = soile2.rt.freeze({
+      "space":     32,
       "backspace": 8,
       "tab":       9,
       "enter":     13,
@@ -1063,6 +1065,7 @@ SOILE2 = (function(){
     });
     
     var keycode2name = soile2.rt.freeze({
+      32: "sapce",
       37: "left",
       38: "up",
       39: "right",
