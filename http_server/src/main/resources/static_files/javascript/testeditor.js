@@ -3,11 +3,6 @@ var app = angular.module('testEditor', ['ui.ace', 'angularFileUpload', 'xeditabl
 
 var disp = document.getElementById("display");
 
-window.onkeydown = function(e) {
-  if (e.keyCode == 32 && e.target == document.body||e.target == disp) {
-    e.preventDefault();
-  }
-};
 
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
@@ -85,6 +80,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   $scope.runbutton = "Run";
   $scope.compiled = false;
 
+  $scope.running = false;
+
   ace.config.set("modePath", "/javascript");
 
 	$scope.aceLoaded = function(_editor) {
@@ -133,6 +130,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       console.log(data);
 
       $scope.runbutton = "Run";
+      $scope.running = false;
 
 
     /*   This part pretty much generate a bucket for all distinct fields
@@ -184,6 +182,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   $scope.runTest = function() {
     $scope.runbutton = "Running";
+    $scope.running = true;
 
     $scope.soileLog = [];
 		$scope.testStartTime = Date.now();
@@ -211,6 +210,24 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       }
     }
   });
+
+  /* Preventing scoll on arrowkeys and space if test is running and the mouse
+     is hovering above the test display */
+  document.addEventListener("keydown", function (e) {
+
+    if(!$scope.running) {
+      return
+    }
+
+    if([37,38,39,40,32].indexOf(e.keyCode) > -1 && e.target.tagName == "INPUT") {
+      return
+    }
+
+    if([37,38,39,40,32].indexOf(e.keyCode) > -1 && mouseTestHover){
+      e.preventDefault();
+    }
+
+  }, false);
 });
 
 app.controller('editNameController', function($scope, $http, $location) {
@@ -230,6 +247,7 @@ app.controller('editNameController', function($scope, $http, $location) {
 
 //Showing mouse coordinates when hovering over the test display
 var mousePos = document.getElementById("mouseposition");
+var mouseTestHover = false
 
 var mouseMove = function (e){
   var displayRect = display.getBoundingClientRect();
@@ -237,10 +255,12 @@ var mouseMove = function (e){
   var y = e.clientY - displayRect.bottom + displayRect.height;
   var cursor = "Mouse Position: Top " + y.toFixed(0) + " Left: " + x.toFixed(0) ;
   mousePos.innerHTML = cursor;
+  mouseTestHover = true;
 };
 
 function stopTracking(){
     mousePos.innerHTML="";
+    mouseTestHover = false;
 }
 
 var display = document.getElementById("display");
@@ -249,10 +269,4 @@ var displayRect = display.getBoundingClientRect();
 display.onmousemove = mouseMove;
 display.onmouseout = stopTracking;
 
-
-document.addEventListener("keydown", function (e) {
-  if([37/*,38,39*/,40].indexOf(e.keyCode) > -1){
-    e.preventDefault();
-    // Do whatever else you want with the keydown event (i.e. your navigation).
-  }
-}, false);
+/*Prevent navigation in some cases*/
