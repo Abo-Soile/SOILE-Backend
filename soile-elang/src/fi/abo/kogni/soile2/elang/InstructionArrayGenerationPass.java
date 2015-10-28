@@ -462,6 +462,11 @@ public class InstructionArrayGenerationPass extends ProcessorVisitorPass<Integer
     
     private String hostingObject(String name) throws NullPointerException {
         Symbol s = symbolTable().lookup(name);
+
+        if (s == null) {
+            throw new NullPointerException("Variable " + name + " is not defined");
+        }
+
         if (s.varType == SymbolType.GVAR) {
             return template("abspathGvars").render();
         }

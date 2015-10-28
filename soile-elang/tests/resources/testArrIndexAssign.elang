@@ -1,0 +1,19 @@
+gvar a <- ["aa" "bb"]
+gvar n <- 1
+intermezzo-phase p
+
+  n <- 2
+  a[0] <- "cc"
+end
+
+intermezzo-phase g
+  #so <- 56
+  helptext(a[0][0])
+  helptext(a.a.a)
+end
+
+transition
+  start(p),
+  p -> g,
+  final(g)
+end

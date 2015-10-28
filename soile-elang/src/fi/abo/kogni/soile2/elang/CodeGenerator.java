@@ -99,8 +99,10 @@ public class CodeGenerator {
             this.errorMessages.append(e.getMessage());
         } catch (IOException e) {
             this.errorMessages.append("Problem opening the template file.");
-        } catch (NullPointerException e) {
+        }
+        catch (NullPointerException e) {
             this.errorMessages.append("Undefined error, make sure that variables are defined correctly before assignments.");
+            this.errorMessages.append(e.getMessage());
         }
     }
     
