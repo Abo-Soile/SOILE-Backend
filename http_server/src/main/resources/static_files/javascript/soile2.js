@@ -420,6 +420,16 @@ SOILE2 = (function(){
     }
     return false;
   };
+
+  bin.gte = function(x, y){
+    if (_.isNumber(x) && _.isNumber(y)){
+      return (x >= y);
+    }
+    else {
+      return x >= y;
+    }
+    return false;
+  };
   
   bin.greaterthan = bin.gt;
 
@@ -569,6 +579,16 @@ SOILE2 = (function(){
   };
   
   bin.lessthan = bin.lt;
+
+  bin.lte = function(x, y){
+    if (_.isNumber(x) && _.isNumber(y)){
+      return (x <= y);
+    }
+    else {
+      return x <= y;
+    }
+    return false;
+  };
 
   bin.minus = function(){
     //var nums = _.filter(_.toArray(arguments), _.isNumber);

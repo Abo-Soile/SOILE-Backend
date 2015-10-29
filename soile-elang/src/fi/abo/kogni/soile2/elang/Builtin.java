@@ -46,6 +46,7 @@ public class Builtin {
 
         builtinFunctions.add("greaterthan");
         builtinFunctions.add("gt");
+        builtinFunctions.add("gte");
         builtinFunctions.add("helptext");
         builtinFunctions.add("hide");
         builtinFunctions.add("hidemsg");
@@ -56,6 +57,8 @@ public class Builtin {
         builtinFunctions.add("length");
         builtinFunctions.add("lessthan");
         builtinFunctions.add("lt");
+        builtinFunctions.add("lte");
+
         builtinFunctions.add("minus");
         builtinFunctions.add("minutes");
         builtinFunctions.add("multiply");
