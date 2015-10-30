@@ -476,6 +476,7 @@ SOILE2 = (function(){
         //Removing and reapplying animation to make it repeatable
         jQuery(id).addClass("noAnimation");
         jQuery(id).children("*").addClass("noAnimation");
+  
 
         setTimeout(function() {
 
@@ -484,7 +485,7 @@ SOILE2 = (function(){
 
           jQuery(id).removeClass("pauseAnimation");
           jQuery(id).children().removeClass("pauseAnimation");
-        }, 1);
+        }, 5);
       }
     }
   };
