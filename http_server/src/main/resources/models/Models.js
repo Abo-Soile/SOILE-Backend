@@ -96,18 +96,27 @@ Experiment.prototype.isRandom = function() {
     return;
   } 
 
+  var randomCount = 0;
+
   for (var i = 0; i < this.components.length; i++) {
     if(this.components[i].random) {
       longestRandom +=1;
       if (longestRandom > 1) {
         this.israndom = true;
         return;
-      }  
+      }
+      randomCount += 1;
     }
     else {
       longestRandom = 0;
     } 
   }
+
+  if(randomCount > 1) {
+    this.israndom = true;
+    return
+  }
+
   this.israndom = false;
   return;
 };
