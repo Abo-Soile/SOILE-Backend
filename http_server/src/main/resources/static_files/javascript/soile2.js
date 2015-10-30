@@ -435,9 +435,12 @@ SOILE2 = (function(){
 
   bin.hide = function(id){
     id = soile2.util.getid(id);
-    jQuery(id).addClass("hiddenelem");
-    jQuery(id).css("animation", "none");
-    jQuery(id).children("*").css("animation", "none");
+    //jQuery(id).addClass("hiddenelem");
+    jQuery(id).addClass("invisibleElement")
+    
+    //jQuery(id).addClass("invisibleElement");
+    //jQuery(id).css("animation", "none");
+    //jQuery(id).children("*").css("animation", "none");
   };
   
   bin.show = function(mId){
@@ -455,6 +458,7 @@ SOILE2 = (function(){
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
         jQuery(id).removeClass("hiddenelem");
+        jQuery(id).removeClass("invisibleElement");
 
         if (typeof pos !== 'undefined'){
           soile2.bin.position(id, pos);

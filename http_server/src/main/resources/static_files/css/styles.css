@@ -487,6 +487,9 @@ body {
   left: 3px; }
 
 /*Image uploading and handling*/
+.invisibleElement {
+  visibility: hidden; }
+
 @keyframes countdown {
   0% {
     width: 100%; }
