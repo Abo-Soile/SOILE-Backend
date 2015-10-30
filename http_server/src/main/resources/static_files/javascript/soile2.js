@@ -436,6 +436,8 @@ SOILE2 = (function(){
   bin.hide = function(id){
     id = soile2.util.getid(id);
     jQuery(id).addClass("hiddenelem");
+    jQuery(id).css("animation", "none");
+    jQuery(id).children("*").css("animation", "none");
   };
   
   bin.show = function(mId){
@@ -466,9 +468,19 @@ SOILE2 = (function(){
     var id = soile2.util.getid(mId);
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
-        console.log("Animating")
-        jQuery(id).removeClass("pauseAnimation");
-        jQuery(id).children().removeClass("pauseAnimation");
+
+        //Removing and reapplying animation to make it repeatable
+        jQuery(id).addClass("noAnimation");
+        jQuery(id).children("*").addClass("noAnimation");
+
+        setTimeout(function() {
+
+          jQuery(id).removeClass("noAnimation");
+          jQuery(id).children("*").removeClass("noAnimation");
+
+          jQuery(id).removeClass("pauseAnimation");
+          jQuery(id).children().removeClass("pauseAnimation");
+        }, 1);
       }
     }
   };

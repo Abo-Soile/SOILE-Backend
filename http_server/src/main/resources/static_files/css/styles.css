@@ -496,6 +496,9 @@ body {
 .animatedChild {
   animation-play-state: inherit !important; }
 
+.noAnimation {
+  animation: none !important; }
+
 .pauseAnimation {
   animation-play-state: paused !important;
   -webkit-animation-play-state: paused !important; }

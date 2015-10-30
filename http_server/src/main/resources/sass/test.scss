@@ -15,6 +15,10 @@
   animation-play-state:inherit !important;
 }
 
+.noAnimation {
+  animation: none !important;
+}
+
 
 .pauseAnimation {
   animation-play-state: paused !important;
