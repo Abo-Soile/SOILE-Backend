@@ -31,7 +31,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/on", "dijit/Tooltip",
         var d = this.displayTooltip;
 
         on(this.domNode, "mouseenter", function(e) {
-          console.log(e)
+          //console.log(e)
           that.displayTooltip();
         });
 
