@@ -629,8 +629,9 @@ router.get('/experiment/:id/data', requireAdmin(function(request) {
           } else {
             headerName = j.replace(semiColRegEx,"_") + phaseName;
           }
-
-          userData[item.userid][headerName] = (item.data[j].toString().replace(semiColRegEx,"_"));
+          if(typeof item.data[j] !== 'undefined') {
+            userData[item.userid][headerName] = (item.data[j].toString().replace(semiColRegEx,"_"));
+          }
           headerSet[headerName] = "";
        // }
       }
