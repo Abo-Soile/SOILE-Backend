@@ -1,7 +1,7 @@
 ﻿{
   "name": "soile_httpserver",
   "version": "1.0.0",
-  "description": "Template project for creating a Vert.x module with a Gradle build.",
+  "description": "Contains dev dependencies for the whole vertx/js project",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,5 +22,7 @@
     "karma-coverage":"~0.5.2"
     },
   "author": "Daniel Wärnå",
-  "license": "ISC"
+  "license": "ISC",
+  "private":true,
+  "postinstall": "gulp install"
 }

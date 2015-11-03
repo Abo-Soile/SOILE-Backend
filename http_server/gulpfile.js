@@ -4,7 +4,9 @@ var gulp = require("gulp"),//http://gulpjs.com/
   sass = require("gulp-sass"),//https://www.npmjs.org/package/gulp-sass
   rename = require('gulp-rename'),//https://www.npmjs.org/package/gulp-rename
   log = util.log,
-  concat = require('gulp-concat');
+  concat = require('gulp-concat'),
+  install = require("gulp-install");
+
 
 var sassFiles = "src/main/resources/sass/*.scss";
 var cssDest = "src/main/resources/static_files/css";
@@ -16,6 +18,11 @@ var Server = require('karma').Server;
  
 gulp.task('default', ["sass"],function() {
   // place code for your default task here
+});
+
+gulp.task("install", function() {
+  gulp.src(['./bower.json', './src/main/resources/package.json'])
+  .pipe(install());
 });
 
 gulp.task("sass", function(){ 
