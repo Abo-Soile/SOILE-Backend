@@ -629,8 +629,8 @@ router.get('/experiment/:id/data', requireAdmin(function(request) {
           } else {
             headerName = j.replace(semiColRegEx,"_") + phaseName;
           }
-          if(typeof item.data[j] !== 'undefined' ||
-             typeof item.data[j] !== 'null') {
+          if(typeof item.data[j] !== 'undefined' &&
+             item.data[j] !== null) {
             userData[item.userid][headerName] = (item.data[j].toString().replace(semiColRegEx,"_"));
           }
           headerSet[headerName] = "";
