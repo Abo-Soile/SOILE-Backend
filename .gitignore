@@ -12,6 +12,12 @@ generated/
 *soile-verticle/jar
 *soile-qmarkup/jar
 
+#Maven
+soile-elang/target/*
+soile-utils/target/*
+soile-verticle/target/*
+soile-qmarkup/target/*
+
 *prod/mods/fi.abo.kogni.soile~http-server~1.0/static_files/testimages
 
 prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-elang.jar

@@ -1,7 +1,0 @@
-/if gaaa
-This test will fail
-
-/else
-Fail
-
-/endif

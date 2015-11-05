@@ -1,9 +1,0 @@
-
-/numberfield {
-    dbcolumn: "aivopelit",
-    label: "",
-    value: 0,
-    minimum: 0,
-    maximum: 100,
-    increment: 1
-}
