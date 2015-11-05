@@ -164,7 +164,7 @@ public class StmtRenderPass extends ProcessorListenerPass {
         if (ctx.getParent() instanceof StmtContext) {
             getNodeData(ctx.getParent()).jsstmt = code;
         }
-        System.out.println("Addstmtcode lineno: " + Integer.toString(ctx.getStart().getLine()));
+        //System.out.println("Addstmtcode lineno: " + Integer.toString(ctx.getStart().getLine()));
         BlockContext block = blockStack.getFirst();
         gc4b.get(block).append(code);
     }
