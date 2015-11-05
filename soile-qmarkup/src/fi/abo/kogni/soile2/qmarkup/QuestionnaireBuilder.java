@@ -669,11 +669,12 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
     private String createColumnName(String qid, String col) {
         col = col.replace(".", "").replace("\n", "");
         int len = qid.length() + col.length() + 1;
-        StringBuilder sb = new StringBuilder(len);
+        return col;
+        /*StringBuilder sb = new StringBuilder(len);
         sb.append(qid);
-        sb.append(':');
+        //sb.append(':');
         sb.append(col);
-        return sb.toString();
+        return sb.toString();*/
     }
     
     private void validationCode(Qdata data) {

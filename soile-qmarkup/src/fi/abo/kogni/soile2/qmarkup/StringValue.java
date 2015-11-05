@@ -31,7 +31,8 @@ public class StringValue extends ScalarValue {
 
     @Override
     public String toString() {
-        return this.value;
+        //return this.value;
+        return this.value.replace("'", "&#39;");
     }
     
     private String value;
