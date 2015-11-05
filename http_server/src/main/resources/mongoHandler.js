@@ -398,7 +398,7 @@ var Experiment = {
     doc.score = score;
 
     var timeStamp = new Date();
-    doc.timeStamp = timeStamp.toISOString();
+    doc.timestamp = timeStamp.toISOString();
 
     function save(document){
 

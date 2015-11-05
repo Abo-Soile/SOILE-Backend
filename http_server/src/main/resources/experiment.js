@@ -13,6 +13,7 @@ var experimentDAO = require("models/DAObjects").ExperimentDAO;
 var dataDAO = require("models/DAObjects").DataDAO;
 
 var formModel = require("models/Models").Form;
+var dataModel = require("models/Models").Data;
 
 var formDAO = require("models/DAObjects").FormDAO;
 var testDAO = require("models/DAObjects").TestDAO;
@@ -206,6 +207,57 @@ router.get('/experiment/:id/phase/:phase', function(request) {
         }
       });
     }
+  });
+});
+
+
+/*
+/ Saves data from a certain phase, while also checking that the phase hasn't been 
+/
+*/
+router.post('/experiment/:id/phase/:phase', function(request) {
+  var expID = request.params().get('id');
+  var phase = request.params().get('phase');
+
+  var userID = request.session.getPersonToken();
+  if(request.session.loggedIn()) {
+    userID = request.session.loggedIn().id;
+  }
+
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+    var postData = data.getString(0, data.length());
+    var postJson = JSON.parse(postData);
+
+    var expData = postJson.exp;
+    var duration = postJson.duration;
+    var score = postJson.score;
+
+    var clientStartTime = postJson.clienttime;
+    var timezone = postJson.timezone;
+
+    var dataObj = new dataModel();
+
+    dataObj.phase = parseInt(phase);
+    dataObj.expId = expID;
+    dataObj.userid = userID;
+    dataObj.duration = duration;
+    dataObj.score = score;
+
+    dataObj.clientstarttime = clientStartTime;
+    dataObj.timezone = timezone;
+
+    dataObj.data = expData;
+
+    experimentDAO.completePhase(dataObj, expID,function(r){
+      //console.log(JSON.stringify(r));
+      request.response.end(200);
+    });
   });
 });
 

@@ -65,6 +65,56 @@ ExperimentDAO.prototype.countParticipants = function(expId, callback) {
     });
 };
 
+/*
+    Completes a phase in the current experiment and saves experiment data.
+*/
+ExperimentDAO.prototype.completePhase = function(dataObject, experimentId, callback) {
+    var that = this;
+    var dataDAO = new DataDAO();
+
+    var dataObject = dataObject;
+    var experimentId = experimentId;
+
+    //Save object and increment general current position
+    function save(dataObj) {
+        dataObj.save(function() {
+            var command = {
+                "action":"update", 
+                "criteria":{
+                    "expId":dataObject.expId,
+                    "userid":dataObject.userid,
+                    "type":"general"
+                  },
+                objNew : {
+                    $inc: {
+                        position:1
+                    } 
+                }
+            };
+
+            dataDAO.sendToMongo(command, function() {
+                callback();
+            });
+        });
+    }
+
+    that.get(experimentId, function(experiment) {
+        dataDAO.getGeneral(dataObject.userid, experiment, function(userdata) {
+            var location = dataObject.phase;
+            dataObject.type = experiment.getPhaseType(location, userdata.randomorder);
+            dataObject.phase = experiment.getPhase(location, userdata.randomorder);
+
+            if (experiment.shouldProceedWithSave(userdata, location)) {
+                save(dataObject);
+            } else {
+                //console.log("Skipping save");
+                callback();
+            }
+        });
+    });
+};
+
+
 function FormDAO() {
     BaseDAO.call(this);
     this._baseObject = models.Form;
@@ -83,6 +133,24 @@ function DataDAO() {
 
 DataDAO.prototype = new BaseDAO();
 DataDAO.prototype.constructor = DataDAO;
+
+
+/*
+ * Fetches general data from the user
+ * @param userid {string}
+ * @param exp {string}
+ * @param callback {function}
+ */
+DataDAO.prototype.getGeneral = function(userid, exp, callback) {
+    var that = this;
+
+   // console.log("Getting general " + userid + " " + exp._id);
+
+    that.get({userid:userid, type:"general", expId:exp._id}, 
+      function(data, message) {
+        callback(data);
+    });
+};
 
 DataDAO.prototype.getOrGenerateGeneral = function(userid, exp, request, callback) {
   var that = this;
@@ -118,7 +186,6 @@ DataDAO.prototype.getOrGenerateGeneral = function(userid, exp, request, callback
     }
   });
 };
-
 
 function TrainingDAO() {
     BaseDAO.call(this);

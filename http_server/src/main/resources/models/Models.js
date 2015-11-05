@@ -129,6 +129,32 @@ Experiment.prototype.addComponent = function(id, type, name) {
   this.components.push(comp);
 };
 
+
+Experiment.prototype.getPhaseType = function(phaseNo, randomOrder) {
+  var type = this.components[this.getPhase(phaseNo, randomOrder)].type;
+  return type;
+};
+
+
+Experiment.prototype.getPhase = function(phaseNo, randomOrder) {
+  if (this.israndom) {
+    //console.log("IS RANDOM, converting " + phaseNo + "  -> " + randomOrder[phaseNo]);
+    return randomOrder[phaseNo];
+  }
+  return phaseNo;
+};
+
+Experiment.prototype.shouldProceedWithSave = function(generalData, location) {
+  var lastSavedPhase = parseInt(generalData.position);
+
+  if (lastSavedPhase === location) {
+    return true;
+  } else{
+    return false;
+  }
+
+};
+
 Experiment.prototype.removeComponent = function(index) {
   this.components.splice(index, 1);
 };

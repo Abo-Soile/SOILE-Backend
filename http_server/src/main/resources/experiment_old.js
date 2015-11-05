@@ -500,7 +500,7 @@ router.get('/experiment/:id/phase/:phase/json', function(request) {
 
 
 //Records data from a certain phase,
-router.post('/experiment/:id/phase/:phase', function(request) {
+router.post('/old_experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phase = request.params().get('phase');
 
@@ -596,6 +596,7 @@ router.get('/experiment/:id/data', requireAdmin(function(request) {
     var headerSet = {};
 
     //finding max phase an
+//    console.log(JSON.stringify(data));
     for(var i in data) {
       var item = data[i];
       phase = parseInt(item.phase);
