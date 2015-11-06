@@ -2,6 +2,8 @@
 Function Reference
 ==================
 
+.. default-domain:: js
+
 Elang comes with a set of built in functions for performing common tasks. These functions are pretty much necessary when building tests so it's usefull to be familiar with them. 
 
 #######
@@ -10,17 +12,25 @@ Stimuli
 
 Stimuli is a special list that controls the interaction phase. The iteration in an interaction phase is run once for each element in the stimuli list. 
 
-**setstimuli(list)**
-Sets the stimuli to the given list. Overwrites previously defined stimuli.
+.. js:function:: setstimuli(list)
+    
+    Sets the stimuli to the given list. Overwrites previously defined stimuli.
 
-**shufflestimuli()**
-Randomly shuffles the order of the stimuli.
+    :param array list: List of stimuli objects to set as the stimuli. 
 
-**shufflestimuli(stimulicount)**
-Creates a randomized subset of the stimuli containing the number specified in _stimulicount_.
+.. js:function:: shufflestimuli()
+    
+    Randomly shuffles the order of the stimuli.
 
-**emptystimuli()**
-Empties the stimuli list, and ends an interaction phase when the current iteration ends when called from inside an interaction phase.
+.. js:function:: shufflestimuli(stimulicount)
+
+    Creates a randomized subset of the stimuli containing the number specified in ``stimulicount``.
+
+    :param int stimulicount: The number of stimuli to select.
+
+.. js:function:: emptystimuli()
+    
+    Empties the stimuli list, and ends an interaction phase when the current iteration ends when called from inside an interaction phase.
 
 #######
 Display
@@ -28,14 +38,24 @@ Display
 
 Display positions are defined as the number of pixels from the top-left corner of the display. Positions are defined as a json object with two variables; top and left, .e.g. the position {top:50 left:100} is located 100 pixels to the right and 50 pixels below the topleft corner. 
 
-**show(displayobject position)**
-Displays an object at the specified position.
+.. js:function:: show(item position)
+    
+    Displays an object at the specified position.
 
-**show(displayobject "center")**
-Displays the object at the absolute center of the screen. 
+    :param displayobject item: The object that should be shown.
+    :param position position: Where to displat the object, as an object e.g. {top:100 left:200}
 
-**hide(displayobject)**
-Hides the specified object.
+.. js:function:: show(item "center")
+    
+    Displays the object at the absolute center of the screen.
+
+    :param displayobject item: The object that should be shown.
+
+.. js:function:: hide(item)
+    
+    Hides the specified object.
+
+    :param displayobject item: The object that should be hidden.
 
 
 DisplayObjects
@@ -43,85 +63,147 @@ DisplayObjects
 
 All displayobjects share the same functionality regarding showing and hiding them. And they must be defined and assigned to a variable before being used. 
 
-**msgbox(message, fontsize=20)**
-Displayobject for displaying text at any location. Fontsize is an optional argument and it defaults to 20
+.. js:function:: msgbox(message, fontsize=20)
 
-**imagefile(imageurl)**
-Object containing a image specified by the url, so images can either be uploaded to the testeditor or fetched from the internet. Note that images on the net can disappear or change at any time.  The image is displayed without any scaling so make sure that the image is the right size. 
+    Displayobject for displaying text at any location. Fontsize is an optional argument and it defaults to 20
+
+    :param string message: The text to display in the messagebox.
+    :param int fontsize: Fontsize, defaults to 20.
+    :returns: Displayobject
+
+.. js:function:: imagefile(imageurl) 
+
+    Object containing a image specified by the url, so images can either be uploaded to the testeditor or fetched from the internet. Note that images on the net can disappear or change at any time.  The image is displayed without any scaling so make sure that the image is the right size.
+
+    :param string imageurl: Absoulute or relative url to the image. 
+    :returns: Displayobject
+
 
 **rectangle(width height borderwidth=2)**
 Displays a rectangle with the given width height and borderwidth. Borderwidth is an optional argument and defaults to 2. 
 
+.. js:function:: rectangle(width height borderwidth=2)
+
+    Displays a rectangle with a white background and black border using the given width height and borderwidth.
+
+    :param int width: Width of the rectangle.
+    :param int height: Height if the rectangle.
+    :param int borderwidth: Defines the borderwidth in pixels.
+    :returns: Displayobject
+
+.. js:function:: countdownbar(width time)
+    
+    Displays a fully filled countdown bar with the specified width and time(ms).The countdown animation is started by calling animate(countdownbar)
+
+    :param int width: Width of the bar.
+    :param int time: Define how long it takse for the bar to reach the end in milliseconds.
+    :returns: Displayobject
+
 
 It's also possible to display simple text messages using showmsg(message) and hidemsg() without any further specifications. This just shows/hides a message at location {top:50 left:50}
 
-**showmsg(message)**
-Displays a message at the standard message location in the top right corner
+.. js:function:: showmsg(message)
 
-**hidemsg()**
-Hides the standard message.
+    Displays a message at the standard message location in the top right corner, using the standard size and a standard margin.
+
+    :param string message: The message to display.
+
+.. js:function:: hidemsg()
+
+    Hides the standard message.
 
 ###########
 Mouse input
 ###########
 
-**onmouseclick(imagefile, {action: function, inputid: number, resettimer: bool})**
+.. js:function:: onmouseclick(object {action:function inputid: number})**
 
-Creates a mouseclick listener for the object/image, which will be triggered when the image is clicked. The function specified in "action" is executed on each click. 
+    Creates a mouseclick listener for the object/image, which will be triggered when the image is clicked. The function specified in "action" is executed on each click. 
 
-**onmouseclick(imagefile, false)**
+    :param object displayobject: Displayobject that should respond to clicks.
+    :param function action: Function to call when a click is made. Can be either a builtin function or one defined in the test.
+    :param int inputid: Assign a number that will be passed to the function when the object is clicked.
 
-Removes all mouseclick functions bound to the specified object.
+    ::
+
+        function boxClick(id)
+            showmsg(append("Clicked box" id))
+        end
+
+        var box <- rectangle(50 50)
+        show(box "center")
+        onmouseclick(box, {action:boxClick inputid:55)
+        #Clicking the box show a messag containing -Clicked box 55-
+
+.. js:function:: onmouseclick(imagefile false)
+
+    Removes all mouseclick functions bound to the specified object.
+
+    :param object displayobject: Displayobject that should not respond to click any more.
 
 ##############
 Keyboard Input
 ##############
 
-**onkeypress(key, func)**
+.. function:: onkeypress(key, func)
 
-Binds the specified key to a function so that the function is run every time when the key is pressed.
+    Binds the specified key to a function so that the function is run every time when the key is pressed.
 
-**onkeypress(key)**
+    :param string key: Which keyboard key to use.
+    :param function func: Function to call when a click is made
 
-Removes all actionss bound to the specified key.
+    Example: the function leftclick is run each time when the left arrow is clicked on the keyboard.
 
-::
+    ::
 
-    function leftclick()
-        showmsg("left was clicked")
-    end
+        function leftclick()
+            showmsg("left was clicked")
+        end
 
-    onkeypress("left", leftclick)
-
-Example: the function leftclick is run each time when the left arrow is clicked on the keyboard.
-
-**onanykey(func ignore=[])**
-
-Runs the specified function on all keypresses.
-
-**onanykey(func ignore="")**
-
-Executes the specified function when any keyboeard key except keys specified ignore are pressed. Ignored keys should be sent as a list of individual keynames, for example ["a" "enter"] ignores the keys **a** and **enter**, see the keycode table for the correct key names. 
+        onkeypress("left", leftclick)
 
 
-Ignore can also accept a special command "onlyletters" which ignores everything but a-z.
-    onanykey(resume() "onlyletters").
+.. function:: onkeypress(key)
 
-**onanykey()**
+    Removes all actionss bound to the specified key.
 
-Removes all actions bound with __onanykey__
+    :param string key: Which keyboard key to use.
 
-**resumeonkey(keycode)**
 
-Runs resume() once when the specified key is clicked. 
 
-**resumeonkey()**
+.. function:: onanykey(func ignore=[])
 
-Runs resume() on any keypress once. 
+    Executes the specified function when any keyboeard key except keys specified ignore are pressed. Ignored keys should be sent as a list of individual keynames, for example ["a" "enter"] ignores the keys **a** and **enter**, see the keycode table for the correct key names. 
 
-**getlastkey()**
+    :param function func: Which function to call.
+    :param list ignore: A list of keys to ignore
+    :param string ignore: A specific ignore command
 
-Returns the most recent keypress as a string.
+    Supported ignore commands:
+
+    * "onlyletters"  - ignores everything but a-z.
+
+
+.. function:: onanykey()
+
+    Removes all actions bound with :js:func:`onanykey`
+
+.. function:: resumeonkey(keycode)
+    
+    Runs resume() once when the specified key is pressed. 
+
+    :param string keycode: Key to resume on 
+
+
+.. function:: resumeonkey()
+
+    Runs resume() on any keypress once. 
+
+    :returns:  keycode
+
+.. function:: getlastkey()
+
+    Returns the most recent keypress, as long as there an active :js:func:`onkeypress` , :js:func:`onanykey` or :js:func:`resumeonkey`.
 
 KeyCodes
 ========
@@ -171,20 +253,77 @@ Arithmetic
 
 Basic arithmetic operations that takes on two or more numbers as arguments, so plus(5 5 5 5) is equivalent with 5 + 5 + 5 + 5. Note that the inner function is evaluated before the outer one when performing mulitple nested operations so **multiply(2 plus(5 5)) = 2 * (5+5)** while **plus(2 multiply(5 5)) = 2 + (5*5)**.
 
-**plus(number1 number2)** = number1 + number2
+.. function:: plus(number1 number2 numbers*)
+    
+    Adds together all the given numbers number1 + number2 + ... numberX
 
-**minus(number1 number2)** = number1 - number2
+    :param number number1: Number1
+    :param number number2: Number2 
+    :param number numbers: Number3, and so on...
 
-**multiply(number1 number2)** = number1 * number2
+    :returns: Result
+    :rtype: number
 
-**divide(number1 number2)** = number1 / number2
+.. function:: minus(number1 number2)
+    
+    Calculates number1 - number2
 
-**modulo(number1 number2)** = number1 % number2 
-Calculates the remainder when dividing number1 with number2 (number1/number2)
+    :param number number1: Number to subtract from
+    :param number number2: Number to subtract
 
-**round(number)** Rounds the number to the nearest whole number
+    :returns: integer Result
+    :rtype: number
 
-**round(number mode)** Round a number down when mode = "floor" and up when mode = "ceil"
+.. function:: multiply(number1 number2 numbers*) 
+
+    Calculates number1 * number2 ... numberX
+
+    :param number number1: Number1
+    :param number number2: Number2 
+    :param number numbers: Number3, and so on...
+
+    :returns: Result
+    :rtype: number
+
+.. function:: divide(number1 number2)
+
+    Calculates number1 / number2
+
+    :returns: Number
+    :rtype: number
+
+.. function:: modulo(number1 number2) = number1 % number2 
+    
+    Calculates the remainder when dividing number1 with number2 (number1/number2)
+
+    :param number number1: First number
+    :param number number2: Second number
+
+    ::
+
+        var a <- modulo(5 9)  # a = 4
+        var b <- module(8 64) # b = 0
+        var c <- module(8 45) # c = 4
+
+    :returns: result
+    :rtype: number
+
+.. function:: round(number) 
+
+    Rounds the number to the nearest whole number
+
+    :param number number: Number to round
+
+    :returns: Number
+
+.. function:: round(number mode) 
+
+    Round a number down when mode = "floor" and up when mode = "ceil"
+
+    :param number number: Number to round
+    :param string mode: "floor" to round down or "ceil" to round up 
+
+    :returns: Number
 
 #####
 Logic
@@ -206,7 +345,7 @@ Basic logic functions that return a boolean value(true or false)
 
 #########################
 Lists/String Manipulation
-##########################
+#########################
 
 **append(string1 string2)**
 
@@ -355,6 +494,7 @@ You can also provid your own standarddeviation and average for example when comp
 
 +-----------+------------+------------+--------+--------------+
 | countrows | countExtra | countHello | average| Single Value |
-+===========+============+============+====-===+=====---======+
++===========+============+============+========+==============+
 |     3     |     1      |      2     |   8    |   1234567    |
 +-----------+------------+------------+--------+--------------+
+
