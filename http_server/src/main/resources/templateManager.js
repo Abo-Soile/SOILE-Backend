@@ -2,6 +2,18 @@ var vertx = require('vertx');
 var console = require('vertx/console');
 var container = require('vertx/container');
 
+var config = container.config;
+
+var port = config.port;
+var host = config.host;
+var externalPort = config.externalport;
+
+function swapUrlPort(url, newPort) {
+  var uriRegex = /([a-zA-Z+.\-]+):\/\/([^\/]+):([0-9]+)\//;
+
+  return url.replace(uriRegex, "$1://$2:"+externalPort+"/");
+}
+
 var templateManager = (function() {
   var templates = [];
   var isLoaded = false;
@@ -44,6 +56,9 @@ var templateManager = (function() {
     'render_template': function(templateName, data, request) {
 
       data.URI = String(request.absoluteURI());
+
+      data.URI = swapUrlPort(data.URI, externalPort);
+
       //data.URI = String(request.path());
       data.token = request.session.getPersonToken();
       if(request.session.loggedIn()) {
