@@ -195,6 +195,7 @@ TEST
 */
 function Test(arg) {
     this.published = false;
+    this.name = "Unnamed"
 
     BaseModel.call(this, arg);
 
@@ -206,9 +207,46 @@ Test.prototype.constructor = Test;
 Test.collection = "tests";
 
 
+
+
+/*
+  Compiles this test
+*/
+Test.prototype.compile = function(code, callback) {
+  var address = utils.get_address('experiment_language');
+  var eb = vertx.eventBus;
+  
+  this.code = code;
+
+  var msg = {
+    'code': this.code
+  };
+
+  var that = this;
+  eb.send(address, msg, function(reply) {
+    var response = {};
+
+    if (reply.hasOwnProperty('errors') === true) {
+      response.errors = reply.errors.split("\n");
+      console.log(reply.errors);
+
+      that.js = "";
+      that.compiled = false;
+    } else {
+      response.code = reply.code;
+      that.js = response.code;
+      that.compiled = true;
+    }
+
+    that.save(function() {
+      callback(response);
+    });
+  });
+};
+
 /*
 ####
-FORM
+#FORM
 */
 function Form(arg) {
   this.markup = "";

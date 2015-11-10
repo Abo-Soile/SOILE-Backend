@@ -16,8 +16,6 @@ var testImages = config.directory + "/testimages";
 
 var requireAdmin = require('middleware').requireAdmin;
 
-
-
 router.get('/test', function(request) {
   mongo.test.list(function(r) {
     templateManager.render_template('testlist', {"tests":r.results},request);
@@ -107,33 +105,10 @@ router.post("/test/:id", requireAdmin, function(request) {
     data = data.getString(0, data.length());
     var code = JSON.parse(data).code;
 
-    var address = utils.get_address('experiment_language');
-    var eb = vertx.eventBus;
-    var msg = {
-      'code': code
-    };
+    testDAO.get(id, function(test) {
 
-    eb.send(address, msg, function(reply) {
-      var response = {};
+      test.compile(code, function(response) {
 
-      var test = {};
-
-      test._id = id;
-      test.code = code;
-
-      if (reply.hasOwnProperty('errors') === true) {
-        response.errors = reply.errors.split("\n");
-        console.log(reply.errors);
-
-        test.js = "";
-        test.compiled = false;
-      } else {
-        response.code = reply.code;
-        test.js = response.code;
-        test.compiled = true;
-      }
-
-      mongo.test.update(test, function() {
         request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
         request.response.end(JSON.stringify(response));
       });
