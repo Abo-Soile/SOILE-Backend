@@ -473,19 +473,22 @@ SOILE2 = (function(){
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
 
+        var elem = jQuery(id) 
+
         //Removing and reapplying animation to make it repeatable
-        jQuery(id).addClass("noAnimation");
-        jQuery(id).children("*").addClass("noAnimation");
+        elem.addClass("noAnimation");
+        elem.children("*").addClass("noAnimation");
   
+        elem.offsetHeight
 
         setTimeout(function() {
 
-          jQuery(id).removeClass("noAnimation");
-          jQuery(id).children("*").removeClass("noAnimation");
+          elem.removeClass("noAnimation");
+          elem.children("*").removeClass("noAnimation");
 
-          jQuery(id).removeClass("pauseAnimation");
-          jQuery(id).children().removeClass("pauseAnimation");
-        }, 5);
+          elem.removeClass("pauseAnimation");
+          elem.children().removeClass("pauseAnimation");
+        }, 20);
       }
     }
   };
