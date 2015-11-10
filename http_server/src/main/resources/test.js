@@ -91,6 +91,15 @@ router.get('/test/:id', requireAdmin, function(request) {
   });
 });
 
+router.get('/test/:id/copy', requireAdmin, function(request) {
+  var id = request.params().get('id');
+
+  testDAO.get(id, function(test) {
+    test.copy(request.session.getUserId(), function(newTest) {
+      request.redirect("/test/" + newTest._id);
+    });
+  }) 
+});
 
 router.post("/test/:id", requireAdmin, function(request) {
   var data = new vertx.Buffer();

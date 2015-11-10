@@ -15,6 +15,10 @@ typ User-dao.getUserWithPass() returnerar ett user object.
 var vertx = require('vertx');
 var console = require('vertx/console');
 
+var container = require('vertx/container');
+var config = container.config;
+var testImages = config.directory + "/testimages";
+
 var utils = require('utils');
 var BaseModel = require('models/baseModel');
 
@@ -207,6 +211,47 @@ Test.prototype.constructor = Test;
 Test.collection = "tests";
 
 
+/*
+  Creates a copy of the experiment with the given userid as owner
+*/
+Test.prototype.copy = function(userid, callback) {
+  var test = new Test(this);
+  var testImages = config.directory + "/testimages";
+
+
+  test.owner = userid;
+
+  test.code = this.code;
+  test.js = this.js;
+  test.name = this.name + "_copy";
+
+  if (typeof test.code === 'undefined') {
+    test.code = ""
+  } 
+
+  delete test.id;
+  delete test._id;
+
+  var that = this;
+  test.save(function() {
+
+    console.log("Replacing id:s " + that._id + " -> " + test._id);
+    console.log(JSON.stringify(that.code.indexOf(that._id)))
+
+    //test.code = test.code.replace(that._id, test._id);
+
+    test.code = test.code.split(that._id).join(test._id);
+
+    test.save(function(){ 
+      var oldDir = testImages + "/" + that._id;
+      var dirName = testImages + "/" + test._id;
+
+      vertx.fileSystem.copy(oldDir, dirName,true, function(err, res) {
+        callback(test);
+      });
+    });
+  });
+};
 
 
 /*
