@@ -435,8 +435,12 @@ SOILE2 = (function(){
 
   bin.hide = function(id){
     id = soile2.util.getid(id);
+    var elem = jQuery(id);
     //jQuery(id).addClass("hiddenelem");
-    jQuery(id).addClass("invisibleElement")
+    elem.addClass("invisibleElement");
+
+    //elem.addClass("noAnimation");
+    //elem.children("*").addClass("noAnimation");
     
     //jQuery(id).addClass("invisibleElement");
     //jQuery(id).css("animation", "none");
@@ -473,13 +477,24 @@ SOILE2 = (function(){
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
 
-        var elem = jQuery(id) 
+        var elem = jQuery(id);
+
+        var newone = elem.clone(true);
+        elem.before(newone);
+
+        elem.remove();
+
+        newone.removeClass("noAnimation");
+        newone.children("*").removeClass("noAnimation");
+
+        newone.removeClass("pauseAnimation");
+        newone.children().removeClass("pauseAnimation");
 
         //Removing and reapplying animation to make it repeatable
-        elem.addClass("noAnimation");
+        /*elem.addClass("noAnimation");
         elem.children("*").addClass("noAnimation");
   
-        elem.offsetHeight
+        elem.offsetHeight;
 
         setTimeout(function() {
 
@@ -488,7 +503,7 @@ SOILE2 = (function(){
 
           elem.removeClass("pauseAnimation");
           elem.children().removeClass("pauseAnimation");
-        }, 20);
+        }, 20);*/
       }
     }
   };
