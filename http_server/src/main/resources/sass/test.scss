@@ -15,23 +15,61 @@
   }
 }
 
+@-webkit-keyframes countdown {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+@-moz-keyframes countdown {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+@-o-keyframes countdown {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
 .animatedChild {
   animation-play-state:inherit !important;
+  -webkit-animation-play-state:inherit !important;
+  -moz-animation-play-state:inherit !important;
+  -o-animation-play-state:inherit !important;
 }
 
 .noAnimation {
-  animation: none !important;
+          animation: none !important;
+  -webkit-animation: none !important; 
+     -moz-animation: none !important;
+       -o-animation: none !important;
+
 }
 
 
 .pauseAnimation {
   animation-play-state: paused !important;
   -webkit-animation-play-state: paused !important;
+  -moz-animation-play-state: paused !important;
+  -o-animation-play-state: paused !important;
 }
 
 .playAnimation {
   animation-play-state: running !important;
   -webkit-animation-play-state: running !important;
+  -moz-animation-play-state: running !important;
+  -o-animation-play-state: running !important;
 }
 
 .imgname {
