@@ -917,6 +917,30 @@ SOILE2 = (function(){
     }
   };
 
+  bin.range = function(word, mStart, mEnd) {
+    var start = mStart;
+    var end = mEnd;
+
+    if(typeof end == 'undefined') {
+      start = 0;
+      end = mStart;
+    }
+
+    if (start == end) {
+      return false;
+    }
+
+    if(start > end) {
+      return false;
+    }
+
+    if(start > word.length || end > word.length) {
+      return false;
+    }
+
+    return(word.slice(start, end));
+  };
+
   bin.elementatindex = function(value, mIndex) {
     var index = parseInt(mIndex);
     if(typeof value !== 'undefined' && _.isNumber(index)) {

@@ -90,6 +90,7 @@ public class Builtin {
         builtinFunctions.add("append");
         builtinFunctions.add("join");
         builtinFunctions.add("split");
+        builtinFunctions.add("range");
         builtinFunctions.add("shuffle");
 
         //Radnom
