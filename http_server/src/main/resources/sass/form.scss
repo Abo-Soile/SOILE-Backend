@@ -63,6 +63,18 @@ dBootstrap fixes
   line-height: 18px;
 }
 
+.dijitComboBox .dijitArrowButton:before {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+}
+
+.dijitComboBox .dijitArrowButton:before {
+    content: "\f0d7";
+}
+
 
 /*Overriding dojo buttons*/
 
