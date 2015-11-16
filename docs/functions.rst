@@ -347,21 +347,39 @@ Basic logic functions that return a boolean value(true or false)
 Lists/String Manipulation
 #########################
 
-**append(string1 string2)**
+.. function:: append(string1 string2)
 
-Appends two strings, append("Hello " "World") = "Hello World"
+    Appends two strings, append("Hello " "World") = "Hello World"
 
-**lenght(object)**
+.. function:: lenght(object)
 
-Returns the number of elements/letters in  list or string including whitespaces. 
-**elementatindex(object, index)**
+    Returns the number of elements/letters in  list or string including whitespaces. 
 
-Returns the element at the specified index a list/string where the index starts from 0.
+    :param object array/string: 
 
-::
+.. function:: elementatindex(object, index)
 
-    elementatindex("Hello" 0) #= "H"
-    elementatindex("Test" 3) #= t
+    Returns the element at the specified index a list/string where the index starts from 0. Equivalent to  object[index]
+
+    :param object array: Object to select an element from.
+    :param index number: Index
+
+    ::
+
+        elementatindex("Hello" 0) #= "H"
+        elementatindex("Test" 3) #= t
+
+
+.. function:: range(word start end) 
+
+    Round a number down when mode = "floor" and up when mode = "ceil"
+
+    :param word string/array: The string or array to select a range from
+    :param start number: Index at which to begin selection. Start can be omitted in which case the selections begins from the first index i.e. 0.
+    :param end number: Index at which to end the selection, values up to but not including end are selected. 
+
+    :returns: Range
+
 
 ##############
 Random numbers
