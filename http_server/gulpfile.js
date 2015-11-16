@@ -42,6 +42,14 @@ gulp.task("test", function(done) {
   }, done).start();
 })
 
+gulp.task("testserver", function(done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: false
+  }, done).start();
+})
+
+
 gulp.task('watch', function() {
   gulp.watch(sassFiles, ['sass']);
 });
