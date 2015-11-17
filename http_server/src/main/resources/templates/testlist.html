@@ -5,22 +5,16 @@
 <div id="main" class="container testlist" ng-app="testlist" ng-controller="TestListController">
 	<div class="row">
 		<div class="col-md-8"> 
-			<form action="/test", method="POST">
-				<div class="input-group">
-					<span class="input-group-btn">
-						<input type="submit" value="newTest" class="btn btn-default">
-					</span>
-					<input type="text" name="name" class="form-control" placeholder="Testname">
+				<form action="/test", method="POST">
+					<div class="input-group">
+						
+						<input type="text" name="name" class="form-control" placeholder="Testname">
+						<span class="input-group-btn">
+							<input type="submit" value="New Test" class="btn btn-primary">
+						</span>
 
-				</div>
-			</form>
-
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" title="">Go!</button>
-          </span>
-          <input type="text" class="form-control">
-        </div>
+					</div>
+				</form>
 		</div>
 	</div>
 	<div class="row testlist-folders">
@@ -51,11 +45,15 @@
 					<thead>
 						<tr>
 							<th>Name</th>
+							<th>Status</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="test in tests">
-							<td>[([test.name])]</td>
+						<tr ng-repeat="test in tests" ng-class="{danger: test.compiled==false}">
+							<td><a href="/test/[([test._id])]">[([test.name])]</a></td>
+
+							<td ng-if="test.compiled">Compiled</td>
+							<td ng-if="!test.compiled">Errors</td>
 						</tr>	
 					</tbody>
 				</table>
