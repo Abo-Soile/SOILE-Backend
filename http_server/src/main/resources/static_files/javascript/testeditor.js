@@ -45,7 +45,6 @@ var autoCompleteList = [
 ];
 
 ace.config.set("modePath", "/javascript");
-  
 
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
@@ -67,7 +66,7 @@ app.filter("reverse", function(){
 
 app.controller('fileController', function($scope, $http, $location, FileUploader) {
 		var baseUrl = $location.absUrl();
-		var imgUrl = baseUrl + "/imageupload"
+		var imgUrl = baseUrl + "/imageupload";
 		var onComplete = function(item, response, status, headers) {
 			loadImages();
 		};
@@ -115,7 +114,7 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
 		loadImages();
 });
 
-app.controller('expEditController', function($scope, $http, $location, $timeout, $sce, $window, $timeout) {
+app.controller('expEditController', function($scope, $http, $location, $timeout, $sce, $window) {
 	$scope.compileErrors = "";
 	$scope.soileLog  = [];
 
@@ -127,39 +126,30 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   $scope.test = {};
 
-  /*
-  ace.config.set("modePath", "/javascript");
-  ace.congig.set("tabSize", 2);
-
-  ace.config.set("enableBasicAutocompletion", true);*/
-
 	$scope.aceLoaded = function(_editor) {
     // Options
     $scope.editor = _editor;
-
   
-    //$scope.editor.config.set("modePath", "/javascript");
     $scope.editor.renderer.setShowGutter(true); 
 
     $scope.lastSave = $scope.editor.getValue();
 
     $scope.editor.getSession().setTabSize(2);
 
-    $scope.editor.setOptions({"enableBasicAutocompletion": true});
+    $scope.editor.setOptions({"enableBasicAutocompletion": true,"enableLiveAutocompletion": false,"enableSnippets": true});
     $scope.editor.getSession().setMode("ace/mode/elang");
 
     var autocompleter = {
     getCompletions: function(editor, session, pos, prefix, callback) {
-      if (prefix.length === 0) { callback(null, []); return }
+      if (prefix.length === 0) { callback(null, []); return}
       // wordList like [{"word":"flow","freq":24,"score":300,"flags":"bc","syllables":"1"}]
       callback(null, autoCompleteList.map(function(ea) {
-          return {name: ea.word, value: ea.word, score: ea.score, meta:ea.meta}
+          return {name: ea.word, value: ea.word, score: ea.score, meta:ea.meta};
         }));
       }
-    }
+    };
 
     window.langTool.addCompleter(autocompleter);
-
   };
 
   $scope.compileTest = function() {
@@ -290,13 +280,13 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   var timer = null;
   var delay = 1000;
   $scope.$watch('test.folder', function(){
-    console.log("Watch")
+    console.log("Watch");
   if(timer){
       $timeout.cancel(timer);
     }  
     timer= $timeout(function(){
         $scope.saveTest();
-     },delay)
+     },delay);
 });
 
   $scope.initname = function(name) {
@@ -309,8 +299,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       method:"GET"
     }).then(function(response) {
       $scope.test = response.data;
-      console.log(response)
-      console.log($scope.test)
+      console.log(response);
+      console.log($scope.test);
     });
   };
 
@@ -320,7 +310,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       method:"POST",
       data:$scope.test
     }).then(function(response) {
-      console.log(response)
+      console.log(response);
     });
   };
 
@@ -330,7 +320,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   var windowElement = angular.element($window);
   windowElement.on('beforeunload', function (event) {
     if ($scope.editor.getValue() != $scope.lastSave) {
-      var answer = confirm("Are you sure you want to leave this page?")
+      var answer = confirm("Are you sure you want to leave this page?");
       if (!answer) {
         event.preventDefault();
         return "There are unsaved changed, are you sure you want to leave this page?";
@@ -343,11 +333,11 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   document.addEventListener("keydown", function (e) {
 
     if(!$scope.running) {
-      return
+      return;
     }
 
     if([37,38,39,40,32].indexOf(e.keyCode) > -1 && e.target.tagName == "INPUT") {
-      return
+      return;
     }
 
     if([37,38,39,40,32].indexOf(e.keyCode) > -1 && mouseTestHover){
@@ -360,7 +350,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
 //Showing mouse coordinates when hovering over the test display
 var mousePos = document.getElementById("mouseposition");
-var mouseTestHover = false
+var mouseTestHover = false;
 
 var mouseMove = function (e){
   var displayRect = display.getBoundingClientRect();
