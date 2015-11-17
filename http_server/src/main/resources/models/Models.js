@@ -22,6 +22,7 @@ var testImages = config.directory + "/testimages";
 var utils = require('utils');
 var BaseModel = require('models/baseModel');
 
+
 function User(arg) {
     this.isAdmin = false;
 
@@ -250,6 +251,22 @@ Test.prototype.copy = function(userid, callback) {
         callback(test);
       });
     });
+  });
+};
+
+Test.prototype.init = function(callback) {
+  var that = this;
+
+  that.save(function(r) {
+    var dirName = testImages + "/" + that._id;
+
+      vertx.fileSystem.mkDir(dirName, true, function(err, res) {
+        console.log(err + "  " + res);
+        if (!err) {
+          console.log('Directory created ok');
+        }
+        callback(err, res);
+      });
   });
 };
 

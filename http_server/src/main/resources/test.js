@@ -8,6 +8,7 @@ var router = new CustomMatcher();
 var utils = require("utils");
 var mongo = require('mongoHandler');
 
+var testModel = require('models/Models').Test;
 var testDAO = require("models/DAObjects").TestDAO;
 
 var container = require('vertx/container');
@@ -76,18 +77,12 @@ router.post("/test", requireAdmin,function(request) {
 
     console.log("name1: " + name);
 
-    mongo.test.save({"name":name}, function(r) {
-      console.log(JSON.stringify(r));
+    var test = new testModel();
 
-      var dirName = testImages + "/" + r._id;
+    test.name = name;
 
-      vertx.fileSystem.mkDir(dirName, true, function(err, res) {
-        console.log(err + "  " + res);
-        if (!err) {
-          console.log('Directory created ok');
-          return request.redirect("/test/"+r._id);
-        }
-      });
+    test.init(function(err, result) {
+      return request.redirect("/test/"+test._id);
     });
   });
 });
@@ -138,14 +133,11 @@ router.post("/test/:id", requireAdmin, function(request) {
       folder = "Unspecifid";
     }
     
-
     testDAO.get(id, function(test) {
 
       test.name = name;
       test.published = published;
       test.folder = folder;
-
-
 
       test.save(function(response) {
         request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
