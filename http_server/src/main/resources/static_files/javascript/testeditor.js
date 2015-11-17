@@ -1,8 +1,51 @@
-var app = angular.module('testEditor', ['ui.ace', 'angularFileUpload', 'xeditable'])
-
-
+var app = angular.module('testEditor', ['ui.ace', 'angularFileUpload', 'xeditable']);
 var disp = document.getElementById("display");
 
+var autoCompleteList = [
+  {"meta":"elang-keyword",  "word":"intermezzo-phase\nend"},
+  {"meta":"elang-keyword",  "word":"interaction-phase\n  iteration\n  end\nend"},
+  {"meta":"elang-keyword",  "word":"while \ndo \nend"},
+  {"meta":"elang-keyword",  "word":"if \n then \nend"},
+  {"meta":"elang-keyword",  "word":"if \nthen \nelse \nend"},
+  {"meta":"elang-keyword",  "word":"function functionName() \nend"},
+  {"meta":"elang-function", "word":"eq()"},
+  {"meta":"elang-function", "word":"lt()"},
+  {"meta":"elang-function", "word":"gt()"},
+  {"meta":"elang-function", "word":"stimulus()"},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+  {"meta":"elang-function", "word":""},
+];
+
+ace.config.set("modePath", "/javascript");
+  
 
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
@@ -84,16 +127,38 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   $scope.test = {};
 
+  /*
   ace.config.set("modePath", "/javascript");
+  ace.congig.set("tabSize", 2);
+
+  ace.config.set("enableBasicAutocompletion", true);*/
 
 	$scope.aceLoaded = function(_editor) {
     // Options
     $scope.editor = _editor;
+
+  
     //$scope.editor.config.set("modePath", "/javascript");
-    $scope.editor.getSession().setMode("ace/mode/elanghighlightrules");
     $scope.editor.renderer.setShowGutter(true); 
 
     $scope.lastSave = $scope.editor.getValue();
+
+    $scope.editor.getSession().setTabSize(2);
+
+    $scope.editor.setOptions({"enableBasicAutocompletion": true});
+    $scope.editor.getSession().setMode("ace/mode/elang");
+
+    var autocompleter = {
+    getCompletions: function(editor, session, pos, prefix, callback) {
+      if (prefix.length === 0) { callback(null, []); return }
+      // wordList like [{"word":"flow","freq":24,"score":300,"flags":"bc","syllables":"1"}]
+      callback(null, autoCompleteList.map(function(ea) {
+          return {name: ea.word, value: ea.word, score: ea.score, meta:ea.meta}
+        }));
+      }
+    }
+
+    window.langTool.addCompleter(autocompleter);
 
   };
 

@@ -6,13 +6,11 @@ see
 http://plnkr.co/edit/MuzIWp?p=preview
  */
 
- window.define = window.define || ace.define;
 
-define("ace/mode/elanghighlightrules", ["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(require, exports, module) {
-"use strict";
+ace.define("ace/mode/elanghighlightrules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(require, exports, module) {
 
-var oop = require("ace/lib/oop");
-var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
+var oop = require("../lib/oop");
+var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
 var ElangHighlightRules = function() {
 
@@ -32,11 +30,11 @@ var ElangHighlightRules = function() {
             "plus minus muliply divide" 
     }, "text", true, " ");
 
-    var varkeywords = "var|gvar|val"
-    var compoundKeywords = "aaassdasda"
+    var varkeywords = "var|gvar|val";
+    var compoundKeywords = "aaassdasda";
 
 
-    var func = "function|intermezzo-phase|interaction-phase"
+    var func = "function|intermezzo-phase|interaction-phase";
     
      
     this.$rules = {
@@ -46,7 +44,8 @@ var ElangHighlightRules = function() {
             {token : "keyword.operator", regex: /\W[\-+\%=<>*]\W|\*\*|[~:,\.&$]|->*?|=>/},
             {token : "paren.lparen", regex : "[\\[({]"},
             {token : "paren.rparen", regex : "[\\])}]"},
-            {token : "support.function", regex: func},
+            /*{token : "support.function", regex: func},*/
+            {token : "keyword", regex: func},
             {token : "constant.numeric", regex: "[+-]?\\d+\\b"},
             {token : "keyword", regex : compoundKeywords}, 
             {token : "variable.parameter", regex : varkeywords}, 
@@ -64,4 +63,20 @@ oop.inherits(ElangHighlightRules, TextHighlightRules);
 
 console.log("EXPORTED")
 exports.ElangHighlightRules = ElangHighlightRules;
+});
+
+
+ace.define('ace/mode/elang', [], function(require, exports, module) {
+
+    var oop = require("ace/lib/oop");
+    var TextMode = require("ace/mode/text").Mode;
+    var Tokenizer = require("ace/tokenizer").Tokenizer;
+    var ElangHighlightRules = require("ace/mode/elanghighlightrules").ElangHighlightRules;
+
+    var Mode = function() {
+        this.HighlightRules = ElangHighlightRules;
+    };
+    oop.inherits(Mode, TextMode);
+
+    exports.Mode = Mode;
 });
