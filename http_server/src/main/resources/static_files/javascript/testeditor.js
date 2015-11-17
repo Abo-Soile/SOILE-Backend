@@ -72,7 +72,7 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
 		loadImages();
 });
 
-app.controller('expEditController', function($scope, $http, $location, $timeout, $sce, $window) {
+app.controller('expEditController', function($scope, $http, $location, $timeout, $sce, $window, $timeout) {
 	$scope.compileErrors = "";
 	$scope.soileLog  = [];
 
@@ -81,6 +81,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   $scope.compiled = false;
 
   $scope.running = false;
+
+  $scope.test = {};
 
   ace.config.set("modePath", "/javascript");
 
@@ -100,7 +102,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
     $scope.savebutton = '<i class="fa fa-spinner fa-spin"></i> Compiling';
 
-  	$http.post($location.absUrl(), code).success(function(data, status, headers, config) {
+    var url = $location.absUrl() + "/compile";
+
+  	$http.post(url, code).success(function(data, status, headers, config) {
   		
       $scope.savebutton = "Save&Compile";
 
@@ -200,6 +204,64 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     }, 1500);
   };
 
+  var editnameurl = $location.absUrl() + "/editname";
+
+  $scope.updateMeta = function() {
+    var data = {};
+    data.name = $scope.test.name;
+    data.folder = $scope.test.folder;
+    data.published = $scope.test.published;
+    $http.post($location.absUrl(), data);
+  }
+
+  $scope.updatename = function(data) {
+    console.log("Updating " + $scope.testname + "    " + data);
+    $scope.testname = data;
+    $scope.test.name = data;
+    $http.post(editnameurl, {name: $scope.testname});
+    $scope.updateMeta();
+  };
+
+  var timer = null;
+  var delay = 1000;
+  $scope.$watch('test.folder', function(){
+    console.log("Watch")
+  if(timer){
+      $timeout.cancel(timer);
+    }  
+    timer= $timeout(function(){
+        $scope.saveTest();
+     },delay)
+});
+
+  $scope.initname = function(name) {
+    $scope.testname = name;
+  };
+
+  $scope.getTest = function() {
+    $http({
+      url:$location.absUrl() + "/json",
+      method:"GET"
+    }).then(function(response) {
+      $scope.test = response.data;
+      console.log(response)
+      console.log($scope.test)
+    });
+  };
+
+  $scope.saveTest = function() {
+    $http({
+      url:$location.absUrl(),
+      method:"POST",
+      data:$scope.test
+    }).then(function(response) {
+      console.log(response)
+    });
+  };
+
+
+  $scope.getTest();
+
   var windowElement = angular.element($window);
   windowElement.on('beforeunload', function (event) {
     if ($scope.editor.getValue() != $scope.lastSave) {
@@ -230,20 +292,6 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   }, false);
 });
 
-app.controller('editNameController', function($scope, $http, $location) {
-  var editnameurl = $location.absUrl() + "/editname";
-
-  $scope.updatename = function(data) {
-    console.log("Updating " + $scope.testname + "    " + data);
-    $scope.testname = data;
-    $http.post(editnameurl, {name: $scope.testname});
-  };
-
-  $scope.initname = function(name) {
-    console.log("initing name: " + name);
-    $scope.testname = name;
-  };
-});
 
 //Showing mouse coordinates when hovering over the test display
 var mousePos = document.getElementById("mouseposition");

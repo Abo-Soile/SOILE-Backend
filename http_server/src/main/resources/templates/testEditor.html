@@ -25,9 +25,14 @@
 
 <div class="container" id="main" ng-app="testEditor" ng-controller="expEditController">
     <div class="row">
-        <div class="col-md-8" ng-controller="editNameController" ng-init="initname('{test.name}')">
+        <div class="col-md-8" ng-init="initname('{test.name}')">
             <h2 id="testName" editable-text="testname" onbeforesave="updatename($data)">[([testname || '{test.name}' ])]</h2>
         </div>
+        <div class="col-md-2">
+            <label>Folder:</label><input type="text" ng-model="test.folder">
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-9">
 <!--            <textarea data-dojo-type="dijit/form/Textarea" id="code">
                 {test.code}
@@ -149,11 +154,12 @@
         <div class="col-md-2">
             <a class="btn btn-success"href="{URI}/copy">Copy test</a>
         </div>
+
         <div class="col-md-8">
             <label class="radio-inline">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"/> Private
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"/> Published
             </label>
+            <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" value="false"/> Private
+            <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="published" value="true"/> Published
         </div>
 
     </div>  

@@ -35,6 +35,19 @@ function TestDAO() {
 TestDAO.prototype = new BaseDAO();
 TestDAO.prototype.constructor = TestDAO;
 
+TestDAO.prototype.listFolders = function(callback) {
+    var command = "{ distinct: 'tests', key: 'folder'}";
+
+    var mongo = {
+        "action":"command",
+        "command":command
+    };
+
+    this.sendToMongo(mongo, function(result) {
+        callback(result.result.values);
+    });
+};
+
 function ExperimentDAO() {
     BaseDAO.call(this);
     this._baseObject = models.Experiment;

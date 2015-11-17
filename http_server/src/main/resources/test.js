@@ -22,16 +22,42 @@ router.get('/test', function(request) {
   });
 });
 
-
 router.get('/test/json', function(request) {
   mongo.test.list(function(r) {
+
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(r.results));
+  });
+});
+
+router.get("/test/folder/json", requireAdmin, function(request) {
+  testDAO.listFolders(function(folders) {
+    console.log(JSON.stringify(folders));
+
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(JSON.stringify(folders));
   });
 });
 
 router.get("/test/json/compiled", function(request) {
   testDAO.list({"compiled":true}, function(result) {
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(result)); 
+  });
+});
+
+router.get("/test/folder/:foldername/json", requireAdmin, function(request) {
+  var folder = request.params().get('foldername');
+
+  var query = {"folder":folder};
+
+  if (folder == "unspecified") {
+    query = {$or: [{"folder" : { "$exists" : false }}, {folder:""}] };
+  }
+
+  testDAO.list(query,function(result) {
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(JSON.stringify(result));
   });
 });
 
@@ -84,9 +110,47 @@ router.get('/test/:id', requireAdmin, function(request) {
         console.log(JSON.stringify(files));
         console.log("\n\n\n");
     }
-    mongo.test.get(id, function(r) {
+    testDAO.get(id, function(test) {
       templateManager.render_template('testEditor', 
-        {"code":code, "test":r.result, "files":files}, request);
+        {"code":test.code, "test":test, "files":files}, request);
+    });
+  });
+});
+
+router.post("/test/:id", requireAdmin, function(request) {
+  var data = new vertx.Buffer();
+  var id = request.params().get('id');
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    data = data.getString(0, data.length());
+    data = JSON.parse(data);
+
+    var name = data.name;
+    var published = data.published;
+    var folder = data.folder;
+
+    if (typeof folder === "undefined" || folder === "") {
+      folder = "Unspecifid";
+    }
+    
+
+    testDAO.get(id, function(test) {
+
+      test.name = name;
+      test.published = published;
+      test.folder = folder;
+
+
+
+      test.save(function(response) {
+        request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+        request.response.end(JSON.stringify({"status":"ok"}));
+      });
     });
   });
 });
@@ -98,10 +162,10 @@ router.get('/test/:id/copy', requireAdmin, function(request) {
     test.copy(request.session.getUserId(), function(newTest) {
       request.redirect("/test/" + newTest._id);
     });
-  }) 
+  });
 });
 
-router.post("/test/:id", requireAdmin, function(request) {
+router.post("/test/:id/compile", requireAdmin, function(request) {
   var data = new vertx.Buffer();
   var id = request.params().get('id');
 
@@ -215,4 +279,16 @@ router.post('/test/:id/editname', requireAdmin,function(request) {
       request.response.end(JSON.stringify(r.result));
     });
   });
+});
+
+router.get('/test/:id/json', requireAdmin, function(request) {
+  var id = request.params().get('id');
+
+  testDAO.get(id, function(test) {
+    var json = test.toJson();
+
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(json);
+  });
+
 });

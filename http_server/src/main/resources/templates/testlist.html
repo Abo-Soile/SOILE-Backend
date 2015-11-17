@@ -1,5 +1,8 @@
 {>header /}
-<div id="main" class="container">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+
+<div id="main" class="container testlist" ng-app="testlist" ng-controller="TestListController">
 	<div class="row">
 		<div class="col-md-8"> 
 			<form action="/test", method="POST">
@@ -12,56 +15,59 @@
 				</div>
 			</form>
 
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" title="">Go!</button>
-                </span>
-                <input type="text" class="form-control">
-              </div>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" title="">Go!</button>
+          </span>
+          <input type="text" class="form-control">
+        </div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row testlist-folders">
 		<div class="col-md-6"> 
-			<br><br>
-
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>TestName</th>
-						<th>status</th>
-					</tr>
-				</thead>
-				<tbody>
-				{#tests uri=URI}
-				{?compiled} 
-					<tr>
-						<td><a href="{uri}/{_id}">{name}</a> </td>
-						<td>Compiled</td>
-				{:else}
-					<tr class="danger">
-						<td><a href="{uri}/{_id}">{name}</a> </td>
-						<td>Errors</td>
-				{/compiled}
-
+			<div class="panel">
+				<h4>Folders</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-class="{selected: $index==active}" ng-repeat="(index, folder) in folders" ng-click="pickFolder(index)">
+							<td>[([folder])]</td>
+						</tr>	
+					</tbody>
+				</table>
 				
-				{/tests}
-					</tr>
-				</tbody>
-			</table>
-			<!-- <ul>
-				{#tests uri=URI}
-					<li><a href="{uri}/{_id}">{name}</a> 
-					{?compiled} Compiled
-					{:else} Contains errors
-					{/compiled}
+			</div>
+		</div>
 
-					</li>
-				{/tests}
-			</ul> -->
+		<div class="col-md-6 testlist-tests">
+			<div class="panel">
+				<h4>Tests - [([selectedFolder])]</h4>
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="test in tests">
+							<td>[([test.name])]</td>
+						</tr>	
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
+
 
 	</div>
 </div>
+
+<script type="text/javascript" src="/javascript/testlist.js"></script>
+
 
 {>footer /}
