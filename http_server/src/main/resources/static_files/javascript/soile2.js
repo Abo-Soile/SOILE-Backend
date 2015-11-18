@@ -934,7 +934,7 @@ SOILE2 = (function(){
       return false;
     }
 
-    if(start > word.length || end > word.length) {
+    if(start > word.length) {
       return false;
     }
 
