@@ -159,15 +159,16 @@
             </div>
         </div>
 
-        <div class="col-md-2">
-            <a class="btn btn-success"href="{URI}/copy">Copy test</a>
-        </div>
+
 
         <div class="col-md-8">
             <label class="radio-inline">
             </label>
             <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" value="false"/> Private
             <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="published" value="true"/> Published
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-success"href="{URI}/copy">Copy test</a>
         </div>
 
     </div>  
