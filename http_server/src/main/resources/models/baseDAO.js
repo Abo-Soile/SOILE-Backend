@@ -23,6 +23,10 @@ BaseDAO.prototype.get = function(matcher, callback) {
     }else {
         mongoCommand.matcher = matcher;
     }
+
+    if (typeof mongoCommand.matcher.deleted === 'undefined') {
+        mongoCommand.matcher.deleted = {$in: [null, false]};
+    }
     //mongoCommand.collection = this._collection;
 
     this.sendToMongo(mongoCommand, function(mongoReply) {
@@ -41,7 +45,7 @@ BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
     var that = this;
     mongoCommand.action = "find";
     //mongoCommand.collection = this._collection;
-    if(typeof matcher === 'object' || typeof matcher !== 'undefined') {
+    if((typeof matcher === 'object')) {
         mongoCommand.matcher = matcher;
     } else {
         mongoCommand.matcher = {};
@@ -63,12 +67,16 @@ BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
         mongoCommand.sort = sort;
     }
 
-    this.sendToMongo(mongoCommand, function(mongoReply, replier) {
-        console.log("Find command done - " + mongoReply.status)
-        if(mongoReply.status === "more-exist"){
-            console.log("More exists")
+    if (typeof mongoCommand.matcher.deleted === 'undefined') {
+        mongoCommand.matcher.deleted = {$in: [null, false]};
+    }
 
-            replier({}, that.handleMore(that, mongoReply.results, callback))
+    this.sendToMongo(mongoCommand, function(mongoReply, replier) {
+        console.log("Find command done - " + mongoReply.status);
+        if(mongoReply.status === "more-exist"){
+            console.log("More exists");
+
+            replier({}, that.handleMore(that, mongoReply.results, callback));
         }
 
         else if(mongoReply.status === "ok") {
@@ -113,8 +121,12 @@ BaseDAO.prototype.count = function(matcher, callback) {
     var mongoCommand = {};
     mongoCommand.matcher = {};
 
-    mongoCommand.action = "count"
+    mongoCommand.action = "count";
     mongoCommand.matcher = matcher;
+
+    if (typeof mongoCommand.matcher.deleted === 'undefined') {
+        mongoCommand.matcher.deleted = {$in: [null, false]};
+    }
 
     this.sendToMongo(mongoCommand, function(mongoReply) {
         if (mongoReply.status === "ok") {
@@ -135,8 +147,9 @@ BaseDAO.prototype.sendToMongo = function(arg, callback) {
     eb.send(this._mongoAddress,
             arg,
             function(reply, replier) {
-                if(typeof arg.action !== 'undefined')
+                if(typeof arg.action !== 'undefined'){
                     console.log("####Result from mongo " + arg.action);
+                }
                 else {
                     console.log("####Result from mongo ");
                 }
@@ -149,10 +162,10 @@ BaseDAO.prototype.sendToMongo = function(arg, callback) {
 BaseDAO.prototype.handleMore = function(obj, data, callback) {
     //console.log("Building new replier")
     return function(reply, replier) {
-        var result = data.concat(reply.results)
+        var result = data.concat(reply.results);
 
         if(reply.status==="more-exist") {
-            replier({}, obj.handleMore(obj, result, callback))
+            replier({}, obj.handleMore(obj, result, callback));
         }
         else {
             var resultObjects = [];
@@ -162,7 +175,7 @@ BaseDAO.prototype.handleMore = function(obj, data, callback) {
             callback(resultObjects);
         }
         
-    }
+    };
 };
 
 module.exports = BaseDAO;
