@@ -80,12 +80,12 @@ BaseModel.prototype.update = function(objNew, callback) {
 };
 
 BaseModel.prototype.delete = function(callback  ) {
-    console.log("DELETE " + this._collection);    // body...
+  console.log("DELETE " + this._collection);    // body...
 };
 
 BaseModel.prototype.softDelete = function(callback) {
-  console.log("Softdeleting stuff");  
-}
+  this.deleted = true;
+};
 
 /*
 Sends the specified command to mongo-persistor and returns
