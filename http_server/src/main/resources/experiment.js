@@ -57,6 +57,22 @@ router.get("/experiment/new", requireAdmin,function(request){
     });
 });
 
+
+//Shortned url
+router.get("/e/:name",function(request){
+  var name = request.params().get('name');
+
+  experimentDAO.get({"shortname":name}, function(exp) {
+    if(exp != "") {
+      return request.redirect("/experiment/" + exp._id);
+    }
+    else {
+      return request.notfound();
+    }
+  });
+});
+
+
 router.get('/experiment/:id', function(request){
   var id = request.params().get('id');
 

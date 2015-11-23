@@ -93,6 +93,10 @@ app.controller('experimentController', function($scope, $http, $location) {
       data.startDate = $scope.startdate.toISOString();
       data.endDate = $scope.enddate.toISOString();
 
+      //if (data.shortname == "") {
+        //delete data.shortname;
+      //}
+
       $scope.loading = true;
 
       for (var i = 0; i < data.components.length; i++) {
