@@ -563,7 +563,7 @@ var Experiment = {
   formData: function(id, response) {
     vertx.eventBus.send(mongoAddress, {"action":"find",
     "collection":dataCollection,
-    "matcher":{"expId":id, "confirmed":true, "type":"form"},
+    "matcher":{"expId":id, "confirmed":true, "type":"form", "deleted": {$in: [null, false]}},
     "keys": {"confirmed":0},  // Projection
     //TODO: Handle larger replies.
     "batch_size":1000  
@@ -579,7 +579,7 @@ var Experiment = {
   testData: function(id, response) {
     vertx.eventBus.send(mongoAddress, {"action":"find", 
       "collection":dataCollection,
-      "matcher": {"expId":id, "confirmed":true, "type":"test"},
+      "matcher": {"expId":id, "confirmed":true, "type":"test", "deleted": {$in: [null, false]}},
       "keys": {"confirmed": 0}, // Projection
       "sort": {"phase":1}, 
       //TODO: Handle larger replies.
@@ -596,7 +596,7 @@ var Experiment = {
     vertx.eventBus.send(mongoAddress, {
         "action":"find",
         "collection":dataCollection,
-        "matcher":{"expId":expId, "phase":phase, "confirmed":true},
+        "matcher":{"expId":expId, "phase":phase, "confirmed":true, "deleted": {$in: [null, false]}},
         "keys": {"data":1, "userid":1},
         //TODO: Handle larger replies.
         "batch_size":1000
@@ -901,7 +901,8 @@ db.experiment.update({_id:"c2aa8664-05b7-4870-a6bc-68450951b345",
        "collection":dataCollection,
        "matcher":{"expId":experimentid,
                   "confirmed":true,
-                  "type":"general"
+                  "type":"general",
+                  "deleted": {$in: [null, false]}
                 }
       },
       function(reply) {
