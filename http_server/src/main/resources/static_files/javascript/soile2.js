@@ -450,20 +450,37 @@ SOILE2 = (function(){
   bin.show = function(mId){
     var args = Array.prototype.slice.call(arguments);
     var id, pos;
-    
-    if (args.length === 2){
+
+    if (args.length === 2 || args.length === 3){
       id = soile2.util.getid(args[0]);
       pos = args[1];
     }
+
     else if (args.length === 1){
       id = soile2.util.getid(args[0]);
+    }
+
+    if(args.length === 3 && args[2] && window.requestAnimationFrame) {
+      rt.dowait = true;
+      rt.waitfor = 0;
+
+      var reqID = "";
+      //console.log(performance.now())
+      reqID = window.requestAnimationFrame(function(time) {
+        bin.show(id, args[1]);
+        //console.log(time + " animationframe ")
+        window.requestAnimationFrame(function(inn) {
+          bin.resume();
+          //window.cancelAnimationFrame(reqID);
+        });
+      });
+    return;
     }
     
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
         jQuery(id).removeClass("hiddenelem");
         jQuery(id).removeClass("invisibleElement");
-
         if (typeof pos !== 'undefined'){
           soile2.bin.position(id, pos);
           return;
@@ -733,7 +750,6 @@ SOILE2 = (function(){
   };
 
   bin.starttimer = function() {
-    console.log("STARTING TIMER");
     soile2.rt.timer.start();
   };
 
@@ -1844,6 +1860,9 @@ SOILE2 = (function(){
       }
     };
   })();
+
+  rt.dowait = false;
+  rt.waitfor = 0;
   
   /*
    * Execute a program instruction (or several program instructions).
@@ -1856,6 +1875,20 @@ SOILE2 = (function(){
     var pi, opcode, idx;
     
     while (true){
+
+      if (rt.dowait) {
+        dowait = true;
+        waitfor = rt.waitfor;
+        if (waitfor == 0) {
+          waitfor = 100000000000000000;
+        }
+
+        rt.dowait = false;
+        rt.waitfor = 0;
+
+        break;
+      }
+
       idx = soile2.rt.pi_index.get();
       pi = soile2.rt.get_pi(idx);
       opcode = soile2.rt.pi_opcode(pi);
