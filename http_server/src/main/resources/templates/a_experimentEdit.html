@@ -60,7 +60,7 @@
     </div>
 
     <div class="col-md-4">
-      <label>Short url</label>
+      <label>Short url <a ng-if="experiment.shortname" href="/e/[([experiment.shortname])]">http://soile.braintrain.fi/e/[([experiment.shortname])]</a> </label>
       <input  class="form-control"  ng-model="experiment.shortname">
     </div>
 
