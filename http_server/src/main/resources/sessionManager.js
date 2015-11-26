@@ -116,7 +116,7 @@ var sessionManager =  {
         sessionMap.put(sessionKey, "");
       });
 
-      var userObj = user.toJson();
+      var userObj = user.filter();
 
       userObj.timerID = timerID;
 
