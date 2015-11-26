@@ -240,7 +240,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   };
 
   $scope.runTest = function() {
-    $scope.runbutton = "Running";
+    $scope.runbutton = "Restart";
     $scope.running = true;
 
     $scope.soileLog = [];
@@ -267,7 +267,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     data.folder = $scope.test.folder;
     data.published = $scope.test.published;
     $http.post($location.absUrl(), data);
-  }
+  };
 
   $scope.updatename = function(data) {
     console.log("Updating " + $scope.testname + "    " + data);
