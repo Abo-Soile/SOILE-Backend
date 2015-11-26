@@ -25,6 +25,26 @@ function UserDAO() {
 UserDAO.prototype = new BaseDAO();
 UserDAO.prototype.constructor = UserDAO;
 
+UserDAO.prototype.auth = function(username, password, remember, callback) {
+    var pass = utils.hashPassword(password);
+
+    this.get({username:username, password:pass}, function(user) {
+        if (remember && user) {
+            user.sessiontoken = java.util.UUID.randomUUID().toString();
+            user.save(function() {
+                callback(user);
+            });
+        } else {
+            callback(user) ;
+        }
+    });
+};
+
+UserDAO.prototype.fromSession = function(sessionKey, callback) {
+    this.get({sessiontoken:sessionKey}, function(user) {
+        callback(user);
+    });
+};
 
 function TestDAO() {
     BaseDAO.call(this);

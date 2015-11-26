@@ -25,6 +25,7 @@ var BaseModel = require('models/baseModel');
 
 function User(arg) {
     this.isAdmin = false;
+    this.isEditor = false;
 
     BaseModel.call(this, arg);
  
@@ -40,6 +41,10 @@ User.collection = "users";
 
 User.prototype.setPassword = function(password) {
     this.password = utils.hashPassword(password);
+};
+
+User.prototype.setOrganisation = function(org) {
+  this.organisation = org;
 };
 
 
@@ -200,7 +205,7 @@ TEST
 */
 function Test(arg) {
     this.published = false;
-    this.name = "Unnamed"
+    this.name = "Unnamed";
 
     BaseModel.call(this, arg);
 

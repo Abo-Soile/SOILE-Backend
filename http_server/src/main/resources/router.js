@@ -72,11 +72,11 @@ function extendRequest(request, func) {
       (session.getSessionCookie()) && 
       request.method()==="GET") {
     console.log("Checking session");
-    session.checkSession(function callback(r) {
+    session.checkSession(function callback(user) {
       //Sending the session manager with the request
-      if(r.result) {
+      if(user) {
         console.log("Logging in from token");
-        session.login(r.result._id, r.result.username, r.result.admin, r.result.sessiontoken);
+        session.login(user);
       }
       func(request);
     });

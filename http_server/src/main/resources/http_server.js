@@ -20,6 +20,7 @@ var logger = container.logger;
 
 var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 
+var userDAO = require("models/DAObjects").UserDAO;
 var testDAO = require("models/DAObjects").TestDAO;
 var experimentDAO = require("models/DAObjects").ExperimentDAO;
 
@@ -132,13 +133,11 @@ customMatcher.post("/login", function(request) {
 
     templateVars.origin = decodeURIComponent(origin);
 
-    mongo.user.auth(username, password, remember, function(r) {
+    userDAO.auth(username, password, remember, function(user) {
       
-      console.log(JSON.stringify(r));
-      //Status ok, user found
-      if (r.status==="ok") {
-        request.session.login(r.result._id, r.result.username,r.result.admin, r.token);
-        mongo.experiment.updateDataIdentifier(r.result._id, 
+      if (user) {
+        request.session.login(user);
+        mongo.experiment.updateDataIdentifier(user._id, 
           request.session.getPersonToken(), function(s) {
 
           if(origin){

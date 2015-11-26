@@ -3,6 +3,8 @@ var console = require('vertx/console');
 var mongo = require("mongoHandler");
 var utils = require("utils");
 
+var userDAO = require("models/DAObjects").UserDAO;
+
 var sessionMap = vertx.getMap("soile.session.map");
 
 var sessionManager =  {
@@ -89,13 +91,13 @@ var sessionManager =  {
   },
 
 
-  login: function(id,username, admin, token) {
+  login: function(user) {
       console.log("----Logging in-----");
       //console.log(JSON.stringify(r));
       var sessionKey;
 
-      if(token) {
-        sessionKey = token;
+      if(user.sessiontoken) {
+        sessionKey = user.sessiontoken;
       }
       else {
         sessionKey = java.util.UUID.randomUUID().toString();
@@ -114,8 +116,13 @@ var sessionManager =  {
         sessionMap.put(sessionKey, "");
       });
 
-      sessionMap.put(sessionKey, JSON.stringify({"username":username, "timerID": timerID,
-                                                 "admin":admin,"id":id}));
+      var userObj = user.toJson();
+
+      userObj.timerID = timerID;
+
+      delete userObj.password;
+
+      sessionMap.put(sessionKey, JSON.stringify(userObj));
   },
 
   loggedIn: function() {
@@ -165,10 +172,10 @@ var sessionManager =  {
   checkSession: function(callback) {
     var session = this.getSessionCookie();
 
-    mongo.user.fromSession(session, function(r) {
+    userDAO.fromSession(session, function(user) {
       console.log("---------Checking session--------");
-      console.log(JSON.stringify(r));
-      callback(r);
+      console.log(JSON.stringify(user));
+      callback(user);
     });
   },
 
