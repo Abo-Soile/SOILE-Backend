@@ -55,16 +55,30 @@ SOILE2 = (function(){
         _resettimer = (_.isBoolean(conf.resettimer)) ? conf.resettimer : false;
         if (_.isFunction(conf.action)) {
           action = conf.action;
-          jQuery(_id).click(function(e){
-            if (_resettimer) {
-              // TODO Reset timer here.
-            }
-            console.log('mouse clicked. ' + _inputid);
-            action.call({}, _inputid);
-          });
+
+          if (conf.mousedown) {
+            jQuery(_id).mousedown(function(e){
+              if (_resettimer) {
+                // TODO Reset timer here.
+              }
+              console.log('mouse down. ' + _inputid);
+              action.call({}, _inputid);
+            });            
+          } else {
+            jQuery(_id).click(function(e){
+              if (_resettimer) {
+                // TODO Reset timer here.
+              }
+              console.log('mouse clicked. ' + _inputid);
+              action.call({}, _inputid);
+            });
+          }
+
         }
       } else if (soile2.rt.truthvalue(conf) === false) {
         jQuery(_id).unbind('click');
+        jQuery(_id).unbind('mousedown');
+        jQuery(_id).unbind('mouseup');
       }
     }
   };
