@@ -75,7 +75,7 @@
 
         <ul class="nav navbar-nav navbar-right">
         {?loggedIn}
-           <li><p class="navbar-text">Signed in as <a href="#" class="navbar-link">{user.username}</a></p></li>
+           <li><p class="navbar-text">Signed in as <a href="/user" class="navbar-link">{user.username}</a></p></li>
            <li>
             <form action="/logout">
          {?user.admin} 

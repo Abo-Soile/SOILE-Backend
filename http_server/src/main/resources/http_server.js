@@ -245,6 +245,38 @@ customMatcher.get("/logout", function(request) {
   request.redirect("/");
 });
 
+customMatcher.get("/user", function(request) {
+  var user = request.session.loggedIn();
+
+  //request.response.end("Logging user out " + JSON.stringify(uname));
+  templateManager.render_template("usersettings", {},request);
+});
+
+customMatcher.post("/user", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() { 
+    var params = data.getString(0, data.length());
+    params = utils.getUrlParams(params);
+
+    if (params.password === params.passwordAgain) {
+      console.log(JSON.stringify(request.session.loggedIn()));
+      userDAO.get(request.session.loggedIn()._id, function(user) {
+        user.setPassword(params.password);
+        user.save(function() {
+          templateManager.render_template("usersettings",{"success":true}, request);
+        });
+      });
+    }
+    else {
+      templateManager.render_template("usersettings",{"error":"The password didn't match, please try again"}, request);
+    }
+  });
+});
 
 customMatcher.get('/signup', function(request) {
   templateManager.render_template('signup', {},request);
