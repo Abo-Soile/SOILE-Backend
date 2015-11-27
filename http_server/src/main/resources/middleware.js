@@ -11,6 +11,15 @@ function requireAdmin(request, callback) {
   }
 }
 
+function requireLogin(request, callback) {
+  console.log("require login");
+  if (!request.session.loggedIn()) {
+    request.unauthorized();
+  } else {
+    callback(request);
+  }
+}
+
 function testMiddleware1(request, callback) {
   console.log("TEST MIDDLEWARE 1");
   request.test1 = "TEST1";
