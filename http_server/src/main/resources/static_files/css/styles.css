@@ -497,8 +497,15 @@ body {
   left: 3px; }
 
 /*TestList*/
+.testlist .testlist-folders tr > td {
+  cursor: pointer; }
+
 .testlist .testlist-folders .selected {
-  background-color: red; }
+  background-color: #457a84;
+  color: white; }
+
+.testlist .testlist-folders .selected:hover td:hover {
+  background-color: rgba(25, 25, 25, 0.25); }
 
 /*Image uploading and handling*/
 .invisibleElement {

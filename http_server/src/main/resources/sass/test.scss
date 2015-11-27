@@ -3,8 +3,21 @@
  .testlist {
 
     .testlist-folders {
+
+      tr > td {
+        cursor: pointer;
+      }
+
       .selected {
-        background-color: red;
+        background-color: rgb(69, 122, 132);
+        color: white;
+      }
+
+      .selected:hover {
+
+        td:hover {
+          background-color: rgba(25, 25, 25, 0.25);
+        }
       }
     }
 
