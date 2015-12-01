@@ -12,10 +12,15 @@
 
                 
             </div>
-            <div class="col-md-12">
-                <button data-dojo-type="dijit/form/Button" type="button" id="submitButton"> Submit</button>
 
+            <div class="col-md-12">
+                {?submitbutton}
+                <button data-dojo-type="dijit/form/Button" type="button" id="submitButton">{submitbutton}</button>
+                {:else}
+                <button data-dojo-type="dijit/form/Button" type="button" id="submitButton"> Submit</button>
+                {/submitbutton}
             </div>
+
             <div class="col-md-6 col-md-offset-3">
                 <div class="progress">
                     <div class="progress-bar progress-bar-success" role="progressvar" aria-valuenow="{completed}" aria-valuemin="0" aria-valuemax="100" style="width:{completed}%">

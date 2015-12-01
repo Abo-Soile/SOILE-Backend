@@ -39,7 +39,7 @@
       <br>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label>Start date</label>
       <p class="input-group">
         <input type="text" class="form-control" ng-model="startdate" ng-required:"true" is-open="opened" options="dateOptions" close-text="Close" datepicker-popup="[([format])]" />
@@ -49,7 +49,7 @@
       </p>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label>End Date</label>
       <p class="input-group">
         <input type="text" class="form-control" ng-model="enddate" ng-required:"true" is-open="opened" min-date="startdate" options="dateOptions"  close-text="Close" datepicker-popup="[([format])]"/>
@@ -59,9 +59,14 @@
       </p>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
       <label>Short url <a ng-if="experiment.shortname" href="/e/[([experiment.shortname])]">http://soile.braintrain.fi/e/[([experiment.shortname])]</a> </label>
       <input  class="form-control"  ng-model="experiment.shortname">
+    </div>
+
+    <div class="col-md-3">
+      <label>Submit button </label>
+      <input  class="form-control"  ng-model="experiment.submitbutton">
     </div>
 
     <div class="col-md-12">

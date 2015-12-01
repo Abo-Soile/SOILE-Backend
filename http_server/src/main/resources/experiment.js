@@ -200,6 +200,10 @@ router.get('/experiment/:id/phase/:phase', function(request) {
         if(phase.type === "form") {
           console.log("Form ");
 
+          if (exp.submitbutton) {
+            context.submitbutton = exp.submitbutton;
+          }
+
           formDAO.get(phase.id, function(form) {
             context.form = form.form;
 
