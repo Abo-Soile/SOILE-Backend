@@ -61,6 +61,47 @@ app.controller('TestListController', function($scope, $http, $location, testServ
 
     testService.listTests(folderName).then(function(res) {
       $scope.tests = res.data;
+    });
+  };
+});
+
+
+app.controller('TestListController', function($scope, $http, $location, testService) {
+  $scope.selectedFolder = false;
+  $scope.active = 0;
+  $scope.loading = false;
+
+
+  testService.listFolders().then(function(result) {
+    $scope.folders = result.data;
+    $scope.folders.unshift("All");
+    $scope.folders.unshift("unspecified");
+  });
+
+  testService.listTests().then(function(result) {
+    $scope.tests = result.data;
+  });
+
+  $scope.pickFolder = function(folderID) {
+    $scope.selectedFolder = $scope.folders[folderID];
+    $scope.active = folderID;
+
+    var folderName = "";
+
+    if($scope.selectedFolder !== "All") {
+      folderName = $scope.selectedFolder;
+    }
+
+    $scope.tests = [];
+    $scope.loading = true;
+
+    testService.listTests(folderName).then(function(res) {
+      $scope.tests = res.data;
+      $scope.loading = false;
     })
+  }
+
+  $scope.back = function() {
+    $scope.selectedFolder = false;
   }
 })
