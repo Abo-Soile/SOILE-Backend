@@ -499,6 +499,8 @@ body {
 /*TestList*/
 .testlist .testlist-folders tr > td {
   cursor: pointer; }
+  .testlist .testlist-folders tr > td i {
+    margin-right: 8px; }
 
 .testlist .testlist-folders .selected {
   background-color: #457a84;
@@ -519,7 +521,7 @@ body {
  *
  */
 .sk-wave {
-  margin: 40px auto;
+  margin: 80px auto;
   width: 100px;
   height: 70px;
   text-align: center;
@@ -529,7 +531,7 @@ body {
   background-color: #333;
   height: 100%;
   width: 8px;
-  margin-right: 3px;
+  margin-left: 3px;
   display: inline-block;
   -webkit-animation: sk-waveStretchDelay 1.2s infinite ease-in-out;
   animation: sk-waveStretchDelay 1.2s infinite ease-in-out; }

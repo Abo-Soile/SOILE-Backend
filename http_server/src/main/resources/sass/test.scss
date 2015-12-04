@@ -6,6 +6,10 @@
 
       tr > td {
         cursor: pointer;
+
+        i {
+          margin-right: 8px;
+        }
       }
 
       .selected {
