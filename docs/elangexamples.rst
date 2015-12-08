@@ -2,10 +2,10 @@
 Elang Examples
 ==============
 
-.. _link to reaction test: http://ocean.danielwarna.com:8081/test/d4039e00-e452-4303-bc13-689318167d18
-.. _link to Letter Memory: http://ocean.danielwarna.com:8081/test/ad088132-438f-4a4f-a65a-dafc6b6c4bea
-.. _link to boxes: http://ocean.danielwarna.com:8081/test/a578c12d-4951-488d-90a6-e230b10950fa
-.. _link to number letter: http://ocean.danielwarna.com:8081/test/edd1a4bd-fb05-46c9-aa0d-d282bf761c0a
+.. _link to reaction test: http://http://soile.braintrain.fi/test/d4039e00-e452-4303-bc13-689318167d18
+.. _link to Letter Memory: http://http://soile.braintrain.fi/test/ad088132-438f-4a4f-a65a-dafc6b6c4bea
+.. _link to boxes: http://http://soile.braintrain.fi/test/a578c12d-4951-488d-90a6-e230b10950fa
+.. _link to number letter: http://http://soile.braintrain.fi/test/edd1a4bd-fb05-46c9-aa0d-d282bf761c0a
 
 #############
 Reaction Test

@@ -385,7 +385,7 @@ We'll start by creating a minimal experiment that displays "Hello Test" for 3 se
     wait(3000)
   end
 
-  intemrezzo-phase test
+  interezzo-phase test
     showmsg("Test!")
     wait(3000)
   end
