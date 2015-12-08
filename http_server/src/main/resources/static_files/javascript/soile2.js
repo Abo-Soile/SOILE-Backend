@@ -887,13 +887,36 @@ SOILE2 = (function(){
     soile2.rt.schd.suspend(dur);
   };
 
-  bin.append = function(str1, str2) {
+  bin.append = function(str1, str2) { 
+
+    //More than two arguments
+    if(arguments.length > 2) {
+      if (_.isArray(arguments[0])) {
+        //Array first, add all args to array
+        var arr = arguments[0];
+        for (var i = 1; i < arguments.length; i++) {
+          arr.push(arguments[i]);
+        }
+
+        return arr;
+
+      } else {
+        //Else, build a string
+        //var args = Array.prototype.slice.call(arguments);
+
+        var string = "";
+        for (var i = 0; i < arguments.length; i++) {
+          string += arguments[i];
+        }
+
+        return string;
+      }
+    }
 
     if(_.isArray(str1) && _.isArray(str2)) {
       str1.push.apply(str1, str2);
       return str1;
     }
-
 
     //console.log("str1: " + str1 + " " + typeof str1 + " ||str2 " + str2 + " " + typeof str2)
     if(typeof str1 === "undefined") {
