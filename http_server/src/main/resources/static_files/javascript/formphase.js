@@ -126,14 +126,15 @@ require(["dijit/form/HorizontalSlider",
       var id = params[0];
       var maxlen = params[1];
 
-      var text = registry.byId(id).get('value');
-      console.log(text);
+      var text = registry.byId(id).get('value').replace(/\r?\n|\r/g, " ");
+      //console.log(text);
       if (maxlen > text.length) {
         text = text;
       }
       else {
         text = text.substring(0, maxlen);
       }
+      
       qdata[column] = text;
     }
 
