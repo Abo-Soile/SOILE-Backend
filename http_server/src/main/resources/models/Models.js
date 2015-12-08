@@ -206,6 +206,7 @@ TEST
 function Test(arg) {
     this.published = false;
     this.name = "Unnamed";
+    this.folder = "Unspecified";
 
     BaseModel.call(this, arg);
 
@@ -232,7 +233,7 @@ Test.prototype.copy = function(userid, callback) {
   test.name = this.name + "_copy";
 
   if (typeof test.code === 'undefined') {
-    test.code = ""
+    test.code = "";
   } 
 
   delete test.id;
@@ -242,7 +243,7 @@ Test.prototype.copy = function(userid, callback) {
   test.save(function() {
 
     console.log("Replacing id:s " + that._id + " -> " + test._id);
-    console.log(JSON.stringify(that.code.indexOf(that._id)))
+    console.log(JSON.stringify(that.code.indexOf(that._id)));
 
     //test.code = test.code.replace(that._id, test._id);
 
