@@ -130,7 +130,7 @@ router.post("/test/:id", requireAdmin, function(request) {
     var folder = data.folder;
 
     if (typeof folder === "undefined" || folder === "") {
-      folder = "Unspecified";
+      folder = "Unspecifid";
     }
     
     testDAO.get(id, function(test) {

@@ -42,10 +42,7 @@ app.controller('TestListController', function($scope, $http, $location, testServ
   testService.listFolders().then(function(result) {
     $scope.folders = result.data;
     $scope.folders.unshift("All");
-
-    if (!$scope.folder.hasOwnProperty("Unspecified")) {
-      $scope.folders.unshift("Unspecified");
-    }
+    $scope.folders.unshift("unspecified");
   });
 
   testService.listTests().then(function(result) {
@@ -78,9 +75,7 @@ app.controller('TestListController', function($scope, $http, $location, testServ
   testService.listFolders().then(function(result) {
     $scope.folders = result.data;
     $scope.folders.unshift("All");
-    if (!$scope.folder.hasOwnProperty("Unspecified")) {
-      $scope.folders.unshift("Unspecified");
-    }
+    $scope.folders.unshift("unspecified");
   });
 
   testService.listTests().then(function(result) {

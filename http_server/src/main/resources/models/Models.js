@@ -22,15 +22,10 @@ var testImages = config.directory + "/testimages";
 var utils = require('utils');
 var BaseModel = require('models/baseModel');
 
-/*
-  Main user class; 
-*/
-function User(arg) {
-    //this.isAdmin = false;
-    //this.isEditor = false;
 
-    this.role = "user";
-    this.org = "standard";
+function User(arg) {
+    this.isAdmin = false;
+    this.isEditor = false;
 
     BaseModel.call(this, arg);
  
@@ -52,22 +47,6 @@ User.prototype.setOrganisation = function(org) {
   this.organisation = org;
 };
 
-User.prototype.isAdminF = function() {
-  if (this.role === "admin") {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-User.prototype.isEditorF = function() {
-  if (this.role === "editor") {
-    return true;
-  } else {
-    return false;
-  }
-};
-
 
 function Experiment(arg) {
 
@@ -84,12 +63,6 @@ function Experiment(arg) {
 Experiment.prototype = new BaseModel();
 Experiment.prototype.constructor = Experiment;
 Experiment.collection = "experiment";
-
-Experiment.prototype.save = function(callback) {
-  this.lastupdate = new Date();
-
-  return BaseModel.prototype.save.call(this, callback);
-};
 
 Experiment.prototype.isActive = function() {
   var currentDate = new Date();
@@ -151,7 +124,7 @@ Experiment.prototype.isRandom = function() {
 
   if(randomCount > 1) {
     this.israndom = true;
-    return;
+    return
   }
 
   this.israndom = false;
@@ -233,7 +206,6 @@ TEST
 function Test(arg) {
     this.published = false;
     this.name = "Unnamed";
-    this.folder = "Unspecified";
 
     BaseModel.call(this, arg);
 
@@ -244,11 +216,6 @@ Test.prototype = new BaseModel();
 Test.prototype.constructor = Test;
 Test.collection = "tests";
 
-Test.prototype.save = function(callback) {
-  this.lastupdate = new Date();
-
-  return BaseModel.prototype.save.call(this, callback);
-};
 
 /*
   Creates a copy of the experiment with the given userid as owner
@@ -265,7 +232,7 @@ Test.prototype.copy = function(userid, callback) {
   test.name = this.name + "_copy";
 
   if (typeof test.code === 'undefined') {
-    test.code = "";
+    test.code = ""
   } 
 
   delete test.id;
@@ -275,7 +242,7 @@ Test.prototype.copy = function(userid, callback) {
   test.save(function() {
 
     console.log("Replacing id:s " + that._id + " -> " + test._id);
-    console.log(JSON.stringify(that.code.indexOf(that._id)));
+    console.log(JSON.stringify(that.code.indexOf(that._id)))
 
     //test.code = test.code.replace(that._id, test._id);
 
