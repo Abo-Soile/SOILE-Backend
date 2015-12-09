@@ -110,7 +110,7 @@ router.post("/training", requireAdmin,function(request) {
   newTraining.name = "";
 
   newTraining.save(function(callback) {
-      request.redirect("/experiment/"+newTraining._id+"/edit");
+      request.redirect("/training/"+newTraining._id+"/edit");
       request.response.end();
 
   });
