@@ -1636,6 +1636,9 @@ SOILE2 = (function(){
           return null;
         }
         return _score;
+      },
+      "reset":function() {
+        _score = {}
       }
     };
   })();
@@ -1667,6 +1670,9 @@ SOILE2 = (function(){
       },
       'set':function(data) {
         _variables = data;
+      },
+      "reset":function() {
+        _variables = {};
       }
     };
   })();
@@ -2253,6 +2259,8 @@ SOILE2 = (function(){
   util.resetData = function() {
     soile2.rt.dataHandler.reset();
     soile2.rt.keyhandler.reset();
+    soile2.rt.scoreHandler.reset();
+    soile2.rt.persistantDataHandler.reset();
 
     allReady = false;
   };

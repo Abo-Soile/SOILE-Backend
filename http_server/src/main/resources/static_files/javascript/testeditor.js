@@ -234,6 +234,16 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       $scope.rawHeaders = headers;
       $scope.rawData = rows;
 
+      if (score || persistantData) {
+        $scope.trainingdata = true;
+      } 
+      else {
+        $scope.trainingdata = false;
+      }
+
+      $scope.score = score;
+      $scope.storedVariables = persistantData;
+
       $scope.$apply();
 
       console.log($scope);
