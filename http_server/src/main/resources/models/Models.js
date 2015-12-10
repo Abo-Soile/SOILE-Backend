@@ -82,6 +82,13 @@ Experiment.prototype = new BaseModel();
 Experiment.prototype.constructor = Experiment;
 Experiment.collection = "experiment";
 
+Experiment.prototype.save = function(callback) {
+  this.lastupdate = new Date();
+
+  return BaseModel.prototype.save.call(this, callback);
+};
+
+
 Experiment.prototype.isActive = function() {
   var currentDate = new Date();
   var millisecondsPerDay = 1000*3600*24;
@@ -235,6 +242,11 @@ Test.prototype = new BaseModel();
 Test.prototype.constructor = Test;
 Test.collection = "tests";
 
+Test.prototype.save = function(callback) {
+  this.lastupdate = new Date();
+
+  return BaseModel.prototype.save.call(this, callback);
+};
 
 /*
   Creates a copy of the experiment with the given userid as owner
