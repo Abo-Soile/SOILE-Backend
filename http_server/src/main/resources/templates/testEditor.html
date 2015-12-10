@@ -159,6 +159,50 @@
             </div>
         </div>
 
+        <div ng-if="trainingdata" class="">
+            <div class="col-md-6">
+            <div class="panel panel-fancy">
+                <h5>Score</h5>
+                <div class="overflow">
+                    <table id="dataTable" class="table table-striped table-responsive overflow">
+                        <thead>
+                            <td ng-repeat="(key, value) in score">
+                                [([key])]
+                            </td> 
+                        </thead>
+                        <tbody>
+                            <td ng-repeat="(key, valuee) in score">
+                                [([valuee])]    
+                            </td>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            </div>
+
+            <div class="col-md-6">
+            <div class="panel panel-fancy">
+                <h5>Variables</h5>
+                <div class="overflow">
+                    <table id="dataTable" class="table table-striped table-responsive overflow">
+                        <thead>
+                            <td ng-repeat="(key, value) in storedVariables">
+                                [([key])]
+                            </td> 
+                        </thead>
+                        <tbody>
+                            <td ng-repeat="(key, valuee) in storedVariables">
+                                [([valuee])]    
+                            </td>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            </div>
+            
+        </div>
 
 
         <div class="col-md-8">
