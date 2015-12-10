@@ -2,12 +2,32 @@ var console = require('vertx/console');
 
 
 function requireAdmin(request, callback) {
-  console.log("CHECKING FOR ADMIN MIDDLEWARE" + request)
+  //console.log("CHECKING FOR ADMIN MIDDLEWARE" + request)
   if (!request.session.isAdmin()) {
     request.unauthorized();
   }else {
     callback(request);
     return;
+  }
+}
+
+function requireEditor(request, callback) {
+  console.log("Checking for editor");
+  if(request.session.currentUser){
+    console.log(JSON.stringify(request.session.currentUser));
+    console.log("IS ADMIN:" + request.session.currentUser.isAdmin());
+
+    console.log("IS EDIT:" + request.session.currentUser.isEditor());
+  }
+
+  if(!request.session.user) {
+    request.unauthorized();
+  } else {
+    if (!(request.session.currentUser.isEditor() || request.session.currentUser.isAdmin())) {
+      request.unauthorized();
+    } else {
+      return callback(request);
+    }
   }
 }
 
@@ -32,5 +52,6 @@ function testMiddleware2(request, callback) {
 }
 
 module.exports.requireAdmin = requireAdmin;
+module.exports.requireEditor = requireEditor;
 module.exports.m1 = testMiddleware1;
 module.exports.m2 = testMiddleware2;

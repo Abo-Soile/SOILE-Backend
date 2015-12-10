@@ -4,6 +4,7 @@ var mongo = require("mongoHandler");
 var utils = require("utils");
 
 var userDAO = require("models/DAObjects").UserDAO;
+var User = require("models/Models").User;
 
 var sessionMap = vertx.getMap("soile.session.map");
 
@@ -20,6 +21,10 @@ var sessionManager =  {
 
     if (typeof this.cookies == "undefined") {
       this.cookies = "";
+    }
+
+    if(this.loggedIn()) {
+      this.currentUser = new User(this.loggedIn());
     }
 
     return this;
@@ -147,6 +152,7 @@ var sessionManager =  {
       return false;
     }
     else {
+      return this.currentUser.isAdmin();
       return JSON.parse(sessionData).admin;
     }
   },

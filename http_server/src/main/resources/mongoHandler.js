@@ -120,7 +120,9 @@ var mongoHandler = {
                                       "username":username,
                                       "password": pass,
                                       "admin":true,
-                                      "superuser":true
+                                      "superuser":true,
+                                      "org":"standard",
+                                      "role":"admin"
                                        }},
     function(reply) {
       console.log("Generated admin");

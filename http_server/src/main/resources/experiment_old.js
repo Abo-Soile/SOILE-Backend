@@ -8,7 +8,10 @@ var router = new CustomMatcher();
 var utils = require("utils");
 var mongo = require('mongoHandler');
 
-var requireAdmin = utils.requireAdmin;
+//var requireAdmin = utils.requireAdmin;
+var middle = require("middleware");
+var requireAdmin = middle.requireAdmin;
+
 
 var testDAO = require("models/DAObjects").TestDAO;
 
@@ -197,7 +200,7 @@ router.get('/old_experiment/:id', function(request){
 });
 
 
-router.get('/old_experiment/:id/edit', requireAdmin(function(request){
+router.get('/old_experiment/:id/edit', requireAdmin, function(request){
 
   var id = request.params().get('id');
   console.log(id);
@@ -208,10 +211,10 @@ router.get('/old_experiment/:id/edit', requireAdmin(function(request){
     templateManager.render_template("editexperiment", {"exp":experiment},request);
   });
  
-}));
+});
 
 
-router.post('/old_experiment/:id/edit', requireAdmin(function(request){
+router.post('/old_experiment/:id/edit', requireAdmin, function(request){
     var data = new vertx.Buffer();
     var id = request.params().get('id');
 
@@ -241,9 +244,9 @@ router.post('/old_experiment/:id/edit', requireAdmin(function(request){
       });
       //request.response.end({"status":"ok","id":id});
     });
-}));
+});
 
-router.post('/old_experiment/:id/addform', requireAdmin(function(request){
+router.post('/old_experiment/:id/addform', requireAdmin, function(request){
 
   var address = utils.get_address('questionnaire_render');
   var expId = request.params().get('id');
@@ -265,10 +268,10 @@ router.post('/old_experiment/:id/addform', requireAdmin(function(request){
       request.response.end(JSON.stringify(response));
     });
   });
-}));
+});
 
 
-router.post('/old_experiment/:id/editformname', requireAdmin(function(request){
+router.post('/old_experiment/:id/editformname', requireAdmin, function(request){
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -288,10 +291,10 @@ router.post('/old_experiment/:id/editformname', requireAdmin(function(request){
       request.response.end(JSON.stringify(r.result));
     });
   });
-}));
+});
 
 
-router.post("/old_experiment/:id/addtest", requireAdmin(function(request) {
+router.post("/old_experiment/:id/addtest", requireAdmin, function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -318,10 +321,10 @@ router.post("/old_experiment/:id/addtest", requireAdmin(function(request) {
       request.response.end(JSON.stringify(resp));
     });
   });
-}));
+});
 
 
-router.post("/old_experiment/:id/randomizeorder", requireAdmin(function(request) {
+router.post("/old_experiment/:id/randomizeorder", requireAdmin, function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -339,10 +342,10 @@ router.post("/old_experiment/:id/randomizeorder", requireAdmin(function(request)
       request.response.end("Ending");
     });
   });
-}));
+});
 
 
-router.post('/old_experiment/:id/deletecomponent', requireAdmin(function(request) {
+router.post('/old_experiment/:id/deletecomponent', requireAdmin, function(request) {
   var expId = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -361,7 +364,7 @@ router.post('/old_experiment/:id/deletecomponent', requireAdmin(function(request
     });
 
   });
-}));
+});
 
 
 router.get('/old_experiment/:id/json', function(request){
@@ -581,7 +584,7 @@ router.get('/experiment/:id/end', function(request) {
 
 
 //Performs a custom crafted join on gathered data.
-router.get('/experiment/:id/data', requireAdmin(function(request) {
+router.get('/experiment/:id/data', requireAdmin, function(request) {
   var expID = request.params().get('id');
   mongo.experiment.formData(expID, function(r) {
       
@@ -659,12 +662,12 @@ router.get('/experiment/:id/data', requireAdmin(function(request) {
     //request.response.end("\ufeff " + stringFields+"\n"+ userFields);
     request.response.end("\ufeff " + csv);
   });
-}));
+});
 
 
 // Does pretty much the same as the form data method, 
 // Might generate empty fields when using phase no as array index
-router.get('/experiment/:id/testdata', requireAdmin(function(request) {
+router.get('/experiment/:id/testdata', requireAdmin, function(request) {
 
   var expID = request.params().get('id');
 
@@ -751,21 +754,21 @@ router.get('/experiment/:id/testdata', requireAdmin(function(request) {
     });
   });
  
-}));
+});
 // /experiment/:id/phase/:phase/rawdata'
-router.get('/experiment/:id/rawdata', requireAdmin(function(request) {
+router.get('/experiment/:id/rawdata', requireAdmin, function(request) {
   var expID = request.params().get('id');
   mongo.experiment.testData(expID, function(r) {
     var data = r.results;
 
     request.response.end(JSON.stringify(data));
   });
-}));
+});
 
 
 // Returns raw tesdata from a testphase as a csv, data is formatted 
 // Doesn't format correcly if some fields are missing from the data
-router.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(request) {
+router.get('/experiment/:id/phase/:phase/rawdata', requireAdmin, function(request) {
   var expId = request.params().get('id');
   var phase = request.params().get('phase');
   mongo.experiment.rawTestData(expId, phase, function(r) {
@@ -833,11 +836,11 @@ router.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(request
   });
 
 
-}));
+});
 
 // Outputs 2d data where the useris is stored in every row, making it easier to perform various operation 
 // on the data. 
-router.get('/experiment/:id/phase/:phase/rawdata_pivot', requireAdmin(function(request) {
+router.get('/experiment/:id/phase/:phase/rawdata_pivot', requireAdmin, function(request) {
   var expId = request.params().get('id');
   var phase = request.params().get('phase');
   mongo.experiment.rawTestData(expId, phase, function(r) {
@@ -918,7 +921,7 @@ router.get('/experiment/:id/phase/:phase/rawdata_pivot', requireAdmin(function(r
 
     request.response.end("\ufeff " + csvData);
   });
-}));
+});
 
 /*
 router.get('/test/demo', function(request) {

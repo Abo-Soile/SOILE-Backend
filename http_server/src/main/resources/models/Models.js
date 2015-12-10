@@ -23,9 +23,12 @@ var utils = require('utils');
 var BaseModel = require('models/baseModel');
 
 
+/*
+  Main user class; 
+*/
 function User(arg) {
-    this.isAdmin = false;
-    this.isEditor = false;
+    this.role = "user";
+    this.org = "standard";
 
     BaseModel.call(this, arg);
  
@@ -47,6 +50,21 @@ User.prototype.setOrganisation = function(org) {
   this.organisation = org;
 };
 
+User.prototype.isAdmin = function() {
+  if (this.role === "admin") {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+User.prototype.isEditor = function() {
+  if (this.role === "editor" || this.role === "admin") {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 function Experiment(arg) {
 
@@ -124,7 +142,7 @@ Experiment.prototype.isRandom = function() {
 
   if(randomCount > 1) {
     this.israndom = true;
-    return
+    return;
   }
 
   this.israndom = false;

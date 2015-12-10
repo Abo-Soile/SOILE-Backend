@@ -10,10 +10,11 @@ var mongo = require('mongoHandler');
 
 var formDAO = require("models/DAObjects").FormDAO;
 
-var requireAdmin = utils.requireAdmin;
+var middle = require("middleware");
+var requireAdmin = middle.requireAdmin;
 
 
-router.get('/questionnaire/mongo/:id', requireAdmin(function(request){
+router.get('/questionnaire/mongo/:id', requireAdmin, function(request){
   var id = request.params().get('id');
   
   formDAO.get(id, function(form) {
@@ -27,10 +28,10 @@ router.get('/questionnaire/mongo/:id', requireAdmin(function(request){
     var markup = r.result.markup;
     templateManager.render_template('displayForm', {"form":form,"markup":markup},request);
   });*/
-}));
+});
 
 
-router.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
+router.post('/questionnaire/mongo/:id', requireAdmin, function(request) {
   var postdata = new vertx.Buffer();
   var id = request.params().get("id");
 
@@ -65,7 +66,7 @@ router.post('/questionnaire/mongo/:id', requireAdmin(function(request) {
       request.response.end(JSON.stringify(response));
     });
   });
-}));
+});
 
 
 router.get('/questionnaire/mongo/:id/getform', function(request) {

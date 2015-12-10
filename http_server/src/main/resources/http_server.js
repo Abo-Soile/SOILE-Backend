@@ -24,6 +24,8 @@ var userDAO = require("models/DAObjects").UserDAO;
 var testDAO = require("models/DAObjects").TestDAO;
 var experimentDAO = require("models/DAObjects").ExperimentDAO;
 
+var middle = require("middleware");
+
 var a = new java.lang.String("sdfsdfs");
 console.log(a.hashCode());
 console.log(JSON.stringify(container.config));
@@ -162,6 +164,9 @@ customMatcher.get("/login/forgotten", function(request) {
     templateManager.render_template("forgotten", {}, request);
 });
 
+customMatcher.get("/testeditor", middle.requireEditor, function(request) {
+    request.response.end("Require editor");
+});
 
 customMatcher.post("/login/forgotten", function(request) {
 
@@ -355,13 +360,13 @@ customMatcher.post("/signup", function(request) {
 });
 
 
-customMatcher.get('/users', requireAdmin(function(request){
+customMatcher.get('/users', requireAdmin, function(request){
   mongo.user.list(true, function(r) {
       var admins = r.results;
       console.log(JSON.stringify(r));
       templateManager.render_template("userList",{"users":admins}, request);
     });
-}));
+});
 
 
 /*
