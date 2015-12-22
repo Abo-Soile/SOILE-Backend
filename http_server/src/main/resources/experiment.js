@@ -144,7 +144,7 @@ router.get('/experiment/:id/phase/:phase', function(request) {
 
   var userID = request.session.getPersonToken();
 
-  dataDAO.get({"userid":userID, "expId": expID}, function(userdata) {
+  dataDAO.get({"userid":userID, "expId": expID, "type":"general"}, function(userdata) {
     var reg = /phase\/\d*/;
 
     //Checking if user has visited the landing page
