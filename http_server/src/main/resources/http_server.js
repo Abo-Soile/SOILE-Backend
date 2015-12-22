@@ -32,7 +32,8 @@ console.log(JSON.stringify(container.config));
 
 var utils = require("utils");
 
-var requireAdmin = utils.requireAdmin;
+//var requireAdmin = utils.requireAdmin;
+var requireAdmin = middle.requireAdmin;
 
 function sendEmail(subject, body, address, func) {
   var mailAddress = "soile.my_mailer";
