@@ -220,6 +220,22 @@ DataDAO.prototype.getOrGenerateGeneral = function(userid, exp, request, callback
   });
 };
 
+/*Aggregate completions per phase
+db.data.aggregate([
+    {$match:{expId:"8d4f15f3-d2a8-4001-a83c-6cd080b46911",deleted:{$in: [null, false]}}},
+    {$group:{_id:"$phase", count:{$sum:1}}}
+    ])
+
+
+{
+    "action": "aggregate",
+    "collection": "testcities",
+    pipelines: [
+        {$match:{expId:"8d4f15f3-d2a8-4001-a83c-6cd080b46911",deleted:{$in: [null, false]}}},
+        {$group:{_id:"$phase", count:{$sum:1}}}
+    ]
+}  
+*/
 function TrainingDAO() {
     BaseDAO.call(this);
     this._baseObject = models.Training;
