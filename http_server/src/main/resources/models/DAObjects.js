@@ -93,7 +93,9 @@ ExperimentDAO.prototype.countParticipants = function(expId, callback) {
 
     dataDAO.count(confMatcher, function(confirmed) {
         dataDAO.count(totalMatcher, function(total) {
-            callback({"confirmed":confirmed, "total":total})
+            dataDAO.getPhaseCompletion(expId, function(completion) {
+                callback({"confirmed":confirmed, "total":total, "completion":completion});
+            });
         });
     });
 };
@@ -218,6 +220,19 @@ DataDAO.prototype.getOrGenerateGeneral = function(userid, exp, request, callback
         callback(data);
     }
   });
+};
+
+DataDAO.prototype.getPhaseCompletion = function(expId, callback) {
+    var pipe = [
+        {$match:{expId:expId, 
+                 phase:{$gte:0},
+                 deleted:{$in: [null, false]}}},
+        {$group:{_id:"$phase", count:{$sum:1}}}
+    ];
+
+    this.aggregate(pipe, function(result){
+        callback(result);
+    });
 };
 
 /*Aggregate completions per phase
