@@ -159,6 +159,19 @@ BaseDAO.prototype.sendToMongo = function(arg, callback) {
     );
 };
 
+BaseDAO.prototype.aggregate = function(pipeline, callback) {
+    var obj = {}
+    obj.pipelines = pipeline;
+    obj.action = "aggregate";
+
+    this.sendToMongo(obj, function(res) {
+        if (res.status=="ok") {
+            return callback(res.results);
+        }
+        return callback(false)
+    }
+};
+
 BaseDAO.prototype.handleMore = function(obj, data, callback) {
     //console.log("Building new replier")
     return function(reply, replier) {
