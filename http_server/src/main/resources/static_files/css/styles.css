@@ -705,8 +705,10 @@ testeditor styles
 #loadAnim {
   position: absolute;
   left: 400px;
-  top: 150px; }
+  top: 150px;
+  left: 450px; }
 
+/*
 .loaderAnim {
   font-size: 10px;
   margin: 5em auto;
@@ -725,8 +727,8 @@ testeditor styles
   animation: load3 1.4s infinite linear;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
-  transform: translateZ(0); }
-  .loaderAnim:before {
+  transform: translateZ(0);
+  &:before {
     width: 50%;
     height: 50%;
     background: gray;
@@ -734,8 +736,9 @@ testeditor styles
     position: absolute;
     top: 0;
     left: 0;
-    content: ''; }
-  .loaderAnim:after {
+    content: '';
+  }
+  &:after {
     background: white;
     width: 75%;
     height: 75%;
@@ -746,23 +749,35 @@ testeditor styles
     top: 0;
     left: 0;
     bottom: 0;
-    right: 0; }
+    right: 0;
+  }
+}
 
 @-webkit-keyframes load3 {
   0% {
     -webkit-transform: rotate(0deg);
-    transform: rotate(0deg); }
+    transform: rotate(0deg);
+  }
+
   100% {
     -webkit-transform: rotate(360deg);
-    transform: rotate(360deg); } }
+    transform: rotate(360deg);
+  }
+}
+
 
 @keyframes load3 {
   0% {
     -webkit-transform: rotate(0deg);
-    transform: rotate(0deg); }
+    transform: rotate(0deg);
+  }
+
   100% {
     -webkit-transform: rotate(360deg);
-    transform: rotate(360deg); } }
+    transform: rotate(360deg);
+  }
+}
+*/
 
 #trainingView ul {
   list-style-type: none; }
