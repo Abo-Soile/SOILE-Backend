@@ -169,7 +169,7 @@ BaseDAO.prototype.aggregate = function(pipeline, callback) {
             return callback(res.results);
         }
         return callback(false)
-    }
+    });
 };
 
 BaseDAO.prototype.handleMore = function(obj, data, callback) {
