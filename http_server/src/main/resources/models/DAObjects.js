@@ -200,7 +200,7 @@ DataDAO.prototype.getOrGenerateGeneral = function(userid, exp, request, callback
         data.initGeneral(exp);
 
         data.referer = "direct";
-
+        data.ip = request.remoteAddress().getHostString();
 
         if(typeof request.headers().get("Referer") != 'undefined'){
             data.referer  = request.headers().get("Referer");
