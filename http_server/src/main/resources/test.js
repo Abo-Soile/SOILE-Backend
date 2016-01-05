@@ -235,6 +235,16 @@ router.get('/test/:id/imagelist', requireAdmin,function(request) {
   var id = request.params().get('id');
   var files = [];
 
+  function sortByName(a, b) {
+    if (a.name < b.name)
+        return -1;
+    else if (a.name > b.name) {
+      return 1;
+    }else {
+      return 0;
+    }
+  }
+
   vertx.fileSystem.readDir(testImages + "/" + id, function(err, res) {
     if (!err) {
       //files = res;
@@ -246,9 +256,16 @@ router.get('/test/:id/imagelist', requireAdmin,function(request) {
         files.push(file);
       }
 
+      files = files.sort(sortByName);
+
       var fileJSON = JSON.stringify(files);
       request.response.end(fileJSON);
     }
+
+    else {
+      request.notfound();
+    }
+
   });
 });
 
