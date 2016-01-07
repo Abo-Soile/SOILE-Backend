@@ -193,7 +193,7 @@
     .imgenlarge {
       span {
         position: absolute;
-        right: -9999px;
+        /*right: -9999px;*/
         padding: 2px;
         border-radius: 5px;
         border: 1px solid gray;
@@ -201,11 +201,19 @@
         z-index: 300;
         display: none;
         top: 150px;
+        
         img {
           max-height: 300px;
           max-width: 300px;
           width: auto;
           height: auto;
+        }
+
+        p {
+          text-align: center;
+          margin:0px;
+          padding:2px;
+          padding-bottom: 1px;
         }
       }
       &:hover span {

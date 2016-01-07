@@ -59,7 +59,10 @@
                 <ul id="imagelist"> 
                     <li ng-repeat="img in images"> 
                         <span class="imgenlarge"><img ng-src="/[([img.url])]">
-                            <span > <img align="right" ng-src="/[([img.url])]"> </span>
+                            <span > 
+                                <img align="right" ng-src="/[([img.url])]"> 
+                                <p>[([img.name])]</p>
+                            </span>
                         </span>
                         <span class='imgname'>[([img.name])]</span>
                         <span>

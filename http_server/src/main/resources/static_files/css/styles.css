@@ -650,7 +650,7 @@ body {
 
 #imagelist li .imgenlarge span {
   position: absolute;
-  right: -9999px;
+  /*right: -9999px;*/
   padding: 2px;
   border-radius: 5px;
   border: 1px solid gray;
@@ -663,6 +663,11 @@ body {
     max-width: 300px;
     width: auto;
     height: auto; }
+  #imagelist li .imgenlarge span p {
+    text-align: center;
+    margin: 0px;
+    padding: 2px;
+    padding-bottom: 1px; }
 
 #imagelist li .imgenlarge:hover span {
   right: 280px;
