@@ -201,7 +201,7 @@
         z-index: 300;
         display: none;
         top: 150px;
-        
+
         img {
           max-height: 300px;
           max-width: 300px;
@@ -223,6 +223,23 @@
         left: auto;
         display: block;
       }
+    }
+  }
+}
+
+#advancedSettings {
+  h3 {
+    border-bottom: 1px solid gray;
+    margin-left: 30px;
+
+    button {
+      border-radius: 30px;
+      position: relative;
+      right: 30px;
+    }
+
+    span {
+      margin-left:-25px;
     }
   }
 }

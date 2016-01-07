@@ -676,6 +676,16 @@ body {
   left: auto;
   display: block; }
 
+#advancedSettings h3 {
+  border-bottom: 1px solid gray;
+  margin-left: 30px; }
+  #advancedSettings h3 button {
+    border-radius: 30px;
+    position: relative;
+    right: 30px; }
+  #advancedSettings h3 span {
+    margin-left: -25px; }
+
 /*Logger styles */
 .overflow300 {
   min-height: 100px !important;

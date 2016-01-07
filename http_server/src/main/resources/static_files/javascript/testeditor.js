@@ -126,6 +126,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   $scope.test = {};
 
+  $scope.showAdvanced = false;
+
 	$scope.aceLoaded = function(_editor) {
     // Options
     $scope.editor = _editor;
@@ -151,6 +153,10 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
     window.langTool.addCompleter(autocompleter);
   };
+
+  $scope.showhideadvance = function() {
+    $scope.showAdvanced = !$scope.showAdvanced
+  }
 
   $scope.compileTest = function() {
   	var code = {"code":$scope.editor.getValue()};

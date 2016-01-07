@@ -206,16 +206,33 @@
             </div>
             
         </div>
+    </div>
 
 
-        <div class="col-md-8">
-            <label class="radio-inline">
-            </label>
-            <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" value="false"/> Private
-            <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="published" value="true"/> Published
-        </div>
-        <div class="col-md-2">
-            <a class="btn btn-success"href="{URI}/copy">Copy test</a>
+    <div class="row" id="advancedSettings">
+        <div class="showadvance col-md-12">
+            <h3 class="">
+                <button class="btn btn-default btn-sm" ng:click="showhideadvance()">
+                <i ng-if="showAdvanced" class="fa fa-angle-double-up"></i>
+                <i ng-if="!showAdvanced" class="fa fa-angle-double-down"></i>
+                </button>
+                <span>Advanced settings</span>
+            </h3>
+
+            <div ng-if="!showAdvanced" class="col-md-12">
+                
+            </div>
+            <div ng-if="showAdvanced">
+                <div class="col-md-8">
+                    
+                    <label class="radio-inline">
+                    </label>
+                    <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" value="false"/> Private
+                    <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="published" value="true"/> Published
+                </div>
+                <div class="col-md-2">
+                    <a class="btn btn-success"href="{URI}/copy">Copy test</a>
+                </div>
         </div>
 
     </div>  
