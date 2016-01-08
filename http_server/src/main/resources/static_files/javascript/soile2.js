@@ -1329,16 +1329,16 @@ SOILE2 = (function(){
           var keycode = soile2.rt.kbd.keycode(key);
 
           onkey = function() {
-            soile2.bin.resume();
             keyfunctions[keycode] = null;
+            soile2.bin.resume();
           };
 
           keyfunctions[keycode] = onkey;
         } else {
           onkey = function(key) {
-            soile2.bin.resume();
             var index = anykeyfunctions.indexOf(onkey);
             anykeyfunctions.splice(index, 1);
+            soile2.bin.resume();
           };
 
           anykeyfunctions.push({"func":onkey, "ignoreFunc":ignoreFunc});
