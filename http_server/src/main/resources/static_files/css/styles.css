@@ -614,6 +614,18 @@ body {
   -moz-animation: none !important;
   -o-animation: none !important; }
 
+/* Display */
+#display input[type="text"], #display textarea {
+  border-radius: 5px;
+  border: gray solid 1px;
+  padding: 4px; }
+
+#display textarea:focus, #display input[type="text"]:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+  box-shadow: inset 0 1px 1px; }
+
 .pauseAnimation {
   animation-play-state: paused !important;
   -webkit-animation-play-state: paused !important;
