@@ -35,46 +35,59 @@ public class Builtin {
     static {
         builtinFunctions = new HashSet<>();
         
-        builtinFunctions.add("and");
         builtinFunctions.add("copydata");
         builtinFunctions.add("copystimulus");
-        builtinFunctions.add("divide");
 
-        builtinFunctions.add("eq");
-        builtinFunctions.add("equals");
-        builtinFunctions.add("fuzzyequal");
-
-        builtinFunctions.add("greaterthan");
-        builtinFunctions.add("gt");
-        builtinFunctions.add("gte");
         builtinFunctions.add("helptext");
         builtinFunctions.add("hide");
+        builtinFunctions.add("hideall");
         builtinFunctions.add("hidemsg");
+
         builtinFunctions.add("imagefile");
         builtinFunctions.add("kbdactive");
         builtinFunctions.add("kbdconfig");
         builtinFunctions.add("kbdkey");
         builtinFunctions.add("length");
+
+        //Comparisons
+        builtinFunctions.add("eq");
+        builtinFunctions.add("equals");
+        builtinFunctions.add("fuzzyequal");
+
         builtinFunctions.add("lessthan");
         builtinFunctions.add("lt");
         builtinFunctions.add("lte");
 
+        builtinFunctions.add("greaterthan");
+        builtinFunctions.add("gt");
+        builtinFunctions.add("gte");
+
+        // Basic math operators
+        builtinFunctions.add("plus");
         builtinFunctions.add("minus");
-        builtinFunctions.add("minutes");
         builtinFunctions.add("multiply");
+        builtinFunctions.add("divide");
         builtinFunctions.add("modulo");
+
         builtinFunctions.add("round");
+
         builtinFunctions.add("nkeypresses");
         builtinFunctions.add("nmouseclicks");
         builtinFunctions.add("onmouseclick");
+
+        //Logic
         builtinFunctions.add("not");
         builtinFunctions.add("or");
-        builtinFunctions.add("plus");
+        builtinFunctions.add("and");
+
+
         builtinFunctions.add("position");
+
         builtinFunctions.add("recordts");
         builtinFunctions.add("starttimer");
         builtinFunctions.add("elapsedtime");
         builtinFunctions.add("seconds");
+        builtinFunctions.add("minutes");
 
         builtinFunctions.add("show");
         builtinFunctions.add("animate");
@@ -93,7 +106,7 @@ public class Builtin {
         builtinFunctions.add("range");
         builtinFunctions.add("shuffle");
 
-        //Radnom
+        //Random
         builtinFunctions.add("randominteger");
         builtinFunctions.add("randomnumber");
         builtinFunctions.add("seedrandom");
@@ -133,9 +146,12 @@ public class Builtin {
 
         //Text input
         builtinFunctions.add("textbox");
+        builtinFunctions.add("textarea");
         builtinFunctions.add("readtext");
         builtinFunctions.add("settext");
+        builtinFunctions.add("focus");
 
+        //Stimuli
         builtinFunctions.add("shufflestimuli");
         builtinFunctions.add("pickstimulisubset");
         builtinFunctions.add("emptystimuli");
