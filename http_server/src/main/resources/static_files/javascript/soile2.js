@@ -490,11 +490,19 @@ SOILE2 = (function(){
   bin.greaterthan = bin.gt;
 
   bin.hide = function(id){
-    id = soile2.util.getid(id);
+
+    for (var i = 0; i < arguments.length; i++) {
+      var id = soile2.util.getid(arguments[i]);
+      var elem = jQuery(id);
+      //jQuery(id).addClass("hiddenelem");
+      elem.addClass("invisibleElement");
+    };
+
+    /*id = soile2.util.getid(id);
     var elem = jQuery(id);
     //jQuery(id).addClass("hiddenelem");
     elem.addClass("invisibleElement");
-
+*/
     //elem.addClass("noAnimation");
     //elem.children("*").addClass("noAnimation");
     
