@@ -301,6 +301,32 @@ SOILE2 = (function(){
     return id;
   };
 
+  /*
+    Text area that is a certain number of symbols wide/highe
+  */
+  bin.textarea = function(width, height) {
+    var id = soile2.rt.uniqueid();
+
+    var props = {
+      "id": id,
+      "class": "hiddenelem",
+      "type":"text"
+    };
+
+    if(typeof height !== "undefined") {
+      //area.height(height);
+      props.rows = height;
+    }
+
+    if(typeof width !== "undefined") {
+      props.cols = width;
+    }
+
+    var area = jQuery("<textarea/>", props).appendTo(soile2.util.getid("display"));
+
+    soile2.rt.dyn.add(id);
+    return id;
+  };
   bin.readtext = function(id, clear) {
     var box = jQuery(soile2.util.getid(id));
     var value = box.val();

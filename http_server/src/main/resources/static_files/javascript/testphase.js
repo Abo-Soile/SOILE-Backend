@@ -17,7 +17,7 @@ function(
     document.addEventListener("keydown", function (e) {
       if([37,38,39,40,8,32].indexOf(e.keyCode) > -1){
         //console.log(e);
-        if(e.target.tagName == "INPUT" || e.target.type == "text") {
+        if(e.target.tagName == "INPUT" || e.target.type == "text" || e.target.tagName == "TEXTAREA") {
           return
         } 
         

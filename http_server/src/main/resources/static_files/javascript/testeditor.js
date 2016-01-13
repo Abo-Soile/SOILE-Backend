@@ -352,7 +352,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       return;
     }
 
-    if([37,38,39,40,32].indexOf(e.keyCode) > -1 && e.target.tagName == "INPUT") {
+
+    if([37,38,39,40,32].indexOf(e.keyCode) > -1 && (
+        e.target.tagName == "INPUT" || e.target.tagName == "TEXTAREA")) {
       return;
     }
 
