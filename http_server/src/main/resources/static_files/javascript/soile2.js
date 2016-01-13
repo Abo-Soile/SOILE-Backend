@@ -510,6 +510,13 @@ SOILE2 = (function(){
     //jQuery(id).css("animation", "none");
     //jQuery(id).children("*").css("animation", "none");
   };
+
+  /*
+  Hides everything
+  */
+  bin.hideall = function() {
+    jQuery("#display").children().addClass("invisibleElement");
+  }
   
   bin.show = function(mId){
     var args = Array.prototype.slice.call(arguments);
