@@ -329,6 +329,20 @@ SOILE2 = (function(){
     soile2.rt.dyn.add(id);
     return id;
   };
+
+  /*
+  bin.focus
+
+  Gives focus to a text box or text area.
+  */
+  bin.focus = function(id) {
+    var elem = soile2.util.getid(id);
+    jQuery(elem).focus();
+
+    console.log("focusing " + elem)
+    console.log(jQuery(elem))
+  };
+
   bin.readtext = function(id, clear) {
     var box = jQuery(soile2.util.getid(id));
     var value = box.val();
