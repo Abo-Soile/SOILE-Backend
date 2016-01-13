@@ -315,11 +315,13 @@ SOILE2 = (function(){
 
     if(typeof height !== "undefined") {
       //area.height(height);
-      props.rows = height;
+      //props.rows = height;
+      props.height = height;
     }
 
     if(typeof width !== "undefined") {
-      props.cols = width;
+      //props.cols = width;
+      props.width = width;
     }
 
     var area = jQuery("<textarea/>", props).appendTo(soile2.util.getid("display"));
