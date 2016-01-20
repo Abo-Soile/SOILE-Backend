@@ -51,11 +51,15 @@ Display positions are defined as the number of pixels from the top-left corner o
 
     :param displayobject item: The object that should be shown.
 
-.. js:function:: hide(item)
+.. js:function:: hide(item*)
     
-    Hides the specified object.
+    Hides the specified objects.
 
-    :param displayobject item: The object that should be hidden.
+    :param displayobject item*: The object(s) that should be hidden.
+
+.. js:function:: hideall()
+
+    Hides every visible element on the screen, including text shown with showmsg().
 
 
 DisplayObjects
@@ -71,6 +75,19 @@ All displayobjects share the same functionality regarding showing and hiding the
     :param int fontsize: Fontsize, defaults to 20.
     :returns: Displayobject
 
+.. js:function:: textbox(width)
+    
+    Displays a one line textbox with the specified width.
+
+    :param int width: Width of the textbox
+
+.. js:function:: textarea(width, height)
+    
+    Displays a  multilined text area, for reading longer responses as well as enabling the user to press enter. 
+
+    :param int width: Width of the textarea
+    :param int width: Height of the textarea
+
 .. js:function:: imagefile(imageurl) 
 
     Object containing a image specified by the url, so images can either be uploaded to the testeditor or fetched from the internet. Note that images on the net can disappear or change at any time.  The image is displayed without any scaling so make sure that the image is the right size.
@@ -78,9 +95,6 @@ All displayobjects share the same functionality regarding showing and hiding the
     :param string imageurl: Absoulute or relative url to the image. 
     :returns: Displayobject
 
-
-**rectangle(width height borderwidth=2)**
-Displays a rectangle with the given width height and borderwidth. Borderwidth is an optional argument and defaults to 2. 
 
 .. js:function:: rectangle(width height borderwidth=2)
 
@@ -111,6 +125,32 @@ It's also possible to display simple text messages using showmsg(message) and hi
 .. js:function:: hidemsg()
 
     Hides the standard message.
+
+##########
+Text input
+##########
+
+.. js:function:: settext(object text)
+    
+    Changes the text inside a textbox or textarea. The textbox/area can also be emptied by giving it an empty string (""). Settext can also be used to change the text in a msgbox, thus avoiding recreating the a box at every change. 
+
+    :param int object: Which object to change
+    :param string text: What to chagne the text to
+
+.. js:function:: readtext(object)
+
+    Returns what is currently written in the specified ref :js:func:`textbox` or :js:func:`textarea`.
+
+    :param int width: Width of the textarea
+    :returns: Current text in the :js:func:`textbox` or :js:func:`textbox`
+    :rtype: text
+
+.. js:function:: focus(object)
+    
+    Makes the selected textbox/area focused, meaning that the specified box will be highlighted and that the user can start typing without having to select it first. 
+
+    :param id object: The textbox/area to focus on 
+
 
 ###########
 Mouse input
@@ -190,18 +230,18 @@ Keyboard Input
 
 .. function:: resumeonkey(keycode)
     
-    Runs resume() once when the specified key is pressed. 
+    Runs :js:func:`resume` once when the specified key is pressed. 
 
     :param string keycode: Key to resume on 
 
 
 .. function:: resumeonkey()
 
-    Runs resume() on any keypress once. 
+    Runs :js:func:`resume` on any keypress once. 
 
     :returns:  keycode
 
-.. function:: getlastkey()
+.. function:: getlastkey(active=true)
 
     Returns the most recent keypress, as long as there an active :js:func:`onkeypress` , :js:func:`onanykey` or :js:func:`resumeonkey`.
 
@@ -347,17 +387,17 @@ Basic logic functions that return a boolean value(true or false)
 Lists/String Manipulation
 #########################
 
-.. function:: append(string1 string2)
+.. js:function::  append(string1 string2)
 
     Appends two strings, append("Hello " "World") = "Hello World"
 
-.. function:: lenght(object)
+.. js:function::  lenght(object)
 
     Returns the number of elements/letters in  list or string including whitespaces. 
 
     :param object array/string: 
 
-.. function:: elementatindex(object, index)
+.. js:function::  elementatindex(object, index)
 
     Returns the element at the specified index a list/string where the index starts from 0. Equivalent to  object[index]
 
@@ -370,7 +410,7 @@ Lists/String Manipulation
         elementatindex("Test" 3) #= t
 
 
-.. function:: range(word start end) 
+.. js:function::  range(word start end) 
 
     Round a number down when mode = "floor" and up when mode = "ceil"
 
@@ -401,19 +441,36 @@ Seeds the random generator with  a value. A certain seed will always produce the
 Time and timers
 ###############
 
+
 Time is measured in milliseconds with a precision of +-2 milliseconds in most cases. Time is measured in Epoch time, i.e. the number of milliseconds since 00:00:00 1.1.1970.
 
-**recordts()**
+.. js:function::  recordts()
 
-Returns a timestamp with the current time with millisecond precision. 
+    Returns a timestamp with the current time with millisecond precision. 
 
-**starttimer()**
+    :returns: Current timestamp
+    :rtype: number
 
-Starts the timer.
+.. js:function::  starttimer()
 
-**elapsedtime()**
+    Starts the timer.
 
-Returns elapsed time, in ms, since the last call to starttimer. Returns 0 if no timer has been started. 
+.. js:function::  elapsedtime()
+
+    Returns elapsed time, in ms, since the last call to :js:func:`starttimer`. Reuturns 0 if the timer hasn't been started. 
+
+    :returns: Elapsed time, in milliseconds.
+
+.. js:function::  wait(time=undefined) 
+
+    Halts the program for a certain amount of time, or until :js:func:`resume` is called. Waits forever if no time is specified.
+
+    :param number time: Number of milliseconds to wait. 
+
+.. js:function::  resume() 
+
+    Resumes program execution if the program is currently halted. Does nothing if the program is running. 
+
 
 ##############
 Result storage
@@ -423,17 +480,26 @@ Results are stored as .csv spredsheet files that can easily be imported into Exc
 -   Aggregate data from the whole experiment, can only contain one row per user. 
 -   "Raw data", test specific data, so each test (in the same experiment) writes to a separate file. Allows for multiple rows per user. It's possible to compute e.g. an average over all rows and store this value in the aggregate datatable. 
 
-**storeSingle(field data)**
+.. js:function:: storeSingle(field data)
 
-Stores a single value with the specified fieldname in the aggregated datatable.
+    Stores a single value with the specified fieldname in the aggregated datatable.
 
-**storeRow(string field data)**
+    :param string field: The name of the field
+    :param anything data:  Data to store.
 
-Stores a value with the given fieldname in the current raw datarow. 
 
-**newRow()**
+.. js:function:: storeRow(field data)
 
-Creates a new empty row to write raw data to.
+    Stores a value with the given fieldname in the current raw datarow. 
+
+    :param string field: The name of the field
+    :param anything data:  Data to store.
+
+
+.. js:function:: newRow()
+
+    Creates a new empty row to write raw data to.
+
 
 The example produces the following result:
 
@@ -443,31 +509,40 @@ Data processing and aggregation
 
 Raw data can be processed to something more usable. An aggregation function loops through the whole raw data table and performs the specified function on every field that it finds. Rows that don't have any value in the specific field are simply omitted. Aggregation functions can also be used to aggregate data in lists.
 
-**count(field)**
 
-Counts how many rows contain the specific field.
+.. js:function:: count(field)
 
-**count(field, value)**
+    Counts how many rows contain the specific field.
 
-Counts how many rows contain a specific field with a specific value.
 
-**average(field)**
+.. js:function:: count(field, value)
 
-Computes the average value from all rows containing this field.
+    Counts how many rows contain a specific field with a specific value.
 
-**median(field)**
 
-Computes the median from all rows containing this field.
+.. js:function:: average(field)
 
-**standarddeviation(field)**
+    Computes the average value from all rows containing this field.
 
-Computes the standard deviation from all rows containing ths field.
 
-**outliers(field multiplier)**
-Removes values that deviate more than multiplier*standarddefinition from the average value.
+.. js:function:: median(field)
 
-**outliers(field multiplier standarddeviation average)**
-You can also provid your own standarddeviation and average for example when computing outliers of a subset of you data when you still want to use for example the whole dataset for average and standarddeviation.
+    Computes the median from all rows containing this field.
+
+
+.. js:function:: standarddeviation(field)
+
+    Computes the standard deviation from all rows containing ths field. 
+
+
+.. js:function:: outliers(field multiplier)
+
+    Removes values that deviate more than multiplier*standarddefinition from the average value.
+
+
+.. js:function:: outliers(field multiplier standarddeviation average)
+
+    You can also provid your own standarddeviation and average for example when computing outliers of   a subset of you data when you still want to use for example the whole dataset for average and standarddeviation.
 
 ::
 
