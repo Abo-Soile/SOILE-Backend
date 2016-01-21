@@ -262,6 +262,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     $scope.soileLog = [];
 		$scope.testStartTime = Date.now();
 
+    $window.document.getElementById("runButton").blur();
+    display.focus();
+
     console.log("Executing soile");
 
     SOILE2.util.eval($scope.compiledCode);
