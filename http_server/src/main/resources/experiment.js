@@ -20,6 +20,8 @@ var testDAO = require("models/DAObjects").TestDAO;
 
 var requireAdmin = require('middleware').requireAdmin;
 
+var bowser = require("node_modules/bowser/bowser");
+//var lodash = require("node_modules/lodash");
 
 function merge_options(obj1,obj2){
     var obj3 = {};
@@ -75,6 +77,7 @@ router.get("/e/:name",function(request){
 
 router.get('/experiment/:id', function(request){
   var id = request.params().get('id');
+  var userAgent = request.headers().get("User-Agent");
 
   //Keeping stuff DRY
   function renderExp(exp, admin) {
@@ -100,7 +103,15 @@ router.get('/experiment/:id', function(request){
         templateManager.render_template("experimentAdmin", {"exp":experiment, "hideLogin":hidelogin},request);
       });
     } else{
-      templateManager.render_template("experiment", {"exp":experiment, "hideLogin":hidelogin},request);
+
+      res = bowser._detect(userAgent);
+      var blockUa = res.tablet||res.mobile;
+
+      if (experiment.allowMobile) {
+        blockUa = false;
+      }
+
+      templateManager.render_template("experiment", {"exp":experiment, "hideLogin":hidelogin, "blockUa":blockUa},request);
     }
   }
 

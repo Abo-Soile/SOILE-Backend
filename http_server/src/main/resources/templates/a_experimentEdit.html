@@ -82,6 +82,10 @@
           Enable Mechanical Turk
           <input style="width: 15px; height: 15px" type="checkbox" ng-model="experiment.mechanicalTurkEnabled" ng-true-value="true" ng-false-value="false">
         </label>
+        <label class="checkbox-inline">
+          Allow mobile
+          <input style="width: 15px; height: 15px" type="checkbox" ng-model="experiment.allowMobile" ng-true-value="true" ng-false-value="false">
+        </label>
     </div>
 
     <div class="col-md-12">
@@ -135,9 +139,9 @@
     <div class="col-md-10">
       <div class="form-group">
         <ui-select ng-model="test.selected"  theme="bootstrap" ng-disabled="disabled" style="min-width: 300px; max-width: 300px; display: inline-block">
-          <ui-select-match placeholder="Select an experiment">[([$select.selected.name])]</ui-select-match>
-          <ui-select-choices repeat="test in tests | filter:{name:$select.search}">
-            <div ng-bind-html="test.name | highlight: $select.search"></div>
+          <ui-select-match placeholder="Select an experiment">[([$select.selected.findName])]</ui-select-match>
+          <ui-select-choices repeat="test in tests | filter:{findName:$select.search}">
+            <div ng-bind-html="test.findName | highlight: $select.search"></div>
           </ui-select-choices>
         </ui-select>
         <button class="btn btn-default" ng-disabled="test.selected == null" ng-click="addTest()">Add test</button>
