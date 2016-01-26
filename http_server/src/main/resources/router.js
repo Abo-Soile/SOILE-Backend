@@ -16,6 +16,10 @@ function logHttp(request) {
   var remoteAddress = request.remoteAddress().getHostString();
   var userAgent = request.headers().get("User-Agent");
 
+  if (request.headers().contains("X-Real-IP")) {
+    remoteAddress = request.headers().get("X-Real-IP");
+  }
+
   logger.info("HTTP " + method + "--" + remoteAddress + "  " + url + " Agent:" + userAgent);
 }
 
