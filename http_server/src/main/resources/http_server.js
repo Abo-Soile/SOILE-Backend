@@ -23,6 +23,7 @@ var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 var userDAO = require("models/DAObjects").UserDAO;
 var testDAO = require("models/DAObjects").TestDAO;
 var experimentDAO = require("models/DAObjects").ExperimentDAO;
+var userModel = require("models/Models").User;
 
 var middle = require("middleware");
 
@@ -338,7 +339,30 @@ customMatcher.post("/signup", function(request) {
       return;
     }
 
-    mongo.user.new(email, passwd, function(r) {
+    var newUser = new userModel();
+    newUser.username = email;
+    newUser.setPassword(passwd);
+
+    newUser.save(function(result) {
+      console.log("Trying to create new user");
+
+      request.session.login(newUser);
+
+      if(origin){
+          return request.redirect(decodeURIComponent(origin));
+        }
+      return request.redirect('/');
+    });
+
+    /* On failure
+     else {
+        templateVars.registererrors = "Username already exists!, try logging in";
+        //templateManager.render_template('signup', templateVars, request);
+        templateManager.render_template('login', templateVars, request);
+
+    */
+
+    /*mongo.user.new(email, passwd, function(r) {
       console.log("Trying to create new user");
       console.log(JSON.stringify(r));
       if (r.status==="ok") {
@@ -356,7 +380,7 @@ customMatcher.post("/signup", function(request) {
         templateManager.render_template('login', templateVars, request);
 
       }
-    });
+    });*/
   });
 });
 
