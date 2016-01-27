@@ -6,10 +6,6 @@ describe("Range", function() {
   });
 
   it("selects string from beginning", function() {
-    expect(range("abcdefg",0)).toBe("abc");
-  });
-
-  it("selects string from beginning", function() {
     expect(range("abcdefg",3)).toBe("abc");
   });
 
