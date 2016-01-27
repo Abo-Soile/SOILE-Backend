@@ -2,7 +2,8 @@
   "name": "http-server-backend",
   "version": "1.0.0",
   "dependencies": {
+    "bowser": "^1.0.0",
     "lodash": "^3.10.1"
   },
-  "private":true
+  "private": true
 }

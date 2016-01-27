@@ -34,17 +34,24 @@
 			<p> {exp.description|s}</p>
 			
 			{?exp.active}
-				{?exp.loginrequired}
-<!-- 					<p>LOGGED IN REQUIRED</p> -->
-					 {?loggedIn}
-					 	<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start experiment</a>
-					 {:else}
-					 	<p><strong>You need to sign in to participate in this test, <a href="/login">click here</a> to login or create an account</strong></p>
-					 {/loggedIn}
+
+				{?blockUa}
+				<p><b>Sorry, this experiment does not support smartphones or tablets</b></p>
 				{:else}
+					{?exp.loginrequired}
+	<!-- 					<p>LOGGED IN REQUIRED</p> -->
+						 {?loggedIn}
+						 	<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start experiment</a>
+						 {:else}
+						 	<p><strong>You need to sign in to participate in this test, <a href="/login">click here</a> to login or create an account</strong></p>
+						 {/loggedIn}
+					{:else}
 <!-- 					<p">NOT LOGGEN IN REQUIRED</p> -->
 					<a class="btn btn-primary btn-lg" href="{URI}/phase/0" role="button">Start experiment</a>
-				{/exp.loginrequired}
+					{/exp.loginrequired}
+
+				{/blockUa}
+
 			{:else}
 			<button class="btn btn-primary btn-lg" disabled="disabled" role="button">Start experiment</button>
 
