@@ -123,6 +123,10 @@ app.controller('experimentController', function($scope, $http, $location) {
       return $http.get('/test/json/compiled')
       .then(function(response) {
         $scope.tests = response.data;
+
+        for (var i = 0; i < $scope.tests.length; i++) {
+          $scope.tests[i].findName = $scope.tests[i].folder + "/" + $scope.tests[i].name;
+        };
       });
     };
 

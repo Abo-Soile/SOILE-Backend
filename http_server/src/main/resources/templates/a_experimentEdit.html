@@ -95,25 +95,28 @@
                <div class="form-inline">
               
                 <!-- IF TEST -->
-                <span ng-if="comp.type == 'test'">
+                <div ng-if="comp.type == 'test'" class="form-group">
                   <input class="form-control" ng-model=comp.name readonly>
 
-                  <span class="checkbox">
-                    <label class="componentcheckbox">
-                      Randomize
-                      <input type="checkbox" ng-model="comp.random" ng-true-value="true" ng-false-value="false">
-                    </label>
-                  </span>
-
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label class="componentcheckbox">
+                        Randomize
+                        <input type="checkbox" ng-model="comp.random" ng-true-value="true" ng-false-value="false">
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group">
                   <span ng-if="comp.random">
                     <span>Group</span>
                     <select class="form-control input-sm" name="Random group" ng-model="comp.randomgroup" ng-options="n for n in [] | range:1:10" ng-init="comp.randomgroup = comp.randomgroup || 1"></select>
                   </span>
+                  </div>
 
-                </span>
+                </div>
 
                 <!--IF FORM -->
-                <span ng-if="comp.type == 'form'">
+                <span ng-if="comp.type == 'form'" class="form-group">
                   <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
                   <a class="btn btn-warning" href="/questionnaire/mongo/[([comp.id])]" target="_blank">Edit</a>
                 </span>
@@ -135,9 +138,9 @@
     <div class="col-md-10">
       <div class="form-group">
         <ui-select ng-model="test.selected"  theme="bootstrap" ng-disabled="disabled" style="min-width: 300px; max-width: 300px; display: inline-block">
-          <ui-select-match placeholder="Select an experiment">[([$select.selected.name])]</ui-select-match>
-          <ui-select-choices repeat="test in tests | filter:{name:$select.search}">
-            <div ng-bind-html="test.name | highlight: $select.search"></div>
+          <ui-select-match placeholder="Select an experiment">[([$select.selected.findName])]</ui-select-match>
+          <ui-select-choices repeat="test in tests | filter:{findName:$select.search}">
+            <div ng-bind-html="test.findName | highlight: $select.search"></div>
           </ui-select-choices>
         </ui-select>
         <button class="btn btn-default" ng-disabled="test.selected == null" ng-click="addTest()">Add test</button>
