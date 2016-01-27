@@ -184,6 +184,7 @@ SOILE2 = (function(){
     jQuery(id).css('display', 'block');
     jQuery(id).css('left', '50px');
     jQuery(id).css('top', '50px');
+    jQuery(id).removeClass("invisibleElement");
     jQuery(id).html(msg);
   };
   /*
