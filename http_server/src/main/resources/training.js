@@ -426,37 +426,45 @@ router.get("/training/:id/score", function(request) {
   var userid = request.session.getUserId();
 
   var context = {};
+  trainingDAO.get(id, function(trainingObject) {
 
-  trainingDataDAO.getScore(id, userid, function(totalScore, scores) {
+    context.showscore = trainingObject.showScore;
+    context.sessionMessage = trainingObject.completeSessionMessage;
+    if (trainingObject.showScore) {
+      //Fetch score and stuff
+      trainingDataDAO.getScore(id, userid, function(totalScore, scores) {
 
-    console.log(JSON.stringify(scores));
-    var scoreContext = {};
+        var scoreContext = {};
 
-    scoreContext.totalScore = totalScore;
-    scoreContext.scores = [];
+        scoreContext.totalScore = totalScore;
+        scoreContext.scores = [];
 
-    for (var i = 0; i < scores.length; i++) {
-      var s = scores[i];
-      scoreContext.scores[i] = {"score":s.score};
-      scoreContext.scores[i].subscores = [];
-      for(var key in s) {
-        if (key !== "score") {
-          var subScore = {};
-          subScore.name = key;
-          subScore.score = s[key];
+        for (var i = 0; i < scores.length; i++) {
+          var s = scores[i];
+          scoreContext.scores[i] = {"score":s.score};
+          scoreContext.scores[i].subscores = [];
+          for(var key in s) {
+            if (key !== "score") {
+              var subScore = {};
+              subScore.name = key;
+              subScore.score = s[key];
 
-          scoreContext.scores[i].subscores.push(subScore);
+              scoreContext.scores[i].subscores.push(subScore);
+            }
+          }
         }
-      }
+
+        context.score = scoreContext;
+
+        JSON.stringify(scoreContext);
+
+        return templateManager.render_template("endoftrainingphase", context, request);
+      });
+    } else {
+      return templateManager.render_template("endoftrainingphase", context, request); 
     }
-
-    context.score = scoreContext;
-
-    JSON.stringify(scoreContext);
-
-    templateManager.render_template("endoftrainingphase", context, request);
-  });
     //request.response.end("SCORE!!!")
+  });
 
 
 });
