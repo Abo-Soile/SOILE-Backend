@@ -301,7 +301,7 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, co
   });
 };
 
-
+/*
 TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, controlGroup,callback) {
   var that = this;
   that.get({userId:userid, type:"general", trainingId:trainingId}, 
@@ -321,6 +321,7 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, co
     }
   });
 };
+*/
 
 TrainingDataDAO.prototype.getGeneralData = function(userid, trainingId,callback) {
   var that = this;

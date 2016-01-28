@@ -201,9 +201,8 @@ var sessionManager =  {
   */
   getUserId: function() {
     var userID = this.getPersonToken();
-
     if(this.loggedIn()) {
-      userID = this.loggedIn().id;
+      userID = this.loggedIn()._id;
     }
     return userID;
   }
