@@ -11,7 +11,7 @@
         <div class="col-md-12">
           <h1>{training.name}  </h1>
           <p> {training.description|s}</p>
-          <p> {status|js}</p>
+          <!--<p> {status|js}</p>-->
         </div>
       </div>
 
@@ -25,28 +25,27 @@
           <div class="row">
             <div class="col-md-4">
               <div class="infopanel">
-                <h4>Next task in</h4>
+                <h4>Next task available in</h4>
                 <p>{status.timeLeft}</p> 
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="infopanel">
-                <h4>Completed</h4>   
+                <h4>Progress</h4>   
                 <p> {status.roundsLeft} </p>
               </div>
             </div> 
           
-            <div class="col-md-4">
+            <!--<div class="col-md-4">
               <div class="infopanel">
                 <h4>Time left</h4>
                 <p> {status.totalTimeLeft}</p>
               </div>
-            </div> 
+            </div>--> 
           </div>
         
         </div>
-
       </div>
 
       <div class="row">
@@ -56,16 +55,14 @@
           </div>
 
         </div>
+        <div class="col-md-12">
+          {?status.timeLeft}
+          <h3>Next task is available {status.timeLeft}</h3>
+          {:else}
+          <a href="{URI}/execute">Run next phase</a>
+          {/status.timeLeft}
+        </div>
       </div>
-
-      {?status.timeLeft}
-      <h3>Next task is available {status.timeLeft}</h3>
-      {:else}
-      <a href="{URI}/execute">Run next phase</a>
-      {/status.timeLeft}
-
-      {status.state}
-
 
     </div>
   </div>
