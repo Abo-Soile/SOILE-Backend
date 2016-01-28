@@ -536,7 +536,7 @@ router.get("/training/:id/useroverview", function(request) {
 
   trainingDAO.get(id, function(training) {
     
-    trainingDataDAO.list({type:"general"}, function(data) {
+    trainingDataDAO.list({type:"general", trainingId:id}, function(data) {
 
       var response = {
         training:training.toJson(),
