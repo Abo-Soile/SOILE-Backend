@@ -198,11 +198,18 @@ function trainingView(request, training) {
     status.scoreHistory = score;
   });
 
+  status.showscore = true;
+  if (trainingData.trainingIteration == 0) {
+    status.showscore = false;
+  }
+
+  status.done = false;
   if (mode === "done") {
     trainingDataDAO.getPrePostScore(id, userid, function(pre, post) {
       status.preScore = pre;
       status.postScore = post;
     });
+    status.done = true;
   }
 
   templateManager.render_template('trainingUser', {training:training, status:status}, request);
@@ -246,7 +253,7 @@ function getTrainingAndUserData(trainingid, userid, callback) {
   });
 }
 
-function renderTrainingPhase(components, position, request, persistantData) {
+function renderTrainingPhase(components, position, request, persistantData, training) {
 
   var component = components[position];
   var id = component.id;
@@ -278,6 +285,10 @@ function renderTrainingPhase(components, position, request, persistantData) {
   dao.get(id, function(phase) {
 
     context[contextObj] = phase;
+
+    if (training.submitbutton) {
+      context.submitbutton = training.submitbutton;
+    }
 
     if (childObj !== 0) {
       context[contextObj] = phase[childObj];
@@ -321,7 +332,7 @@ router.get("/training/:id/execute", function(request) {
       return request.redirect("/training/" + id);
     }
      else {
-      renderTrainingPhase(modeComponents, positionInMode, request, trainingData.persistantData);
+      renderTrainingPhase(modeComponents, positionInMode, request, trainingData.persistantData, training);
     }
   });
 
