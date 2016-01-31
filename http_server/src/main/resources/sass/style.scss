@@ -441,3 +441,21 @@ body {
   top: 3px;
   left: 3px;
 }
+
+
+.uheading {
+  border-bottom: 1px solid gray;
+  padding-bottom: 4px;
+}
+
+.userTrainingList {
+  li:first-child {
+
+  }
+  span b {
+    min-width: 30%;
+    display: inline-block;
+    font-size: 20px;
+  }
+
+}

@@ -23,6 +23,9 @@ var messageDigest = java.security.MessageDigest.getInstance("SHA-256");
 var userDAO = require("models/DAObjects").UserDAO;
 var testDAO = require("models/DAObjects").TestDAO;
 var experimentDAO = require("models/DAObjects").ExperimentDAO;
+var trainingDataDAO = require("models/DAObjects").TrainingDataDAO;
+var trainingDAO = require("models/DAObjects").TrainingDAO;
+
 var userModel = require("models/Models").User;
 
 var middle = require("middleware");
@@ -511,24 +514,37 @@ customMatcher.get('/', function(request) {
   else {
     // User logged in showing user controls
     if (request.session.loggedIn()) {
-      var userid = request.session.loggedIn().id;
-      mongo.user.status(userid, function(r) {
-        //console.log(JSON.stringify(r));
-        var openExperiments = [];
-        for (var i = r.newExps.length - 1; i >= 0; i--) {
-          if(r.newExps[i].active) {
-            openExperiments.push(r.newExps[i]);
-          }
-        }
-        r.newExps = openExperiments;
-        console.log("\n\n" + userid);
+      var user = request.session.currentUser;
+      var context = {};
 
-        mongo.user.get(userid, function(userdetails) {
-          r.u = userdetails;
-          //console.log(JSON.stringify(r));
-          templateManager.render_template('user', r, request);
+      trainingDataDAO.list({userId:user._id, type:"general"}, function(training) {
+
+
+        var trainingIDs = [];
+        for (var i = 0; i < training.length; i++) {
+          trainingIDs.push(training[i].trainingId);
+        }
+
+        trainingDAO.list({_id:{$in:trainingIDs}}, function(tObjects) {
+          for (var i = 0; i < training.length; i++) {
+            for (var j = 0; j < tObjects.length; j++) {
+
+              console.log("Compare id " + training[i].trainingId + "  " + tObjects[j]._id)
+
+              if (training[i].trainingId == tObjects[j]._id) {
+                training[i].name = tObjects[j].name;
+              }
+            }
+          }
+
+
+          context.training = training;
+          templateManager.render_template('userV2', context, request);
         });
+
+
       });
+
     }
     // Anonymous user, showing ladning page
     else {
