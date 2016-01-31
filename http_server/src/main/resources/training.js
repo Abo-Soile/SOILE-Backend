@@ -189,8 +189,7 @@ function trainingView(request, training) {
   }
 
   status.roundsLeft = roundsDone + "/" + totalRounds;
-  status.percentageLeft = roundsDone/totalRounds * 100;
-
+  status.percentageDone = roundsDone/totalRounds * 100;
 
   status.roundType = mode;
   status.iteration = trainingData.trainingIteration;
