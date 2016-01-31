@@ -35,8 +35,7 @@ app.controller('userProgressController', function($scope, $http, $location) {
         $scope.participants[i].timestamp = new Date($scope.participants[i].timestamp);
 
         var hoursTilDone = 0;
-        hoursTilDone = (2 + $scope.training.repeatcount) * $scope.training.maxpause;
-
+        hoursTilDone = (2 + parseInt($scope.training.repeatcount)) * $scope.training.maxpause;
         var p = $scope.participants[i];
         if(p.mode === "done") {
           $scope.participants[i].percentageDone = 100;
