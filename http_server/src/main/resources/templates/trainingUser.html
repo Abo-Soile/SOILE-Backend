@@ -11,8 +11,20 @@
         <div class="col-md-12">
           <h1>{training.name}  </h1>
           <p> {training.description|s}</p>
+          <p> {status|js}</p>
+        </div>
+
+        {?status.done}
+        <div class="col-md-12">
+        <div class="alert alert-success" role="alert">
+          
+          <p> {training.endmessage|s}</p>
+        </div>
+
           <!--<p> {status|js}</p>-->
         </div>
+        {/status.done}
+
       </div>
 
       <div class="row">
@@ -24,10 +36,20 @@
           </div>
           <div class="row">
             <div class="col-md-4">
+            {?status.timeLeft}
+              {?status.done}
+              {:else}
               <div class="infopanel">
-                <h4>Next task available in</h4>
+                <h4>Next task available</h4>
                 <p>{status.timeLeft}</p> 
               </div>
+              {/status.done}
+            {:else}
+              <div class="infopanel">
+                <h4>Next task available</h4>
+                <p>Now</p> 
+              </div>  
+            {/status.timeLeft}
             </div>
 
             <div class="col-md-4">
@@ -37,30 +59,38 @@
               </div>
             </div> 
           
-            <!--<div class="col-md-4">
+            {?status.done}
+            {:else}
+            <div class="col-md-4">
               <div class="infopanel">
-                <h4>Time left</h4>
+                <h4>Deadline</h4>
                 <p> {status.totalTimeLeft}</p>
               </div>
-            </div>--> 
+            </div>
+            {/status.done}
           </div>
         
         </div>
       </div>
 
       <div class="row">
-
-        <div class="col-md-12">
-          <div id="chartcontainer" class="">  
-          </div>
-
-        </div>
+        {?status.done}
+        {:else}
         <div class="col-md-12">
           {?status.timeLeft}
           <h3>Next task is available {status.timeLeft}</h3>
           {:else}
-          <a href="{URI}/execute">Run next phase</a>
+          <a class="btn btn-success btn-lg" href="{URI}/execute">Start next round</a>
           {/status.timeLeft}
+        </div>
+        {/status.done}
+
+        {?status.showscore}
+        <div class="col-md-12">
+          <div id="chartcontainer" class="">  
+        </div>
+        {/status.showscore}
+
         </div>
       </div>
 
@@ -84,7 +114,10 @@ $(function () {
             /*categories: [
               1,2,3,4,5,6,7,8,9,10
             ],*/
-            crosshair: true
+            crosshair: true,
+            title: {
+              text:"Training round"
+            }
         },
         yAxis: {
             min: 0,
