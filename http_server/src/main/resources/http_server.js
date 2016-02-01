@@ -328,11 +328,11 @@ customMatcher.post("/signup", function(request) {
       return;
     }
 
-    if(!looksLikeMail(email)) {
+    /*if(!looksLikeMail(email)) {
       templateVars.registererrors = "Enter a valid email address";
       templateManager.render_template('login', templateVars,request);
       return;
-    }
+    }*/
 
     if((passwd !== passwdAgain)) {
       templateVars.registererrors = "Password didn't match";
