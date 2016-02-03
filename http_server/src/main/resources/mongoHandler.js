@@ -568,7 +568,7 @@ var Experiment = {
     "matcher":{"expId":id, "confirmed":true, "type":"form", "deleted": {$in: [null, false]}},
     "keys": {"confirmed":0},  // Projection
     //TODO: Handle larger replies.
-    "batch_size":1000  
+    "batch_size":10000
     }, 
      function(reply) {
       Experiment.phaseCount(id, function(phases) {
@@ -585,7 +585,7 @@ var Experiment = {
       "keys": {"confirmed": 0}, // Projection
       "sort": {"phase":1}, 
       //TODO: Handle larger replies.
-     "batch_size":1000
+     "batch_size":10000
       },   
       function(reply) {
         response(reply);
@@ -601,7 +601,7 @@ var Experiment = {
         "matcher":{"expId":expId, "phase":phase, "confirmed":true, "deleted": {$in: [null, false]}},
         "keys": {"data":1, "userid":1},
         //TODO: Handle larger replies.
-        "batch_size":1000
+        "batch_size":10000
       },
       function(reply) {
         response(reply);
