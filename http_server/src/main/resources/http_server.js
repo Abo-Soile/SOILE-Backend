@@ -169,7 +169,19 @@ customMatcher.get("/login/forgotten", function(request) {
     templateManager.render_template("forgotten", {}, request);
 });
 
-customMatcher.get("/testeditor", middle.requireEditor, function(request) {
+customMatcher.get("/testeditor", function(request) {
+    console.error("This is a test error");
+
+    logger.trace("Trace Message!");
+    logger.debug("Debug Message!");
+    logger.info("Info Message!");
+    logger.warn("Warn Message!");
+    logger.error("Error Message!");
+    logger.fatal("Fatal Message!");
+
+    vertx.setTimer(300,function() {
+      a = asdfsdfs + sdklfj;
+    });
     request.response.end("Require editor");
 });
 
