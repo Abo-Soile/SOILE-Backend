@@ -210,10 +210,11 @@ function Training(arg) {
     this.components.training = [];
     this.components.post = [];
 
-
     this.repeatpause = 0;
     this.repeatcount = 1;
     this.maxpause = 1;
+
+    this._isRandom = false;
 
     BaseModel.call(this, arg);
     
@@ -223,6 +224,39 @@ function Training(arg) {
 Training.prototype = new BaseModel();
 Training.prototype.constructor = Training;
 Training.collection = "training";
+
+Training.prototype.isRandom = function(mode) {
+//  var isRandom = {};
+//
+//  isRandom.pre = utils.isRandom(this.components["pre"]);
+//  isRandom.post = utils.isRandom(this.components["post"]);
+//  isRandom.training = utils.isRandom(this.components["training"]);
+//  isRandom.control = utils.isRandom(this.components["control"]);
+//  
+//  if (!(isRandom.pre || isRandom.post || isRandom.training || isRandom.control)) {
+//    return false;
+//  }
+//  return isRandom
+  return this._isRandom;
+};
+
+Training.prototype.buildIsRandom = function() {
+  var isRandom = {};
+
+  isRandom.pre = utils.isRandom(this.components["pre"]);
+  isRandom.post = utils.isRandom(this.components["post"]);
+  isRandom.training = utils.isRandom(this.components["training"]);
+  isRandom.control = utils.isRandom(this.components["control"]);
+  
+  if (!(isRandom.pre || isRandom.post || isRandom.training || isRandom.control)) {
+    return false;
+  }
+
+  console.log(JSON.stringify(isRandom));
+
+  this._isRandom = isRandom;
+  //return isRandom;
+};
 
 /*
 ####
@@ -502,7 +536,7 @@ TrainingData.collection = "trainingdata";
 /*
   Sets the general datafiled to the initial state. 
 */
-TrainingData.prototype.initGeneral = function(trainingid, control) {
+TrainingData.prototype.initGeneral = function(training) {
   this.type = "general";
 
   this.mode = "pre";
@@ -510,8 +544,9 @@ TrainingData.prototype.initGeneral = function(trainingid, control) {
   this.trainingIteration = 0;
 
   this.inControlGroup = false;
+  this.randomorder = false;
 
-  if (control) {
+  if (training.controlGroup) {
     this.inControlGroup = false;
     // 50/50 chance to be put in control group
     if (Math.floor(Math.random() * 2 + 1) === 1) {
@@ -519,12 +554,60 @@ TrainingData.prototype.initGeneral = function(trainingid, control) {
     }
   }
 
+//  var isRandom = training.isRandom();
+//  if(isRandom) {
+//    this.buildRandomOrder(isRandom);
+//  }
+
+  this.buildRandomOrder(training);
+
   //When the next session is opened// DATE
   this.nextTask = new Date();
 
-  this.trainingId = trainingid;
+  this.trainingId = training._id;
 };
 
+TrainingData.prototype.buildRandomOrder = function(training) {
+  var isRandom = training.isRandom();
+  if (!isRandom) {
+    this.randomorder = false;
+    return;
+  }
+
+  this.randomorder = {};
+
+  var orders = ["pre", "post", "training", "control"];
+
+  for (var i = 0; i < orders.length; i++) {
+    var ord = orders[i];
+    if (isRandom[ord]) {
+      this.randomorder[ord] = utils.generateRandomOrder(training.components[ord]);
+    } else {
+      this.randomorder[ord] = false;
+    }
+  }  
+
+  /*console.log("Created random order");
+  console.log(JSON.stringify(this.randomorder));
+*/
+};
+
+TrainingData.prototype.checkRandom = function() {
+  if (!this.randomorder) {
+    return false;
+  } else {
+
+    if (typeof this.randomorder[this.getMode()] !== "undefined"){
+      if (typeof this.randomorder[this.getMode()][this.position] === "number") {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  return false;
+};
 
 /*
   Generates a date x hours in the future

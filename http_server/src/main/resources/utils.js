@@ -6,6 +6,26 @@ var shared_config = container.config.shared;
 
 console.log(JSON.stringify(container.config));
 
+
+function _shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex ;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
 var utils = (function() {
 
   /*var addresses = shared_config.addresses;
@@ -141,6 +161,99 @@ var utils = (function() {
     },
     'randomAlphaNumeric': function(length) {
       return this.randomString(length, "1234567890abcdefghijklmnopqrstuvwxyz");
+    },
+
+
+    'isRandom':function(components) {
+      var longestRandom = 0;
+      var prevRandom = false;
+
+      if (typeof components === 'undefined') {
+        return false;
+      } 
+
+      var randomCount = 0;
+
+      for (var i = 0; i < components.length; i++) {
+        if(components[i].random) {
+          longestRandom +=1;
+          if (longestRandom > 1) {
+            return true;
+          }
+          randomCount += 1;
+        }
+        else {
+          longestRandom = 0;
+        } 
+      }
+
+      if(randomCount > 1) {
+        return true;
+      }
+
+      return false;
+    },
+
+    'generateRandomOrder':function(components) {
+      var randomList = [];
+      var randomMapping = [];
+      var randomGroups = [0,0,0,0,0,0,0,0,0,0];
+
+      for (var i = 0; i < components.length; i++) {
+        if (components[i].random > 0) {
+          randomList[i] = components[i].random;
+          randomGroups[components[i].random] = 1;
+        } else {
+          randomList[i] = 0;
+        }
+        randomMapping[i] = i;
+      }
+
+
+      console.log(JSON.stringify(randomList))
+      console.log(JSON.stringify(randomMapping))
+      console.log(JSON.stringify(randomGroups))
+    
+      randomGroups[0] = 0;
+      var startRandomSequence = null;
+
+      function randomizePart(arrSlice, index) {
+        arrSlice = _shuffle(arrSlice);
+        for (var i = 0; i < arrSlice.length; i++) {
+          randomList[i + index] = arrSlice[i];
+          randomMapping[i + index] = arrSlice[i];
+        }
+      }
+
+      function randomizeGroup(array, groupMapping, groupNo) {
+        var tempArr = [];
+        for (var i = 0; i < array.length; i++) {
+          if(groupMapping[i]===groupNo) {
+            tempArr.push(array[i]);
+            array[i] = null;
+          }
+        }
+
+        //console.log(JSON.stringify(array))
+        tempArr = _shuffle(tempArr);
+
+        for (var j = 0; j < array.length; j++) {
+          if(array[j] === null) {
+            array[j] = tempArr.pop();
+          }
+        }
+
+        return array;
+
+      }
+
+      for (var i = 0; i < randomGroups.length; i++) {
+        if(randomGroups[i]===1) {
+          randomMapping = randomizeGroup(randomMapping, randomList, i);
+        }
+      }
+      //this.randomorder = randomMapping;
+      return randomMapping;
     }
   };
 

@@ -231,7 +231,8 @@ router.post("/training/:id/participate", function(request) {
 
   trainingDAO.get(id, function(training) {
 
-    trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
+    //trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
+    trainingDataDAO.getOrGenerateGeneral(userid, training, function(trainingData) {
       request.redirect("/training/" + id);
     });
   });
@@ -253,9 +254,9 @@ function getTrainingAndUserData(trainingid, userid, callback) {
   });
 }
 
-function renderTrainingPhase(components, position, request, persistantData, training) {
+function renderTrainingPhase(components, position, translatedPhase,request, persistantData, training) {
 
-  var component = components[position];
+  var component = components[translatedPhase];
   var id = component.id;
   var template = "";
   var dao = {};
@@ -321,6 +322,17 @@ router.get("/training/:id/execute", function(request) {
 
     var phasesLeft = modeComponents.length - (positionInMode);
 
+    var phase = positionInMode;
+
+    var isRandom = training.isRandom();
+    if (isRandom) {
+      console.log(JSON.stringify(isRandom));
+      if (isRandom[trainingData.getMode()] && trainingData.checkRandom()) {
+        console.log("Random translation " + positionInMode + " -> " +  trainingData.randomorder[trainingData.getMode()][positionInMode]);
+        phase = trainingData.randomorder[trainingData.getMode()][positionInMode];
+      }
+    }
+
     console.log("Executin training");
     console.log("mode = " + trainingData.getMode() + " position:" + positionInMode);
     console.log("Component:" + JSON.stringify(modeComponents[positionInMode]));
@@ -332,7 +344,7 @@ router.get("/training/:id/execute", function(request) {
       return request.redirect("/training/" + id);
     }
      else {
-      renderTrainingPhase(modeComponents, positionInMode, request, trainingData.persistantData, training);
+      renderTrainingPhase(modeComponents, positionInMode, phase,request, trainingData.persistantData, training);
     }
   });
 
@@ -362,6 +374,16 @@ router.post("/training/:id/execute", function(request) {
       tData.data = jsonData.exp;
       tData.mode = generalData.getMode();
       tData.phase = generalData.position;
+
+      //Random order, save testdata with the right phase number
+      var isRandom = training.isRandom();
+      if (isRandom) {
+        if (isRandom[generalData.getMode()] && generalData.checkRandom()) {
+          console.log("###SAVE### Random translation " + generalData.position + " -> " +  generalData.randomorder[generalData.getMode()][generalData.position]);
+          tData.phase = generalData.randomorder[generalData.getMode()][generalData.position];
+        }
+      }
+
       tData.trainingId = id;
 
       tData.userId = generalData.userId;
@@ -522,6 +544,8 @@ router.post("/training/:id/edit", requireAdmin,function(request) {
     trainingDAO.get(id, function(training) {
 
       training = merge_options(training, dataObj);
+
+      training.buildIsRandom();
 
       training.save(function() {
         request.response.end(200);

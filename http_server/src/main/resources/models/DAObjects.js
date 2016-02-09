@@ -280,16 +280,18 @@ TrainingDataDAO.prototype.constructor = TrainingDataDAO;
 
 
 
-TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, controlGroup,callback) {
+//TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, controlGroup,callback) {
+TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, training, callback) {
   var that = this;
-  that.get({userId:userid, type:"general", trainingId:trainingId}, 
+  that.get({userId:userid, type:"general", trainingId:training._id},
         function(trainingData, message) {
     if (trainingData === "") {
         //console.log("Generating new data object");
         trainingData = new TrainingData();
 
         trainingData.userId = userid;
-        trainingData.initGeneral(trainingId, controlGroup);
+        //trainingData.initGeneral(training._id, training.controlGroup);
+        trainingData.initGeneral(training);
 
         trainingData.save(function(err) {
             return callback(trainingData);
