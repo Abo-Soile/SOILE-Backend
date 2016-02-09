@@ -67,6 +67,16 @@ function extendRequest(request, func) {
     templateManager.render_template("error", context, this);
   };
 
+  request.serverError = function() {
+    this.response.statusCode(505);
+
+    var context = {};
+    context.short = "505, server error" ;
+    context.long =  "Something went very wrong.";
+
+    templateManager.render_template("error", context, this);
+  };
+
   var session = sessionManager.loadManager(request);
   session.setPersonToken();
   request.session = session;
