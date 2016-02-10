@@ -41,17 +41,37 @@ app.controller('trainingController', function($scope, $http, $location) {
 
   $scope.saveTraining = function save() {
       console.log("SSSSAAAVVE");
-      var data = $scope.training;
+      var data = angular.copy($scope.training);
 
-      console.log($scope.training);
+      for (var i in data.components) {
+        var comp = data.components[i];
+
+        for (var j = 0; j < comp.length; j++) {
+          if (comp[j].random) {
+            comp[j].random = comp[j].randomgroup;
+            delete comp[j].randomgroup;
+          }
+        }
+      }
 
       $http.post(baseUrl, data);
   };
 
   $scope.loadData = function() {
       $http.get("json").success(function(data,status) {
-          console.log(data);
           $scope.training = data;
+
+          for (var i in $scope.training.components) {
+            var comp = $scope.training.components[i];
+            //console.log(comp);
+
+            for (var j = 0; j < comp.length; j++) {
+              if (comp[j].random) {
+                comp[j].randomgroup = comp[j].random;
+                comp[j].random = true;
+              }
+            }
+          }          
           console.log($scope);
       });
   };
