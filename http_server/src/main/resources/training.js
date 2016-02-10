@@ -203,6 +203,10 @@ function trainingView(request, training) {
     status.showscore = false;
   }
 
+  if (!training.showScore) {
+    status.showscore = false;
+  }
+
   status.done = false;
   if (mode === "done") {
     trainingDataDAO.getPrePostScore(id, userid, function(pre, post) {
