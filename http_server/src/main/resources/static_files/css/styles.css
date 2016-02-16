@@ -725,7 +725,8 @@ testeditor styles
   position: absolute;
   background-color: #ebebeb;
   border-bottom: 1px solid gray;
-  border-right: 1px solid gray; }
+  border-right: 1px solid gray;
+  visibility: visible; }
 
 #log td:first-child, #log th:first-child {
   width: 100px; }
