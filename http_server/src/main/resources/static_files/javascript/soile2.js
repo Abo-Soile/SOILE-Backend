@@ -36,6 +36,8 @@ SOILE2 = (function(){
   soile2.bin = bin;
   soile2.util = util;
 
+  soile2.util.debug = false;
+
   bin.onmouseclick = function(id, conf){
 
     //The args call basically converts a functions arguments object to
@@ -2298,6 +2300,8 @@ SOILE2 = (function(){
     var dowait = false;
     var waitfor = 0;
     var pi, opcode, idx;
+
+    try {
     
     while (true){
 
@@ -2369,6 +2373,14 @@ SOILE2 = (function(){
         break;
       }
     }
+  } catch (e) {
+    if (soile2.util.debug) {
+      //console.log("error");
+      //console.log(e);
+
+      soile2.util.debugFunction(e);
+    }
+  }
     
     if (dowait){
       scheduler.wait(waitfor);
@@ -2875,6 +2887,11 @@ SOILE2 = (function(){
 
   util.setPersistantData = function(data) {
     soile2.rt.persistantDataHandler.set(data);
+  };
+
+  util.setDebug = function(func) {
+    soile2.util.debug = true;
+    soile2.util.debugFunction = func;
   };
 
   soile2.bin = soile2.rt.seal(bin);
