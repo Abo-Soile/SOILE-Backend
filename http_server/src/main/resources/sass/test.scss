@@ -197,6 +197,7 @@
     border-radius: 5px;
     border:gray solid 1px;
     padding:4px;
+    pointer-events:auto;
   }
 
   textarea:focus, input[type="text"]:focus {
@@ -204,7 +205,13 @@
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)!important;
     box-shadow: inset 0 1px 1px;
+    pointer-events:auto;
   }
+
+  > .mouselistener {
+    pointer-events:auto;
+  }
+
 }
 
 

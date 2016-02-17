@@ -55,6 +55,7 @@ SOILE2 = (function(){
         _resettimer = (_.isBoolean(conf.resettimer)) ? conf.resettimer : false;
         if (_.isFunction(conf.action)) {
           action = conf.action;
+          jQuery(_id).addClass('mouselistener');
 
           if (conf.mousedown) {
             jQuery(_id).mousedown(function(e){
