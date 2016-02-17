@@ -144,65 +144,6 @@ SOILE2 = (function(){
     return soile2.util.copyobject(data);
   };
   
-
-  bin.draggable = function(mId, isdraggable, data) {
-    var id = soile2.util.getid(mId);
-    var elem = jQuery(id);
-
-    if(isdraggable == true || (typeof data === "undefined" && typeof isdraggable !== "undefined" && isdraggable !== false)) {
-      elem.attr("draggable", true);
-      elem.addClass("mouselistener");
-
-      elem.on("dragstart", function(ev) {
-        ev.originalEvent.dataTransfer.setData("text/plain", data);
-      });
-    }
-
-    //Remove drag handlers
-    if((typeof isdraggable == "undefined" && typeof data == "undefined") || !isdraggable) {
-      elem.off("dragestart");
-      elem.attre("draggable", false);
-
-      elem.removeClass("mouselistener");
-    }
-
-  };
-
-  bin.dropzone = function(mId, ondrop, mDropdata) {
-    var elem = jQuery(soile2.util.getid(mId));
-    var dropdata = mDropdata;
-
-    // removeing handler
-    if (typeof ondrop === "undefined" && typeof mDropdata === "undefined") {
-        elem.removeClass("mouselistener");
-        elem.off("dragover", "dragenter","dragleave");
-        return
-    }
-
-    elem.addClass("mouselistener");
-
-    elem.on("dragenter", soile2.rt.dragenter);
-    elem.on("dragleave", soile2.rt.dragleave);
-
-    elem.on("dragover", function(ev) {
-      ev.preventDefault();
-    });
-
-    /*elem.on("dropover", function(ev) {
-      console.log("DROPPED OVER")
-      console.log(ev)
-    })*/
-
-    elem.on("drop", function(ev) {
-      var target = jQuery(ev.target);
-      target.removeClass("activeDropzone");
-
-      if(elem.attr("id") == target.attr("id")) {
-        ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
-      }
-    });
-
-  };
   /*
    * Stimuli are basically implemented as id strings (DOM id's),
    * so copying a stimulus means copying the DOM element 
@@ -750,65 +691,6 @@ SOILE2 = (function(){
     return 0;
   };
   
-
-  bin.draggable = function(mId, isdraggable, data) {
-    var id = soile2.util.getid(mId);
-    var elem = jQuery(id);
-
-    if(isdraggable == true || (typeof data === "undefined" && typeof isdraggable !== "undefined" && isdraggable !== false)) {
-      elem.attr("draggable", true);
-      elem.addClass("mouselistener");
-
-      elem.on("dragstart", function(ev) {
-        ev.originalEvent.dataTransfer.setData("text/plain", data);
-      });
-    }
-
-    //Remove drag handlers
-    if((typeof isdraggable == "undefined" && typeof data == "undefined") || !isdraggable) {
-      elem.off("dragestart");
-      elem.attre("draggable", false);
-
-      elem.removeClass("mouselistener");
-    }
-
-  };
-
-  bin.dropzone = function(mId, ondrop, mDropdata) {
-    var elem = jQuery(soile2.util.getid(mId));
-    var dropdata = mDropdata;
-
-    // removeing handler
-    if (typeof ondrop === "undefined" && typeof mDropdata === "undefined") {
-        elem.removeClass("mouselistener");
-        elem.off("dragover", "dragenter","dragleave");
-        return
-    }
-
-    elem.addClass("mouselistener");
-
-    elem.on("dragenter", soile2.rt.dragenter);
-    elem.on("dragleave", soile2.rt.dragleave);
-
-    elem.on("dragover", function(ev) {
-      ev.preventDefault();
-    });
-
-    /*elem.on("dropover", function(ev) {
-      console.log("DROPPED OVER")
-      console.log(ev)
-    })*/
-
-    elem.on("drop", function(ev) {
-      var target = jQuery(ev.target);
-      target.removeClass("activeDropzone");
-
-      if(elem.attr("id") == target.attr("id")) {
-        ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
-      }
-    });
-
-  };
   /*
    * Convert an integer representing seconds to milliseconds.
    */
@@ -2116,65 +1998,6 @@ SOILE2 = (function(){
     };
   };
   
-
-  bin.draggable = function(mId, isdraggable, data) {
-    var id = soile2.util.getid(mId);
-    var elem = jQuery(id);
-
-    if(isdraggable == true || (typeof data === "undefined" && typeof isdraggable !== "undefined" && isdraggable !== false)) {
-      elem.attr("draggable", true);
-      elem.addClass("mouselistener");
-
-      elem.on("dragstart", function(ev) {
-        ev.originalEvent.dataTransfer.setData("text/plain", data);
-      });
-    }
-
-    //Remove drag handlers
-    if((typeof isdraggable == "undefined" && typeof data == "undefined") || !isdraggable) {
-      elem.off("dragestart");
-      elem.attre("draggable", false);
-
-      elem.removeClass("mouselistener");
-    }
-
-  };
-
-  bin.dropzone = function(mId, ondrop, mDropdata) {
-    var elem = jQuery(soile2.util.getid(mId));
-    var dropdata = mDropdata;
-
-    // removeing handler
-    if (typeof ondrop === "undefined" && typeof mDropdata === "undefined") {
-        elem.removeClass("mouselistener");
-        elem.off("dragover", "dragenter","dragleave");
-        return
-    }
-
-    elem.addClass("mouselistener");
-
-    elem.on("dragenter", soile2.rt.dragenter);
-    elem.on("dragleave", soile2.rt.dragleave);
-
-    elem.on("dragover", function(ev) {
-      ev.preventDefault();
-    });
-
-    /*elem.on("dropover", function(ev) {
-      console.log("DROPPED OVER")
-      console.log(ev)
-    })*/
-
-    elem.on("drop", function(ev) {
-      var target = jQuery(ev.target);
-      target.removeClass("activeDropzone");
-
-      if(elem.attr("id") == target.attr("id")) {
-        ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
-      }
-    });
-
-  };
   /*
    * Save "program instructions." Note that we are 
    * assigning a FUNCTION, not an array. The 
@@ -2231,66 +2054,7 @@ SOILE2 = (function(){
 
   rt.dowait = false;
   rt.waitfor = 0;
-  
 
-  bin.draggable = function(mId, isdraggable, data) {
-    var id = soile2.util.getid(mId);
-    var elem = jQuery(id);
-
-    if(isdraggable == true || (typeof data === "undefined" && typeof isdraggable !== "undefined" && isdraggable !== false)) {
-      elem.attr("draggable", true);
-      elem.addClass("mouselistener");
-
-      elem.on("dragstart", function(ev) {
-        ev.originalEvent.dataTransfer.setData("text/plain", data);
-      });
-    }
-
-    //Remove drag handlers
-    if((typeof isdraggable == "undefined" && typeof data == "undefined") || !isdraggable) {
-      elem.off("dragestart");
-      elem.attre("draggable", false);
-
-      elem.removeClass("mouselistener");
-    }
-
-  };
-
-  bin.dropzone = function(mId, ondrop, mDropdata) {
-    var elem = jQuery(soile2.util.getid(mId));
-    var dropdata = mDropdata;
-
-    // removeing handler
-    if (typeof ondrop === "undefined" && typeof mDropdata === "undefined") {
-        elem.removeClass("mouselistener");
-        elem.off("dragover", "dragenter","dragleave");
-        return
-    }
-
-    elem.addClass("mouselistener");
-
-    elem.on("dragenter", soile2.rt.dragenter);
-    elem.on("dragleave", soile2.rt.dragleave);
-
-    elem.on("dragover", function(ev) {
-      ev.preventDefault();
-    });
-
-    /*elem.on("dropover", function(ev) {
-      console.log("DROPPED OVER")
-      console.log(ev)
-    })*/
-
-    elem.on("drop", function(ev) {
-      var target = jQuery(ev.target);
-      target.removeClass("activeDropzone");
-
-      if(elem.attr("id") == target.attr("id")) {
-        ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
-      }
-    });
-
-  };
   /*
    * Execute a program instruction (or several program instructions).
    */
@@ -2474,65 +2238,6 @@ SOILE2 = (function(){
     var suspend = function(){
       var args = Array.prototype.slice.call(arguments);
       
-
-  bin.draggable = function(mId, isdraggable, data) {
-    var id = soile2.util.getid(mId);
-    var elem = jQuery(id);
-
-    if(isdraggable == true || (typeof data === "undefined" && typeof isdraggable !== "undefined" && isdraggable !== false)) {
-      elem.attr("draggable", true);
-      elem.addClass("mouselistener");
-
-      elem.on("dragstart", function(ev) {
-        ev.originalEvent.dataTransfer.setData("text/plain", data);
-      });
-    }
-
-    //Remove drag handlers
-    if((typeof isdraggable == "undefined" && typeof data == "undefined") || !isdraggable) {
-      elem.off("dragestart");
-      elem.attre("draggable", false);
-
-      elem.removeClass("mouselistener");
-    }
-
-  };
-
-  bin.dropzone = function(mId, ondrop, mDropdata) {
-    var elem = jQuery(soile2.util.getid(mId));
-    var dropdata = mDropdata;
-
-    // removeing handler
-    if (typeof ondrop === "undefined" && typeof mDropdata === "undefined") {
-        elem.removeClass("mouselistener");
-        elem.off("dragover", "dragenter","dragleave");
-        return
-    }
-
-    elem.addClass("mouselistener");
-
-    elem.on("dragenter", soile2.rt.dragenter);
-    elem.on("dragleave", soile2.rt.dragleave);
-
-    elem.on("dragover", function(ev) {
-      ev.preventDefault();
-    });
-
-    /*elem.on("dropover", function(ev) {
-      console.log("DROPPED OVER")
-      console.log(ev)
-    })*/
-
-    elem.on("drop", function(ev) {
-      var target = jQuery(ev.target);
-      target.removeClass("activeDropzone");
-
-      if(elem.attr("id") == target.attr("id")) {
-        ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
-      }
-    });
-
-  };
       /*
        * When the 'suspend' method is called with a number as a parameter,
        * that will set the duration of suspension WITHOUT suspending the 
@@ -2549,65 +2254,6 @@ SOILE2 = (function(){
         return;
       }
       
-
-  bin.draggable = function(mId, isdraggable, data) {
-    var id = soile2.util.getid(mId);
-    var elem = jQuery(id);
-
-    if(isdraggable == true || (typeof data === "undefined" && typeof isdraggable !== "undefined" && isdraggable !== false)) {
-      elem.attr("draggable", true);
-      elem.addClass("mouselistener");
-
-      elem.on("dragstart", function(ev) {
-        ev.originalEvent.dataTransfer.setData("text/plain", data);
-      });
-    }
-
-    //Remove drag handlers
-    if((typeof isdraggable == "undefined" && typeof data == "undefined") || !isdraggable) {
-      elem.off("dragestart");
-      elem.attre("draggable", false);
-
-      elem.removeClass("mouselistener");
-    }
-
-  };
-
-  bin.dropzone = function(mId, ondrop, mDropdata) {
-    var elem = jQuery(soile2.util.getid(mId));
-    var dropdata = mDropdata;
-
-    // removeing handler
-    if (typeof ondrop === "undefined" && typeof mDropdata === "undefined") {
-        elem.removeClass("mouselistener");
-        elem.off("dragover", "dragenter","dragleave");
-        return
-    }
-
-    elem.addClass("mouselistener");
-
-    elem.on("dragenter", soile2.rt.dragenter);
-    elem.on("dragleave", soile2.rt.dragleave);
-
-    elem.on("dragover", function(ev) {
-      ev.preventDefault();
-    });
-
-    /*elem.on("dropover", function(ev) {
-      console.log("DROPPED OVER")
-      console.log(ev)
-    })*/
-
-    elem.on("drop", function(ev) {
-      var target = jQuery(ev.target);
-      target.removeClass("activeDropzone");
-
-      if(elem.attr("id") == target.attr("id")) {
-        ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
-      }
-    });
-
-  };
       /*
        * If no suspension duration has been set previously, just stop the
        * execution of the program; otherwise, set a timeout.
@@ -2729,65 +2375,6 @@ SOILE2 = (function(){
     // https://github.com/douglascrockford/JSON-js
     // http://bestiejs.github.io/json3/
     
-
-  bin.draggable = function(mId, isdraggable, data) {
-    var id = soile2.util.getid(mId);
-    var elem = jQuery(id);
-
-    if(isdraggable == true || (typeof data === "undefined" && typeof isdraggable !== "undefined" && isdraggable !== false)) {
-      elem.attr("draggable", true);
-      elem.addClass("mouselistener");
-
-      elem.on("dragstart", function(ev) {
-        ev.originalEvent.dataTransfer.setData("text/plain", data);
-      });
-    }
-
-    //Remove drag handlers
-    if((typeof isdraggable == "undefined" && typeof data == "undefined") || !isdraggable) {
-      elem.off("dragestart");
-      elem.attre("draggable", false);
-
-      elem.removeClass("mouselistener");
-    }
-
-  };
-
-  bin.dropzone = function(mId, ondrop, mDropdata) {
-    var elem = jQuery(soile2.util.getid(mId));
-    var dropdata = mDropdata;
-
-    // removeing handler
-    if (typeof ondrop === "undefined" && typeof mDropdata === "undefined") {
-        elem.removeClass("mouselistener");
-        elem.off("dragover", "dragenter","dragleave");
-        return
-    }
-
-    elem.addClass("mouselistener");
-
-    elem.on("dragenter", soile2.rt.dragenter);
-    elem.on("dragleave", soile2.rt.dragleave);
-
-    elem.on("dragover", function(ev) {
-      ev.preventDefault();
-    });
-
-    /*elem.on("dropover", function(ev) {
-      console.log("DROPPED OVER")
-      console.log(ev)
-    })*/
-
-    elem.on("drop", function(ev) {
-      var target = jQuery(ev.target);
-      target.removeClass("activeDropzone");
-
-      if(elem.attr("id") == target.attr("id")) {
-        ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
-      }
-    });
-
-  };
     /*
      * We copy an object, or an array, by first serializing 
      * it into a JSON string, and then de-serializing it.
