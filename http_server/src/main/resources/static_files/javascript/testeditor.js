@@ -182,6 +182,12 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   	});
   };
 
+  function setRuntimeError(errMsg) {
+    $scope.runtimeError = errMsg.message;
+    //console.log(errMsg);
+    $scope.$apply();
+  }
+
   $scope.logFunc = function(message) {
   	var logRow = {timestamp: Date.now() - $scope.testStartTime, message:message};
   	logRow.timestamp = logRow.timestamp/1000 + " s";
@@ -262,6 +268,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     $scope.soileLog = [];
 		$scope.testStartTime = Date.now();
 
+    $scope.runtimeError = false;
+
     $window.document.getElementById("runButton").blur();
     display.focus();
 
@@ -272,6 +280,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     SOILE2.util.setLogFunction($scope.logFunc);
 
     SOILE2.util.resetData();
+    SOILE2.util.setDebug(setRuntimeError);
+
     $timeout(function() {
       //SOILE2.run()
       SOILE2.rt.exec_pi();
