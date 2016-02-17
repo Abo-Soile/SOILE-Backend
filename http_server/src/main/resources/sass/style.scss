@@ -1,5 +1,5 @@
 * {
-  outline: none !important;
+  outline: none;
 }
 
 /*body {
@@ -62,31 +62,6 @@ p {
   clear: both;
 }
 
-#display {
-  height: 500px;
-  /*min-width: 1000px;*/
-  width: 1000px;
-  border: solid black 2px;
-  background-color: white;
-  overflow: hidden;
-  position: relative;
-  /*Unselectable display*/
-  -webkit-user-select: none;
-  /* Chrome/Safari */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* IE10+ */
-  > p {
-    padding-left: 0px;
-    display: inline;
-    line-height: 1.20;
-    cursor: default;
-    /*text-align: justify;*/
-    padding-right: 5px;
-    padding-bottom: 5px;  
-  }
-}
 
 #code {
   width: 100%;
