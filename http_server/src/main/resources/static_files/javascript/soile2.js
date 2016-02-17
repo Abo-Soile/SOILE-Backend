@@ -80,6 +80,7 @@ SOILE2 = (function(){
         jQuery(_id).unbind('click');
         jQuery(_id).unbind('mousedown');
         jQuery(_id).unbind('mouseup');
+        jQuery(_id).removeClass('mouselistener');
       }
     }
   };
