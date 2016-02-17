@@ -276,7 +276,7 @@ SOILE2 = (function(){
     }
   };
 
-  bin.msgbox = function(msg, _size){
+  bin.msgbox = function(msg, _size, maxwidth){
     var id = soile2.rt.uniqueid(); 
     var size;
 
@@ -289,10 +289,14 @@ SOILE2 = (function(){
     var props = {
       "id": id,
       "class": "hiddenelem",
-      "style": "font-size:"+size+"px"
+      "style": "font-size:"+size+"px;"
       /*"text": msg*/
       //"src": url
     };
+
+    if (typeof maxwidth === "number") {
+      props.style += "max-width:"+maxwidth+"px;";
+    }
 
     var box = jQuery("<p/>", props);
     box.append(msg);
