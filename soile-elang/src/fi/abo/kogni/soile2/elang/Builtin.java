@@ -144,6 +144,11 @@ public class Builtin {
 
         builtinFunctions.add("countdownbar");
 
+        //Drag and drop
+        builtinFunctions.add("draggable");
+        builtinFunctions.add("dropzone");
+        builtinFunctions.add("cleardragdrop");
+
         //Text input
         builtinFunctions.add("textbox");
         builtinFunctions.add("textarea");

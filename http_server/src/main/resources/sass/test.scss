@@ -149,6 +149,50 @@
 /* Display */
 #display {
 
+  height: 500px;
+  /*min-width: 1000px;*/
+  width: 1000px;
+  border: solid black 2px;
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+  /*Unselectable display*/
+  -webkit-user-select: none;
+  /* Chrome/Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE10+ */
+
+  > * {
+    pointer-events: none;
+  }
+
+  > p {
+    padding-left: 0px;
+    display: inline;
+    line-height: 1.20;
+    cursor: default;
+    /*text-align: justify;*/
+    padding-right: 5px;
+    padding-bottom: 5px;  
+  }
+
+  .activeDropzone {
+    /*position:relative;*/
+    outline: 3px dotted blue;
+    pointer-events:auto;
+  }
+  /*.activeDropzone:after {
+    content: " ";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 5px solid #ffea00;
+  }*/
+
   input[type="text"], textarea{
     border-radius: 5px;
     border:gray solid 1px;
