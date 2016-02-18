@@ -365,7 +365,13 @@ SOILE2 = (function(){
 
   bin.settext = function(id, text) {
     var tbox = jQuery(soile2.util.getid(id));
-    tbox.val(text);
+
+    if (tbox.is("p")) {
+      tbox.text(text);
+    }
+    else {
+      tbox.val(text);
+    }
   };
 
   //Width in pixels, timer in ms
