@@ -2149,6 +2149,10 @@ SOILE2 = (function(){
       //console.log(e);
 
       soile2.util.debugFunction(e);
+    } else {
+      if (typeof Raven != "undefined") {
+        Raven.captureException(e);
+      }
     }
   }
     
