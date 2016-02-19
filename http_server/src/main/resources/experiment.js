@@ -351,7 +351,7 @@ router.get('/experiment/:id/phase/:phase/json', function(request) {
     userID = request.session.getUserId();
   }
 
-  dataDAO.getGeneral(userID, expID, function(userdata) {
+  dataDAO.get({"userid":userID, "expId": expID, "type":"general"}, function(userdata) {
     phaseNo = userdata.position;
 
     if (userdata.randomorder) {
