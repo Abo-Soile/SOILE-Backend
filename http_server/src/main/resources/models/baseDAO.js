@@ -96,8 +96,13 @@ BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
         }
     });
 };
+/*
+ * Update the element specified in matcher with data specified in objNew
+ * Will update multiple objects by default, set multi to false to only update
+ * one. 
+ */
 
-BaseDAO.prototype.update = function(matcher, objnew, callback) {
+BaseDAO.prototype.update = function(matcher, objnew, callback, multi) {
     var mongoCommand = {};
 
     if (typeof matcher === 'undefined' ||
@@ -108,6 +113,11 @@ BaseDAO.prototype.update = function(matcher, objnew, callback) {
     mongoCommand.action = "update";
     mongoCommand.criteria = matcher;
     mongoCommand.objNew = objnew;
+    mongoCommand.multi = true;
+
+    if (multi === false) {
+        mongoCommand.multi = false;
+    }
 
     this.sendToMongo(mongoCommand, function(mongoReply) {
         if(mongoReply.status === "ok") {

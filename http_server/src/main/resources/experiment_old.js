@@ -476,7 +476,7 @@ router.get('/old_experiment/:id/phase/:phase', function(request) {
 });
 
 
-router.get('/experiment/:id/phase/:phase/json', function(request) {
+router.get('/old_experiment/:id/phase/:phase/json', function(request) {
   var expID = request.params().get('id');
   var phaseNo = request.params().get('phase'); 
   var phase;
@@ -497,7 +497,7 @@ router.get('/experiment/:id/phase/:phase/json', function(request) {
         request.response.end(r2.result.js);
       });
     });
-  })
+  });
 
 });
 
@@ -536,7 +536,7 @@ router.post('/old_experiment/:id/phase/:phase', function(request) {
 });
 
 
-router.get('/experiment/:id/end', function(request) {
+router.get('/old_experiment/:id/end', function(request) {
   var expID = request.params().get('id');
   var userID = request.session.getPersonToken();
   if(request.session.loggedIn()) {

@@ -226,6 +226,20 @@ DataDAO.prototype.getOrGenerateGeneral = function(userid, exp, request, callback
   });
 };
 
+DataDAO.prototype.completeExperiment = function(expId, userid, callback) {
+    var that = this;
+
+    var matcher = {};
+    matcher.expId = expId;
+    matcher.userid = userid;
+
+    var objnew = {"$set":{"confirmed":true}};
+
+    that.update(matcher, objnew, function(status) {
+        callback(status);
+    });
+};
+
 DataDAO.prototype.getPhaseCompletion = function(expId, callback) {
     var pipe = [
         {$match:{expId:expId, 
@@ -417,7 +431,6 @@ TrainingDataDAO.prototype.getScoreHistory = function(trainingId, userid, callbac
         
         callback(iterationScores); 
     });
-
 };
 
 TrainingDataDAO.prototype.getPrePostScore = function(trainingId, userid, callback) {

@@ -126,7 +126,8 @@ router.get('/experiment/:id', function(request){
       var userID = request.session.getPersonToken();
 
       if(request.session.loggedIn()) {
-        userID = request.session.loggedIn().id;
+        //userID = request.session.loggedIn().id;
+        userID = request.session.getUserId();
       }
 
       /*
@@ -154,6 +155,10 @@ router.get('/experiment/:id/phase/:phase', function(request) {
   var phase;
 
   var userID = request.session.getPersonToken();
+
+  if(request.session.loggedIn()) {
+    userID = request.session.getUserId();
+  }
 
   dataDAO.get({"userid":userID, "expId": expID, "type":"general"}, function(userdata) {
     var reg = /phase\/\d*/;
@@ -252,7 +257,7 @@ router.post('/experiment/:id/phase/:phase', function(request) {
 
   var userID = request.session.getPersonToken();
   if(request.session.loggedIn()) {
-    userID = request.session.loggedIn().id;
+    userID = request.session.getUserId();
   }
 
   var data = new vertx.Buffer();
@@ -292,6 +297,78 @@ router.post('/experiment/:id/phase/:phase', function(request) {
   });
 });
 
+router.get('/experiment/:id/end', function(request) {
+  var expID = request.params().get('id');
+  var userID = request.session.getPersonToken();
+
+  if(request.session.loggedIn()) {
+    userID = request.session.getUserId();
+  }
+
+
+  dataDAO.completeExperiment(expID, userID, function(status) {
+    console.log("confirmed submitted data");
+    experimentDAO.get(expID, function(exp) {
+
+      var endMessage = exp.endmessage;
+      var endTitle = "";
+      if(typeof endMessage !== 'undefined') {
+
+        endTitle = endMessage.split('\n')[0];
+        endMessage = endMessage.split("\n").slice(1).join("\n");
+
+        endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      }
+
+      var context = {"endtitle":endTitle, "endmessage":endMessage};
+      
+      if (typeof exp.hidelogin !== 'undefined') {
+        context.hideLogin = exp.hidelogin;
+      }
+
+      if (exp.mechanicalTurkEnabled) {
+        dataDAO.getGeneral(userID, expID, function(userData) {
+          context.endmessage = context.endmessage.replace("{turkToken}", userData.mechanicalTurkToken);
+
+          return templateManager.render_template('end', context, request);
+        });
+      }
+      else {
+        return templateManager.render_template('end', context, request);
+      }
+    });
+
+  });
+});
+
+router.get('/experiment/:id/phase/:phase/json', function(request) {
+  var expID = request.params().get('id');
+  var phaseNo = request.params().get('phase'); 
+
+  var userID = request.session.getPersonToken();
+
+  if(request.session.loggedIn()) {
+    userID = request.session.getUserId();
+  }
+
+  dataDAO.getGeneral(userID, expID, function(userdata) {
+    phaseNo = userdata.position;
+
+    if (userdata.randomorder) {
+      phaseNo = userdata.randomorder[userdata.position];
+    }
+
+    experimentDAO.get(expID, function(exp) {
+      var phase = exp.components[phaseNo];
+
+      testDAO.get(phase.id, function(test) {
+
+        request.response.end(test.js);
+      });
+    });
+  });
+
+});
 
 router.get("/experiment/:id/edit", requireAdmin,function(request) {
   templateManager.render_template('a_experimentEdit', {}, request);
