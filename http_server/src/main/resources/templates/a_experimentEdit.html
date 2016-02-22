@@ -23,7 +23,7 @@
 <script src="/javascript/bower_components/ladda/js/ladda.js"></script>
 <script src="/javascript/bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
 
-<div class="container" id="main" ng-app="experimentEdit" ng-controller="experimentController">
+<div class="container experiment-edit" id="main" ng-app="experimentEdit" ng-controller="experimentController">
   <div class="row">
     <div class="col-md-12">    
         <label>Experiment name</label>
@@ -100,7 +100,7 @@
               
                 <!-- IF TEST -->
                 <div ng-if="comp.type == 'test'" class="form-group">
-                  <input class="form-control" ng-model=comp.name readonly>
+                  <input class="form-control compname" ng-model=comp.name readonly>
 
                   <div class="form-group">
                     <div class="checkbox">
@@ -121,7 +121,7 @@
 
                 <!--IF FORM -->
                 <span ng-if="comp.type == 'form'" class="form-group">
-                  <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
+                  <input class="form-control compname" ng-model=comp.name placeholder="Unnamed form"> 
                   <a class="btn btn-warning" href="/questionnaire/mongo/[([comp.id])]" target="_blank">Edit</a>
                 </span>
 
@@ -141,7 +141,7 @@
     </div>
     <div class="col-md-10">
       <div class="form-group">
-        <ui-select ng-model="test.selected"  theme="bootstrap" ng-disabled="disabled" style="min-width: 300px; max-width: 300px; display: inline-block">
+        <ui-select ng-model="test.selected" theme="bootstrap" ng-disabled="disabled" >
           <ui-select-match placeholder="Select an experiment">[([$select.selected.findName])]</ui-select-match>
           <ui-select-choices repeat="test in tests | filter:{findName:$select.search}">
             <div ng-bind-html="test.findName | highlight: $select.search"></div>

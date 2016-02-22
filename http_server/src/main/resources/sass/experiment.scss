@@ -22,3 +22,17 @@
     margin-bottom: 10px;
   }
 }
+
+.angularcomponentlist {
+  .compname {
+    min-width: 300px;
+  }
+}
+
+.experiment-edit {
+  .ui-select-bootstrap {
+    min-width: 480px;
+    max-width: 480px;
+    display: inline-block;
+  }
+}

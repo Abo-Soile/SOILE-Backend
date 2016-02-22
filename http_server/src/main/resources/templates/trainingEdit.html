@@ -15,7 +15,7 @@
 <script type="text/javascript" src="/javascript/trainingedit.js"></script>
 
 
-<div class="container" id="main" ng-app="trainingEdit" ng-controller="trainingController">
+<div class="container training-edit" id="main" ng-app="trainingEdit" ng-controller="trainingController">
   <div class="row">
     <div class="col-md-12">    
       <label>Experiment name</label>
@@ -119,7 +119,7 @@
                  <div class="form-inline">
 
                   <span ng-if="comp.type == 'test'">
-                    <input class="form-control" ng-model=comp.name readonly>
+                    <input class="form-control compname" ng-model=comp.name readonly>
                     
                     <span class="checkbox">
                       <label class="componentcheckbox">
@@ -135,7 +135,7 @@
                   </span>
 
                   <span ng-if="comp.type == 'form'">
-                    <input class="form-control" ng-model=comp.name placeholder="Unnamed form"> 
+                    <input class="compname form-control" ng-model=comp.name placeholder="Unnamed form"> 
                     <a href="/questionnaire/mongo/[([comp.id])]" class="btn btn-warning" target="_blank">Edit</a>
                   </span>
 
@@ -157,7 +157,7 @@
 
       <div class="col-md-10">
         <div class="form-group">
-          <ui-select ng-model="test.selected"  theme="bootstrap" ng-disabled="disabled" style="min-width: 300px; max-width: 300px; display: inline-block">
+          <ui-select ng-model="test.selected"  theme="bootstrap" ng-disabled="disabled">
             <ui-select-match placeholder="Select an experiment">[([$select.selected.findName])]</ui-select-match>
             <ui-select-choices repeat="test in tests | filter:{findName:$select.search}">
               <div ng-bind-html="test.findName | highlight: $select.search"></div>
