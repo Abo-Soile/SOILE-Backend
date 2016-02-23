@@ -14,6 +14,7 @@ require(["dijit/form/HorizontalSlider",
          "dijit/form/TextBox",
          "dojo/dom",
          "dojo/dom-construct", 
+         "dojo/dom-class",
          "dojo/aspect", 
          "dijit/registry", 
          "dojo/on",
@@ -37,7 +38,8 @@ require(["dijit/form/HorizontalSlider",
            NumberSpinner,
            TextBox,
            dom,
-           domConstruct, 
+           domConstruct,
+           domClass,
            aspect, 
            registry, 
            on,
@@ -88,6 +90,29 @@ require(["dijit/form/HorizontalSlider",
     var dojoForm = registry.byId("formcol");
     //console.log(dojoForm);
 
+    var inBuilder = false;
+    var clashingColNames = [];
+
+    function addToQdata(col, value) {
+      if(inBuilder) {
+        if(qdata.hasOwnProperty(col)) {
+          clashingColNames.push(col);
+        }
+      }
+      qdata[col] = value;
+    }
+
+    function uniqueArr(arr) {
+      var result = [];
+      arr.forEach(function(item) {
+           if(result.indexOf(item) < 0) {
+               result.push(item);
+           }
+      });
+
+      return result;
+    }
+
     var is_checked = function(id) {
       var widget = registry.byId(id);
       return (widget.get('checked') === true ? true : false);
@@ -119,7 +144,10 @@ require(["dijit/form/HorizontalSlider",
 
     var save_value = function(data, params, column){
       var id = params[0];
-      qdata[column] = registry.byId(params[0]).get('value');
+      var value = registry.byId(params[0]).get('value');
+      
+      addToQdata(column, value);
+      //qdata[column] = value; 
     };
 
     var save_textwidget_value = function(data, params, column) {
@@ -134,9 +162,11 @@ require(["dijit/form/HorizontalSlider",
       else {
         text = text.substring(0, maxlen);
       }
-      
-      qdata[column] = text;
-    }
+  
+      addToQdata(column, text);
+
+      //qdata[column] = text;
+    };
 
     var save_first_checked = function(data,
                                       ids, 
@@ -160,7 +190,9 @@ require(["dijit/form/HorizontalSlider",
       if (use_default){
         value = default_value;
       }
-      qdata[column_name] = value;
+
+      addToQdata(column_name, value);
+      //qdata[column_name] = value;
     };
 
     var save_all_checked = function(data,
@@ -180,7 +212,9 @@ require(["dijit/form/HorizontalSlider",
         } else {
           value = default_value;
         }
-        qdata[column] = value;
+        //qdata[column] = value;
+        
+        addToQdata(column, value);
         i += 1;
       }
     };
@@ -236,6 +270,12 @@ require(["dijit/form/HorizontalSlider",
         //var domContainer = dom.byId("formcol");
         //var widgets = registry.findWidgets(domContainer);
 
+        var warningBox = dom.byId("warningbox");
+        domClass.add(warningBox, "hiddenelem");
+
+        inBuilder = true;
+        clashingColNames = [];
+
         var form = registry.byId("formcol");
 
         var valid = form.validate(); 
@@ -246,6 +286,22 @@ require(["dijit/form/HorizontalSlider",
 
         show_saved_data(d);
 
+        if (clashingColNames.length > 0) {
+
+          clashingColNames = uniqueArr(clashingColNames);
+
+          var names = "name";
+          var isare = "is";
+          if (clashingColNames.length > 1) {names = "names"; isare="are"}
+
+          var message = "WARING: The column " + names + " <strong>" + clashingColNames.toString() + 
+                        "</strong> " + isare + " used multiple times, is this intended?";
+        
+          warningBox.innerHTML = message;
+          domClass.remove(warningBox, "hiddenelem");  
+        }
+
+        inBuilder = false;
         //console.log("Widgets:");
         //console.log(widgets);
 
