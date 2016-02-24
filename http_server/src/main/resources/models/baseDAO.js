@@ -182,6 +182,57 @@ BaseDAO.prototype.aggregate = function(pipeline, callback) {
     });
 };
 
+//Returns the raw json data from the query instead of object(s).
+//Will always return a list, which will be empry if nothing is found
+BaseDAO.prototype.rawQuery = function(matcher, callback, extra) {
+
+    var that = this;
+
+    var mongoCommand = {};
+    mongoCommand.action = "find";
+    if((typeof matcher === 'object')) {
+        mongoCommand.matcher = matcher;
+    } else {
+        mongoCommand.matcher = {};
+    }
+
+    if (typeof extra !== "undefined") {
+
+        if (typeof extra.sort !== "undefined") {
+            mongoCommand.sort = extra.sort;
+        }
+
+        if (typeof extra.limit !== "undefined") {
+            mongoCommand.limit = extra.limit;
+        }
+
+        if (typeof extra.offset !== "undefined") {
+            mongoCommand.skip = extra.offset;
+        }
+
+        if (typeof extra.keys !== "undefined") {
+            mongoCommand.keys = extra.keys;
+        }
+    }
+
+
+    this.sendToMongo(mongoCommand, function(mongoReply, replier) {
+        console.log("Find raw command done - " + mongoReply.status);
+
+        if(mongoReply.status === "more-exist"){
+            replier({}, that.handleMore(that, mongoReply.results, callback));
+        }
+
+        else if(mongoReply.status === "ok") {
+            callback(mongoReply.results);
+        }
+
+        else {
+            callback(false);
+        }
+    });
+};
+
 BaseDAO.prototype.handleMore = function(obj, data, callback) {
     //console.log("Building new replier")
     return function(reply, replier) {
@@ -196,6 +247,21 @@ BaseDAO.prototype.handleMore = function(obj, data, callback) {
                 resultObjects.push(new obj._baseObject(result[i]));
             }
             callback(resultObjects);
+        }
+        
+    };
+};
+
+BaseDAO.prototype.rawHandleMore = function(obj, data, callback) {
+    //console.log("Building new replier")
+    return function(reply, replier) {
+        var result = data.concat(reply.results);
+
+        if(reply.status==="more-exist") {
+            replier({}, obj.handleMore(obj, result, callback));
+        }
+        else {
+            callback(result);
         }
         
     };
