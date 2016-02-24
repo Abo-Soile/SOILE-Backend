@@ -16,7 +16,7 @@ var userDao = dao.UserDAO;
 var dataDAO = dao.DataDAO;
 var Data = models.Data;
 
-var dataCount = 10000;
+var dataCount = 200;
 
 var mongoConfig = {
   "address": "vertx.mongo-persistor",
@@ -157,6 +157,52 @@ function testBatching() {
       console.log("Stuff")
     }
   ])
+}
+
+function testRawQuery() {
+  async.waterfall([
+    function setup(callback) {
+      resetMongo(function() {
+        callback();
+      });
+    },
+    function generator(callback) {
+      var c = 0;
+      async.whilst(
+        function() {return c < dataCount},
+        function(innerCallback) {
+          var d = new Data();
+          d.initGeneral(c);
+          d.save(function() {
+            if((c%100) === 0) {console.log("Generating data " + c)}
+            innerCallback();
+
+            c = c + 1;
+          })
+
+        },
+        function(err) {
+          console.log("GENERATION DONE!!");
+          callback();
+        }
+        );
+    },
+    function getter(callback) {
+      console.log("Fetching data");
+      dataDAO.rawQuery({}, function(result) {
+
+        vassert.assertEquals(result.length, dataCount,5);
+
+        console.log(result.length);
+
+        console.log(JSON.stringify(result.splice(55,63)));
+
+        vassert.testComplete();
+        callback();
+
+      });
+    }
+  ]);
 }
 
 
