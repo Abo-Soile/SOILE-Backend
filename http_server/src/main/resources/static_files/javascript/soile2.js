@@ -678,6 +678,7 @@ SOILE2 = (function(){
     })*/
 
     elem.on("drop", function(ev) {
+      ev.preventDefault();
       var target = jQuery(ev.target);
       target.removeClass("activeDropzone");
 
