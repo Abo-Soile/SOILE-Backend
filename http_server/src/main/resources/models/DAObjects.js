@@ -282,6 +282,25 @@ TrainingDAO.prototype.addform = function(first_argument) {
     // body...
 };
 
+/*
+Manually enrolls a user as a participant in a training experiment
+Returns: True if user was enrolled
+         False if the user couldnt be enrolled (i.e. he is already enrolled in this experiment)
+*/
+TrainingDAO.prototype.enrollUser = function(trainingID, userid, callback) {
+    var that  = this;
+    var tDataDao = new TrainingDataDAO();
+
+    that.get(trainingID ,function(training) {
+        tDataDao.getOrGenerateGeneral(userid, training, function(res, alreadyEnrolled) {
+            if(alreadyEnrolled === true) {
+                callback(false);
+            } else {
+                callback(true);
+            }
+        });
+    });
+};
 
 function TrainingDataDAO() {
     BaseDAO.call(this);
@@ -312,7 +331,7 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, training, call
         });
     } else {
         console.log("Training exists");
-        callback(trainingData);
+        callback(trainingData, true);
     }
   });
 };

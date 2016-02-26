@@ -24,6 +24,9 @@ var requireAdmin = require('middleware').requireAdmin;
 var m1 = require('middleware').m1;
 var m2 = require('middleware').m2;
 
+var utils = require("utils");
+
+
 /*
 Architectural ideas. 
 
@@ -227,6 +230,68 @@ function trainingAdminView(request, training) {
   var cData = [["Pre", 123], ["1", 63],["2", 55],["3", 32],["Post", 19]];
   return templateManager.render_template("trainingAdmin", {training:training, chartData:cData}, request);
 }
+
+/*
+b3608da6-aef4-49aa-8e25-1210bc377254,f38699cf-d4e8-42da-8d7c-643b3952e067
+*/
+/*
+  Manually enroll a user into a training experiment. Does the same thing as
+  when a user clicks the participate button. The user will see that he is participating
+  in the test at the user view after logging in.
+*/
+router.post("/training/:id/enrolluser", requireAdmin,function (request) {
+  var data = new vertx.Buffer();
+  var trainingId = request.params().get('id');
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    var params = data.getString(0, data.length());
+    params = utils.getUrlParams(params);
+
+
+    console.log(JSON.stringify(params))
+
+    params = params.userids;
+
+    console.log(JSON.stringify(params))
+
+    if (typeof params === "undefined" || params == "") {
+      request.redirect(request.absoluteURI());
+      return;
+    }
+
+    var ids = params.split(",");
+    var usersEnrolled = 0;
+
+    function redirectToTraining() {
+      request.redirect("/training/" + trainingId);
+    }
+
+    function enrollUsers(next) {
+      var id = next.pop();
+
+      var func = enrollUsers;
+
+      if (id === undefined) {
+        redirectToTraining();
+      } else {
+        trainingDAO.enrollUser(trainingId, id, function(res, enrollStatus) {
+          if (enrollStatus) { 
+            usersEnrolled += 1;
+          }
+          func(next);
+        });
+      }
+    }
+
+    enrollUsers(ids);
+  });
+
+});
 
 //Save data to the experiment
 router.post("/training/:id/participate", function(request) {
