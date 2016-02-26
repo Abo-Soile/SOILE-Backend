@@ -78,10 +78,28 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
 		$scope.uploader.removeAfterUpload = true;
 		$scope.uploader.onCompleteItem = onComplete;
 
+    function sortImagesByName() {
+      function compare(a,b) {
+          if (a.name < b.name){
+            return -1;
+          }
+          else if (a.name > b.name) {
+            return 1;
+          }
+          else {
+            return 0;
+          }
+        }
+
+        $scope.images.sort(compare);
+    }
+
 		function loadImages() {
 			$http.get(baseUrl + '/imagelist').
 		  success(function(data, status, headers, config) {
 		    $scope.images = data;
+        _.sortBy($scope.images, "name");
+        //sortImagesByName();
 		  }).
 		  error(function(data, status, headers, config) {
 		    // log error
