@@ -580,6 +580,10 @@ TrainingData.prototype.initGeneral = function(training) {
     }
   }
 
+  if (training.components.pre.length === 0) {
+    this.mode = "training";
+  }  
+
 //  var isRandom = training.isRandom();
 //  if(isRandom) {
 //    this.buildRandomOrder(isRandom);
@@ -701,6 +705,12 @@ TrainingData.prototype.completePhase = function(training) {
 
       if (training.repeatcount == (this.trainingIteration + 1)) {
         this.mode = "post";
+
+        /*Set mode to done if the posttest is empty*/
+        if (training.components.post.length === 0) {
+          this.mode = "done";
+        }
+
       } else {
         this.trainingIteration += 1;
       }

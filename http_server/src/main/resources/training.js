@@ -174,6 +174,8 @@ function trainingView(request, training) {
     status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow(true);
   }
 
+  status.deadline = moment(Date.now()).add(training.maxpause, "hours").fromNow(true);
+
   var totalRounds = parseInt(training.repeatcount) + 2;
   var roundsDone = 0;
 
@@ -189,6 +191,16 @@ function trainingView(request, training) {
 
   if (mode === "done") {
     roundsDone = totalRounds;
+  }
+
+  if (training.components.pre.length === 0) {
+    roundsDone -= 1;
+    totalRounds -= 1;
+  }
+
+  if (training.components.post.length === 0) {
+    roundsDone -= 1;
+    totalRounds -= 1;
   }
 
   status.roundsLeft = roundsDone + "/" + totalRounds;
