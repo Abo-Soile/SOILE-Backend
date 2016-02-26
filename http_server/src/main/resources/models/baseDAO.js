@@ -40,7 +40,15 @@ BaseDAO.prototype.get = function(matcher, callback) {
     });
 };
 
-BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
+/*
+    Params:
+    @Matcher: object with mongo find parameters
+    @callback: call this funtion with the result as a parameter
+    @sort: sort resut, object
+    @limit:number of objects to include
+    @offset: offset when using a limit
+*/
+BaseDAO.prototype.list = function(matcher, callback, sort, limit, offset) {
     var mongoCommand = {};
     var that = this;
     mongoCommand.action = "find";
@@ -65,6 +73,10 @@ BaseDAO.prototype.list = function(matcher, callback, limit, sort) {
 
     if(typeof sort !== undefined) {
         mongoCommand.sort = sort;
+    }
+
+    if(typeof offset !== undefined) {
+        mongoCommand.skip = offset;
     }
 
     if (typeof mongoCommand.matcher.deleted === 'undefined') {
