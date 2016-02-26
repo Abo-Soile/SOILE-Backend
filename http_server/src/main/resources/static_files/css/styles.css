@@ -16,6 +16,14 @@
   margin-top: 10px;
   margin-bottom: 10px; }
 
+.angularcomponentlist .compname {
+  min-width: 300px; }
+
+.experiment-edit .ui-select-bootstrap {
+  min-width: 480px;
+  max-width: 480px;
+  display: inline-block; }
+
 /*
 dBootstrap fixes
 */
@@ -142,7 +150,7 @@ dBootstrap fixes
     height: 100% !important; }
 
 * {
-  outline: none !important; }
+  outline: none; }
 
 /*body {
   margin: 0;
@@ -196,30 +204,6 @@ p {
 .break {
   float: none;
   clear: both; }
-
-#display {
-  height: 500px;
-  /*min-width: 1000px;*/
-  width: 1000px;
-  border: solid black 2px;
-  background-color: white;
-  overflow: hidden;
-  position: relative;
-  /*Unselectable display*/
-  -webkit-user-select: none;
-  /* Chrome/Safari */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* IE10+ */ }
-  #display > p {
-    padding-left: 0px;
-    display: inline;
-    line-height: 1.20;
-    cursor: default;
-    /*text-align: justify;*/
-    padding-right: 5px;
-    padding-bottom: 5px; }
 
 #code {
   width: 100%;
@@ -624,16 +608,57 @@ body {
   -o-animation: none !important; }
 
 /* Display */
-#display input[type="text"], #display textarea {
-  border-radius: 5px;
-  border: gray solid 1px;
-  padding: 4px; }
-
-#display textarea:focus, #display input[type="text"]:focus {
-  border-color: #66afe9;
-  outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
-  box-shadow: inset 0 1px 1px; }
+#display {
+  height: 500px;
+  /*min-width: 1000px;*/
+  width: 1000px;
+  border: solid black 2px;
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+  /*Unselectable display*/
+  -webkit-user-select: none;
+  /* Chrome/Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE10+ */
+  /*.activeDropzone:after {
+    content: " ";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 5px solid #ffea00;
+  }*/ }
+  #display > * {
+    pointer-events: none; }
+  #display > p {
+    padding-left: 0px;
+    display: inline;
+    line-height: 1.20;
+    cursor: default;
+    /*text-align: justify;*/
+    padding-right: 5px;
+    padding-bottom: 5px; }
+  #display .activeDropzone {
+    /*position:relative;*/
+    outline: 3px dotted blue;
+    pointer-events: auto; }
+  #display input[type="text"], #display textarea {
+    border-radius: 5px;
+    border: gray solid 1px;
+    padding: 4px;
+    pointer-events: auto; }
+  #display textarea:focus, #display input[type="text"]:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+    box-shadow: inset 0 1px 1px;
+    pointer-events: auto; }
+  #display > .mouselistener {
+    pointer-events: auto; }
 
 .pauseAnimation {
   animation-play-state: paused !important;
@@ -726,7 +751,8 @@ testeditor styles
   background-color: #ebebeb;
   border-bottom: 1px solid gray;
   border-right: 1px solid gray;
-  visibility: visible; }
+  visibility: visible;
+  z-index: 1000; }
 
 #log td:first-child, #log th:first-child {
   width: 100px; }
@@ -857,3 +883,20 @@ testeditor styles
       margin-top: -9px;
       right: -13px;
       top: 25%; }
+
+.training-edit .ui-select-bootstrap {
+  min-width: 480px;
+  max-width: 480px;
+  display: inline-block; }
+
+.training-edit .angularcomponentlist .compname {
+  min-width: 300px; }
+
+.training-edit .ng-selectboxes {
+  background-color: blue !important; }
+  .training-edit .ng-selectboxes span {
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: red; }
+  .training-edit .ng-selectboxes .activePhase {
+    background-color: yellow !important; }
