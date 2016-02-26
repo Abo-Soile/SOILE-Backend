@@ -322,7 +322,9 @@ router.get("/training/:id/execute", function(request) {
     }*/
 
     var modeComponents = training.components[trainingData.getMode()];
-    var positionInMode = trainingData.position;
+    var positionInMode = parseInt(trainingData.position);
+
+    var modeComponents = training.getComponentsForRound(trainingData);
 
     var phasesLeft = modeComponents.length - (positionInMode);
 

@@ -69,6 +69,7 @@
 }
 
 .training-edit {
+
  .ui-select-bootstrap {
     min-width: 480px;
     max-width: 480px;
@@ -77,6 +78,19 @@
   .angularcomponentlist {
     .compname {
       min-width: 300px;
+    }
+  }
+
+  .ng-selectboxes {
+    background-color: blue !important;
+    span {
+      padding: 5px 10px;
+      margin:5px;
+      background-color: red;
+
+    }
+    .activePhase {
+      background-color: yellow !important;
     }
   }
 

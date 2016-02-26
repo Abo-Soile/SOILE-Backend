@@ -39,6 +39,14 @@ app.controller('trainingController', function($scope, $http, $location) {
 
   $scope.training = {};
 
+  $scope.getRepeatCount = function() {
+    if (isNaN(parseInt($scope.training.repeatcount))) {
+      return [];
+    }else {
+      return new Array(parseInt($scope.training.repeatcount));
+    }
+  };
+
   $scope.saveTraining = function save() {
       console.log("SSSSAAAVVE");
       var data = angular.copy($scope.training);
@@ -176,3 +184,47 @@ app.controller('componentController', function($scope, $http, $location) {
 */
   loadTests();
 });
+
+
+app.directive('selectboxes', function () {
+    return {
+        restrict: 'AE',
+        scope: {
+          component:"=",
+          rep:"="
+        },
+        template: "<div class='ng-selectboxes'>"+
+                  "<span ng-click='toggleIterationElement($event,lk)'" + 
+                  "ng-repeat='(lk,i) in getRepeatCount() track by $index' ng-click=[([lk])] " + 
+                  "ng-class='{activePhase: getIterationStatusByIndex($index)}'>[([lk + 1])]</span></div>",
+        link:function (scope, element, attrs) {
+          var component = scope.component;
+          //console.log(scope.training.components.training);
+
+          if (!Array.isArray(component.iterationcontrolarray) && scope.rep > 0) {
+            component.iterationcontrolarray = new Array(parseInt(scope.rep));
+            for (var i = 0; i < component.iterationcontrolarray.length; i++) {
+              component.iterationcontrolarray[i] = false;
+            }
+          }
+
+          scope.toggleIterationElement = function(event, id) {
+            component.iterationcontrolarray[id] = !component.iterationcontrolarray[id];
+          };
+
+          scope.getRepeatCount = function(){
+            if (isNaN(parseInt(scope.rep))) {
+                return [];
+            } else {
+                return new Array(parseInt(scope.rep));
+            }
+          };
+
+          scope.getIterationStatusByIndex = function (index) {
+            return component.iterationcontrolarray[index];
+          };
+        }
+
+    };
+});
+

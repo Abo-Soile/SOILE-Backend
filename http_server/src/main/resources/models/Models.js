@@ -259,6 +259,32 @@ Training.prototype.buildIsRandom = function() {
 };
 
 /*
+Returns the components for the current training round, takes care 
+*/
+Training.prototype.getComponentsForRound = function(trainingData) {
+
+    var modeComponents = this.components[trainingData.getMode()];
+    var positionInMode = parseInt(trainingData.position);
+
+    var prunedModeComponents = [];
+
+    for (var i = 0; i < modeComponents.length; i++) {
+      if(modeComponents[i].iterationcontrol) {
+
+        if (modeComponents[i].iterationcontrolarray[trainingData.trainingIteration]) {
+          prunedModeComponents.push(modeComponents[i]);
+        }
+      } else {
+        prunedModeComponents.push(modeComponents[i]);
+      }
+    }
+
+    modeComponents = prunedModeComponents;
+
+    return modeComponents;
+};
+
+/*
 ####
 TEST
 */
@@ -625,6 +651,8 @@ TrainingData.prototype.isLastPhase = function(training) {
   var isLast = false;
   var components = training.components[this.getMode()];
 
+  components = training.getComponentsForRound(this);
+
   if(components.length === (this.position + 1) || components.length === 1) {
     isLast = true;
   }
@@ -642,7 +670,9 @@ TrainingData.prototype.completePhase = function(training) {
   //If not last phase -> phase += 1
   var mode = this.getMode();
   var components = training.components[mode];
-  
+
+  components = training.getComponentsForRound(this);
+
   var lastPhase = false;
 
   if(components.length === (this.position + 1)) {
