@@ -199,8 +199,11 @@ function trainingView(request, training) {
   }
 
   if (training.components.post.length === 0) {
-    roundsDone -= 1;
+    //roundsDone -= 1;
     totalRounds -= 1;
+    if (mode === "done") {
+      roundsDone -= 1;
+    }
   }
 
   status.roundsLeft = roundsDone + "/" + totalRounds;
