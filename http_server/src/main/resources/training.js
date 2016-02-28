@@ -143,98 +143,103 @@ function trainingView(request, training) {
 
   trainingDataDAO.getGeneralData(userid, id, function(trainingData) {
 
-  if(trainingData === "") {
-    templateManager.render_template('trainingLanding',{training:training},request);
-    return;
-  }
-
-  var status = {};
-  status.open = false;
-  status.state = trainingData.getMode();
-  status.nextRound = training.nextTask;
-
-  trainingData.nextTask = new Date(trainingData.nextTask);
-
-  var timeString = false;
-  if(trainingData.nextTask - Date.now() > 0) {
-    timeString = moment(trainingData.nextTask).fromNow();
-    console.log("Timestring " + timeString);
-  }
-
-  status.timeLeft = timeString;
-
-  var tasksLeft = parseInt(training.repeatcount) - parseInt(trainingData.position);
-  var hoursLeft = tasksLeft * parseInt(training.repeatpause);
-
-  console.log("HOURS LEFT " + hoursLeft  + " taskleft " + tasksLeft + " repeat " + training.repeatcount + " pause " + training.repeatpause);
-
-  //status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow();
-  status.totalTimeLeft = moment(Date.now()).add(hoursLeft, "hours").fromNow(true);
-  if(timeString) {
-    status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow(true);
-  }
-
-  status.deadline = moment(Date.now()).add(training.maxpause, "hours").fromNow(true);
-
-  var totalRounds = parseInt(training.repeatcount) + 2;
-  var roundsDone = 0;
-
-  var mode = trainingData.getMode();
-
-  if (mode === "training") {
-    roundsDone = trainingData.trainingIteration + 1;
-  }
-
-  if (mode === "post") {
-    roundsDone = totalRounds - 1;
-  }
-
-  if (mode === "done") {
-    roundsDone = totalRounds;
-  }
-
-  if (training.components.pre.length === 0) {
-    roundsDone -= 1;
-    totalRounds -= 1;
-  }
-
-  if (training.components.post.length === 0) {
-    //roundsDone -= 1;
-    totalRounds -= 1;
-    if (mode === "done") {
-      roundsDone -= 1;
+    if(trainingData === "") {
+      templateManager.render_template('trainingLanding',{training:training},request);
+      return;
     }
-  }
 
-  status.roundsLeft = roundsDone + "/" + totalRounds;
-  status.percentageDone = roundsDone/totalRounds * 100;
+    var status = {};
+    status.open = false;
+    status.state = trainingData.getMode();
+    status.nextRound = training.nextTask;
 
-  status.roundType = mode;
-  status.iteration = trainingData.trainingIteration;
+    trainingData.nextTask = new Date(trainingData.nextTask);
 
-  trainingDataDAO.getScoreHistory(id, userid, function(score) {
-    status.scoreHistory = score;
-  });
+    var timeString = false;
+    if(trainingData.nextTask - Date.now() > 0) {
+      timeString = moment(trainingData.nextTask).fromNow();
+      console.log("Timestring " + timeString);
+    }
 
-  status.showscore = true;
-  if (trainingData.trainingIteration == 0) {
-    status.showscore = false;
-  }
+    status.timeLeft = timeString;
 
-  if (!training.showScore) {
-    status.showscore = false;
-  }
+    var tasksLeft = parseInt(training.repeatcount) - parseInt(trainingData.position);
+    var hoursLeft = tasksLeft * parseInt(training.repeatpause);
 
-  status.done = false;
-  if (mode === "done") {
-    trainingDataDAO.getPrePostScore(id, userid, function(pre, post) {
-      status.preScore = pre;
-      status.postScore = post;
-    });
-    status.done = true;
-  }
+    console.log("HOURS LEFT " + hoursLeft  + " taskleft " + tasksLeft + " repeat " + training.repeatcount + " pause " + training.repeatpause);
 
-  templateManager.render_template('trainingUser', {training:training, status:status}, request);
+    //status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow();
+    status.totalTimeLeft = moment(Date.now()).add(hoursLeft, "hours").fromNow(true);
+    if(timeString) {
+      status.totalTimeLeft = moment(trainingData.nextTask).add(hoursLeft, "hours").fromNow(true);
+    }
+
+    status.deadline = moment(Date.now()).add(training.maxpause, "hours").fromNow(true);
+
+    var totalRounds = parseInt(training.repeatcount) + 2;
+    var roundsDone = 0;
+
+    var mode = trainingData.getMode();
+
+    if (mode === "training") {
+      roundsDone = trainingData.trainingIteration + 1;
+    }
+
+    if (mode === "post") {
+      roundsDone = totalRounds - 1;
+    }
+
+    if (mode === "done") {
+      roundsDone = totalRounds;
+    }
+
+    if (training.components.pre.length === 0) {
+      roundsDone -= 1;
+      totalRounds -= 1;
+    }
+
+    if (training.components.post.length === 0) {
+      //roundsDone -= 1;
+      totalRounds -= 1;
+      if (mode === "done") {
+        roundsDone -= 1;
+      }
+    }
+
+    status.roundsLeft = roundsDone + "/" + totalRounds;
+    status.percentageDone = roundsDone/totalRounds * 100;
+
+    status.roundType = mode;
+    status.iteration = trainingData.trainingIteration;
+
+
+    status.showscore = true;
+    if (trainingData.trainingIteration == 0) {
+      status.showscore = false;
+    }
+
+    if (!training.showScore) {
+      status.showscore = false;
+    }
+
+    status.done = false;
+    if (mode === "done") {
+      /*trainingDataDAO.getPrePostScore(id, userid, function(pre, post) {
+        status.preScore = pre;
+        status.postScore = post;
+      });*/
+      status.done = true;
+    }
+
+    if (status.showscore) {
+      
+      trainingDataDAO.getScoreHistory(id, userid, function(score) {
+        status.scoreHistory = score;
+        templateManager.render_template('trainingUser', {training:training, status:status}, request);
+      });
+    } else {
+      templateManager.render_template('trainingUser', {training:training, status:status}, request);
+    }
   });
 }
 
