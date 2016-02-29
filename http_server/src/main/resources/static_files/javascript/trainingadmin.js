@@ -8,8 +8,48 @@ app.config(function($interpolateProvider){
 /*Marks html as safe*/
 app.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
+app.service('overviewService', function($http, $location, $q) {
+    this.users = [];
+    this.training = null;
 
-app.controller('userProgressController', function($scope, $http, $location) {
+    var promise = false;
+
+    var deferred = $q.defer();
+
+    var that = this;
+
+    //Gets the list of nuclear weapons
+    this.getUsers = function() {
+      if (!promise) {
+        promise = $http.get($location.absUrl() + "/useroverview").success(function(data,status) {
+          //users = JSON.parse(data.participants);
+          that.users = data.participants.map(function(obj){return JSON.parse(obj)});
+          that.training = JSON.parse(data.training);
+
+          console.log("RESOLVING THEN")
+          deferred.resolve("success");
+
+        });
+      }
+
+      return deferred.promise;
+    };
+
+    // Fill the list with actual nukes, async why not.
+    //this.getUsers();
+
+    /*return {
+      users:users,
+      training:training
+    };*/
+
+
+        // expose more functions or data if you want
+
+});
+
+
+app.controller('userProgressController', function($scope, $http, $location, overviewService) {
   var baseUrl = $location.absUrl();
 
   $scope.rowClass = function(user){
