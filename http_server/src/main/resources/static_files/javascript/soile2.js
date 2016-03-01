@@ -638,7 +638,18 @@ SOILE2 = (function(){
       elem.addClass("mouselistener");
 
       elem.on("dragstart", function(ev) {
-        ev.originalEvent.dataTransfer.setData("text/plain", data);
+
+        var userAgent = window.navigator.userAgent;
+        var msie = userAgent.indexOf('MSIE ');     //Detect IE
+        var trident = userAgent.indexOf('Trident/');
+        var edge = userAgent.indexOf("Edge/");
+
+        if (msie > 0 || trident > 0 || edge >0) {
+            ev.originalEvent.dataTransfer.setData("Text", data.toString());
+        } else {
+          ev.originalEvent.dataTransfer.setData("text/plain", data);
+        }
+
       });
     }
 
@@ -683,7 +694,17 @@ SOILE2 = (function(){
       target.removeClass("activeDropzone");
 
       if(elem.attr("id") == target.attr("id")) {
-        ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
+
+        var userAgent = window.navigator.userAgent;
+        var msie = userAgent.indexOf('MSIE ');     //Detect IE
+        var trident = userAgent.indexOf('Trident/');
+        var edge = userAgent.indexOf("Edge/");
+
+        if (msie > 0 || trident > 0 || edge >0) {
+          ondrop(ev.originalEvent.dataTransfer.getData("Text"), dropdata);
+        } else {
+          ondrop(ev.originalEvent.dataTransfer.getData("text/plain"), dropdata);
+        }
       }
     });
 
