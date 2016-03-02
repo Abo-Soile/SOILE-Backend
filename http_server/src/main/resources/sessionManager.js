@@ -30,6 +30,12 @@ var sessionManager =  {
     return this;
   },
 
+  reloadUser: function(request) {
+    if(this.loggedIn()) {
+      this.currentUser = new User(this.loggedIn());
+    }
+  },
+
   createCookie: function(name, value, days) {
     var expires = "";
 

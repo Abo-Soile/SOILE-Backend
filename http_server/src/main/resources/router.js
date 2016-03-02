@@ -84,13 +84,15 @@ function extendRequest(request, func) {
   //Check if a db session exists
   if((!session.loggedIn()) && 
       (session.getSessionCookie()) && 
-      request.method()==="GET") {
+      (request.method()==="GET" || request.method()==="POST")) {
     console.log("Checking session");
     session.checkSession(function callback(user) {
       //Sending the session manager with the request
       if(user) {
         console.log("Logging in from token");
         session.login(user);
+        /*Reload manager when we have a user*/
+        session = session.reloadUser();
       }
       func(request);
     });
