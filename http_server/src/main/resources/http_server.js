@@ -517,10 +517,7 @@ customMatcher.get('/', function(request) {
   // Admin showing admin controls
   if (request.session.isAdmin()) {
     experimentDAO.list(function(experiments) {
-      testDAO.list(function(tests) {
-        templateManager.render_template('admin', {"experiments":experiments,"tests":tests},request);
-        //templateManager.render_template('testlist', {"tests":r.results},request);
-      });
+      templateManager.render_template('admin', {"experiments":experiments},request);
     });
   }
   else {
