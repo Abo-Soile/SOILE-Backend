@@ -18,17 +18,23 @@ var testImages = config.directory + "/testimages";
 var requireAdmin = require('middleware').requireAdmin;
 
 router.get('/test', function(request) {
-  mongo.test.list(function(r) {
+ testDAO.rawQuery({}, function(tests) {
     templateManager.render_template('testlist', {"tests":r.results},request);
-  });
+  },{keys:{js:0, code:0}});
 });
 
 router.get('/test/json', function(request) {
-  mongo.test.list(function(r) {
+ /* mongo.test.list(function(r) {
 
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(r.results));
-  });
+  });*/
+
+
+  testDAO.rawQuery({}, function(tests) {
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(JSON.stringify(tests));
+  },{keys:{js:0, code:0}});
 });
 
 router.get("/test/folder/json", requireAdmin, function(request) {
@@ -41,10 +47,15 @@ router.get("/test/folder/json", requireAdmin, function(request) {
 });
 
 router.get("/test/json/compiled", function(request) {
-  testDAO.list({"compiled":true}, function(result) {
+ /* testDAO.list({"compiled":true}, function(result) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(result)); 
-  });
+  });*/
+  testDAO.rawQuery({"compiled":true}, function(tests) {
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(JSON.stringify(tests));
+  },{keys:{js:0, code:0}});
+
 });
 
 router.get("/test/folder/:foldername/json", requireAdmin, function(request) {
@@ -56,10 +67,15 @@ router.get("/test/folder/:foldername/json", requireAdmin, function(request) {
     query = {$or: [{"folder" : { "$exists" : false }}, {folder:""}] };
   }
 
-  testDAO.list(query,function(result) {
+ /* testDAO.list(query,function(result) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(result));
-  });
+  });*/
+
+  testDAO.rawQuery(query, function(tests) {
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(JSON.stringify(tests));
+  },{keys:{js:0, code:0}});
 });
 
 router.post("/test", requireAdmin,function(request) {
