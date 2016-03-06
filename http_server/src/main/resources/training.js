@@ -26,6 +26,8 @@ var m2 = require('middleware').m2;
 
 var utils = require("utils");
 
+var babyparser = require("libs/babyparse");
+
 
 /*
 Architectural ideas. 
@@ -444,7 +446,6 @@ router.get("/training/:id/execute", function(request) {
 //Recieve and stora data from training phase
 router.post("/training/:id/execute", function(request) {
   var id = request.params().get('id');
-  var userid = request.session.getUserId();
   var postData = new vertx.Buffer();
 
   request.dataHandler(function(buffer){
@@ -453,6 +454,7 @@ router.post("/training/:id/execute", function(request) {
 
   request.endHandler(function() {
 
+    var userid = request.session.getUserId();
     //Figures out the current phase and creates a data object.
     getTrainingAndUserData(id, userid, function(training, generalData) {
       var jsonData = JSON.parse(postData.getString(0, postData.length()));
@@ -588,9 +590,261 @@ router.get("/training/:id/score", function(request) {
     }
     //request.response.end("SCORE!!!")
   });
+});
 
+/*
+
+Funderingar
+
+Filter 1 pre/post/training/control/
+          If Pre or Post
+            Filter 2 all/raw
+              if Raw
+                filter 3 which test
+          if Training or control
+            Filter 2 phase
+              filter 3 all/raw
+                filter 4 which raw
+            Filter 2 score
+            filter 2 all + id
+
+      Only select stuff from a single user if a id is specified                
+
+
+*/
+
+
+function jsonMatrixDataToCsv(json, groupby) {
+
+  var data = [];
+  var sep =";";
+
+  var csvData = "";
+
+  for (var ik = 0; ik < json.length; ik++) {
+    if (typeof json[ik].data.rows !== "undefined") {
+      data.push(json[ik]);
+    }
+  }
+
+  for (var i = 0; i < data.length; i++) {
+    var element = data[i];
+    var keys = {};
+
+    csvData += groupby+ ": " + sep +  element[groupby] + sep + "\n";
+    //console.log("RawData number of rows: " + element.data.rows.length);
+    var rowCount = element.data.rows.length;
+    for (var j = 0; j < element.data.rows.length; j++) {
+      var row = element.data.rows[j];
+      for (var rkey in row) {
+        if (keys.hasOwnProperty(rkey)) {
+          keys[rkey][j] = JSON.stringify(row[rkey]);
+        }else {
+          keys[rkey] = [];
+          keys[rkey][j] = JSON.stringify(row[rkey]);
+        }
+      }
+    }
+
+    var csv = "";
+    var lastK = "";
+    
+    //Building headers
+    for(var k in keys) {
+      csv += k + sep;
+      lastK = k;
+    }
+
+    //console.log(csv + "\n");
+    csv += "\n";
+    
+    /*
+      Skriver ut resultatet till csv:n
+    */
+    for (var ij = 0; ij < rowCount; ij++) {
+      for(var k in keys) {
+        if ( keys[k][ij] !== undefined) {
+          csv += keys[k][ij] + sep;
+          
+        } else{
+          csv += sep;
+        }
+      }
+      csv += "\n"; 
+    }
+
+    csvData += csv;
+
+    return csvData
+
+  }
+}
+
+
+function jsonRowDataToCsv(json, groupby) {
+
+  var users = {};
+
+  var command = "single";
+
+  var headers = {}
+
+  var idField = groupby;
+
+  console.log("jsonlen = " + json.length);
+
+  for (var i = 0; i < json.length; i++) {
+
+    var item = json[i];
+    var id = item[idField];
+
+    if (typeof users[id] === "undefined") {
+      users[id] = {};
+      console.log("new user");
+    } 
+
+    var data = null;
+
+    if (typeof item.data != "undefined") {
+      if (command === "single") {
+        console.log("Data is signle");
+        data = item.data.single;
+      }
+
+      // No single or raw object -> form
+      if (typeof item.data.single == "undefined") {
+      console.log("Data is form")  
+        data = item.data;
+      }
+    }
+
+
+    users[id]["timestamp_" + item.phase] = item.timestamp;
+    headers["timestamp_" + item.phase] = "";
+
+    for (var datapoint in data) {
+      var dataheader = datapoint + " phase" +item.phase;
+      users[id][dataheader] = data[datapoint];
+      headers[dataheader] = "";
+
+      console.log(datapoint + " --- " + data[datapoint]);
+    }
+  }
+
+  headers[groupby] = "";
+
+  console.log(JSON.stringify(users));
+
+  var resArr = [];
+
+  for (var id in users) {
+    users[id][groupby] = id;
+    resArr.push(users[id]);
+  } 
+
+  resArr.unshift(headers);
+
+  var csv = babyparser.unparse(resArr, {"delimiter":";"});
+
+  return csv;
+
+}
+
+
+router.get("/training/:id/loaddata", requireAdmin, function(request) {
+  var id = request.params().get('id');
+  var userid = request.params().get("userid");
+  var filter1 = request.params().get("f1");
+  var filter2 = request.params().get("f2");
+  var filter3 = request.params().get("f3");
+  var filter4 = request.params().get("f4");
+  var offest = request.params().get("offset");
+  var limit = request.params().get("limit");
+
+  var matcher = {};
+  var projection = {};
+
+  console.log("filter1 " + filter1);
+  console.log("filter2 " + filter2);
+  console.log("filter3 " + filter3);
+  console.log("filter4 " + filter4);
+
+  matcher.trainingId = id;
+  matcher.mode = filter1;
+
+  var command = "single";
+  var groupby = "userId";
+
+  if (matcher.mode === "pre" || matcher.mode === "post") {
+    /*
+      Pre or post, fetch either raw or single data for all users. 
+    */
+    if (filter2 === "raw") {
+      matcher.phase = filter3 - 1;
+      projection['data.single'] = 0;
+      command = "raw"
+    }
+
+    if (filter2 === "single") {
+      projection['data.rows'] = 0;
+    }
+
+   // matcher.type = {$not:"generel"};
+  }
+
+  if (matcher.mode === "training") {
+
+    matcher.userId = filter2;
+    groupby = "trainingIteration";
+
+    // Certain training phase
+    if (filter3 === "single") {
+      projection['data.rows'] = 0;
+    }
+
+    if (filter3 === "raw") {
+      matcher.trainingIteration = parseInt(filter4 - 1);
+
+      command = "raw"
+
+      projection['data.single']= 0;
+    }
+    
+    //matcher.type = "{$in:['form','test']}";
+    //matcher.type = {$not:"generel"};
+
+  }
+
+  matcher.type = {"$ne":"general"};
+
+  console.log(JSON.stringify(matcher));
+
+  //throw new Error("ERRRORRRRRR");
+  //var a = 1/0;
+
+  trainingDataDAO.rawQuery(matcher, function(res) {
+
+    var csv = "";
+
+    if (command == "single") {
+      csv = jsonRowDataToCsv(res, groupby);
+    }
+    if (command == "raw") {
+      csv = jsonMatrixDataToCsv(res, groupby);
+    }
+
+    console.log("AllDone");
+    console.log(csv);
+
+    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+    request.response.putHeader("Content-Disposition", "attachment; filename=data.csv");
+
+    request.response.end(csv);
+    //request.response.end("\ufeff " + phaseNames + "\n" + csv);
+  }, {keys:projection});
 
 });
+
 
 //Pre test
 router.get("/training/:id/pre", function(request) {

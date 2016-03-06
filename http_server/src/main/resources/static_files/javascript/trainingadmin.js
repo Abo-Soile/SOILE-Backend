@@ -63,12 +63,16 @@ app.controller('userProgressController', function($scope, $http, $location, over
 
 
   $scope.loadData = function() {
-    $http.get($location.absUrl() + "/useroverview").success(function(data,status) {
+    /*$http.get($location.absUrl() + "/useroverview").success(function(data,status) {
         console.log("Load ing data");
-        console.log(data);
+      console.log(data);
       //$scope.participants = JSON.parse(data.participants);
       $scope.participants = data.participants.map(function(obj){return JSON.parse(obj)});
-      $scope.training = JSON.parse(data.training);
+      $scope.training = JSON.parse(data.training);*/
+    overviewService.getUsers().then(function() {
+
+      $scope.participants = overviewService.users;
+      $scope.training = overviewService.training;
 
       for (var i = 0; i < $scope.participants.length; i++) {
 
@@ -79,7 +83,7 @@ app.controller('userProgressController', function($scope, $http, $location, over
         var p = $scope.participants[i];
         if(p.mode === "done") {
           $scope.participants[i].percentageDone = 100;
-          hoursTilDone = 0
+          hoursTilDone = 0;
         }
 
         if(p.mode === "pre") {
@@ -101,14 +105,102 @@ app.controller('userProgressController', function($scope, $http, $location, over
 
       }
 
-    $scope.participants.sort(function(a, b){
-        if(a.timestamp < b.timestamp) return -1;
-        if(a.timestamp > b.timestamp) return 1;
-        return 0;
-    });
+      $scope.participants.sort(function(a, b){
+          if(a.timestamp < b.timestamp) return -1;
+          if(a.timestamp > b.timestamp) return 1;
+          return 0;
+      });
 
     });
   };
 
+
   $scope.loadData();
+});
+
+
+app.controller('trainingDataFilterController', function($scope, $http, $location, overviewService) {
+  var baseUrl = $location.absUrl();
+
+  $scope.getUsers = function() {
+    //console.log(overviewService);
+    return $scope.users;
+  };
+
+
+  /*
+    Returns a array with trainingiterations
+  */
+  $scope.getIterations = function() {
+    var arr = [];
+    var iterations = $scope.training.repeatcount;
+    for (var i = 0; i < iterations; i++) {
+      arr.push(i+1);
+    }
+
+    return arr;
+  };
+  /*
+    Returns an array with component numbers
+  */
+  $scope.getComponentIterations = function(phase) {
+    var arr = [];
+    var iterations = $scope.training.components[phase].length;
+    console.log($scope.training.components[phase].length);
+    for (var i = 0; i < iterations; i++) {
+      arr.push(i+1);
+    }
+
+    return arr;
+  };
+
+  $scope.buildQuery = function() {
+    var base = baseUrl + "/loaddata?";
+    var query = base;
+
+    if ($scope.filter1 === "pre" || $scope.filter1 === "post") {
+      $scope.filter4 = undefined;
+
+      if($scope.filter2 === "single") {
+        $scope.filter3 = undefined;
+      }
+    } 
+
+    if ($scope.filter1 === "training") {
+
+      if($scope.filter3 === "single") {
+        $scope.filter4 = undefined;
+      }
+    }
+
+    query += "f1=" + ($scope.filter1 ? $scope.filter1 : "") + "&";
+    query += "f2=" + ($scope.filter2 ? $scope.filter2 : "") + "&";
+    query += "f3=" + ($scope.filter3 ? $scope.filter3 : "") + "&";
+    query += "f4=" + ($scope.filter4 ? $scope.filter4 : "") + "&";
+
+    console.log(query);
+
+    console.log($scope);
+
+    $http.get(query).success(function(data, status) {
+      console.log(data)
+
+       var anchor = angular.element('<a/>');
+       anchor.attr({
+           href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
+           target: '_blank',
+           download: 'data.csv'
+       })[0].click();
+
+    });
+  };
+
+  overviewService.getUsers().then(function() {
+    $scope.users = overviewService.users;
+    $scope.training = overviewService.training;
+  });
+
+ /* overviewService.loadData(function(data) {
+    $scope.users = data.users;
+  });*/
 });

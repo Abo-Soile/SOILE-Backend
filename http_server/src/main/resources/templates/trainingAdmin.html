@@ -149,7 +149,7 @@
 
             <div ng-if="filter1 == 'pre' || filter1 == 'post'">
               <select ng-model="$parent.filter2" ng-options="o as o for o in ['single', 'raw']"></select>
-              <select ng-model="$parent.$parent.filter3" ng-if="$parent.filter2 == 'raw'" ng-options="o as o for o in getComponentIterations()"></select>
+              <select ng-model="$parent.$parent.filter3" ng-if="$parent.filter2 == 'raw'" ng-options="o as o for o in getComponentIterations(filter1)"></select>
             </div>
 
             <div ng-if="filter1 == 'training'">
