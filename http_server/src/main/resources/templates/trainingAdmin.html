@@ -157,8 +157,14 @@
 
               <span ng-if="filter1 == 'training'">
                 <select ng-model="$parent.filter2" ng-options="o.userId as o.userId for o in getUsers()" class="form-control"></select>
-                <select ng-model="$parent.filter3" ng-options="o as o for o in ['raw', 'single']" class="form-control"></select>
-                <select ng-if="$parent.filter3 === 'raw'" ng-model="$parent.$parent.filter4" ng-options="o as o for o in getIterations()" class="form-control"></select>
+                <span ng-if="$parent.filter2 == 'all'">
+                  <input class="form-control" type="text" ng-model="$parent.$parent.filter3"></input>
+                  <select ng-model="$parent.$parent.filter4" ng-options="o as o for o in getComponentIterations(filter1)" class="form-control"></select>
+                </span>
+                <span ng-if="$parent.filter2 != 'all'">
+                  <select ng-model="$parent.$parent.filter3" ng-options="o as o for o in ['raw', 'single']" class="form-control"></select>
+                  <select ng-if="$parent.$parent.filter3 === 'raw'" ng-model="$parent.$parent.$parent.filter4" ng-options="o as o for o in getIterations()" class="form-control"></select>
+                </span>
               </span>
 
               <button ng-click="buildQuery()" class="btn btn-success">Run</button>

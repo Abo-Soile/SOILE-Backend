@@ -4,7 +4,6 @@ app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
 });
 
-
 /*Marks html as safe*/
 app.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
@@ -207,6 +206,7 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
 
   overviewService.getUsers().then(function() {
     $scope.users = overviewService.users;
+    $scope.users.unshift({userId:"all"});
     $scope.training = overviewService.training;
   });
 

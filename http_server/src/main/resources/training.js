@@ -750,6 +750,56 @@ function jsonRowDataToCsv(json, groupby) {
 
 }
 
+function jsonSingleTrainingVarToCsv(data, variable) {
+   var users = {};
+
+   var maxHeader = 0;
+
+   for (var i = 0; i < data.length; i++) {
+     var item = data[i];
+
+    if (typeof users[item.userId] === "undefined") {
+      users[item.userId] = [];
+      console.log("new user");
+    } 
+
+    var itemData = item.data.single;
+    if (typeof item.data.single === "undefined") {
+      itemData = item.data;
+    }
+
+    users[item.userId][item.trainingIteration] = itemData[variable];
+
+    console.log(variable + "  " + itemData[variable] + " iteration: " + item.trainingIteration);
+    console.log(JSON.stringify(item));
+
+    if (item.trainingIteration > maxHeader) {
+      maxHeader = item.trainingIteration;
+      console.log("new maxheader: " + maxHeader);
+    }
+   }
+
+  var headers = {};
+
+  for (var j = 0; j < maxHeader; j++) {
+    headers[j] = "";
+  }
+  headers.userId = "";
+
+  var resArr = [];
+
+  for (var id in users) {
+    users[id].userId = id;
+    resArr.push(users[id]);
+  } 
+  resArr.unshift(headers);
+
+
+  var csv = babyparser.unparse(resArr, {"delimiter":";"});
+
+  return csv;
+}
+
 
 router.get("/training/:id/loaddata", requireAdmin, function(request) {
   var id = request.params().get('id');
@@ -809,6 +859,21 @@ router.get("/training/:id/loaddata", requireAdmin, function(request) {
 
       projection['data.single']= 0;
     }
+
+    if (filter2 == "all") {
+      command = "all";
+      delete matcher.userId;
+
+      var field = "data.single." + filter3;
+      projection[field] = 1;
+      projection["data."+filter3] = 1;
+      projection.userId = 1;
+      projection.trainingIteration = 1;
+      
+      matcher.phase= parseInt(filter4 - 1);
+
+      groupby = filter3;
+    }
     
     //matcher.type = "{$in:['form','test']}";
     //matcher.type = {$not:"generel"};
@@ -818,9 +883,6 @@ router.get("/training/:id/loaddata", requireAdmin, function(request) {
   matcher.type = {"$ne":"general"};
 
   console.log(JSON.stringify(matcher));
-
-  //throw new Error("ERRRORRRRRR");
-  //var a = 1/0;
 
   trainingDataDAO.rawQuery(matcher, function(res) {
 
@@ -832,9 +894,9 @@ router.get("/training/:id/loaddata", requireAdmin, function(request) {
     if (command == "raw") {
       csv = jsonMatrixDataToCsv(res, groupby);
     }
-
-    console.log("AllDone");
-    console.log(csv);
+    if (command == "all") {
+      csv = jsonSingleTrainingVarToCsv(res, groupby);
+    }
 
     request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
     request.response.putHeader("Content-Disposition", "attachment; filename=data.csv");
