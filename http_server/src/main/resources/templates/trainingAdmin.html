@@ -144,47 +144,50 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div ng-controller="trainingDataFilterController" class="dataFilter">
-            <select ng-model="filter1" ng-options="o as o for o in ['pre', 'post', 'training']"></select>
+      <div ng-controller="trainingDataFilterController">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="dataFilter form-inline">
+              <select ng-model="filter1" ng-options="o as o for o in ['pre', 'post', 'training']" class="form-control"></select>
 
-            <div ng-if="filter1 == 'pre' || filter1 == 'post'">
-              <select ng-model="$parent.filter2" ng-options="o as o for o in ['single', 'raw']"></select>
-              <select ng-model="$parent.$parent.filter3" ng-if="$parent.filter2 == 'raw'" ng-options="o as o for o in getComponentIterations(filter1)"></select>
+              <span ng-if="filter1 == 'pre' || filter1 == 'post'">
+                <select ng-model="$parent.filter2" ng-options="o as o for o in ['single', 'raw']" class="form-control"></select>
+                <select ng-model="$parent.$parent.filter3" ng-if="$parent.filter2 == 'raw'" ng-options="o as o for o in getComponentIterations(filter1)" class="form-control"></select>
+              </span>
+
+              <span ng-if="filter1 == 'training'">
+                <select ng-model="$parent.filter2" ng-options="o.userId as o.userId for o in getUsers()" class="form-control"></select>
+                <select ng-model="$parent.filter3" ng-options="o as o for o in ['raw', 'single']" class="form-control"></select>
+                <select ng-if="$parent.filter3 === 'raw'" ng-model="$parent.$parent.filter4" ng-options="o as o for o in getIterations()" class="form-control"></select>
+              </span>
+
+              <button ng-click="buildQuery()" class="btn btn-success">Run</button>
+
+              <a id="dlLink" class="ng-hide" ng-show="downloadData">Download data</a>
             </div>
-
-            <div ng-if="filter1 == 'training'">
-              <select ng-model="$parent.filter2" ng-options="o.userId as o.userId for o in getUsers()"></select>
-              <select ng-model="$parent.filter3" ng-options="o as o for o in ['raw', 'single']"></select>
-              <select ng-if="$parent.filter3 === 'raw'" ng-model="$parent.$parent.filter4" ng-options="o as o for o in getIterations()"></select>
+            
             </div>
-
-            <button ng-click="buildQuery()" class="btn btn-success">Run</button>
-
-
-            <a id="dlLink" class="ng-hide" ng-show="downloadData">Download data</a>
-            <div class="row">
-              <div class="col-md-12 overflow300">
-                  <table class="table table-striped table-condensed table-bordered">
-                    <thead ng-repeat="row in datarows.slice(0,1)">
-                      <tr>
-                        <th ng-repeat="col in row track by $index">[([col])]</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr ng-repeat="row in datarows.slice(1,entries.length)">
-                        <td ng-repeat="col in row track by $index">[([col])]</td>
-                      </tr>
-                    </tbody>
-                  </table>
-              </div>
-            </div>
-          
           </div>
-        </div>
-
+          <div class="row">
+            <div class="col-md-12 overflow300">
+                <table class="table table-striped table-condensed table-bordered">
+                  <thead ng-repeat="row in datarows.slice(0,1)">
+                    <tr>
+                      <th ng-repeat="col in row track by $index">[([col])]</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="row in datarows.slice(1,entries.length)">
+                      <td ng-repeat="col in row track by $index">[([col])]</td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+            
+          </div>
+        
       </div>
+
 
       <div class="row">
         <div class="col-md-8">
@@ -204,8 +207,8 @@
 
       <!--Data-->
       <div class="row">
-        
       </div>
+        
     </div>
   </div>
 </div>
