@@ -122,8 +122,9 @@ app.controller('userProgressController', function($scope, $http, $location, over
 app.controller('trainingDataFilterController', function($scope, $http, $location, overviewService) {
   var baseUrl = $location.absUrl();
 
+  $scope.downloadData = false;
+
   $scope.getUsers = function() {
-    //console.log(overviewService);
     return $scope.users;
   };
 
@@ -180,17 +181,26 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
 
     console.log(query);
 
-    console.log($scope);
-
     $http.get(query).success(function(data, status) {
-      console.log(data)
 
-       var anchor = angular.element('<a/>');
-       anchor.attr({
+      $scope.downloadData = true;
+      var link = angular.element( document.querySelector( '#dlLink' ) );
+
+       link.attr({
            href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
            target: '_blank',
            download: 'data.csv'
-       })[0].click();
+       });
+
+       console.log(link)
+
+       CSV.RELAXED = true;
+       CSV.COLUMN_SEPARATOR = ";";
+
+       var jsonData = CSV.parse(data);
+
+       $scope.datarows = jsonData;
+
 
     });
   };
