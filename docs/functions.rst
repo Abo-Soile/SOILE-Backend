@@ -6,17 +6,24 @@ Function Reference
 
 Elang comes with a set of built in functions for performing common tasks. These functions are pretty much necessary when building tests so it's usefull to be familiar with them. 
 
+.. js:function:: helptext(data*)
+
+    Writes every parameter given to the debug log. 
+
+    :param data anything: Things(s) to write to the debug log
+    
+
 #######
 Stimuli
 #######
 
 Stimuli is a special list that controls the interaction phase. The iteration in an interaction phase is run once for each element in the stimuli list. 
 
-.. js:function:: setstimuli(list)
+.. js:function:: setstimuli(stimuli)
     
     Sets the stimuli to the given list. Overwrites previously defined stimuli.
 
-    :param array list: List of stimuli objects to set as the stimuli. 
+    :param list stimuli: List of stimuli objects to set as the stimuli. 
 
 .. js:function:: shufflestimuli()
     
@@ -26,7 +33,7 @@ Stimuli is a special list that controls the interaction phase. The iteration in 
 
     Creates a randomized subset of the stimuli containing the number specified in ``stimulicount``.
 
-    :param int stimulicount: The number of stimuli to select.
+    :param number stimulicount: The number of stimuli to select.
 
 .. js:function:: emptystimuli()
     
@@ -53,7 +60,7 @@ Display positions are defined as the number of pixels from the top-left corner o
 
 .. js:function:: hide(item*)
     
-    Hides the specified objects.
+    Hides the specified object(s).
 
     :param displayobject item*: The object(s) that should be hidden.
 
@@ -105,9 +112,27 @@ All displayobjects share the same functionality regarding showing and hiding the
     :param int borderwidth: Defines the borderwidth in pixels.
     :returns: Displayobject
 
+
+.. function:: button(text)
+    
+    Displays a button with the specified text. The button animates when a user clicks or hovers the mouse above it. 
+
+    :param string text: Text to show on the button
+    :returns: Displayobject
+
+
 .. js:function:: countdownbar(width time)
     
     Displays a fully filled countdown bar with the specified width and time(ms).The countdown animation is started by calling animate(countdownbar)
+
+    ::
+
+        var countdown <- countdownbar(200 5000) #
+        show(countdown "center")                # Create and show a countdownbar, with a 5 second countdown
+        wait(2000)                              # Wait two seconds
+        animate(countdown)                      # Countdownbar starts counting down
+        wait(5000)
+        hideall()                               #Hide it after 5 seconds -> when it's empty
 
     :param int width: Width of the bar.
     :param int time: Define how long it takse for the bar to reach the end in milliseconds.
@@ -125,6 +150,10 @@ It's also possible to display simple text messages using showmsg(message) and hi
 .. js:function:: hidemsg()
 
     Hides the standard message.
+
+.. js:function:: emptymsg()
+
+    Empties the standard message. The same thing can be done by calling :js:func:`showmsg` with an empty string.
 
 ##########
 Text input
@@ -156,7 +185,7 @@ Text input
 Mouse input
 ###########
 
-.. js:function:: onmouseclick(object {action:function inputid: number})**
+.. js:function:: onmouseclick(displayobject {action:function inputid: number})
 
     Creates a mouseclick listener for the object/image, which will be triggered when the image is clicked. The function specified in "action" is executed on each click. 
 
@@ -175,7 +204,7 @@ Mouse input
         onmouseclick(box, {action:boxClick inputid:55)
         #Clicking the box show a messag containing -Clicked box 55-
 
-.. js:function:: onmouseclick(imagefile false)
+.. js:function:: onmouseclick(displayobject false)
 
     Removes all mouseclick functions bound to the specified object.
 
@@ -237,9 +266,7 @@ Keyboard Input
 
 .. function:: resumeonkey()
 
-    Runs :js:func:`resume` on any keypress once. 
-
-    :returns:  keycode
+    Runs :js:func:`resume` on any keypress once.
 
 .. function:: getlastkey(active=true)
 
@@ -247,45 +274,45 @@ Keyboard Input
 
 KeyCodes
 ========
-Keys are specified using keycodes where keycode corrsepsonds to a certain key, keycodes should be defined as strings e.g. ("a"). Alphanumerical keys(a-ö 0-9) simply uses the keys letter, so the keycode "a" corresponds to the button a key on the keyboard. All other keycodes are defined in the following table.
+Keys are specified using keycodes where keycode corrsepsonds to a certain key, keycodes should be defined as strings e.g. ("a"). Alphanumerical keys(a-ö 0-9) simply uses the keys letter, so the keycode "a" corresponds to the button a key on the keyboard. All other keycodes are defined in the following table. 
 
-+-----------+------------------------+
-|"backspace"| Backspace              |       
-+-----------+------------------------+
-| "tab"     |  Tab                   |   
-+-----------+------------------------+
-| "enter"   |  Enter/Return          |           
-+-----------+------------------------+
-| "shift"   |  Left and Right shift  |                   
-+-----------+------------------------+
-| "ctrl"    |  Left and right control|                   
-+-----------+------------------------+
-| "alt"     |  Alt                   |   
-+-----------+------------------------+
-| "capslock"|  Capslock              |       
-+-----------+------------------------+
-| "escape"  |  Esc                   |   
-+-----------+------------------------+
-| "pageup"  |  Page Up               |       
-+-----------+------------------------+
-| "pagedown"|  Page Down             |       
-+-----------+------------------------+
-| "end"     |  End                   |   
-+-----------+------------------------+
-| "home"    |  Home                  |   
-+-----------+------------------------+
-| "insert"  |  Insert                |   
-+-----------+------------------------+
-| "delete"  |  Delete                |   
-+-----------+------------------------+
-| "left"    |  Arrow Left            |       
-+-----------+------------------------+
-| "up"      |  Arrow Up              |       
-+-----------+------------------------+
-| "right"   |  Arrow Right           |           
-+-----------+------------------------+
-| "down"    |  Arrow Down            |       
-+-----------+------------------------+
++-------------+-------------------------+
+| "backspace" | Backspace               |
++-------------+-------------------------+
+| "tab"       |  Tab                    |
++-------------+-------------------------+
+| "enter"     |  Enter/Return           |
++-------------+-------------------------+
+| "shift"     |  Left and Right shift   |
++-------------+-------------------------+
+| "ctrl"      |  Left and right control |
++-------------+-------------------------+
+| "alt"       |  Alt                    |
++-------------+-------------------------+
+| "capslock"  |  Capslock               |
++-------------+-------------------------+
+| "escape"    |  Esc                    |
++-------------+-------------------------+
+| "pageup"    |  Page Up                |
++-------------+-------------------------+
+| "pagedown"  |  Page Down              |
++-------------+-------------------------+
+| "end"       |  End                    |
++-------------+-------------------------+
+| "home"      |  Home                   |
++-------------+-------------------------+
+| "insert"    |  Insert                 |
++-------------+-------------------------+
+| "delete"    |  Delete                 |
++-------------+-------------------------+
+| "left"      |  Arrow Left             |
++-------------+-------------------------+
+| "up"        |  Arrow Up               |
++-------------+-------------------------+
+| "right"     |  Arrow Right            |
++-------------+-------------------------+
+| "down"      |  Arrow Down             |
++-------------+-------------------------+
 
 ##########
 Arithmetic
@@ -371,38 +398,96 @@ Logic
 
 Basic logic functions that return a boolean value(true or false)
 
-**not(boolean)**  Logic NOT
+.. function:: not(boolean)
+    
+    Logic NOT
 
-**and(bool1 bool2)** Logic AND
+.. function:: and(bool1 bool2)
+    
+    Logic AND
 
-**or(bool1 bool2)** logic OR
+.. function:: or(bool1 bool2)
+    
+    Logic OR
 
-**lessthan(number1 number2 _or_ lt(number1 number2))** number1 < number2
+.. function:: lessthan(number1 number2)
+    
+    number1 < number2
 
-**greaterthan(number1 number2) _or_ gt(number1 number2)** number1 > number2
+.. function:: lt(number1 number2))
+    
+    Short version of :js:func:`lessthan`
 
-**equal(number1 number2) _or_ eq(number1 number2)** number1 == number2
+.. function:: greaterthan(number1 number2)
+    
+    number1 > number2
+
+.. function:: gt(number1 number2)
+    
+    Short version of :js:func:`greaterthan`
+
+.. function:: equals(number1 number2)
+    
+    number1 == number2
+
+.. function:: eq(number1 number2)
+
+    Short version of :js:func:`equals`
+
+.. function:: fuzzyequal(string1 string2 ignoreCases)
+    
+    Computes how different two strings are from each other. The difference is defined by how many single character edits are required to change string1 into string2.
+
+    :param string1 string: String to compare
+    :param string2 string: String to compare with
+    :param ignoreCases boolean: Specify if upper/lower case letters should be taken into account, defaults to true.
+
+    For example, the difference between "kitten" and "sitting" is 3, since the following three edits change one into the other, and there is no way to do it with fewer than three edits:
+
+    ::
+
+        kitten → sitten (substitution of "s" for "k")
+        sitten → sittin (substitution of "i" for "e")
+        sittin → sitting (insertion of "g" at the end).
+
+
+    :returns: 0 if the strings are equal
+    :returns: A number greater than 1 specifying how different the strings are
+
+
 
 #########################
 Lists/String Manipulation
 #########################
 
-.. js:function::  append(string1 string2)
+.. js:function::  append(string1 string2..stringn)
 
-    Appends two strings, append("Hello " "World") = "Hello World"
+    Appends two or more strings
 
-.. js:function::  lenght(object)
+    :param string1 string: String to append to
+    :param string2 string: String to append to ´string1´
+    :param stringn string: String to append to ´string1´
 
-    Returns the number of elements/letters in  list or string including whitespaces. 
 
-    :param object array/string: 
+    ::
+
+        append("Hello " "World" "!") #= "Hello World!"
+
+
+
+.. js:function::  length(object)
+
+    Returns the number of elements/letters in list or string including whitespaces. 
+
+    :param array/string object: Var to get length of
+    :returns number: Length of variable
 
 .. js:function::  elementatindex(object, index)
 
     Returns the element at the specified index a list/string where the index starts from 0. Equivalent to  object[index]
 
-    :param object array: Object to select an element from.
-    :param index number: Index
+    :param array object: Object to select an element from.
+    :param number index: Index
 
     ::
 
@@ -414,28 +499,61 @@ Lists/String Manipulation
 
     Round a number down when mode = "floor" and up when mode = "ceil"
 
-    :param word string/array: The string or array to select a range from
-    :param start number: Index at which to begin selection. Start can be omitted in which case the selections begins from the first index i.e. 0.
+    :param string/list word: The string or array to select a range from
+    :param number start: Index at which to begin selection. Start can be omitted in which case the selections begins from the first index i.e. 0.
     :param end number: Index at which to end the selection, values up to but not including end are selected. 
 
     :returns: Range
 
 
+.. js:function:: split(text separator)
+    
+    Splits a string into a list of string at every occurance of the separator in the string. 
+
+    :param string text: The string to be split
+    :param string separator: Specifies the character to use when splitting the string
+    :returns: List of strings
+
+    ::
+
+        split(["1..2..3..4..5], "..") # = [1 2 3 4 5]
+
+
+.. js:function:: join(list separator)
+    
+    Joins all elements of a list into a string, separated by the sperator.
+
+    :param list list: The array to be joined.
+    :param string separator: Specifies a string to separate each element in the list
+
+
+    ::
+
+        join([1 2 3 4 5], "..") # = 1..2..3..4..5
+
 ##############
 Random numbers
 ##############
 
-**randominteger(min, max)**
+.. js:function:: randominteger(min max not)
 
-returns a pseudorandom non decimal number within the range.
+    Generates a pseudorandom non decimal number within the specified range, and which is not equal to any of the numbers specified in *not*.
 
-**randomnumber(min, max)**
+    :param number min: Range min number
+    :param number max: Range max number
+    :param number/list not: Number(s) that are not allowed
 
-Returns a pseudorandom number value within the range
+.. js:function:: randomnumber(min max)
 
-**seedrandom(seed)**
+    Returns a pseudorandom number value within the range
 
-Seeds the random generator with  a value. A certain seed will always produce the same sequence of random values. 
+    :param number min: Range min number
+    :param number max: Range max number
+
+
+.. js:function:: seedrandom(seed)
+
+    Seeds the random generator with  a value. A certain seed will always produce the same sequence of random values. 
 
 ###############
 Time and timers
