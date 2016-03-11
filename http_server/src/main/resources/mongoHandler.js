@@ -600,7 +600,7 @@ var Experiment = {
         "action":"find",
         "collection":dataCollection,
         "matcher":{"expId":expId, "phase":phase, "confirmed":true, "deleted": {$in: [null, false]}},
-        "keys": {"data":1, "userid":1, "data.single":0},
+        "keys": {"data.single":0},
         //TODO: Handle larger replies.
         "batch_size":10000
       },
