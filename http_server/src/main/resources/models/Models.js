@@ -66,6 +66,11 @@ User.prototype.isEditor = function() {
   }
 };
 
+User.prototype.generatePasswordResetToken = function() {
+  this.forgottenPasswordToken = java.util.UUID.randomUUID().toString();
+};
+
+
 function Experiment(arg) {
 
     this.components = [];
