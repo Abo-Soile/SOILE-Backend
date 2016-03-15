@@ -144,6 +144,46 @@ BaseDAO.prototype.update = function(matcher, objnew, callback, multi) {
     });
 };
 
+BaseDAO.prototype.newFindAndUpdate = function(matcher, objnew, callback) {
+    var that = this;
+    var mongoCommand = {};
+
+    if (typeof matcher === 'undefined' ||
+        typeof objnew === 'undefined') {
+        callback(false);
+    }
+
+    mongoCommand.action = "find_and_modify";
+    mongoCommand.matcher = matcher;
+    mongoCommand.update = objnew;
+    mongoCommand.new = true;
+
+    if (typeof matcher !== "object") {
+        mongoCommand.matcher = {_id:matcher};
+    }
+
+    this.sendToMongo(mongoCommand, function(reply) {
+        if(reply.status === "ok") {
+            var doc = reply.result;
+            doc = new that._baseObject(doc);
+            callback(doc);
+        } else {
+            callback(false);
+        }
+    });
+};
+
+BaseDAO.prototype.findAndUpdate = function(matcher, objnew, callback) {
+    var that = this;
+    that.update(matcher, objnew, function(result) {
+        if(result) {
+            that.get(matcher, function(obj) {
+                callback(obj);
+            });
+        }
+    });
+};
+
 BaseDAO.prototype.count = function(matcher, callback) {
     var mongoCommand = {};
     mongoCommand.matcher = {};
