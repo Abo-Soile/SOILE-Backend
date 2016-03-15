@@ -70,6 +70,10 @@ User.prototype.generatePasswordResetToken = function() {
   this.forgottenPasswordToken = java.util.UUID.randomUUID().toString();
 };
 
+User.prototype.deletePasswordResetToken = function() {
+  delete this.forgottenPasswordToken;
+}
+
 
 function Experiment(arg) {
 
