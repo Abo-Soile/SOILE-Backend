@@ -131,6 +131,11 @@ BaseDAO.prototype.update = function(matcher, objnew, callback, multi) {
         mongoCommand.multi = false;
     }
 
+    if(typeof matcher !== "object") {
+        mongoCommand.criteria = {_id:matcher};
+        mongoCommand.multi = false;
+    }
+
     this.sendToMongo(mongoCommand, function(mongoReply) {
         if(mongoReply.status === "ok") {
             return callback(true);
