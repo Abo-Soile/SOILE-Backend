@@ -210,6 +210,24 @@ Mouse input
 
     :param object displayobject: Displayobject that should not respond to click any more.
 
+
+#############
+Drag and drop
+#############
+
+
+.. function:: draggable(object data)
+
+    :param displayobject object: Displayobject to make draggable.
+    :param object data: The data that is passed to the dropfunction when the object is dropped.
+
+
+.. function:: dropzone(object ondrop dropdata)
+
+    :param displayobject object:
+    :param function ondrop: What to do on drop
+    :param object dropdata: 
+
 ##############
 Keyboard Input
 ##############
