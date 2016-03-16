@@ -149,6 +149,12 @@ public class Builtin {
         builtinFunctions.add("dropzone");
         builtinFunctions.add("cleardragdrop");
 
+        //Audio
+        builtinFunctions.add("audiofile");
+        builtinFunctions.add("play");
+        builtinFunctions.add("pause");
+        builtinFunctions.add("jumpto");
+
         //Text input
         builtinFunctions.add("textbox");
         builtinFunctions.add("textarea");
