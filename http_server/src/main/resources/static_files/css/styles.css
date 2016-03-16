@@ -1,3 +1,8 @@
+.useradmin {
+  background-color: green; }
+  .useradmin table .vert-align td {
+    vertical-align: middle; }
+
 /*Experiment admin view */
 #expview ul {
   list-style-type: none; }
