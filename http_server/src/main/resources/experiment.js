@@ -255,11 +255,6 @@ router.post('/experiment/:id/phase/:phase', function(request) {
   var expID = request.params().get('id');
   var phase = request.params().get('phase');
 
-  var userID = request.session.getPersonToken();
-  if(request.session.loggedIn()) {
-    userID = request.session.getUserId();
-  }
-
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -267,6 +262,12 @@ router.post('/experiment/:id/phase/:phase', function(request) {
   });
 
   request.endHandler(function() {
+
+    var userID = request.session.getPersonToken();
+    if(request.session.loggedIn()) {
+      userID = request.session.getUserId();
+    }
+
     var postData = data.getString(0, data.length());
     var postJson = JSON.parse(postData);
 
