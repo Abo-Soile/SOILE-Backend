@@ -104,6 +104,7 @@ require('experiment.js');
 require('experiment_old.js');
 require('questionnaire.js');
 require('test.js');
+require('admin.js');
 
 customMatcher.get("/login", function(request) {
   var previous = request.headers().get("Referer");
