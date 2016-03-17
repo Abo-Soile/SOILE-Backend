@@ -717,7 +717,8 @@ SOILE2 = (function(){
     var id = soile2.rt.uniqueid();
     var props = {
       "id": id,
-      "src": url
+      "src": url,
+      "preload":"auto"
     };
     var audio = jQuery('<audio />', props).appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
@@ -726,7 +727,7 @@ SOILE2 = (function(){
       toLoad += 1;
       audio.on('load', soile2.util.onImageLoad);
     }
-    jQuery(soile2.util.getid(id))[0].load()
+    jQuery(soile2.util.getid(id))[0].load();
     return id;
   };
 
