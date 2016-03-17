@@ -567,8 +567,34 @@ customMatcher.get('/', function(request) {
   Matches static files. Uses the normal routmatcher so that session stuff is 
   ignored when sending static files. 
 */
-customMatcher.routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff|mp3)$', function(request) {
+customMatcher.routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff)$', function(request) {
   //logHttp(request);
+
+  request.response.sendFile(utils.file_from_serverdir(request.path()));
+});
+
+/*
+  Audio files
+*/
+customMatcher.routeMatcher.allWithRegEx('.*\.(mp3)$', function(request) {
+  request.response.putHeader("Content-Type", "audio/mpeg");
+
+//  var file = utils.file_from_serverdir(request.path());
+//
+//  console.log("Reading file: " + file);
+//
+//  vertx.fileSystem.readFile(file, function(err, res) {
+//      if (!err) {
+//        var len = res.length();
+//        request.response.putHeader("Accept-Ranges","bytes");
+//        request.response.putHeader("Content-Length", len);
+//        request.response.putHeader("Content-Range","bytes 0-" + len +"/"+(len+1));
+//        request.response.end(res);
+//      }
+//  });
+
+  //Content-Range:bytes 0-1950826/1950827
+  request.response.putHeader("Accept-Ranges","bytes");
   request.response.sendFile(utils.file_from_serverdir(request.path()));
 });
 
