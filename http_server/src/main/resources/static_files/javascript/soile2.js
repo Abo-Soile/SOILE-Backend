@@ -746,6 +746,21 @@ SOILE2 = (function(){
     }
   };
 
+  bin.jumpto = function(id, seconds) {
+    var audioElement = jQuery(soile2.util.getid(id))[0];
+    console.log(audioElement.currentTime);
+    if (audioElement) {
+      console.log("jumping to " + seconds);
+      audioElement.pause();
+      audioElement.currentTime = seconds;
+      audioElement.play();
+    }
+
+    console.log(audioElement.currentTime);
+  };
+
+
+  /*
    * Convert an integer representing minutes to milliseconds.
    */
   bin.minutes = function(m){
