@@ -145,14 +145,14 @@ customMatcher.post("/login", function(request) {
       
       if (user) {
         request.session.login(user);
-        mongo.experiment.updateDataIdentifier(user._id, 
-          request.session.getPersonToken(), function(s) {
+        //mongo.experiment.updateDataIdentifier(user._id, 
+        //  request.session.getPersonToken(), function(s) {
 
           if(origin){
             return request.redirect(decodeURIComponent(origin));
           }
           return request.redirect("/");
-        });
+        //});
         
       }
       //No user was found, error
