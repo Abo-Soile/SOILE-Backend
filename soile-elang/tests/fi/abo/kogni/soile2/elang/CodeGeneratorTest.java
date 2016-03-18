@@ -157,6 +157,17 @@ public class CodeGeneratorTest extends TestCase {
 
     }
 
+    public void testMultilineString() throws Exception {
+        String codeString = readFile("./soile-elang/tests/resources/testMultilineString.elang", Charset.defaultCharset());
+
+        StringReader input = new StringReader(codeString);
+        codeGen.generate(input);
+
+        System.out.println(code.toString());
+        System.out.println(errors.toString());
+
+    }
+
     @Test
     public void testRandom() throws Exception {
         System.out.println("Random test is random");
