@@ -124,7 +124,13 @@ app.controller('fileController', function($scope, $http, $location, FileUploader
       var humanName = name.substring(0, name.lastIndexOf("."));
       var url = "/" + image.url;
 
+      var extension = name.substring(name.lastIndexOf(".")+1);
+
       var str = "val "+ humanName +' <- imagefile("'+ url+ '") \n';
+
+      if (extension === "mp3") {
+        str = "val " + humanName + ' <- audiofile("'+url+'")\n';
+      }
 
 			$scope.editor.insert(str);
 		};

@@ -709,6 +709,58 @@ SOILE2 = (function(){
     });
 
   };
+
+  /*
+   * Audio support
+   */
+  bin.audiofile = function(url) {
+    var id = soile2.rt.uniqueid();
+    var props = {
+      "id": id,
+      "src": url,
+      "preload":"auto"
+    };
+    var audio = jQuery('<audio />', props).appendTo(soile2.util.getid("display"));
+    soile2.rt.dyn.add(id);
+    if(loadScreen) {  
+      //console.log(performance.now() + " LOADING IMAGE");
+      toLoad += 1;
+      audio.on('load', soile2.util.onImageLoad);
+    }
+    jQuery(soile2.util.getid(id))[0].load();
+    return id;
+  };
+
+  bin.play = function(id) {
+    var audioElement =jQuery(soile2.util.getid(id))[0];
+
+    if (audioElement) {
+      audioElement.play();
+    }
+  };
+
+  bin.pause = function(id) {
+    var audioElement = jQuery(soile2.util.getid(id))[0];
+
+    if (audioElement) {
+      audioElement.pause();
+    }
+  };
+
+  bin.jumpto = function(id, seconds) {
+    var audioElement = jQuery(soile2.util.getid(id))[0];
+    console.log(audioElement.currentTime);
+    if (audioElement) {
+      console.log("jumping to " + seconds);
+      audioElement.pause();
+      audioElement.currentTime = seconds;
+      audioElement.play();
+    }
+
+    console.log(audioElement.currentTime);
+  };
+
+
   /*
    * Convert an integer representing minutes to milliseconds.
    */
