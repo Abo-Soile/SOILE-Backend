@@ -41,7 +41,7 @@ router.get("/experiment", function(request){
 router.get("/experiment/new", requireAdmin,function(request){
   //templateManager.render_template("experimentform", {},request);
   var sDate = Date.now();
-  var eDate = Date.now() + (1000*60*60*24*30);  //30 days in the future
+  var eDate = Date.now() + (1000*60*60*24*700);  //Two years into the future
 
   var expData = {};
 
