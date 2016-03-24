@@ -22,6 +22,7 @@
 <link href="/javascript/bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
 <script src="/javascript/bower_components/angular-xeditable/dist/js/xeditable.js"></script>
 
+<script type="text/javascript" src="/javascript/userAccessDirective.js"></script>
 <script type="text/javascript" src="/javascript/bower_components/fast-levenshtein/levenshtein.js"></script>
 
 
@@ -228,6 +229,12 @@
                 
             </div>
             <div ng-if="showAdvanced">
+                <div class="row">
+                    <div class="col-md-12">
+                        <useraccess users="test.users" savefunction="updateUsers">
+                    </div>
+                </div>
+            
                 <div class="col-md-8">
                     
                     <label class="radio-inline">

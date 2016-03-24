@@ -1,4 +1,4 @@
-var app = angular.module('testEditor', ['ui.ace', 'angularFileUpload', 'xeditable']);
+var app = angular.module('testEditor', ['ui.ace', 'angularFileUpload', 'xeditable','useraccess']);
 var disp = document.getElementById("display");
 
 var autoCompleteList = [
@@ -328,6 +328,10 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     $scope.test.name = data;
     $http.post(editnameurl, {name: $scope.testname});
     $scope.updateMeta();
+  };
+
+  $scope.updateUsers = function() {
+    $scope.saveTest();
   };
 
   var timer = null;

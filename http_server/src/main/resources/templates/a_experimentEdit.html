@@ -22,6 +22,7 @@
 <script src="/javascript/bower_components/ladda/js/spin.js"></script>
 <script src="/javascript/bower_components/ladda/js/ladda.js"></script>
 <script src="/javascript/bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
+<script type="text/javascript" src="/javascript/userAccessDirective.js"></script>
 
 <div class="container experiment-edit" id="main" ng-app="experimentEdit" ng-controller="experimentController">
   <div class="row">
@@ -150,6 +151,10 @@
         <button class="btn btn-default" ng-disabled="test.selected == null" ng-click="addTest()">Add test</button>
       </div>
     
+    </div>
+
+    <div class="col-md-12">
+      <useraccess users="experiment.users" savefunction="null">
     </div>
 
     <div class="col-md-12">

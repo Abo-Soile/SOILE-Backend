@@ -13,7 +13,7 @@
 /javascript/bower_components/angular-ui-select/dist/select.css">
 
 <script type="text/javascript" src="/javascript/trainingedit.js"></script>
-
+<script type="text/javascript" src="/javascript/userAccessDirective.js"></script>
 
 <div class="container training-edit" id="main" ng-app="trainingEdit" ng-controller="trainingController">
   <div class="row">
@@ -184,6 +184,9 @@
     </div>
   </div>  
   <div class="row">
+    <div class="col-md-12">
+      <useraccess users="training.users" savefunction="null"></useraccess>
+    </div>
     <div class="col-md-12">
       <button class="btn btn-success"ng-click="saveTraining()">Save</button>
     </div>

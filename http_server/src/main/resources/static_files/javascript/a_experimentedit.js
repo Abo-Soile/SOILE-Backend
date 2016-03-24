@@ -4,7 +4,8 @@ var app = angular.module('experimentEdit',
         'ui.select', 
         'ngSanitize', 
         'angular-ladda',
-        'monospaced.elastic'
+        'monospaced.elastic',
+        'useraccess'
         ]);
 
 app.config(function($interpolateProvider){

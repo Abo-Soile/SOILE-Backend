@@ -2,7 +2,9 @@ var app = angular.module('trainingEdit',
                       ['ui.tree',
                        'ui.select',
                        'ngSanitize',
-                       'ui.bootstrap']);
+                       'ui.bootstrap',
+                       'useraccess'
+                       ]);
 
 
 app.config(function($interpolateProvider){
