@@ -13,6 +13,7 @@ var router = new CustomMatcher();
 var utils = require("utils");
 
 var requireAdmin = require('middleware').requireAdmin;
+var requireLogin = require('middleware').requireLogin;
 var userDAO = require("models/DAObjects").UserDAO;
 
 
@@ -27,6 +28,13 @@ router.get("/admin/user", requireAdmin,function(request){
 });
 
 
+router.get("/admin/user/current", requireLogin,function(request){
+  var user = request.session.currentUser;
+
+  request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+  request.response.end(JSON.stringify(user));
+});
+
 /*JSON list of admin users*/
 router.get("/admin/user/json", requireAdmin,function(request){
   userDAO.list({role:{$ne: "user"}},function(users) {
@@ -35,6 +43,15 @@ router.get("/admin/user/json", requireAdmin,function(request){
   });
 });
 
+/*JSON list of editor users, without the currently logged in user*/
+router.get("/admin/user/json/editor/filter", requireLogin, function(request) {
+
+  var userId = request.session.currentUser._id;
+  userDAO.list({role:"editor","_id":{"$ne":userId}},function(users) {
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(JSON.stringify(users));
+  });
+});
 
 /*Specific user*/
 router.get("/admin/user/:id", requireAdmin,function(request){
