@@ -144,6 +144,7 @@ router.post("/test/:id", requireAdmin, function(request) {
     var name = data.name;
     var published = data.published;
     var folder = data.folder;
+    var users = data.users;
 
     if (typeof folder === "undefined" || folder === "") {
       folder = "Unspecified";
@@ -154,6 +155,7 @@ router.post("/test/:id", requireAdmin, function(request) {
       test.name = name;
       test.published = published;
       test.folder = folder;
+      test.users = data.users;
 
       test.save(function(response) {
         request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
