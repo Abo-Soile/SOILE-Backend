@@ -516,17 +516,17 @@ customMatcher.post('/user', function(request) {
 
 customMatcher.get('/', function(request) {
   // Admin showing admin controls
-  if (request.session.isAdmin()) {
-    experimentDAO.list(function(experiments) {
-      templateManager.render_template('admin', {"experiments":experiments},request);
-    });
-  }
-  else {
-    // User logged in showing user controls
-    if (request.session.loggedIn()) {
-      var user = request.session.currentUser;
-      var context = {};
+  // User logged in showing user controls
+  if (request.session.loggedIn()) {
+    var user = request.session.currentUser;
+    var context = {};
 
+    if (user.isEditor()) {
+      experimentDAO.list(function(experiments) {
+        return templateManager.render_template('admin', {"experiments":experiments},request);
+      }); 
+    }
+    else {
       trainingDataDAO.list({userId:user._id, type:"general"}, function(training) {
 
 
@@ -554,13 +554,14 @@ customMatcher.get('/', function(request) {
 
 
       });
+    }
 
-    }
-    // Anonymous user, showing ladning page
-    else {
-      templateManager.render_template('landing', {} ,request);
-    }
   }
+  // Anonymous user, showing ladning page
+  else {
+    templateManager.render_template('landing', {} ,request);
+  }
+  
 });
 
 

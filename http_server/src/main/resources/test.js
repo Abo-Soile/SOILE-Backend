@@ -16,6 +16,7 @@ var config = container.config;
 var testImages = config.directory + "/testimages";
 
 var requireAdmin = require('middleware').requireAdmin;
+var requireEditor = require('middleware').requireEditor;
 
 router.get('/test', function(request) {
  testDAO.rawQuery({}, function(tests) {
@@ -37,7 +38,7 @@ router.get('/test/json', function(request) {
   },{keys:{js:0, code:0}});
 });
 
-router.get("/test/folder/json", requireAdmin, function(request) {
+router.get("/test/folder/json", requireEditor, function(request) {
   testDAO.listFolders(function(folders) {
     console.log(JSON.stringify(folders));
 
@@ -58,7 +59,7 @@ router.get("/test/json/compiled", function(request) {
 
 });
 
-router.get("/test/folder/:foldername/json", requireAdmin, function(request) {
+router.get("/test/folder/:foldername/json", requireEditor, function(request) {
   var folder = request.params().get('foldername');
 
   var query = {"folder":folder};
@@ -78,7 +79,7 @@ router.get("/test/folder/:foldername/json", requireAdmin, function(request) {
   },{keys:{js:0, code:0}});
 });
 
-router.post("/test", requireAdmin,function(request) {
+router.post("/test", requireEditor,function(request) {
   var data = new vertx.Buffer();
 
   request.dataHandler(function(buffer) {
@@ -104,7 +105,7 @@ router.post("/test", requireAdmin,function(request) {
 });
 
 
-router.get('/test/:id', requireAdmin, function(request) {
+router.get('/test/:id', requireEditor, function(request) {
   var id = request.params().get('id');
   var code = "sadas";
   var files = [];
@@ -122,13 +123,19 @@ router.get('/test/:id', requireAdmin, function(request) {
         console.log("\n\n\n");
     }
     testDAO.get(id, function(test) {
-      templateManager.render_template('testEditor', 
-        {"code":test.code, "test":test, "files":files}, request);
+
+      var user = request.session.currentUser;
+      if (test.userHasAccess(user.username) || user.isAdmin()) { 
+        templateManager.render_template('testEditor', 
+          {"code":test.code, "test":test, "files":files}, request);
+      } else {
+        return request.unauthorized();
+      }
     });
   });
 });
 
-router.post("/test/:id", requireAdmin, function(request) {
+router.post("/test/:id", requireEditor, function(request) {
   var data = new vertx.Buffer();
   var id = request.params().get('id');
 
@@ -165,7 +172,7 @@ router.post("/test/:id", requireAdmin, function(request) {
   });
 });
 
-router.get('/test/:id/copy', requireAdmin, function(request) {
+router.get('/test/:id/copy', requireEditor, function(request) {
   var id = request.params().get('id');
 
   testDAO.get(id, function(test) {
@@ -175,7 +182,7 @@ router.get('/test/:id/copy', requireAdmin, function(request) {
   });
 });
 
-router.post("/test/:id/compile", requireAdmin, function(request) {
+router.post("/test/:id/compile", requireEditor, function(request) {
   var data = new vertx.Buffer();
   var id = request.params().get('id');
 
@@ -200,7 +207,7 @@ router.post("/test/:id/compile", requireAdmin, function(request) {
 });
 
 
-router.post("/test/:id/imageupload", requireAdmin,function(request) {
+router.post("/test/:id/imageupload", requireEditor,function(request) {
 
   request.expectMultiPart(true);
   var id = request.params().get('id');
@@ -229,7 +236,7 @@ router.post("/test/:id/imageupload", requireAdmin,function(request) {
 });
 
 
-router.delete("/test/:id/imageupload/:imageName", requireAdmin,function(request) {
+router.delete("/test/:id/imageupload/:imageName", requireEditor,function(request) {
   var id = request.params().get('id');
   var imgName = request.params().get('imageName');
 
@@ -249,7 +256,7 @@ router.delete("/test/:id/imageupload/:imageName", requireAdmin,function(request)
 });
 
 
-router.get('/test/:id/imagelist', requireAdmin,function(request) {
+router.get('/test/:id/imagelist', requireEditor,function(request) {
   var id = request.params().get('id');
   var files = [];
 
@@ -288,7 +295,7 @@ router.get('/test/:id/imagelist', requireAdmin,function(request) {
 });
 
 
-router.post('/test/:id/editname', requireAdmin,function(request) {
+router.post('/test/:id/editname', requireEditor,function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -308,7 +315,7 @@ router.post('/test/:id/editname', requireAdmin,function(request) {
   });
 });
 
-router.get('/test/:id/json', requireAdmin, function(request) {
+router.get('/test/:id/json', requireEditor, function(request) {
   var id = request.params().get('id');
 
   testDAO.get(id, function(test) {
