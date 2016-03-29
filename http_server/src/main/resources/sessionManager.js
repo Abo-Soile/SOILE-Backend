@@ -18,6 +18,7 @@ var sessionManager =  {
   loadManager: function(request) {
     this.cookies = request.headers().get("Cookie");
     this.request = request;
+    this.currentUser = false;
 
     if (typeof this.cookies == "undefined") {
       this.cookies = "";
