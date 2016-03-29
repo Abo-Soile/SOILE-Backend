@@ -1,0 +1,3 @@
+[submodule "prod/mods/fi.abo.kogni.soile~vertx-mod-template-engines~1.0"]
+	path = prod/mods/fi.abo.kogni.soile~vertx-mod-template-engines~1.0
+	url = https://github.com/danielwarna/vertx-mod-template-engines.git
