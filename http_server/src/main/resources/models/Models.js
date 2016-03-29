@@ -23,6 +23,22 @@ var utils = require('utils');
 var BaseModel = require('models/baseModel');
 
 
+
+function userHasAccess(username) {
+  var users = this.users;
+
+  if (typeof users === "undefined") {
+    return false;
+  }
+
+  var idx = users.indexOf(username);
+  if (idx >= 0) {
+    return true;
+  }
+
+  return false;
+}
+
 /*
   Main user class; 
 */
@@ -207,6 +223,8 @@ Experiment.prototype.renameComponent = function(index, name) {
   this.components[index].name = name;
 };
 
+Experiment.prototype.userHasAccess = userHasAccess;
+
 /*
 ##########
 TRAINING
@@ -292,6 +310,8 @@ Training.prototype.getComponentsForRound = function(trainingData) {
 
     return modeComponents;
 };
+
+Training.prototype.userHasAccess = userHasAccess;
 
 /*
 ####
@@ -410,6 +430,8 @@ Test.prototype.compile = function(code, callback) {
     });
   });
 };
+
+Test.prototype.userHasAccess = userHasAccess;
 
 /*
 ####
