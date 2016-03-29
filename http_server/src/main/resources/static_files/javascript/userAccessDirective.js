@@ -1,4 +1,10 @@
 var mApp = angular.module('useraccess', []);
+
+
+/*
+Directive for managing user access to a certain component. A component is viewable
+by all admins and all editors who have been granted permission.
+*/
 mApp.directive('useraccess',  ['$http', function($http) {
     return {
         restrict: 'AE',
@@ -12,7 +18,7 @@ mApp.directive('useraccess',  ['$http', function($http) {
                 "ng-options='userList.indexOf(u) as u.username for u in userList'>" +
             "</select></div>" + 
             "<div class='col-md-8'><span ng-repeat='user in users'>{{user}}" + 
-            "<span class='label label-danger' ng-click='removeUser(user)'>Removeee</span></span>" +
+            "<span class='label label-danger' ng-click='removeUser(user)'>Remove</span></span>" +
             "</div></div>",
         link:function (scope, element, attrs) {
 
@@ -24,15 +30,29 @@ mApp.directive('useraccess',  ['$http', function($http) {
             var url = scope.address;
           };
 
+          /*Load list of editors*/
           scope.loadUserList = function() {
             var userUrl = "/admin/user/json/editor/filter";
 
             $http.get(userUrl).success(function(data) {
               scope.userList = data;
 
+              /*Removing already added users from the list*/
+              for (var i = 0; i < scope.users.length; i++) {
+                var usr = scope.users[i];
+                for (var j = 0; j < scope.userList.length; j++) {
+                  if (scope.userList[j].username === usr) {
+                    scope.addedUsers.push(scope.userList.splice(j, 1)[0]);
+                  }
+                }
+              }
+
             });
           };
 
+          /*
+            Add user to component and calls the save function
+          */
           scope.addUser = function(userIndex) {
             if (typeof scope.users === "undefined") {
               scope.users = [];
@@ -51,7 +71,9 @@ mApp.directive('useraccess',  ['$http', function($http) {
             }
           };
 
-
+          /*
+            Removes user from the user list and re-adds him to the available users list 
+          */
           scope.removeUser = function(user) {
             console.log("Removing useraccess " + user);
 
@@ -75,8 +97,6 @@ mApp.directive('useraccess',  ['$http', function($http) {
 
           };
           scope.loadUserList();
-
         }
-
     };
 }]);
