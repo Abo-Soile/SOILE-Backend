@@ -125,7 +125,7 @@ router.get('/test/:id', requireEditor, function(request) {
     testDAO.get(id, function(test) {
 
       var user = request.session.currentUser;
-      if (test.userHasAccess(user.username) || user.isAdmin()) { 
+      if (test.userHasAccess(user) || user.isAdmin()) { 
         templateManager.render_template('testEditor', 
           {"code":test.code, "test":test, "files":files}, request);
       } else {

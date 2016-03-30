@@ -24,8 +24,13 @@ var BaseModel = require('models/baseModel');
 
 
 
-function userHasAccess(username) {
+function userHasAccess(userObject) {
   var users = this.users;
+  var username = userObject.username;
+
+  if (userObject.isAdmin()) {
+    return true;
+  }
 
   if (typeof users === "undefined") {
     return false;
