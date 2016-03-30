@@ -84,12 +84,6 @@ router.get('/experiment/:id', function(request){
     var experiment = exp;
     var hidelogin = false;
 
-    if(typeof experiment.hidelogin !== undefined) {
-      if(experiment.hidelogin){
-        hidelogin = true;
-      }
-    }
-
     //Replacing newlines with html linebreaks when displaying the description
     if(typeof experiment.description !== 'undefined') {
       experiment.description = experiment.description.replace(/(?:\r\n|\r|\n)/g, '<br />');
@@ -102,9 +96,15 @@ router.get('/experiment/:id', function(request){
   
         templateManager.render_template("experimentAdmin", {"exp":experiment, "hideLogin":hidelogin},request);
       });
-    } else{
+    } else {
 
-      res = bowser._detect(userAgent);
+      if(typeof experiment.hidelogin !== undefined) {
+        if(experiment.hidelogin){
+          hidelogin = true;
+        }
+      }
+
+      var res = bowser._detect(userAgent);
       var blockUa = res.tablet||res.mobile;
 
       if (experiment.allowMobile) {
