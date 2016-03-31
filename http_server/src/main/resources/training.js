@@ -939,9 +939,14 @@ router.get("/training/:id/task", function(request) {
 });
 
 router.get("/training/:id/edit", requireEditor,function(request) {
-
-  templateManager.render_template('trainingEdit', {}, request);
-
+  var id = request.params().get('id');
+  trainingDAO.get(id, function(training) {
+    if (training.userHasAccess(request.session.currentUser)) {
+      return templateManager.render_template('trainingEdit', {}, request);
+    } else {
+      return request.unauthorized();
+    }
+  });
 });
 
 //JSON structure
