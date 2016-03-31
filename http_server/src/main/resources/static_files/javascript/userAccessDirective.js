@@ -1,6 +1,5 @@
 var mApp = angular.module('useraccess', []);
 
-
 /*
 Directive for managing user access to a certain component. A component is viewable
 by all admins and all editors who have been granted permission.
@@ -12,18 +11,35 @@ mApp.directive('useraccess',  ['$http', function($http) {
           users:"=",
           savefunction:"="
         },
-        template: "<div class='ng-useraccess'><h1>Users</h1>"+
-            "<div class='col-md-4 form-group form-inline'><button class='btn btn-primary' ng-click='addUser(selectedUser)'>Add</button>" +
-            "<select style='width:200px;' class='form-inline form-control' ng-model='selectedUser'"+
+        template: "<div class='ng-useraccess'>"+
+            "<h4><button class='btn btn-default btn-sm' ng:click='showhideuseraccess()'>"+
+            "<span ng-show='showUserAccess'><i class='fa fa-angle-double-up ng-scope'></i></span>" +
+            "<span ng-show='!showUserAccess'><i class='fa fa-angle-double-down ng-scope'></i></span>" +
+            "</button>User Access</h4>"+
+            "<div class='row' ng-show='showUserAccess'> <div class='col-md-3 form-group form-inline'>" +
+            "<select style='width:170px;' class='form-inline form-control' ng-model='selectedUser'"+
                 "ng-options='userList.indexOf(u) as u.username for u in userList'>" +
-            "</select></div>" + 
-            "<div class='col-md-8'><span ng-repeat='user in users'>{{user}}" + 
-            "<span class='label label-danger' ng-click='removeUser(user)'>Remove</span></span>" +
-            "</div></div>",
+            "</select> <button class='btn btn-primary' ng-click='addUser(selectedUser)'>Add</button> </div>" + 
+            "<div class='col-md-9'><table><tr ng-repeat='user in users'><td>{{user}}</td>" + 
+            "<td> <span class='label label-danger' ng-click='removeUser(user)'>Remove</span></td></tr></table>" +
+            "</div></div></div>",
         link:function (scope, element, attrs) {
 
           //Array of already added users
           scope.addedUsers = [];
+          scope.showUserAccess = false;
+          scope.userAccessSymbol = '<i class="fa fa-angle-double-down ng-scope"></i>'
+
+
+          scope.showhideuseraccess = function() {
+            scope.showUserAccess = !scope.showUserAccess;
+
+            if (scope.showUserAccess) {
+              scope.userAccessSymbol = '<i class="fa fa-angle-double-down ng-scope"></i>'
+            } else {
+              scope.userAccessSymbol = '<i class="fa fa-angle-double-up ng-scope"></i>'
+            }
+          }
 
           scope.loadUsers = function() {
           
