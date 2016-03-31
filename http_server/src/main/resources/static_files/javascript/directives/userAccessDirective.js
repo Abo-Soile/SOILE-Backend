@@ -19,6 +19,12 @@ mApp.directive('useraccess',  ['$http', function($http) {
           scope.showUserAccess = false;
           scope.userAccessSymbol = '<i class="fa fa-angle-double-down ng-scope"></i>'
 
+          scope.currentUserName = null;
+
+          $http.get("/admin/user/current").success(function(data) {
+            scope.currentUserName = data.username;
+            //console.log(scope.currentUserName)
+          })
 
           scope.showhideuseraccess = function() {
             scope.showUserAccess = !scope.showUserAccess;

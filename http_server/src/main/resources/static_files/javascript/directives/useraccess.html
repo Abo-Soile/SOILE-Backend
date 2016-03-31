@@ -16,11 +16,10 @@
                 <table class="table table-striped">
                     <tr ng-repeat='user in users'>
                         <td>{{user}}</td>
-                        <td> <span class='label label-danger' ng-click='removeUser(user)'>Remove</span>
+                        <td> <span ng-show="user != currentUserName" class='label label-danger' ng-click='removeUser(user)'>Remove</span>
                         </td>
                     </tr>
                 </table>
-                
             </div>
         </div>
     </div>
