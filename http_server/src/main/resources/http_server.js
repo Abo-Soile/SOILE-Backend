@@ -522,7 +522,14 @@ customMatcher.get('/', function(request) {
     var context = {};
 
     if (user.isEditor()) {
-      experimentDAO.list(function(experiments) {
+
+      var query = {};
+
+      if (user.isEditor && !user.isAdmin()) {
+        query = {users:user.username};
+      }
+
+      experimentDAO.list(query,function(experiments) {
         return templateManager.render_template('admin', {"experiments":experiments},request);
       }); 
     }
