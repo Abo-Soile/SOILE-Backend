@@ -20,6 +20,7 @@ var formDAO = require("models/DAObjects").FormDAO;
 var moment = require("libs/moment");
 
 var requireAdmin = require('middleware').requireAdmin;
+var requireEditor = require('middleware').requireEditor;
 
 var m1 = require('middleware').m1;
 var m2 = require('middleware').m2;
@@ -93,7 +94,7 @@ function handleResultData(data, datatype, callback) {
 }
 
 //Admin view, show list of training experiments
-router.get("/training", requireAdmin,function(request) {
+router.get("/training", requireEditor,function(request) {
   console.log("Training List is running ");
 
   trainingDAO.list(function(training) {
@@ -103,7 +104,7 @@ router.get("/training", requireAdmin,function(request) {
 });
 
 //Create a new training task 
-router.post("/training", requireAdmin,function(request) {
+router.post("/training", requireEditor,function(request) {
 
   var sDate = Date.now() + (1000*60*60*24*2); //Two days in the future
   var eDate = Date.now() + (1000*60*60*24*30);  //30 days in the future
@@ -113,6 +114,8 @@ router.post("/training", requireAdmin,function(request) {
   newTraining.startDate = new Date(sDate);
   newTraining.endDate = new Date(eDate);
   newTraining.name = "";
+
+  newTraining.users = [request.session.currentUser.username];
 
   newTraining.save(function(callback) {
       request.redirect("/training/"+newTraining._id+"/edit");
@@ -131,7 +134,7 @@ router.get("/training/:id",function(request) {
     console.log("##### FIRST TRAINING");
     console.log(JSON.stringify(training));
 
-    if (request.session.isAdmin()) {
+    if (request.session.isEditor()) {
       return trainingAdminView(request, training);
     }
 
@@ -250,7 +253,12 @@ function trainingAdminView(request, training) {
   var userid = request.session.getUserId();
 
   var cData = [["Pre", 123], ["1", 63],["2", 55],["3", 32],["Post", 19]];
-  return templateManager.render_template("trainingAdmin", {training:training, chartData:cData}, request);
+
+  if (training.userHasAccess(request.session.currentUser)) {
+    return templateManager.render_template("trainingAdmin", {training:training, chartData:cData}, request);
+  } else {
+    return request.unauthorized();
+  }
 }
 
 /*
@@ -261,7 +269,7 @@ b3608da6-aef4-49aa-8e25-1210bc377254,f38699cf-d4e8-42da-8d7c-643b3952e067
   when a user clicks the participate button. The user will see that he is participating
   in the test at the user view after logging in.
 */
-router.post("/training/:id/enrolluser", requireAdmin,function (request) {
+router.post("/training/:id/enrolluser", requireEditor,function (request) {
   var data = new vertx.Buffer();
   var trainingId = request.params().get('id');
 
@@ -801,7 +809,7 @@ function jsonSingleTrainingVarToCsv(data, variable) {
 }
 
 
-router.get("/training/:id/loaddata", requireAdmin, function(request) {
+router.get("/training/:id/loaddata", requireEditor, function(request) {
   var id = request.params().get('id');
   var userid = request.params().get("userid");
   var filter1 = request.params().get("f1");
@@ -923,7 +931,7 @@ router.get("/training/:id/task", function(request) {
 
 });
 
-router.get("/training/:id/edit", function(request) {
+router.get("/training/:id/edit", requireEditor,function(request) {
 
   templateManager.render_template('trainingEdit', {}, request);
 
@@ -938,7 +946,7 @@ router.get("/training/:id/edit", function(request) {
 }
 */
 
-router.post("/training/:id/edit", requireAdmin,function(request) {
+router.post("/training/:id/edit", requireEditor,function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -961,7 +969,7 @@ router.post("/training/:id/edit", requireAdmin,function(request) {
   });
 });
 
-router.post("/training/:id/addform", requireAdmin,function(request) {
+router.post("/training/:id/addform", requireEditor,function(request) {
   var id = request.params().get('id');
 
   var newForm = new formModel();
@@ -980,7 +988,7 @@ router.post("/training/:id/addform", requireAdmin,function(request) {
   });
 });
 
-router.get("/training/:id/useroverview", function(request) {
+router.get("/training/:id/useroverview", requireEditor,function(request) {
   var id = request.params().get('id');
 
   trainingDAO.get(id, function(training) {
