@@ -19,6 +19,7 @@ var formDAO = require("models/DAObjects").FormDAO;
 var testDAO = require("models/DAObjects").TestDAO;
 
 var requireAdmin = require('middleware').requireAdmin;
+var requireEditor = require('middleware').requireEditor;
 
 var bowser = require("node_modules/bowser/bowser");
 //var lodash = require("node_modules/lodash");
@@ -38,7 +39,7 @@ router.get("/experiment", function(request){
 });
 
 
-router.get("/experiment/new", requireAdmin,function(request){
+router.get("/experiment/new", requireEditor,function(request){
   //templateManager.render_template("experimentform", {},request);
   var sDate = Date.now();
   var eDate = Date.now() + (1000*60*60*24*700);  //Two years into the future
@@ -49,6 +50,8 @@ router.get("/experiment/new", requireAdmin,function(request){
   newExp.startDate = new Date(sDate);
   newExp.endDate = new Date(eDate);
   newExp.name = "";
+
+  newExp.users = [request.session.currentUser.username];
 
   newExp.save(function(r){
       console.log(JSON.stringify(r));
@@ -122,7 +125,7 @@ router.get('/experiment/:id', function(request){
     }
 
     //If normal user, check if user has filled in something before
-    if(!request.session.isAdmin()) {
+    if(!request.session.isEditor()) {
       var userID = request.session.getPersonToken();
 
       if(request.session.loggedIn()) {
@@ -144,7 +147,13 @@ router.get('/experiment/:id', function(request){
     }
     //Admin, navigation controls dont apply here, just show the view
     else {
-      renderExp(exp, true); 
+
+      if (exp.userHasAccess(request.session.currentUser)) {
+        renderExp(exp, true); 
+      }
+      else {
+        return request.unauthorized();
+      }
     }
   });
 });
@@ -371,11 +380,19 @@ router.get('/experiment/:id/phase/:phase/json', function(request) {
 
 });
 
-router.get("/experiment/:id/edit", requireAdmin,function(request) {
-  templateManager.render_template('a_experimentEdit', {}, request);
+
+router.get("/experiment/:id/edit", requireEditor, function(request) {
+  var id = request.params().get('id');
+
+  experimentDAO.get(id, function(exp) {
+    if (exp.userHasAccess(request.session.currentUser)) { 
+      return templateManager.render_template('a_experimentEdit', {}, request);
+    }
+    return request.unauthorized();
+  });
 });
 
-router.post("/experiment/:id/edit", requireAdmin,function(request) {
+router.post("/experiment/:id/edit", requireEditor,function(request) {
   var id = request.params().get('id');
   var data = new vertx.Buffer();
 
@@ -399,7 +416,7 @@ router.post("/experiment/:id/edit", requireAdmin,function(request) {
 });
 
 
-router.get("/experiment/:id/json", function(request) {
+router.get("/experiment/:id/json",function(request) {
   var id = request.params().get('id');
 
   experimentDAO.get(id, function(experiment) {
@@ -410,7 +427,8 @@ router.get("/experiment/:id/json", function(request) {
   });
 });
 
-router.post("/experiment/:id/addform", requireAdmin,function(request) {
+
+router.post("/experiment/:id/addform", requireEditor,function(request) {
   var id = request.params().get('id');
   var address = utils.get_address('questionnaire_render');
 
