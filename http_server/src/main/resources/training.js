@@ -93,14 +93,21 @@ function handleResultData(data, datatype, callback) {
 
 }
 
-//Admin view, show list of training experiments
+//Admin view, shows a list of training experiments
 router.get("/training", requireEditor,function(request) {
-  console.log("Training List is running ");
+  var user = request.session.currentUser;
 
-  trainingDAO.list(function(training) {
-    templateManager.render_template("trainingList", {"trainings":training}, request);
-  });
+  if (user.isEditor()) {
+    var query = {};
 
+    if (user.isEditor && !user.isAdmin()) {
+      query = {users:user.username};
+    }
+
+    trainingDAO.list(query ,function(training) {
+      templateManager.render_template("trainingList", {"trainings":training}, request);
+    });
+  }
 });
 
 //Create a new training task 
