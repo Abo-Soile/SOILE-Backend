@@ -14,21 +14,22 @@ function requireAdmin(request, callback) {
 function requireEditor(request, callback) {
   console.log("Checking for editor");
   if(request.session.currentUser){
-    console.log(JSON.stringify(request.session.currentUser));
+    /*console.log(JSON.stringify(request.session.currentUser));
     console.log("IS ADMIN:" + request.session.currentUser.isAdmin());
 
     console.log("IS EDIT:" + request.session.currentUser.isEditor());
+*/
+    if(request.session.currentUser.isEditor()) {
+      return callback(request);
+    } else {
+      console.log("Unauthorized")
+      request.unauthorized();
+    }
+  } else {
+    request.unauthorized();
   }
 
-  if(!request.session.user) {
-    request.unauthorized();
-  } else {
-    if (!(request.session.currentUser.isEditor() || request.session.currentUser.isAdmin())) {
-      request.unauthorized();
-    } else {
-      return callback(request);
-    }
-  }
+
 }
 
 function requireLogin(request, callback) {
