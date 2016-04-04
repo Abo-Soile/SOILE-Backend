@@ -197,58 +197,62 @@ router.get('/experiment/:id/phase/:phase', function(request) {
           var cut = url.indexOf("/phase/");
           url = url.substr(0,cut) + "/end";
 
-          return request.redirect(url);
+          dataDAO.completeExperiment(expID, userID, function(status) {
+
+            return request.redirect(url);
+          });
         }
-
-        if(exp.loginrequired && !request.session.loggedIn()) {
-          var url = "/experiment/"+expID;
-          return request.redirect(url);
-        }
-
-        //Calculating how much of the experiment is completed
-        var noOfPhases = parseInt(exp.components.length);
-        phaseNo = parseInt(phaseNo);
-        var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
-
-
-        if (typeof exp.hidelogin !== 'undefined') {
-          context.hideLogin = exp.hidelogin;
-        }
-
-        if (exp.israndom) {
-          console.log("------Translating phase number---------");
-          console.log(phaseNo + " -> " + userdata.randomorder[phaseNo]);
-          phase = exp.components[userdata.randomorder[phaseNo]]; 
-        }
-
-        //Formphase, rendering form template
-        if(phase.type === "form") {
-          console.log("Form ");
-
-          if (exp.submitbutton) {
-            context.submitbutton = exp.submitbutton;
+        else {
+          if(exp.loginrequired && !request.session.loggedIn()) {
+            var url = "/experiment/"+expID;
+            return request.redirect(url);
           }
 
-          formDAO.get(phase.id, function(form) {
-            context.form = form.form;
+          //Calculating how much of the experiment is completed
+          var noOfPhases = parseInt(exp.components.length);
+          phaseNo = parseInt(phaseNo);
+          var context = {"completed":(phaseNo+1)/noOfPhases*100, "phasesLeft":phaseNo+1+"/"+noOfPhases};
 
-            templateManager.render_template("formphase", context, request);
-          });
-        }
-        //Testphases, rendering test template
-        if(phase.type === "test") {
-          console.log("test");
 
-          testDAO.get(phase.id, function(experiment) {
-            context.experiment = experiment.js.replace(/(\r\n|\n|\r)/gm,"");
+          if (typeof exp.hidelogin !== 'undefined') {
+            context.hideLogin = exp.hidelogin;
+          }
 
-            templateManager.render_template("testphase", context, request);
-          });
-        }
-        
-        else {
-          console.log(phase.type);
-          console.log("Phase type is undefined");
+          if (exp.israndom) {
+            console.log("------Translating phase number---------");
+            console.log(phaseNo + " -> " + userdata.randomorder[phaseNo]);
+            phase = exp.components[userdata.randomorder[phaseNo]]; 
+          }
+
+          //Formphase, rendering form template
+          if(phase.type === "form") {
+            console.log("Form ");
+
+            if (exp.submitbutton) {
+              context.submitbutton = exp.submitbutton;
+            }
+
+            formDAO.get(phase.id, function(form) {
+              context.form = form.form;
+
+              templateManager.render_template("formphase", context, request);
+            });
+          }
+          //Testphases, rendering test template
+          if(phase.type === "test") {
+            console.log("test");
+
+            testDAO.get(phase.id, function(experiment) {
+              context.experiment = experiment.js.replace(/(\r\n|\n|\r)/gm,"");
+
+              templateManager.render_template("testphase", context, request);
+            });
+          }
+          
+          else {
+            console.log(phase.type);
+            console.log("Phase type is undefined");
+          }
         }
       });
     }
@@ -316,7 +320,7 @@ router.get('/experiment/:id/end', function(request) {
   }
 
 
-  dataDAO.completeExperiment(expID, userID, function(status) {
+  //dataDAO.completeExperiment(expID, userID, function(status) {
     console.log("confirmed submitted data");
     experimentDAO.get(expID, function(exp) {
 
@@ -348,7 +352,7 @@ router.get('/experiment/:id/end', function(request) {
       }
     });
 
-  });
+  //});
 });
 
 router.get('/experiment/:id/phase/:phase/json', function(request) {
