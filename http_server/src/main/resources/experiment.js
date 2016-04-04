@@ -2,6 +2,8 @@ var vertx = require("vertx");
 var console = require('vertx/console');
 var utils = require("utils");
 
+var csvUtils = require("csvUtils");
+
 var CustomMatcher = require('router');
 var router = new CustomMatcher();
 
@@ -429,6 +431,87 @@ router.get("/experiment/:id/json",function(request) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(js);
   });
+});
+
+router.get("/experiment/:id/loaddata", requireEditor,function(request) {
+  var id = request.params().get('id');
+
+  //All/completed
+  var filter1 = request.params().get("f1");
+
+  //Raw/aggregate
+  var filter2 = request.params().get("f2");
+  //if raw -> phase
+  var filter3 = request.params().get("f3");
+  //if raw -> machine readable/huma readable
+  var filter4 = request.params().get("f4");
+
+  var offest = request.params().get("offset");
+  var limit = request.params().get("limit");
+
+  var matcher = {};
+  var projection = {};
+
+  var command = "single";
+
+  if (filter1 === "completed") {
+    matcher.confirmed = true;
+  }
+
+  if (filter2 === "aggregate") {
+    projection["data.raw"] = 0;
+    //projection.data.raw = 0;
+
+    if (filter3 === "test") {
+      matcher.type = "test";
+    }
+
+    else if (filter3 === "all") {
+
+    }
+
+    else if (filter3 === "form"){
+      matcher.type = "form";
+    } else {
+      matcher.phase = parseInt(filter3);
+    }
+  }
+
+  if (filter2 === "raw") {
+    //projection.data = {};
+    projection["data.single"] = 0;
+    matcher.type === "test";
+  
+    matcher.phase = parseInt(filter3);
+    /*matcher.format = filter4;*/
+
+    command = "raw";
+  }
+
+  var groupby = "userid";
+  matcher.expId = id;
+  matcher.type = {$ne:"general"};
+
+  dataDAO.rawQuery(matcher, function(res) {
+    var csv = "";
+
+    if (command === "single"){
+      csv = csvUtils.jsonRowDataToCsv(res, groupby);
+    }
+
+    if (command === "raw") {
+      if(filter4 === "standard") {
+        csv = csvUtils.jsonMatrixDataToCsv(res, groupby);
+      } else {
+        csv = csvUtils.jsonMatrixToCsvSorted(res, groupby);
+      }
+    }
+
+    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+    request.response.putHeader("Content-Disposition", "attachment; filename=data.csv");
+
+    request.response.end(csv);
+  }, {keys:projection});
 });
 
 

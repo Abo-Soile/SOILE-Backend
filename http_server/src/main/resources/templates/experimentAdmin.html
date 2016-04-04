@@ -1,5 +1,13 @@
 {>header /}
-<div id="main" class="container">
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-sanitize.js"></script>
+
+<script type="text/javascript" src="/javascript/experimentData.js"></script>
+
+
+<div id="main" class="container" ng-app="experimentAdmin">
   <div class="row">
     <div id="expview" class="col-md-12"> 
       <h1>{exp.name}   <a class="btn btn-default" href="{URI}/edit">Edit</a></h1>
@@ -53,6 +61,22 @@
           
         </div>
       </p>
+
+      <div>
+        <h4>Filter data</h4>
+        <div ng-controller="experimentDataFilterController" class="dataFilter form-inline">
+          <select class="form-control" ng-model="filter1" ng-options="o as o for o in ['all', 'confirmed']"></select>
+
+          <select class="form-control" ng-model="filter2" ng-options="o as o for o in ['aggregate', 'raw']"></select>
+
+          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'aggregate'" ng-options="o as o for o in getF3Components()"></select>
+
+          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'raw'" ng-options="o as o for o in getComponents()"></select>
+          <select class="form-control" ng-model="$parent.filter4" ng-if="filter2 == 'raw'" ng-options="o as o for o in ['standard', 'sorted']"></select>
+
+          <button ng-click="buildQuery()" class="btn btn-success">Downnload</button>
+        </div>
+      </div>
 
     </div>
   </div>
