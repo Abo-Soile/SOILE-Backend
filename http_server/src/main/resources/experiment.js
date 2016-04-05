@@ -467,13 +467,14 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
     }
 
     else if (filter3 === "all") {
-
+      matcher.type = {$ne:"general"};
     }
 
     else if (filter3 === "form"){
       matcher.type = "form";
     } else {
       matcher.phase = parseInt(filter3);
+      matcher.type = {$ne:"general"};
     }
   }
 
@@ -482,7 +483,7 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
     projection["data.single"] = 0;
     matcher.type === "test";
   
-    matcher.phase = parseInt(filter3);
+    matcher.phase = parseInt(filter3)-1;
     /*matcher.format = filter4;*/
 
     command = "raw";
@@ -490,7 +491,7 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
 
   var groupby = "userid";
   matcher.expId = id;
-  matcher.type = {$ne:"general"};
+
 
   dataDAO.rawQuery(matcher, function(res) {
     var csv = "";
