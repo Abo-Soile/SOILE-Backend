@@ -164,6 +164,14 @@ var sessionManager =  {
     }
   },
 
+  isEditor: function() {
+    if (this.currentUser) {
+      return this.currentUser.isEditor();
+    } else {
+      return false;
+    }
+  },
+
   logout: function() {
     var data = this.loggedIn();
     if(data) {
