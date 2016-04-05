@@ -689,10 +689,8 @@ function jsonMatrixDataToCsv(json, groupby) {
     }
 
     csvData += csv;
-
-    return csvData
-
   }
+  return csvData;
 }
 
 
@@ -845,7 +843,7 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
       Pre or post, fetch either raw or single data for all users. 
     */
     if (filter2 === "raw") {
-      matcher.phase = filter3 - 1;
+      matcher.phase = parseInt(filter3) - 1;
       projection['data.single'] = 0;
       command = "raw"
     }
@@ -868,7 +866,7 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
     }
 
     if (filter3 === "raw") {
-      matcher.trainingIteration = parseInt(filter4 - 1);
+      matcher.trainingIteration = parseInt(filter4) - 1;
 
       command = "raw"
 
@@ -885,7 +883,7 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
       projection.userId = 1;
       projection.trainingIteration = 1;
       
-      matcher.phase= parseInt(filter4 - 1);
+      matcher.phase= parseInt(filter4)- 1;
 
       groupby = filter3;
     }

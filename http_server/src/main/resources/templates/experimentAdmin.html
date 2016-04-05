@@ -72,7 +72,7 @@
 
           <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'aggregate'" ng-options="o as o for o in getF3Components()"></select>
 
-          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'raw'" ng-options="o as o for o in components"></select>
+          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'raw'" ng-options="o as o for o in testComponents"></select>
           <select class="form-control" ng-model="$parent.filter4" ng-if="filter2 == 'raw'" ng-options="o as o for o in ['standard', 'sorted']"></select>
 
           <button ng-click="buildQuery()" class="btn btn-success">Load</button>

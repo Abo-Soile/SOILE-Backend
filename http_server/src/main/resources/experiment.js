@@ -469,11 +469,10 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
     else if (filter3 === "all") {
       matcher.type = {$ne:"general"};
     }
-
     else if (filter3 === "form"){
       matcher.type = "form";
     } else {
-      matcher.phase = parseInt(filter3);
+      matcher.phase = parseInt(filter3)-1;
       matcher.type = {$ne:"general"};
     }
   }

@@ -44,10 +44,6 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
       }
     } 
 
-    if ($scope.filter1 === "raw") {
-
-    }
-
     query += "f1=" + ($scope.filter1 ? $scope.filter1 : "") + "&";
     query += "f2=" + ($scope.filter2 ? $scope.filter2 : "") + "&";
     query += "f3=" + ($scope.filter3 ? $scope.filter3 : "") + "&";
