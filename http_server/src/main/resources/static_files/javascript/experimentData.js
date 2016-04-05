@@ -8,6 +8,8 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
   var baseUrl = $location.absUrl();
   $scope.components = [];
 
+  $scope.jsonData = {};
+
   $http.get(baseUrl+"/json").success(function(data) {
     var comps = [];
     for (var i = 0; i < data.components.length; i++) {
@@ -52,14 +54,27 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
     console.log($scope);
 
     $http.get(query).success(function(data, status) {
-      console.log(data)
+      //console.log(data)
 
-       var anchor = angular.element('<a/>');
+       //var anchor = angular.element('<a/>');
+       var anchor = angular.element( document.querySelector( '#dlLink' ) );
+
        anchor.attr({
            href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
            target: '_blank',
            download: 'data.csv'
-       })[0].click();
+       })
+       //[0].click();
+
+      CSV.RELAXED = true;
+      CSV.COLUMN_SEPARATOR = ";";
+
+      var jsonData = CSV.parse(data);
+
+      $scope.datarows = jsonData;
+      $scope.downloadData = true;
+
+      console.log($scope.datarows)
 
     });
   };

@@ -5,7 +5,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-sanitize.js"></script>
 
 <script type="text/javascript" src="/javascript/experimentData.js"></script>
-
+<script src="/javascript/bower_components/CSV-JS/csv.js"></script>
 
 <div id="main" class="container" ng-app="experimentAdmin">
   <div class="row">
@@ -61,24 +61,43 @@
           
         </div>
       </p>
-
-      <div>
+    </div>
+    <div ng-controller="experimentDataFilterController">
+      <div class="col-md-12">
         <h4>Filter data</h4>
-        <div ng-controller="experimentDataFilterController" class="dataFilter form-inline">
+        <div class="dataFilter form-inline">
           <select class="form-control" ng-model="filter1" ng-options="o as o for o in ['all', 'confirmed']"></select>
 
           <select class="form-control" ng-model="filter2" ng-options="o as o for o in ['aggregate', 'raw']"></select>
 
           <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'aggregate'" ng-options="o as o for o in getF3Components()"></select>
 
-          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'raw'" ng-options="o as o for o in getComponents()"></select>
+          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'raw'" ng-options="o as o for o in components"></select>
           <select class="form-control" ng-model="$parent.filter4" ng-if="filter2 == 'raw'" ng-options="o as o for o in ['standard', 'sorted']"></select>
 
-          <button ng-click="buildQuery()" class="btn btn-success">Downnload</button>
+          <button ng-click="buildQuery()" class="btn btn-success">Load</button>
+          <a id="dlLink" class="ng-hide" ng-show="downloadData">Download data</a>
         </div>
       </div>
 
+      <div class="col-md-12 overflow600">
+      <p>
+          <table class="table table-striped table-condensed table-bordered">
+            <thead ng-repeat="row in datarows.slice(0,1)">
+              <tr>
+                <th ng-repeat="col in row track by $index">[([col])]</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="row in datarows.slice(1,entries.length)">
+                <td ng-repeat="col in row track by $index">[([col])]</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
     </div>
+
+
   </div>
 </div>
 
