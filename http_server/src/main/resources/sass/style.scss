@@ -434,3 +434,19 @@ body {
   }
 
 }
+
+.overflow300 {
+  min-height: 100px !important;
+  max-height: 300px !important;
+  overflow: auto;
+}
+
+.overflow600 {
+  min-height: 150px !important;
+  max-height: 600px !important;
+  overflow: auto;
+}
+
+.overflow {
+  overflow: auto;
+}
