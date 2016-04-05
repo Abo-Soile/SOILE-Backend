@@ -7,6 +7,7 @@ app.config(function($interpolateProvider){
 app.controller('experimentDataFilterController', function($scope, $http, $location) {
   var baseUrl = $location.absUrl();
   $scope.components = [];
+  $scope.testComponents = [];
 
   $scope.jsonData = {};
 
@@ -14,6 +15,9 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
     var comps = [];
     for (var i = 0; i < data.components.length; i++) {
       comps.push(i+1);
+      if (data.components[i].type === "test") {
+        $scope.testComponents.push(i+1);
+      }
     }
 
     $scope.components = comps;
