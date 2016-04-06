@@ -12,9 +12,9 @@ var formDAO = require("models/DAObjects").FormDAO;
 
 var middle = require("middleware");
 var requireAdmin = middle.requireAdmin;
+var requireEditor = require('middleware').requireEditor;
 
-
-router.get('/questionnaire/mongo/:id', requireAdmin, function(request){
+router.get('/questionnaire/mongo/:id', requireEditor, function(request){
   var id = request.params().get('id');
   
   formDAO.get(id, function(form) {
@@ -31,7 +31,7 @@ router.get('/questionnaire/mongo/:id', requireAdmin, function(request){
 });
 
 
-router.post('/questionnaire/mongo/:id', requireAdmin, function(request) {
+router.post('/questionnaire/mongo/:id', requireEditor, function(request) {
   var postdata = new vertx.Buffer();
   var id = request.params().get("id");
 
