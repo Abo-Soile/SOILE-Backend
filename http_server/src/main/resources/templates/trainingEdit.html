@@ -79,25 +79,20 @@
       </div>
 
       <div class="row">
-        <div class="col-md-3">
-          <span class="checkbox">
-            <label class="bigcheckbox">
-              Control group
-              <input type="checkbox" ng-model="training.controlgroup" ng-true-value="true" ng-false-value="false"
-              ng-click="toggleControlGroup($event)"
-              >
-            </label>
-          </span>
-        </div>
 
-        <div class="col-md-3">
-          <span class="checkbox">
-            <label class="bigcheckbox">
-              Show score
-              <input type="checkbox" ng-model="training.showScore" ng-true-value="true" ng-false-value="false"
-              >
-            </label>
-          </span>
+      <div class="col-md-12 form-inline">
+        <label class="checkbox bigcheckbox">
+          Control group
+          <input type="checkbox" ng-model="training.controlgroup" ng-true-value="true" ng-false-value="false"
+          ng-click="toggleControlGroup($event)"
+          >
+        </label>
+
+        <label class="checkbox bigcheckbox">
+          Show score
+          <input type="checkbox" ng-model="training.showScore" ng-true-value="true" ng-false-value="false"
+          >
+        </label>
         </div>
       </div>
     </div> 

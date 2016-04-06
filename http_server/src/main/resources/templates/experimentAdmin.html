@@ -42,11 +42,14 @@
     <div class="col-md-12">
       <ol class="componentlist fancyList">
         {#exp.components uri=URI}
-        <li class="btn-toolbar"><a class="phaselistlink" href="{uri}/phase/{$idx}">phase {$idx} - {name}</a>
+        <li>
+        <a class="phaselistlink" href="{uri}/phase/{$idx}">phase {$idx} - {name}</a>
           {@eq key=type value="test"}
           <span class="label label-info">{type}</span>
+          <span class="btn-group">
             <a href="{uri}/phase/{$idx}/rawdata" type="button" class="btn btn-default btn-xs">Raw data</a>
             <a href="{uri}/phase/{$idx}/rawdata_pivot" type="button" class="btn btn-default btn-xs">Sorted data</a>
+          </span>
           {:else}
             <span class="label label-default">{type}</span>
           {/eq}
