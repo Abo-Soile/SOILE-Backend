@@ -217,13 +217,13 @@ var ElangHighlightRules = function() {
         "keyword": 
             "function end intermezzo-phase interaction-phase "+ 
             "if then else enterphase leavephase beforeiteration afteriteration "+
-            "transition intermezzo-phase iteration while do",
+            "transition intermezzo-phase iteration while do return",
         "constant.language": 
             "TRUE FALSE NULL SPACE",
         "support.type": 
             "gvar var val",
         "keyword.operator":
-            "plus minus muliply divide" 
+            "plus minus muliply divide modulo" 
     }, "text", true, " ");
 
     var varkeywords = "var|gvar|val";
