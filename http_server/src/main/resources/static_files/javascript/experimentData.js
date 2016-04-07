@@ -1,4 +1,4 @@
-var app = angular.module('experimentAdmin', []);
+var app = angular.module('experimentAdmin', ['ui.bootstrap']);
 
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
@@ -8,6 +8,24 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
   var baseUrl = $location.absUrl();
   $scope.components = [];
   $scope.testComponents = [];
+  $scope.format = 'yyyy/MM/dd';
+
+  $scope.startdate = 0;
+  $scope.enddate = 0;
+
+  $scope.open = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      console.log("OPEN");
+
+      $scope.opened = true;
+    };
+
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+   };
 
   $scope.jsonData = {};
 
@@ -48,6 +66,12 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
     query += "f2=" + ($scope.filter2 ? $scope.filter2 : "") + "&";
     query += "f3=" + ($scope.filter3 ? $scope.filter3 : "") + "&";
     query += "f4=" + ($scope.filter4 ? $scope.filter4 : "") + "&";
+
+    var sDate = new Date($scope.startdate).toISOString();
+    var eDate = new Date($scope.enddate).toISOString();
+
+    query += "startdate=" + ($scope.startdate ?  sDate: "") + "&";
+    query += "enddate=" + ($scope.enddate ?  eDate: "") + "&";
 
     console.log(query);
 

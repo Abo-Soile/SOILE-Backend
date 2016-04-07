@@ -449,6 +449,9 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
   var offest = request.params().get("offset");
   var limit = request.params().get("limit");
 
+  var startdate = request.params().get("startdate");
+  var enddate = request.params().get("enddate");
+
   var matcher = {};
   var projection = {};
 
@@ -490,6 +493,14 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
 
   var groupby = "userid";
   matcher.expId = id;
+
+  // If start and enddate is set, add date filters to query
+  if (startdate && enddate) {
+    startdate = new Date(startdate);
+    enddate = new Date(enddate);
+
+    matcher.timestamp = {"$gte":startdate,"$lte":enddate};
+  }
 
 
   dataDAO.rawQuery(matcher, function(res) {

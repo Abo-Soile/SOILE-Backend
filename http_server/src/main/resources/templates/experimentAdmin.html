@@ -6,6 +6,7 @@
 
 <script type="text/javascript" src="/javascript/experimentData.js"></script>
 <script src="/javascript/bower_components/CSV-JS/csv.js"></script>
+<script type="text/javascript" src="/javascript/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 
 <div id="main" class="container" ng-app="experimentAdmin">
   <div class="row">
@@ -81,22 +82,41 @@
           <button ng-click="buildQuery()" class="btn btn-success">Load</button>
           <a id="dlLink" class="ng-hide" ng-show="downloadData">Download data</a>
         </div>
-      <p>
+      </div>
+      <div class="col-md-4">
+          <!--Datepickers-->
+          <div class="input-group form-inline">
+            <input type="text" class="form-control" ng-model="startdate" ng-required:"true" is-open="opened" options="dateOptions" close-text="Close" datepicker-popup="[([format])]" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </div>
+        </div>
+      <div class="col-md-4">
+          <div class="input-group">
+            <input type="text" class="form-control" ng-model="enddate" ng-required:"true" is-open="opened" min-date="startdate" options="dateOptions"  close-text="Close" datepicker-popup="[([format])]"/>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </div>  
       </div>
 
+
+
       <div class="col-md-12 overflow600">
-          <table class="table table-striped table-condensed table-bordered">
-            <thead ng-repeat="row in datarows.slice(0,1)">
-              <tr>
-                <th ng-repeat="col in row track by $index">[([col])]</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="row in datarows.slice(1,entries.length)">
-                <td ng-repeat="col in row track by $index">[([col])]</td>
-              </tr>
-            </tbody>
-          </table>
+      <p>
+        <table class="table table-striped table-condensed table-bordered">
+          <thead ng-repeat="row in datarows.slice(0,1)">
+            <tr>
+              <th ng-repeat="col in row track by $index">[([col])]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in datarows.slice(1,entries.length)">
+              <td ng-repeat="col in row track by $index">[([col])]</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
