@@ -454,7 +454,7 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
 
   var command = "single";
 
-  if (filter1 === "completed") {
+  if (filter1 === "confirmed") {
     matcher.confirmed = true;
   }
 
