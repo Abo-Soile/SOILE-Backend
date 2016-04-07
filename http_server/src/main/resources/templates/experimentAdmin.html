@@ -70,14 +70,23 @@
       <div class="col-md-12">
         <h4>Filter data</h4>
         <div class="dataFilter form-inline">
-          <select class="form-control" ng-model="filter1" ng-options="o as o for o in ['all', 'confirmed']"></select>
+          <select class="form-control" ng-model="filter1" ng-options="o as o for o in ['all', 'confirmed']" ng-init="filter1=['all', 'confirmed'][1]">
+          </select>
 
-          <select class="form-control" ng-model="filter2" ng-options="o as o for o in ['aggregate', 'raw']"></select>
+          <select class="form-control" ng-model="filter2" ng-options="o as o for o in ['aggregate', 'raw']">
+            <option value="" selected disabled>Select data type</option>
+          </select>
 
-          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'aggregate'" ng-options="o as o for o in getF3Components()"></select>
+          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'aggregate'" ng-options="o as o for o in getF3Components()">
+            <option value="" selected disabled>Select components</option>
+          </select>
 
-          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'raw'" ng-options="o as o for o in testComponents"></select>
-          <select class="form-control" ng-model="$parent.filter4" ng-if="filter2 == 'raw'" ng-options="o as o for o in ['standard', 'sorted']"></select>
+          <select class="form-control" ng-model="$parent.filter3" ng-if="filter2 == 'raw'" ng-options="o as o for o in testComponents">
+            <option value="" selected disabled>Select test</option>
+          </select>
+          <select class="form-control" ng-model="$parent.filter4" ng-if="filter2 == 'raw'" ng-options="o as o for o in ['standard', 'sorted']">
+            <option value="" selected disabled>Select sorting</option>
+          </select>
 
           <button ng-click="buildQuery()" class="btn btn-success">Load</button>
           <a id="dlLink" class="ng-hide" ng-show="downloadData">Download data</a>
