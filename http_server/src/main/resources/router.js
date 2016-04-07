@@ -86,19 +86,46 @@ function extendRequest(request, func) {
       (session.getSessionCookie()) && 
       (request.method()==="GET" || request.method()==="POST")) {
     console.log("Checking session");
+
+    /* 
+      If postrequest
+      Run the handler, but defer the call to the endhandler until the session check has
+      been completed.
+    */
+    if (request.method() === "POST") {
+      console.log("DEFER END = TRUE")
+      request.deferEndFunc = true;
+      func(request);
+    }
+
+    // Timer used to debug issues with the session check
+    //vertx.setTimer(3000, function(tid) {
+      
     session.checkSession(function callback(user) {
       //Sending the session manager with the request
+      console.log("user: " + user);
+      console.log("user json: " + JSON.stringify(user));
       if(user) {
         console.log("Logging in from token");
         session.login(user);
         /*Reload manager when we have a user*/
         session = session.reloadUser();
+      } else{
+        console.log("No user found with toke: " + session.getSessionCookie());
       }
-      func(request);
+
+      if (request.method() === "POST") {
+        console.log("Trying to call endhandler")
+        request.deferEndFunc = false;
+        request.callEndHandler();
+      }
+      else {
+        func(request); 
+      }
     });
   }
   else {
-    console.log("Skipping session check");
+    console.log("Skipping db session check");
     func(request);
   }
 
@@ -133,11 +160,54 @@ CustomMatcher.prototype.handleArgs = function(arg) {
 
 // 
 // Runs middleware and 
-CustomMatcher.prototype.handleRequest = function(callback, middleware) {
+CustomMatcher.prototype.handleRequest = function(mCallback, middleware) {
   return function(request) {
-    request = extendRequest(request, function(req) {
 
-      //One middleware
+    var callback = mCallback;
+
+    if (request.method() == "POST") {
+      request.origEndHandler = request.endHandler;
+      request.deferEndFunc = false;
+
+      console.log("POST Setting up new endhandler");
+
+      /*
+        Extending the endhandler so that we can defer the call to it, as well
+        as calling it manually when something has been completed.
+      */
+      request.endHandler = function(func) {
+        var that = this;
+
+        console.log("setting up new endhandler")
+        var endFunc = function() {
+
+          console.log("CALLING ENFUNC -- deffer: " + that.deferEndFunc);
+          if(!that.deferEndFunc) {
+            console.log("ENDFUNC CALLED")
+            callback = func;
+            handleMiddleWare(that);
+            //func();
+          } else {
+            console.log("DIDNT CALL ENDFUNC")
+          }
+        };
+        that.origEndHandler(endFunc);
+
+        that.callEndHandler = endFunc;
+      };
+    }
+
+    function defMiddleware(req) {
+      if(req.deferEndFunc) {
+        console.log("deffering middleware");
+        callback(req);
+      } else {
+        handleMiddleWare(req);
+      }
+    }
+
+    function handleMiddleWare(req) {
+            //One middleware
       if (typeof middleware === 'function') {
         middleware(req, function(req, err) {
           callback(req);
@@ -148,6 +218,12 @@ CustomMatcher.prototype.handleRequest = function(callback, middleware) {
       else if (typeof middleware === 'object' && middleware.length > 0){
         var handleMiddlewareArray = function(n, request) {
           if(n < middleware.length) {
+
+            console.log(JSON.stringify(middleware))
+            console.log(typeof middleware[n] + " " + n + " type: " + typeof n);
+
+            n = parseInt(n);
+
             middleware[n](req, function(newRequest) {
               handleMiddlewareArray(n+1, newRequest);
             });
@@ -163,7 +239,9 @@ CustomMatcher.prototype.handleRequest = function(callback, middleware) {
       else {
         callback(req);
       }
-    });
+    }
+    request = extendRequest(request, defMiddleware);
+     
   }; 
 };
 
