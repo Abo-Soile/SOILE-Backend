@@ -18,7 +18,7 @@ function jsonRowDataToCsv(json, groupby) {
 
     if (typeof users[id] === "undefined") {
       users[id] = {};
-      console.log("new user");
+      //console.log("new user");
     } 
 
     var data = null;
@@ -43,13 +43,13 @@ function jsonRowDataToCsv(json, groupby) {
       users[id][dataheader] = data[datapoint];
       headers[dataheader] = "";
 
-      console.log(datapoint + " --- " + data[datapoint]);
+      //console.log(datapoint + " --- " + data[datapoint]);
     }
   }
 
   headers[groupby] = "";
 
-  console.log(JSON.stringify(users));
+  //console.log(JSON.stringify(users));
 
   var resArr = [];
 
@@ -65,6 +65,11 @@ function jsonRowDataToCsv(json, groupby) {
   return csv;
 }
 
+
+/*
+  Writes raw 2d data in humanredable format, where groupby
+  is set as a heading for each thing to groupby.
+*/
 function jsonMatrixDataToCsv(json, groupby) {
 
   var data = [];
@@ -83,7 +88,6 @@ function jsonMatrixDataToCsv(json, groupby) {
     var keys = {};
 
     csvData += groupby+ ": " + element[groupby] + sep + "\n";
-    //console.log("RawData number of rows: " + element.data.rows.length);
     var rowCount = element.data.rows.length;
     for (var j = 0; j < element.data.rows.length; j++) {
       var row = element.data.rows[j];
@@ -106,11 +110,10 @@ function jsonMatrixDataToCsv(json, groupby) {
       lastK = k;
     }
 
-    //console.log(csv + "\n");
     csv += "\n";
     
     /*
-      Skriver ut resultatet till csv:n
+      Write results to the csv file
     */
     for (var ij = 0; ij < rowCount; ij++) {
       for(var k in keys) {
@@ -129,6 +132,11 @@ function jsonMatrixDataToCsv(json, groupby) {
   }
   return csvData;
 }
+
+
+/*
+  Writes raw 2d data in a machinereadable format.
+*/
 function jsonMatrixToCsvSorted(json, groupby) {
   var data = json;
   var sep =";";

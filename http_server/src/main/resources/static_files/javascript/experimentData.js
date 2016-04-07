@@ -17,8 +17,6 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
       $event.preventDefault();
       $event.stopPropagation();
 
-      console.log("OPEN");
-
       $scope.opened = true;
     };
 
@@ -73,14 +71,7 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
     query += "startdate=" + ($scope.startdate ?  sDate: "") + "&";
     query += "enddate=" + ($scope.enddate ?  eDate: "") + "&";
 
-    console.log(query);
-
-    console.log($scope);
-
     $http.get(query).success(function(data, status) {
-      //console.log(data)
-
-       //var anchor = angular.element('<a/>');
        var anchor = angular.element( document.querySelector( '#dlLink' ) );
 
        anchor.attr({
