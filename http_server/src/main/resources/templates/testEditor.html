@@ -229,14 +229,8 @@
                 
             </div>
             <div ng-if="showAdvanced">
-                <div class="row">
-                    <div class="col-md-12">
-                        <useraccess users="test.users" savefunction="updateUsers">
-                    </div>
-                </div>
             
                 <div class="col-md-8">
-                    
                     <label class="radio-inline">
                     </label>
                     <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" value="false"/> Private
@@ -245,6 +239,13 @@
                 <div class="col-md-2">
                     <a class="btn btn-success"href="{URI}/copy">Copy test</a>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <useraccess users="test.users" savefunction="updateUsers">
+                    </div>
+                </div>
+
                 <!--
                 <div class="row">
                     <div class="col-md-12">
