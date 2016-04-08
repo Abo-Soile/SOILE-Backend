@@ -212,11 +212,63 @@ function jsonMatrixToCsvSorted(json, groupby) {
   return csvData;
 }
 
+
+function jsonSingleTrainingVarToCsv(data, variable) {
+   var users = {};
+
+   var maxHeader = 0;
+
+   for (var i = 0; i < data.length; i++) {
+     var item = data[i];
+
+    if (typeof users[item.userId] === "undefined") {
+      users[item.userId] = [];
+      console.log("new user");
+    } 
+
+    var itemData = item.data.single;
+    if (typeof item.data.single === "undefined") {
+      itemData = item.data;
+    }
+
+    users[item.userId][item.trainingIteration] = itemData[variable];
+
+    console.log(variable + "  " + itemData[variable] + " iteration: " + item.trainingIteration);
+    console.log(JSON.stringify(item));
+
+    if (item.trainingIteration > maxHeader) {
+      maxHeader = item.trainingIteration;
+      console.log("new maxheader: " + maxHeader);
+    }
+   }
+
+  var headers = {};
+
+  for (var j = 0; j <= maxHeader; j++) {
+    headers[j] = "";
+  }
+  headers.userId = "";
+
+  var resArr = [];
+
+  for (var id in users) {
+    users[id].userId = id;
+    resArr.push(users[id]);
+  } 
+  resArr.unshift(headers);
+
+
+  var csv = babyparser.unparse(resArr, {"delimiter":";"});
+
+  return csv;
+}
+
 var csvUtils = (function() {
   return {
     'jsonRowDataToCsv':jsonRowDataToCsv,
     'jsonMatrixDataToCsv':jsonMatrixDataToCsv,
-    'jsonMatrixToCsvSorted':jsonMatrixToCsvSorted
+    'jsonMatrixToCsvSorted':jsonMatrixToCsvSorted,
+    'jsonSingleTrainingVarToCsv':jsonSingleTrainingVarToCsv
   };
 });
 
