@@ -89,7 +89,7 @@
           </select>
 
           <button ng-click="buildQuery()" class="btn btn-success">Load</button>
-          <a id="dlLink" class="ng-hide" ng-show="downloadData">Download data</a>
+          <a id="dlLink" class="ng-hide" ng-show="downloadData"  ng-href="[([fileUrl])]" download="data.csv">Download data</a>
         </div>
       </div>
       <div class="col-md-4">
@@ -113,7 +113,12 @@
 
 
       <div class="col-md-12 overflow600">
-      <p>
+      <p></p>
+      <div ng-show="warning" class="alert alert-danger" role="alert">
+        <strong>Large dataset,</strong> only the 1000 first rows are shown below, click download to access the whole dataset
+      </div>
+
+
         <table class="table table-striped table-condensed table-bordered">
           <thead ng-repeat="row in datarows.slice(0,1)">
             <tr>
@@ -121,7 +126,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="row in datarows.slice(1,entries.length)">
+            <tr ng-repeat="row in datarows.slice(1,entries.length) | limitTo:dataLimit">
               <td ng-repeat="col in row track by $index">[([col])]</td>
             </tr>
           </tbody>

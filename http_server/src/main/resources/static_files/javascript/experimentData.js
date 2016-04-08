@@ -4,7 +4,12 @@ app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
 });
 
-app.controller('experimentDataFilterController', function($scope, $http, $location) {
+app.config(['$compileProvider', function ($compileProvider) {
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|):/);
+}]);
+
+
+app.controller('experimentDataFilterController', function($scope, $http, $location, $window) {
   var baseUrl = $location.absUrl();
   $scope.components = [];
   $scope.testComponents = [];
@@ -12,6 +17,9 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
 
   $scope.startdate = 0;
   $scope.enddate = 0;
+
+  $scope.dataLimit = 1000;
+  $scope.warning = false;
 
   $scope.open = function($event) {
       $event.preventDefault();
@@ -71,26 +79,36 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
     query += "startdate=" + ($scope.startdate ?  sDate: "") + "&";
     query += "enddate=" + ($scope.enddate ?  eDate: "") + "&";
 
-    $http.get(query).success(function(data, status) {
-       var anchor = angular.element( document.querySelector( '#dlLink' ) );
+    $scope.warning = false;
 
-       anchor.attr({
+    $http.get(query).success(function(data, status) {
+      var anchor = angular.element( document.querySelector( '#dlLink' ) );
+
+      if ($scope.fileUrl) {
+        $window.URL.revokeObjectURL($scope.fileUrl);
+      }
+     /*  anchor.attr({
            href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
            target: '_blank',
            download: 'data.csv'
-       })
+       })*/
        //[0].click();
 
       CSV.RELAXED = true;
       CSV.COLUMN_SEPARATOR = ";";
 
-      var jsonData = CSV.parse(data);
 
+      var jsonData = CSV.parse(data);
+      if (jsonData.length > 1000) {
+        $scope.warning = true;
+      } 
       $scope.datarows = jsonData;
       $scope.downloadData = true;
 
-      console.log($scope.datarows)
 
+      var blob=new Blob([data]);
+      $scope.url = $window.URL || $window.webkitURL;
+      $scope.fileUrl = $scope.url.createObjectURL(blob);
     });
   };
 });
