@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "soile_httpserver",
   "version": "1.0.0",
   "description": "Contains dev dependencies for the whole vertx/js project",
@@ -6,23 +6,23 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    
   },
   "devDependencies": {
-    "gulp":"~3.9.0",
-    "gulp-concat":"~2.6.0",
-    "gulp-rename":"~1.2.2",
-    "gulp-sass":"~2.0.4",
-    "gulp-util":"~3.0.6",
-    "jasmine-core":"~2.3.4",
-    "karma":"~0.13.11",
-    "karma-jasmine":"~0.3.6",
-    "phantomjs":"~1.9.18",
-    "karma-phantomjs-launcher": "~0.1",
-    "karma-coverage":"~0.5.2"
-    },
+    "gulp": "~3.9.0",
+    "gulp-concat": "~2.6.0",
+    "gulp-install": "^0.6.0",
+    "gulp-rename": "~1.2.2",
+    "gulp-sass": "~2.2.0",
+    "gulp-util": "~3.0.6",
+    "jasmine-core": "~2.4.1",
+    "karma": "~0.13.11",
+    "karma-jasmine": "~0.3.6",
+    "phantomjs": "~2.1.7",
+    "karma-phantomjs-launcher": "~1.0",
+    "karma-coverage": "~0.5.2"
+  },
   "author": "Daniel Wärnå",
   "license": "ISC",
-  "private":true,
+  "private": true,
   "postinstall": "gulp install"
 }
