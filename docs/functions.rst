@@ -215,6 +215,7 @@ Mouse input
 Drag and drop
 #############
 
+Drag&drop works by setting objects to draggable, and defining dropzones that the draggable objects can interact with (can be dropped on). Any displayobject can be designated as draggable or as a dropzone. 
 
 .. function:: draggable(object data)
 
@@ -224,9 +225,65 @@ Drag and drop
 
 .. function:: dropzone(object ondrop dropdata)
 
-    :param displayobject object:
-    :param function ondrop: What to do on drop
-    :param object dropdata: 
+    :param displayobject object: Displayobject to designate as a dropzone
+    :param function ondrop: Function to call when an object is dropped on the dropzone
+    :param object dropdata: The second parameter to sen to the ondrop function
+
+
+
+::
+
+    var box1 = rectangle(10 10 2 "gray")
+    var box2 = rectangle(10 10 2 "gray")
+
+    var text1 = msgbox("Text1")
+    var text2 = msgbox("Text2")
+
+    function dropbox(text box)
+        showmsg(text "was dropped on" box)
+    end
+
+    dropzone(box1 dropbox "Box1")
+    dropzone(box2 dropbox "Box2")
+
+    draggable(text1 "Text1")
+    draggable(text2 "Text2")
+
+    # Dropping text1 box1 prints "text1 was dropped on box1"
+    # Dropping text2 box1 prints "text2 was dropped on box1"
+    # Dropping text1 box2 prints "text1 was dropped on box2"
+    # Dropping text2 box2 prints "text2 was dropped on box2"
+
+#####
+Audio
+#####
+
+Audio works the same way as images. You upload an audio file(.mp3 or .ogg), or find one on the Internet. It can then be used after being loaded with the :js:func:`audiofile` command. Note that there's no guarantee that the user will hear what is being played, as he might have turned of/down his speakers/headphones or his device might not even have any audio output. So it's a good idea to check that the users hears the audio, for example asking the user to type in a word that is played, before starting the actual task.
+
+.. function:: audiofile(url)
+    
+    Loads an audiofile, from soile or from the Internet and stores it in the specified variable. 
+
+    :param string url: Url to the audiofile
+
+.. function:: play(audiofile):
+    
+    Plays the specified audiofile from the last location.
+
+    :param audiofile audiofile: Audiofile to use.
+
+.. function:: pause(audiofile)
+
+    Pauses the specified audiofile.
+
+    :param audiofile audiofile: Audiofile to use.
+
+.. function:: jumpto(audiofile seconds)
+
+    Skips to the specified location in the audiofile. Can be called for both playing and paused audiofiles.
+
+    :param audiofile audiofile: Audiofile to use.
+    :param number seconds: Which location to skip to.
 
 ##############
 Keyboard Input
@@ -548,6 +605,13 @@ Lists/String Manipulation
     ::
 
         join([1 2 3 4 5], "..") # = 1..2..3..4..5
+
+.. function:: shuffle(list)
+
+    Returns a new shuffled/randomized version of the list.
+
+    :param list list: The list tp be shuffled.
+    :returns: Shuffled list 
 
 ##############
 Random numbers
