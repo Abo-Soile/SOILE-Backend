@@ -150,8 +150,9 @@ router.post("/test/:id", requireEditor, function(request) {
 
     var name = data.name;
     var published = data.published;
+    var allCanEdit = data.allCanEdit;
     var folder = data.folder;
-    var users = data.users;
+    var users = data.users; 
 
     if (typeof folder === "undefined" || folder === "") {
       folder = "Unspecified";
@@ -161,6 +162,7 @@ router.post("/test/:id", requireEditor, function(request) {
 
       test.name = name;
       test.published = published;
+      test.allCanEdit = allCanEdit;
       test.folder = folder;
       test.users = data.users;
 

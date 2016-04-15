@@ -184,6 +184,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   $scope.showAdvanced = false;
 
+  $scope.userCanEdit = false;
+  $scope.userIsOwner = false;
+
 	$scope.aceLoaded = function(_editor) {
     // Options
     $scope.editor = _editor;
@@ -193,6 +196,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     $scope.lastSave = $scope.editor.getValue();
 
     $scope.editor.getSession().setTabSize(2);
+
+    $scope.editor.setReadOnly(true);
+    _editor.setReadOnly(true);
 
     $scope.editor.setOptions({"enableBasicAutocompletion": true,"enableLiveAutocompletion": false,"enableSnippets": true});
     $scope.editor.getSession().setMode("ace/mode/elang");
@@ -207,6 +213,9 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       }
     };
 
+    $scope.updateAccess();
+
+
     window.langTool.addCompleter(autocompleter);
   };
 
@@ -215,6 +224,11 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   }
 
   $scope.compileTest = function() {
+
+    if (!$scope.userCanEdit) {
+      return;
+    }
+
   	var code = {"code":$scope.editor.getValue()};
 
     $scope.savebutton = '<i class="fa fa-spinner fa-spin"></i> Compiling';
@@ -317,6 +331,19 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       console.log($scope);
   };
 
+  $scope.updateAccess = function() {
+    // User has access to edit test, enable editing
+    if ($scope.userCanEdit) {
+      $scope.editor.setReadOnly(false);
+      $scope.editor.container.style.opacity=1; // or use svg filter to make it gray
+      $scope.editor.renderer.setStyle("disabled", false);
+    } else {
+      $scope.editor.setReadOnly(true);
+      $scope.editor.container.style.opacity=0.7; // or use svg filter to make it gray
+      $scope.editor.renderer.setStyle("disabled", true);
+    }
+  };
+
   $scope.runTest = function() {
     $scope.runbutton = "Restart";
     $scope.running = true;
@@ -390,6 +417,35 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
       $scope.test = response.data;
       console.log(response);
       console.log($scope.test);
+      if ($scope.test.compiled) {
+        $scope.compiled = true;
+        $scope.compiledCode = $scope.test.js;
+      }
+
+      if($scope.test.users === "undefined") {
+        $scope.test.users = [];
+      }
+
+      // Skip userlist control if the experiment is set to all can edit.
+      if($scope.test.allCanEdit === true) {
+        $scope.userCanEdit = true;
+        $scope.updateAccess();
+      }
+
+      $http.get("/admin/user/current").success(function(data) {
+        $scope.currentUserName = data.username;
+        /*
+          User can edit if he is admin, on the list, or if the test is publically editable
+        */
+        if (_.includes($scope.test.users, $scope.currentUserName) || 
+            data.role == "admin"
+            ) {
+
+          $scope.userCanEdit = true;
+          $scope.userIsOwner = true;
+          $scope.updateAccess();
+        }
+      });
     });
   };
 

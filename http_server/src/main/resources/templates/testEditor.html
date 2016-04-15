@@ -35,7 +35,8 @@
 <div class="container" id="main" ng-app="testEditor" ng-controller="expEditController">
     <div class="row">
         <div class="col-md-8" ng-init="initname('{test.name}')">
-            <h2 id="testName" e-style="width: 150%" editable-text="testname" onbeforesave="updatename($data)">[([testname || '{test.name}' ])]</h2>
+            <h2 ng-if="userCanEdit" id="testName" e-style="width: 150%" editable-text="testname" onbeforesave="updatename($data)">[([testname || '{test.name}' ])]</h2>
+            <h2 ng-if="!userCanEdit">[([testname || '{test.name}'])] </h2>
         </div>
         <div class="col-md-2">
             <label>Folder:</label><input type="text" ng-model="test.folder">
@@ -54,7 +55,7 @@
         <div class="col-md-3" ng-controller="fileController"> 
             <h3>Images</h3>
             <div id="uploader"></div>
-                <input type="file" nv-file-select uploader="uploader" multiple/>
+                <input ng-show="$parent.userCanEdit" type="file" nv-file-select uploader="uploader" multiple/>
                 <h4>Available images</h4>
                 <div id="images">
                 <ul id="imagelist"> 
@@ -66,7 +67,7 @@
                             </span>
                         </span>
                         <span class='imgname'>[([img.name])]</span>
-                        <span>
+                        <span ng-show="$parent.userCanEdit">
                             <button ng:click="useImage(img)" class="btn btn-xs btn-primary">Use</button>  
                             <button type="button" class="btn btn-xs btn-danger" ng:click="delImage($index)" >Del</button>
                         </span>
@@ -77,7 +78,7 @@
     </div>
     <div class="row">  
         <div class="col-md-12 btn-row">
-            <span> <button ng:click="compileTest()"  ng-bind-html="savebutton | unsafe" id="compileButton" class="btn btn-primary"></button>   
+            <span> <button ng:click="compileTest()"  ng-bind-html="savebutton | unsafe" id="compileButton" class="btn btn-primary" ng-class="userCanEdit ? '' : 'disabled'"></button>   
   
             <button ng:click="runTest()" type="button" id="runButton" class="btn btn-success"
             ng-class="compiled ? '' : 'disabled'"
@@ -230,18 +231,27 @@
             </div>
             <div ng-if="showAdvanced">
             
-                <div class="col-md-8">
-                    <label class="radio-inline">
+                <div ng-show="userCanEdit && userIsOwner" class="col-md-8 form-inline">
+                    <label class="radiobutton">
+                        Private
+                        <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" data-ng-value="false" /> 
                     </label>
-                    <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" value="false"/> Private
-                    <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="published" value="true"/> Published
+                    <label class="radiobutton">
+                        Published
+                        <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="published" data-ng-value="true" /> 
+                    </label>
+                    <label ng-show="test.published == true" class="checkbox">
+                        Others can edit
+                        <input ng-change="saveTest()" ng-model="test.allCanEdit" type="checkbox" ng-true-value="true" ng-false-value="false"/> 
+                    </label>
+
                 </div>
                 <div class="col-md-2">
                     <a class="btn btn-success"href="{URI}/copy">Copy test</a>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" ng-show="userCanEdit && userIsOwner">
                         <useraccess users="test.users" savefunction="updateUsers">
                     </div>
                 </div>
