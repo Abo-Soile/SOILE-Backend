@@ -53,6 +53,8 @@ require(["dijit/form/HorizontalSlider",
   ready(function() {
     parser.parse();
 
+    var lastClick = false;
+
     //Disable mousewheel events on spinners to prevent the user from
     //editing an answer when scrolling
     dojo.extend(dijit.form.NumberSpinner, {
@@ -313,8 +315,22 @@ require(["dijit/form/HorizontalSlider",
         console.log("submitbutton");
 
         var valid = formcol.validate();
+        var clickLimit = true;
 
-        if(valid) {
+        if(!lastClick) {
+          lastClick = Date.now();
+        }
+
+        if (lastClick) {
+          if ((Date.now() - lastClick) < 500) {
+            console.log("Submit clicked in quick succession, ignore click " + (Date.now() - lastClick));
+            clickLimit = false;
+          } else {
+            lastClick = Date.now();
+          }
+        }
+
+        if(valid && clickLimit) {
           var formdata = loadData();
           send_questionnaire_data(formdata);
 
