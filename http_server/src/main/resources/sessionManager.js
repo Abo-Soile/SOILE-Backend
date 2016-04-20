@@ -185,10 +185,8 @@ var sessionManager =  {
 
       //console.log(JSON.stringify(this.request.response.headers()));
 
-    } else {
-      console.log("there was no data");
-    }   
-  },
+    } 
+   },
 
   checkSession: function(callback) {
     var session = this.getSessionCookie();
@@ -196,7 +194,13 @@ var sessionManager =  {
     userDAO.fromSession(session, function(user) {
       console.log("---------Checking session--------");
       console.log(JSON.stringify(user));
-      callback(user);
+
+      if (user == "") {
+        callback(false);
+      }
+      else {
+        callback(user);
+      }
     });
   },
 
