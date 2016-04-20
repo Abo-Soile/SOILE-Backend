@@ -317,9 +317,6 @@ require(["dijit/form/HorizontalSlider",
         var valid = formcol.validate();
         var clickLimit = true;
 
-        if(!lastClick) {
-          lastClick = Date.now();
-        }
 
         if (lastClick) {
           if ((Date.now() - lastClick) < 500) {
@@ -330,6 +327,10 @@ require(["dijit/form/HorizontalSlider",
           }
         }
 
+        if(!lastClick) {
+          lastClick = Date.now();
+        }
+        
         if(valid && clickLimit) {
           var formdata = loadData();
           send_questionnaire_data(formdata);
