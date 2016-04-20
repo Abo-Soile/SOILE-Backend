@@ -629,6 +629,39 @@ Filter 1 pre/post/training/control/
 
 */
 
+
+/*
+Translates phases to match over the whole training dataset
+*/
+function fixPhases(arr, training) {
+  var translationArray = [];
+  var shift = 0;
+
+  for (var i = 0; i < training.repeatcount; i++) {
+    translationArray.push([]);
+
+    for (var j = 0; j < training.components.training.length;j++) {
+      var comp =  training.components.training[j];
+      translationArray[i][j] = 0;
+      if (comp.iterationcontrol) {
+        if(comp.iterationcontrolarray[i]) {
+          translationArray[i][j] += 1;
+        }
+      }
+    }
+  }
+
+  for (var i = 0; i < arr.length; i++) {
+    var item = arr[i];
+    if (translationArray[item.trainingIteration][item.phase]) {
+      console.log(arr[i].phase + " -> " + translationArray[item.trainingIteration][item.phase])
+      arr[i].phase += translationArray[item.trainingIteration][item.phase];
+    }
+  }
+
+  return arr;
+}
+
 router.get("/training/:id/loaddata", requireEditor, function(request) {
   var id = request.params().get('id');
   var userid = request.params().get("userid");
@@ -712,26 +745,29 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
 
   console.log(JSON.stringify(matcher));
 
-  trainingDataDAO.rawQuery(matcher, function(res) {
+  trainingDAO.get(id, function(training) {
+    trainingDataDAO.rawQuery(matcher, function(res) {
 
-    var csv = "";
+      var csv = "";
 
-    if (command === "single") {
-      csv = csvUtils.jsonRowDataToCsv(res, groupby);
-    }
-    if (command === "raw") {
-      csv = csvUtils.jsonMatrixDataToCsv(res, groupby);
-    }
-    if (command === "all") {
-      csv = csvUtils.jsonSingleTrainingVarToCsv(res, groupby);
-    }
+      if (command === "single") {
+        res = fixPhases(res, training);
+        csv = csvUtils.jsonRowDataToCsv(res, groupby);
+      }
+      if (command === "raw") {
+        csv = csvUtils.jsonMatrixDataToCsv(res, groupby);
+      }
+      if (command === "all") {
+        csv = csvUtils.jsonSingleTrainingVarToCsv(res, groupby);
+      }
 
-    request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
-    request.response.putHeader("Content-Disposition", "attachment; filename=data.csv");
+      request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+      request.response.putHeader("Content-Disposition", "attachment; filename=data.csv");
 
-    request.response.end(csv);
-    //request.response.end("\ufeff " + phaseNames + "\n" + csv);
-  }, {keys:projection});
+      request.response.end(csv);
+      //request.response.end("\ufeff " + phaseNames + "\n" + csv);
+    }, {keys:projection});
+  })
 
 });
 
