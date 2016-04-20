@@ -643,8 +643,11 @@ function fixPhases(arr, training) {
     for (var j = 0; j < training.components.training.length;j++) {
       var comp =  training.components.training[j];
       translationArray[i][j] = 0;
+      if (j > 0) {
+        translationArray[i][j] = translationArray[i][j-1];
+      }
       if (comp.iterationcontrol) {
-        if(comp.iterationcontrolarray[i]) {
+        if(!comp.iterationcontrolarray[i]) {
           translationArray[i][j] += 1;
         }
       }
@@ -654,7 +657,7 @@ function fixPhases(arr, training) {
   for (var i = 0; i < arr.length; i++) {
     var item = arr[i];
     if (translationArray[item.trainingIteration][item.phase]) {
-      console.log(arr[i].phase + " -> " + translationArray[item.trainingIteration][item.phase])
+      //console.log(arr[i].phase + " -> " + translationArray[item.trainingIteration][item.phase])
       arr[i].phase += translationArray[item.trainingIteration][item.phase];
     }
   }
