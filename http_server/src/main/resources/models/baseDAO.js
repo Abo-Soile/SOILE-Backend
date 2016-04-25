@@ -272,7 +272,7 @@ BaseDAO.prototype.rawQuery = function(matcher, callback, extra) {
         }
 
         if (typeof extra.timeout !== "undefined") {
-            mongoCommand.keys = extra.timeout;
+            mongoCommand.timeout = extra.timeout;
         }
 
         if (typeof extra.batch_size !== "undefined") {

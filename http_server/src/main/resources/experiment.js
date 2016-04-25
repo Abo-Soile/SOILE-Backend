@@ -522,7 +522,7 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
     request.response.putHeader("Content-Disposition", "attachment; filename=data.csv");
 
     request.response.end(csv);
-  }, {keys:projection, batch_size:100, timeout:120});
+  }, {keys:projection, batch_size:100, timeout:120000});
 });
 
 
