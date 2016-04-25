@@ -285,7 +285,7 @@ BaseDAO.prototype.rawQuery = function(matcher, callback, extra) {
         console.log("Find raw command done - " + mongoReply.status);
 
         if(mongoReply.status === "more-exist"){
-            replier({}, that.handleMore(that, mongoReply.results, callback));
+            replier({}, that.rawHandleMore(that, mongoReply.results, callback));
         }
 
         else if(mongoReply.status === "ok") {
