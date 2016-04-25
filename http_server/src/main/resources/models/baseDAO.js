@@ -317,19 +317,54 @@ BaseDAO.prototype.handleMore = function(obj, data, callback) {
     };
 };
 
+callbackCounter = 0;
+
 BaseDAO.prototype.rawHandleMore = function(obj, data, callback) {
     //console.log("Building new replier")
-    return function(reply, replier) {
-        var result = data.concat(reply.results);
+    var id = callbackCounter;
+    callbackCounter += 1;
+    console.log("Rawhandlemore init" + id);
+
+    var mObj = obj;
+    var mData = data;
+    var mCallback  = callback;
+
+    var innerCounter = 5;
+
+    function returnReplier() {
+        return function(reply, replier) {
+            console.log("Rawhandlemore replier callback, " + mData.length);
+            mData = mData.concat(reply.results);
+
+            console.log("Mdata efter concat" + mData.length);
+
+            if(reply.status==="more-exist") {
+                console.log("Rawhandlemore more exists " + id);
+                replier({}, returnReplier());
+            }
+            else {
+                console.log("Rawhandlemore done " + id);
+                mCallback(mData);
+            }
+        };
+    }
+
+    return returnReplier();
+
+   /* return function(reply, replier) {
+        console.log("Rawhandlemore replier callback, " + id);
+        data = data.concat(reply.results);
 
         if(reply.status==="more-exist") {
-            replier({}, obj.handleMore(obj, result, callback));
+            console.log("Rawhandlemore more exists " + id);
+            replier({}, obj.rawHandleMore(obj, data, callback));
         }
         else {
-            callback(result);
+            console.log("Rawhandlemore done " + id);
+            callback(data);
         }
-        
-    };
+        return;
+    };*/
 };
 
 module.exports = BaseDAO;
