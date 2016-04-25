@@ -462,7 +462,7 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
   }
 
   if (filter2 === "aggregate") {
-    projection["data.raw"] = 0;
+    projection["data.rows"] = 0;
     //projection.data.raw = 0;
 
     if (filter3 === "test") {
