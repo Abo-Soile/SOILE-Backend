@@ -317,13 +317,10 @@ BaseDAO.prototype.handleMore = function(obj, data, callback) {
     };
 };
 
-callbackCounter = 0;
 
 BaseDAO.prototype.rawHandleMore = function(obj, data, callback) {
     //console.log("Building new replier")
-    var id = callbackCounter;
-    callbackCounter += 1;
-    console.log("Rawhandlemore init" + id);
+    console.log("Rawhandlemore init");
 
     var mObj = obj;
     var mData = data;
@@ -333,17 +330,18 @@ BaseDAO.prototype.rawHandleMore = function(obj, data, callback) {
 
     function returnReplier() {
         return function(reply, replier) {
-            console.log("Rawhandlemore replier callback, " + mData.length);
+            //console.log("Rawhandlemore replier callback, " + mData.length);
+            //console.log(JSON.stringify(reply.results));
             mData = mData.concat(reply.results);
 
             console.log("Mdata efter concat" + mData.length);
 
             if(reply.status==="more-exist") {
-                console.log("Rawhandlemore more exists " + id);
+                console.log("Rawhandlemore more exists");
                 replier({}, returnReplier());
             }
             else {
-                console.log("Rawhandlemore done " + id);
+                console.log("Rawhandlemore done");
                 mCallback(mData);
             }
         };
