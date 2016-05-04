@@ -328,3 +328,9 @@ router.get('/test/:id/json', requireEditor, function(request) {
   });
 
 });
+
+router.get("/tools/mergetool", requireEditor, function(request) {
+
+  templateManager.render_template("mergeToolTemplate",{},request);
+
+});
