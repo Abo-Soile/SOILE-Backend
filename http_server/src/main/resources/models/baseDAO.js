@@ -253,6 +253,10 @@ BaseDAO.prototype.rawQuery = function(matcher, callback, extra) {
         mongoCommand.matcher = {};
     }
 
+    if (typeof mongoCommand.matcher.deleted === 'undefined') {
+        mongoCommand.matcher.deleted = {$in: [null, false]};
+    }
+
     if (typeof extra !== "undefined") {
 
         if (typeof extra.sort !== "undefined") {
