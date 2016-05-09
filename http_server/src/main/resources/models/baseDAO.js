@@ -305,15 +305,15 @@ BaseDAO.prototype.rawQuery = function(matcher, callback, extra) {
 BaseDAO.prototype.handleMore = function(obj, data, callback) {
     //console.log("Building new replier")
     return function(reply, replier) {
-        var result = data.concat(reply.results);
+        data = data.concat(reply.results);
 
         if(reply.status==="more-exist") {
-            replier({}, obj.handleMore(obj, result, callback));
+            replier({}, obj.handleMore(obj, data, callback));
         }
         else {
             var resultObjects = [];
-            for (var i = 0; i < result.length; i++) {
-                resultObjects.push(new obj._baseObject(result[i]));
+            for (var i = 0; i < data.length; i++) {
+                resultObjects.push(new obj._baseObject(data[i]));
             }
             callback(resultObjects);
         }
