@@ -491,6 +491,12 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
     command = "raw";
   }
 
+  if (filter2 === "metadata") {
+    matcher.type = "general";
+
+    command = "metadata";
+  }
+
   var groupby = "userid";
   matcher.expId = id;
 
@@ -516,6 +522,10 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
       } else {
         csv = csvUtils.jsonMatrixToCsvSorted(res, groupby);
       }
+    }
+
+    if (command === "metadata") {
+      csv = csvUtils.jsonArrayToCsv(res);
     }
 
     request.response.putHeader("Content-Type", "text/csv; charset=utf-8");

@@ -263,12 +263,19 @@ function jsonSingleTrainingVarToCsv(data, variable) {
   return csv;
 }
 
+function jsonArrayToCsv(data) {
+  var csv = babyparser.unparse(data, {"delimiter":";"});
+
+  return csv;
+}
+
 var csvUtils = (function() {
   return {
     'jsonRowDataToCsv':jsonRowDataToCsv,
     'jsonMatrixDataToCsv':jsonMatrixDataToCsv,
     'jsonMatrixToCsvSorted':jsonMatrixToCsvSorted,
-    'jsonSingleTrainingVarToCsv':jsonSingleTrainingVarToCsv
+    'jsonSingleTrainingVarToCsv':jsonSingleTrainingVarToCsv,
+    'jsonArrayToCsv':jsonArrayToCsv
   };
 });
 
