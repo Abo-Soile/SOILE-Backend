@@ -33,7 +33,20 @@
       <div class="form-group">
         <select placeholder="Select fuzzyness" class="form-control" ng-show="fuzzy" ng-model="fuzzyThreshold" ng-options="o as o for o in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]"></select>
       </div>
+
+      <label>
+        <input type="checkbox" ng-model="ignoreCases" ng-true-value="true" ng-false-value="false">
+        Ignore cases
+      </label>
     </div>
+  </div>
+  <div class="col-md-12">
+    <span class="alert alert-success col-md-12" ng-show="downloadData">
+      <strong>Merge successfull!</strong> Scanned <b>{{totalRows}}</b> rows and found <b>{{mergedRows}}</b> matches 
+    </span>
+    
+  </div>
+  <div class="col-md-12">
 
     <button class="btn btn-primary" ng-click="mergeData()">Merge</button>
 

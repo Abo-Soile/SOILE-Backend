@@ -34,6 +34,8 @@ myApp.directive('csvmerge', ['$sce','$http','FileUploader', function($sce,$http,
       $scope.fuzzy = false;
       $scope.fuzzyThreshold = 0;
 
+      $scope.ignoreCases = false;
+
       function combineObjects(obj1, obj2) {
         var obj3 = {};
         for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
@@ -104,38 +106,58 @@ myApp.directive('csvmerge', ['$sce','$http','FileUploader', function($sce,$http,
       $scope.mergeData = function() {
 
         $scope.mergedData = [];
+        $scope.downloadData = false;
+
+        $scope.$apply();
+
+        $scope.totalRows = $scope.csv1.length;
+        $scope.mergedRows = 0;
 
         $scope.csv1.forEach(function(row) {
           var resObj = {};
           //console.log(row);
           var matche = _.find($scope.csv2, function(data) {
 
-            if (data[$scope.mergeString2] == "" || row[$scope.mergeString1] == "") {
+            var str1 = row[$scope.mergeString1];
+            var str2 = data[$scope.mergeString2];
+
+            if (str2 == "" || str1 == "") {
               return false;
             }
 
+            if ($scope.ignoreCases) {
+              str1 = str1.toLowerCase();
+              str2 = str2.toLowerCase();
+            }
+
             if ($scope.fuzzy) {
-                console.log("Levenshtein distance :" + $scope.fuzzyThreshold + " - " + levenshtein.get(data[$scope.mergeString2], row[$scope.mergeString1]) +
-                 " -- " + data[$scope.mergeString2] + " == " + row[$scope.mergeString1])
-              if(levenshtein.get(data[$scope.mergeString2], row[$scope.mergeString1]) <= $scope.fuzzyThreshold) {
-               
+                console.log("Levenshtein distance :" + $scope.fuzzyThreshold + " - " + levenshtein.get(str2, str1) +
+                 " -- " + str2 + " == " + str1)
+              if(levenshtein.get(str2, str1) <= $scope.fuzzyThreshold) {
+
                 return true;
               }
               return false;
 
             }else {
-              if (data[$scope.mergeString2] == row[$scope.mergeString1]) {
-                console.log(data[$scope.mergeString2] + " == " + row[$scope.mergeString1])
+              if (str2 == str1) {
+                console.log(str2 + " == " + str1)
                 return true;
               } else {
                 return false;
               }
             }
           });
+
+          if (typeof matche !== "undefined") {
+            $scope.mergedRows += 1;
+          }
           resObj = combineObjects(row, matche);
           //console.log(matches);          
 
           $scope.mergedData.push(resObj);
+
+          //$scope.mergedRows = mergedRows;
         });
 
         console.log($scope.mergedData);
