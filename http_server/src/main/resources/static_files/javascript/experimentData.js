@@ -97,6 +97,7 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
       CSV.RELAXED = true;
       CSV.COLUMN_SEPARATOR = ";";
 
+      data = data.replace(/questionnaire-id:/g, "");
 
       var jsonData = CSV.parse(data);
       if (jsonData.length > 1000) {
