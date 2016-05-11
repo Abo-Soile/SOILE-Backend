@@ -630,12 +630,8 @@ Filter 1 pre/post/training/control/
 */
 
 
-/*
-Translates phases to match over the whole training dataset
-*/
-function fixPhases(arr, training) {
+function buildTranslationArray(training) {
   var translationArray = [];
-  var shift = 0;
 
   for (var i = 0; i < training.repeatcount; i++) {
     translationArray.push([]);
@@ -653,6 +649,34 @@ function fixPhases(arr, training) {
       }
     }
   }
+
+  return translationArray;
+}
+
+/*
+Translates phases to match over the whole training dataset
+*/
+function fixPhases(arr, training) {
+  var translationArray = buildTranslationArray(training);
+  /*var shift = 0;
+
+  for (var i = 0; i < training.repeatcount; i++) {
+    translationArray.push([]);
+
+    for (var j = 0; j < training.components.training.length;j++) {
+      var comp =  training.components.training[j];
+      translationArray[i][j] = 0;
+      if (j > 0) {
+        translationArray[i][j] = translationArray[i][j-1];
+      }
+      if (comp.iterationcontrol) {
+        if(!comp.iterationcontrolarray[i]) {
+          translationArray[i][j] += 1;
+        }
+      }
+    }
+  }
+  */
 
   for (var i = 0; i < arr.length; i++) {
     var item = arr[i];
