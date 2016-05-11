@@ -689,6 +689,45 @@ function fixPhases(arr, training) {
   return arr;
 }
 
+function buildPhaseShiftQuery(training, phase) {
+  var translationArray = buildTranslationArray(training);
+
+ /* for (var i = 0; i < training.repeatcount; i++) {
+    translationArray.push([]);
+
+    for (var j = 0; j < training.components.training.length;j++) {
+      var comp =  training.components.training[j];
+      translationArray[i][j] = 0;
+      if (j > 0) {
+        translationArray[i][j] = translationArray[i][j-1];
+      }
+      if (comp.iterationcontrol) {
+        if(!comp.iterationcontrolarray[i]) {
+          translationArray[i][j] += 1;
+        }
+      }
+    }
+  }*/
+
+
+  var orArr = [];
+
+  for (var i = 0; i < translationArray.length; i++) {
+    var currentTranslation = translationArray[i];
+    var translationPhaseOffset = phase - currentTranslation[phase];
+
+    if (training.components.training[phase].iterationcontrol) {
+      if (training.components.training[phase].iterationcontrolarray[i] === false) {
+        translationPhaseOffset = -1;
+      }
+    }
+
+    orArr[i] = {$and:[{trainingIteration:i},{phase:translationPhaseOffset}]};
+  }
+
+  return orArr;
+}
+
 router.get("/training/:id/loaddata", requireEditor, function(request) {
   var id = request.params().get('id');
   var userid = request.params().get("userid");
