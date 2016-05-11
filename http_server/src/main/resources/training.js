@@ -752,66 +752,82 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
   var command = "single";
   var groupby = "userId";
 
-  if (matcher.mode === "pre" || matcher.mode === "post") {
-    /*
-      Pre or post, fetch either raw or single data for all users. 
-    */
-    if (filter2 === "raw") {
-      matcher.phase = parseInt(filter3) - 1;
-      projection['data.single'] = 0;
-      command = "raw"
-    }
-
-    if (filter2 === "single") {
-      projection['data.rows'] = 0;
-    }
-
-   // matcher.type = {$not:"generel"};
-  }
-
-  if (matcher.mode === "training") {
-
-    matcher.userId = filter2;
-    groupby = "trainingIteration";
-
-    // Certain training phase
-    if (filter3 === "single") {
-      projection['data.rows'] = 0;
-    }
-
-    if (filter3 === "raw") {
-      matcher.trainingIteration = parseInt(filter4) - 1;
-
-      command = "raw"
-
-      projection['data.single']= 0;
-    }
-
-    if (filter2 == "all") {
-      command = "all";
-      delete matcher.userId;
-
-      var field = "data.single." + filter3;
-      projection[field] = 1;
-      projection["data."+filter3] = 1;
-      projection.userId = 1;
-      projection.trainingIteration = 1;
-      
-      matcher.phase= parseInt(filter4)- 1;
-
-      groupby = filter3;
-    }
-    
-    //matcher.type = "{$in:['form','test']}";
-    //matcher.type = {$not:"generel"};
-
-  }
-
-  matcher.type = {"$ne":"general"};
-
-  console.log(JSON.stringify(matcher));
-
   trainingDAO.get(id, function(training) {
+    if (matcher.mode === "pre" || matcher.mode === "post") {
+      /*
+        Pre or post, fetch either raw or single data for all users. 
+      */
+      if (filter2 === "raw") {
+        matcher.phase = parseInt(filter3) - 1;
+        projection['data.single'] = 0;
+        command = "raw"
+      }
+
+      if (filter2 === "single") {
+        projection['data.rows'] = 0;
+      }
+
+     // matcher.type = {$not:"generel"};
+    }
+
+    if (matcher.mode === "training") {
+
+      matcher.userId = filter2;
+      groupby = "trainingIteration";
+
+      // Certain training phase
+      if (filter3 === "single") {
+        projection['data.rows'] = 0;
+      }
+
+      if (filter3 === "raw") {
+        matcher.trainingIteration = parseInt(filter4) - 1;
+
+        command = "raw"
+
+        projection['data.single']= 0;
+      }
+
+      if (filter2 == "all") {
+        command = "all";
+        delete matcher.userId;
+
+        var field = "data.single." + filter3;
+        projection[field] = 1;
+        projection["data."+filter3] = 1;
+        projection.userId = 1;
+        projection.trainingIteration = 1;
+        
+        // CHange this to take phase shifts into consideration
+        /* Select test where
+          $or($and(iteration:1, phase:x), (iteration:2, phase:x))
+          
+      {$or : [
+          { $and : [ { trainingIteration : 1 }, { phase : 1 } ] },
+          { $and : [ { trainingIteration : 2 }, { phase : 3 } ] }
+      ]}
+
+        */
+
+        matcher.phase= parseInt(filter4)- 1;
+
+        var orArr = buildPhaseShiftQuery(training, matcher.phase);
+
+        delete matcher.phase;
+        matcher.$or = orArr;
+
+        groupby = filter3;
+      }
+      
+      //matcher.type = "{$in:['form','test']}";
+      //matcher.type = {$not:"generel"};
+
+    }
+
+    matcher.type = {"$ne":"general"};
+
+    console.log(JSON.stringify(matcher));
+
     trainingDataDAO.rawQuery(matcher, function(res) {
 
       var csv = "";
