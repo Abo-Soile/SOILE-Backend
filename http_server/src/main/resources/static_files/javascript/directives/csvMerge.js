@@ -36,10 +36,17 @@ myApp.directive('csvmerge', ['$sce','$http','FileUploader', function($sce,$http,
 
       $scope.ignoreCases = false;
 
+      $scope.preserveAllFields = false;
+
       function combineObjects(obj1, obj2) {
         var obj3 = {};
-        for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-        for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+        if ($scope.preserveAllFields) {
+          for (var attrname in obj1) { obj3[attrname + " file1"] = obj1[attrname]; }
+          for (var attrname in obj2) { obj3[attrname + " file2"] = obj2[attrname]; }
+        } else {
+          for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+          for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+        }
         return obj3;
       }
 
