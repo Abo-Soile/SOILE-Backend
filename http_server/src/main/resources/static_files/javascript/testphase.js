@@ -32,6 +32,43 @@ function(
       console.log("Starting!!!");
     }
 
+    function sendData(d) {
+
+      //Send data xhr,
+      xhr.post(document.URL, {timeout:10000,data:JSON.stringify(d)}).then(
+        function(response) {
+
+          if (typeof response !== 'undefined') {
+            response = JSON.parse(response);
+          }
+
+          if(response.redirect) {
+            console.log("JSON_REDIRECTING");
+            window.location.replace(response.redirect);
+          }
+
+          else {
+            //Navigate to next phase
+            var url = document.URL;
+            var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
+            url = url.slice(0, url.lastIndexOf("/")+1);
+
+            if(!isNaN(currentPhase)) {
+              console.log("Redirecting " + isNaN(currentPhase));
+              window.location.href = url+(currentPhase+1);
+            }else {
+              location.reload();
+            }
+          }
+        },function(error) {
+          console.log("Sending data failed, retrying...");
+          setTimeout(function() {
+            console.log("...resending");
+            sendData(d);
+          }, 1000);
+        });
+    }
+
     function end(expdata, duration, score, persistantData) {
       console.log("Test over");
       console.log(expdata);
@@ -43,33 +80,10 @@ function(
       d.score = score;
       d.persistantData = persistantData;
 
-      //Send data xhr,
-      xhr.post(document.URL, {data:JSON.stringify(d)}).then(
-        function(response) {
-          
-          if (typeof response !== 'undefined') {
-          	response = JSON.parse(response);
-          }
+      //Showing loadingscreen at the end when sending data.
+      SOILE2.util.enableLoadScreen();
 
-          if(response.redirect) {
-          	console.log("JSON_REDIRECTING");
-          	window.location.replace(response.redirect);
-          }
-
-          else {
-	          //Navigate to next phase
-	          var url = document.URL;
-	          var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
-	          url = url.slice(0, url.lastIndexOf("/")+1);
-
-	          if(!isNaN(currentPhase)) {
-	            console.log("Redirecting " + isNaN(currentPhase));
-	            window.location.href = url+(currentPhase+1);
-	          }else {
-	            location.reload();
-	          }
-          }
-    	});
+      sendData(d);
     }
 
     function startSoile(data) {
@@ -91,12 +105,12 @@ function(
     console.log(typeof window.testJs);
 
     if (window.testJs !== undefined) {
-      console.log("fdslkfdsklfjdsl");
+     // console.log("fdslkfdsklfjdsl");
       var data = window.testJs;
       startSoile(data);
     }
     else {
-      console.log("dklfjd");
+      //console.log("dklfjd");
       var jsonUrl = document.URL + "/json";
       xhr.get(jsonUrl).then(function(data) {
         
