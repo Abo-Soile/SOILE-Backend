@@ -461,6 +461,14 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
     matcher.confirmed = true;
   }
 
+  if (filter1 === "completions") {
+    return dataDAO.getPhaseCompletionWithoutAggregate(id, function(res) {
+
+      request.response.end(csvUtils.jsonArrayToCsv(res));
+      //request.response.end(JSON.stringify(res));
+    });
+  }
+
   if (filter2 === "aggregate") {
     projection["data.rows"] = 0;
     //projection.data.raw = 0;

@@ -253,6 +253,39 @@ DataDAO.prototype.getPhaseCompletion = function(expId, callback) {
     });
 };
 
+DataDAO.prototype.getPhaseCompletionWithoutAggregate = function(expId, callback) {
+    var that = this;
+    var matcher = {
+        expId:expId,
+        type:"general"
+    };
+
+    that.rawQuery(matcher, function(res) {
+        var positionCount = [];
+        for (var i = 0; i < res.length; i++) {
+            var pos = res[i].position; 
+            if (pos || pos == 0) {
+                if(typeof positionCount[pos] === "undefined") {
+                    positionCount[pos] = 1;
+                } else {
+                    positionCount[pos] += 1;
+                }
+            }
+        }
+
+        var posObj = {};
+        for (var i = 0; i < positionCount.length; i++) {
+            posObj[i] = positionCount[i];
+
+            if(!posObj[i]) {
+                posObj[i] = 0;
+            }
+        }
+
+        callback([posObj]);
+    },{keys:{"position":1}});
+};
+
 /*Aggregate completions per phase
 db.data.aggregate([
     {$match:{expId:"8d4f15f3-d2a8-4001-a83c-6cd080b46911",deleted:{$in: [null, false]}}},
