@@ -168,7 +168,7 @@ Text input
 
 .. js:function:: readtext(object)
 
-    Returns what is currently written in the specified ref :js:func:`textbox` or :js:func:`textarea`.
+    Returns what is currently written in the specified :js:func:`textbox` or :js:func:`textarea`.
 
     :param int width: Width of the textarea
     :returns: Current text in the :js:func:`textbox` or :js:func:`textbox`
@@ -791,3 +791,45 @@ Raw data can be processed to something more usable. An aggregation function loop
 |     3     |     1      |      2     |   8    |   1234567    |
 +-----------+------------+------------+--------+--------------+
 
+
+##########################
+Traning specific functions
+##########################
+
+Tests that are run as part of a trainingstudy have access to a few functions for storing variables bwtween trainingrounds and for displaying a score to the test person.
+
+.. js:function:: savevariable(variablename value)
+
+    Saves a variable with the specified name and value. This value can then be accessed using the :js:func:`loadvariable` function in the next training round.
+
+    :param string variablename: The name with which to store the variable
+    :param value value:  Value to store in the variable
+
+.. js:function:: loadvariable(variablename defaultValue)
+
+    Returns the previously stored variable. The default value is returned if the variable doesnt exist yet.
+
+    :param string variablename: The name of the variable to be loaded
+    :param value defaultValue:
+
+
+::
+
+    #This codesnippet prints 1 the first time the test is run, 2 the second time,
+    #3 the third time, and so on.
+    var round <- loadvariable("persistantRound" 1)
+    .
+    .
+    .
+    helptext(round)
+    .
+    .
+    .
+    savevariable("persistantRound" plus(round 1))
+
+
+.. js:function:: savescore(score)
+
+    Save a score that is displayed to the user at the end of a training session, and summed score for a whole trainingsession is also shown to the test person in the form of a graph, so that he can view how he has improved during the training. Its a good idea to make sure that all test in a trainingexperiment produce a score with the same order of magnitude. 
+
+    :param number score: The value of the score to be saved.
