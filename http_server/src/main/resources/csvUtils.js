@@ -39,6 +39,11 @@ function jsonRowDataToCsv(json, groupby) {
     headers["timestamp_" + item.phase] = "";
 
     for (var datapoint in data) {
+
+      if(datapoint.slice(0,17) === "questionnaire-id:") {
+        datapoint = datapoint.slice(17, datapoint.length);
+      }
+
       var dataheader = datapoint + " phase" +item.phase;
       users[id][dataheader] = data[datapoint];
       headers[dataheader] = "";
