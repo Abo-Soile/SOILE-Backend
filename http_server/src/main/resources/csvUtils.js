@@ -22,6 +22,7 @@ function jsonRowDataToCsv(json, groupby) {
     } 
 
     var data = null;
+    var checkForExtra = false;
 
     if (typeof item.data !== "undefined") {
       if (command === "single") {
@@ -31,6 +32,7 @@ function jsonRowDataToCsv(json, groupby) {
       // No single or raw object -> form
       if (typeof item.data.single === "undefined") {
         data = item.data;
+        checkForExtra = true;
       }
     }
 
@@ -43,7 +45,7 @@ function jsonRowDataToCsv(json, groupby) {
       var dataheader = false;
 
       // Cheking for questionnair id in header and removing if it exists
-      if(datapoint.slice(0,17) === "questionnaire-id:") {
+      if(checkForExtra && datapoint.slice(0,17) === "questionnaire-id:") {
         dataheader = datapoint.slice(17, datapoint.length) + " phase" +item.phase;
       } else {
         dataheader = datapoint + " phase" +item.phase;
