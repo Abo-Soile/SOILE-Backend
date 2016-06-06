@@ -40,11 +40,15 @@ function jsonRowDataToCsv(json, groupby) {
 
     for (var datapoint in data) {
 
+      var dataheader = false;
+
+      // Cheking for questionnair id in header and removing if it exists
       if(datapoint.slice(0,17) === "questionnaire-id:") {
-        datapoint = datapoint.slice(17, datapoint.length);
+        dataheader = datapoint.slice(17, datapoint.length) + " phase" +item.phase;
+      } else {
+        dataheader = datapoint + " phase" +item.phase;
       }
 
-      var dataheader = datapoint + " phase" +item.phase;
       users[id][dataheader] = data[datapoint];
       headers[dataheader] = "";
 
