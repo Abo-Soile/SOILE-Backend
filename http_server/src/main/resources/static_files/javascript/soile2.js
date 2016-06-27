@@ -254,6 +254,9 @@ SOILE2 = (function(){
 
     if(!_borderWidth) {
       borderWidth = 2;
+      if (typeof _borderWidth != "undefined" && _borderWidth == 0) {
+        borderWidth = 0;
+      }
     }else{
       borderWidth = _borderWidth;
     }
