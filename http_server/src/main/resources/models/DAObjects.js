@@ -477,7 +477,11 @@ TrainingDataDAO.prototype.getScoreHistory = function(trainingId, userid, callbac
                 if (typeof iterationScores[scoreList[i].trainingIteration] === "undefined") {
                     iterationScores[scoreList[i].trainingIteration] = 0;
                 }
-                iterationScores[scoreList[i].trainingIteration] += scoreList[i].score.score;
+                if (scoreList[i].score != null) {
+
+                    iterationScores[scoreList[i].trainingIteration] += scoreList[i].score.score;
+            
+                }
             }
         }
         
