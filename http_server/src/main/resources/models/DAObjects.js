@@ -445,7 +445,9 @@ TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
             var scores = [];
 
             for (var i = 0; i < scoreList.length; i++) {
-                if(typeof scoreList[i].score !== "undefined") {
+                console.log(scoreList[i].toString());
+                console.log("Score value ", scoreList[i].score);
+                if(typeof scoreList[i].score != "undefined" && scoreList[i].score != null && !scoreList[i].score) {
                     totalScore += scoreList[i].score.score;
                     scores.push(scoreList[i].score);
                 }
