@@ -13,8 +13,22 @@
           <p> {training.introduction|s}</p>
         </div>
       </div>
+      
+      {?training.requireLogin}
+        {?loggedIn}
+          <div class="row">
+            <div class="col-md-12">
+              <form action="{URI}/participate" method="post">
+                <button class="btn btn-primary"type="submit">Participate</button>
+              </form>
 
-      <div class="row">
+            </div>
+          </div>
+        {:else}
+          <p><strong>You need to sign in to proceed with the training, <a href="/login">click here</a> to login or create an account</strong></p>
+        {/loggedIn}
+      {:else}
+       <div class="row">
         <div class="col-md-12">
           <form action="{URI}/participate" method="post">
             <button class="btn btn-primary"type="submit">Participate</button>
@@ -22,6 +36,8 @@
 
         </div>
       </div>
+      {/training.requireLogin}
+
     </div>
   </div>
 </div>
