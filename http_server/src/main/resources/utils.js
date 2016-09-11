@@ -262,6 +262,22 @@ var utils = (function() {
       }
       //this.randomorder = randomMapping;
       return randomMapping;
+    },
+    // Generates a html renderable message from a string with newlines,
+    // first line is stripped up and returned seperately 
+    "messageGenerator":function(text) {
+      var endMessage = text;
+
+      var endTitle = "";
+      if(typeof endMessage !== 'undefined') {
+
+        endTitle = endMessage.split('\n')[0];
+        endMessage = endMessage.split("\n").slice(1).join("\n");
+
+        endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      }
+
+      return {title:endTitle, message:endMessage}
     }
   };
 
