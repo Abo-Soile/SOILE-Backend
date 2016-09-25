@@ -42,11 +42,15 @@
 					<tr>
 						<td>
 							<a href="{uri}experiment/{_id}">
-							{?name}
-								{name} 
+							{?descriptiveName}
+								{descriptiveName}
 							{:else}
-								Unnamed Experiment
-							{/name}
+								{?name}
+									{name} 
+								{:else}
+									Unnamed Experiment
+								{/name}
+							{/descriptiveName}
 							</a>
 
 							</td>
