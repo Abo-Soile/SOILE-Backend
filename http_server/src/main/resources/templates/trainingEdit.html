@@ -89,8 +89,20 @@
         </label>
 
         <label class="checkbox bigcheckbox">
-          Show score
+          Show historic score
           <input type="checkbox" ng-model="training.showScore" ng-true-value="true" ng-false-value="false"
+          >
+        </label>
+
+        <label class="checkbox bigcheckbox">
+          Show score at end of training
+          <input type="checkbox" ng-model="training.showScoreEndTraining" ng-true-value="true" ng-false-value="false"
+          >
+        </label>
+
+        <label class="checkbox bigcheckbox">
+          Require Login
+          <input type="checkbox" ng-model="training.requireLogin" ng-true-value="true" ng-false-value="false"
           >
         </label>
         </div>

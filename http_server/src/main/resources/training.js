@@ -569,9 +569,18 @@ router.get("/training/:id/score", function(request) {
   var context = {};
   trainingDAO.get(id, function(trainingObject) {
 
-    context.showscore = trainingObject.showScore;
-    context.sessionMessage = trainingObject.completeSessionMessage;
-    if (trainingObject.showScore) {
+    context.showscore = trainingObject.showScoreEndTraining;
+
+    console.log("message --- ",  trainingObject.completeSessionMessage)
+    var messages = utils.messageGenerator(trainingObject.completeSessionMessage);
+
+
+    context.title = messages.title
+    context.sessionMessage = messages.message;
+
+    console.log("ENDMESSAGE", messages.message)
+
+    if (trainingObject.showScoreEndTraining) {
       //Fetch score and stuff
       trainingDataDAO.getScore(id, userid, function(totalScore, scores) {
 
