@@ -30,6 +30,19 @@ var utils = require("utils");
 var babyparser = require("libs/babyparse");
 var csvUtils = require("csvUtils");
 
+var Promise = require("mPromise");
+
+// Promise demo
+var p = new Promise(function(resolve, reject) {
+  console.log("Setting up promise")
+  vertx.setTimer(5000, function() {
+    resolve("Success");
+  });
+});
+
+p.then(function(res) {
+  console.log("Promise " + res);
+})
 
 /*
 Architectural ideas. 
