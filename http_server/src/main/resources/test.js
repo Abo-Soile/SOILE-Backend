@@ -98,6 +98,11 @@ router.post("/test", requireEditor,function(request) {
 
     test.name = name;
 
+    // Add edit access to current user
+    if(!request.session.currentUser.isAdmin()) {
+      test.users = [request.session.currentUser.username];
+    }
+
     test.init(function(err, result) {
       return request.redirect("/test/"+test._id);
     });

@@ -34,7 +34,7 @@ function merge_options(obj1,obj2){
 }
 
 router.get("/experiment", function(request){
-  experimentDAO.list(function(r){
+  experimentDAO.list({users:request.session.currentUser.username},function(r){
 
     templateManager.render_template("experimentList", {"experiments":r}, request);
   });
@@ -127,7 +127,7 @@ router.get('/experiment/:id', function(request){
     }
 
     //If normal user, check if user has filled in something before
-    if(!request.session.isEditor()) {
+    if(!request.session.isTestLeader()) {
       var userID = request.session.getPersonToken();
 
       if(request.session.loggedIn()) {

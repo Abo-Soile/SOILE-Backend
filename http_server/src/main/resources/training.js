@@ -156,10 +156,10 @@ function handleResultData(data, datatype, callback) {
 router.get("/training", requireEditor,function(request) {
   var user = request.session.currentUser;
 
-  if (user.isEditor()) {
+  if (user.isTestLeader()) {
     var query = {};
 
-    if (user.isEditor && !user.isAdmin()) {
+    if (user.isEditor() && !user.isAdmin()) {
       query = {users:user.username};
     }
 

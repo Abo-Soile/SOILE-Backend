@@ -80,6 +80,14 @@ User.prototype.isAdmin = function() {
 };
 
 User.prototype.isEditor = function() {
+  if (this.role === "editor") {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+User.prototype.isTestLeader = function() {
   if (this.role === "editor" || this.role === "admin") {
     return true;
   } else {

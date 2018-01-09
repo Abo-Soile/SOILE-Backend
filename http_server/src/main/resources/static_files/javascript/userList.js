@@ -1,6 +1,5 @@
 var app = angular.module('userList', []);
 
-
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
 });
@@ -41,6 +40,14 @@ app.controller("UserController", function($scope,$http,$location) {
       $scope.users[userIndex].forgottenPasswordToken = false;
     }
     $scope.updateUser(userIndex)
+  }
+
+  $scope.createUser = function(username){
+    var user = {username:username};
+
+    $http.post("user", user).success(function(data, status) {
+      $scope.loadData();
+    });
   }
 
   $scope.loadData();

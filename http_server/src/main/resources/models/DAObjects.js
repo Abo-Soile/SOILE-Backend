@@ -55,8 +55,12 @@ function TestDAO() {
 TestDAO.prototype = new BaseDAO();
 TestDAO.prototype.constructor = TestDAO;
 
-TestDAO.prototype.listFolders = function(callback) {
-    var command = "{ distinct: 'tests', key: 'folder'}";
+TestDAO.prototype.listFolders = function(user, callback) {
+    var command = "{ distinct: 'tests', key: 'folder', query:{users:'" + user.username + "'}}";
+
+    if(user.isAdmin()) {
+        command = "{ distinct: 'tests', key: 'folder', query:{}}";
+    }
 
     var mongo = {
         "action":"command",

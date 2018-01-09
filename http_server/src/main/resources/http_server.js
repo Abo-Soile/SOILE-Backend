@@ -521,7 +521,7 @@ customMatcher.get('/', function(request) {
     var user = request.session.currentUser;
     var context = {};
 
-    if (user.isEditor()) {
+    if (user.isTestLeader()) {
 
       var query = {};
 

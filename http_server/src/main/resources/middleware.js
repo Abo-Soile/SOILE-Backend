@@ -19,7 +19,7 @@ function requireEditor(request, callback) {
 
     console.log("IS EDIT:" + request.session.currentUser.isEditor());
 */
-    if(request.session.currentUser.isEditor()) {
+    if(request.session.currentUser.isEditor() || request.session.currentUser.isAdmin()) {
       return callback(request);
     } else {
       console.log("Unauthorized")

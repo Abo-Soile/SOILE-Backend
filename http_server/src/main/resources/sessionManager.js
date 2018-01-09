@@ -153,8 +153,8 @@ var sessionManager =  {
 
   isAdmin: function() {
     var sessionData = sessionMap.get(this.getSessionCookie());
-    console.log("----Checking for admin----\n with session: " + this.getSessionCookie());
-    console.log(JSON.stringify(sessionData));
+    // console.log("----Checking for admin----\n with session: " + this.getSessionCookie());
+    // console.log(JSON.stringify(sessionData));
     if(!sessionData) {
       return false;
     }
@@ -167,6 +167,14 @@ var sessionManager =  {
   isEditor: function() {
     if (this.currentUser) {
       return this.currentUser.isEditor();
+    } else {
+      return false;
+    }
+  },
+
+  isTestLeader: function() {
+    if (this.currentUser) {
+      return this.currentUser.isTestLeader();
     } else {
       return false;
     }
