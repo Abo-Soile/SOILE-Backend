@@ -15,6 +15,7 @@ var utils = require("utils");
 var requireAdmin = require('middleware').requireAdmin;
 var requireLogin = require('middleware').requireLogin;
 var userDAO = require("models/DAObjects").UserDAO;
+var userModel = require("models/Models").User;
 
 
 router.get("/admin", requireAdmin,function(request){
@@ -50,6 +51,33 @@ router.get("/admin/user/json/editor/filter", requireLogin, function(request) {
   userDAO.list({role:"editor","_id":{"$ne":userId}},function(users) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(users));
+  });
+});
+
+// New editor
+router.post("/admin/user", requireAdmin,function(request){
+  var id = request.params().get('id');
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+
+    data = JSON.parse(data);
+
+    var newUser = new userModel();
+    newUser.username = data.username;
+    newUser.role = "editor";
+    newUser.password = java.util.UUID.randomUUID().toString();
+    newUser.forgottenPasswordToken = java.util.UUID.randomUUID().toString();
+
+    newUser.save(function(result)  {
+      console.log("Created new editor user: ", newUser.username);
+      request.response.end(JSON.stringify(result));
+    })
+
   });
 });
 
