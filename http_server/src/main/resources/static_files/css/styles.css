@@ -908,6 +908,13 @@ testeditor styles
       right: -13px;
       top: 25%; }
 
+#trainingView.trainingAdmin .dataFilter label {
+  position: absolute;
+  top: -20px; }
+
+.nav-default {
+  background-color: red !important; }
+
 .training-edit .ui-select-bootstrap {
   min-width: 480px;
   max-width: 480px;

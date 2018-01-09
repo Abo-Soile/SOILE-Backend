@@ -120,33 +120,34 @@ app.controller('userProgressController', function($scope, $http, $location, over
 
 app.controller('trainingDataFilterController', function($scope, $http, $location, overviewService) {
   var baseUrl = $location.absUrl();
+  var vm = this;
+  // this.
+  vm.downloadData = false;
 
-  $scope.downloadData = false;
-
-  $scope.getUsers = function() {
-    return $scope.users;
+  vm.getUsers = function() {
+    return vm.users;
   };
 
 
   /*
     Returns a array with trainingiterations
   */
-  $scope.getIterations = function() {
+  vm.getIterations = function() {
     var arr = [];
-    var iterations = $scope.training.repeatcount;
+    var iterations = vm.training.repeatcount;
     for (var i = 0; i < iterations; i++) {
       arr.push(i+1);
     }
 
     return arr;
-  };
+  }; 
   /*
     Returns an array with component numbers
   */
-  $scope.getComponentIterations = function(phase) {
+  vm.getComponentIterations = function(phase) {
     var arr = [];
-    var iterations = $scope.training.components[phase].length;
-    console.log($scope.training.components[phase].length);
+    var iterations = vm.training.components[phase].length;
+    console.log(vm.training.components[phase].length);
     for (var i = 0; i < iterations; i++) {
       arr.push(i+1);
     }
@@ -154,35 +155,35 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
     return arr;
   };
 
-  $scope.buildQuery = function() {
+  vm.buildQuery = function() {
     var base = baseUrl + "/loaddata?";
     var query = base;
 
-    if ($scope.filter1 === "pre" || $scope.filter1 === "post") {
-      $scope.filter4 = undefined;
+    if (vm.filter1 === "pre" || vm.filter1 === "post") {
+      vm.filter4 = undefined;
 
-      if($scope.filter2 === "single") {
-        $scope.filter3 = undefined;
+      if(vm.filter2 === "single") {
+        vm.filter3 = undefined;
       }
     } 
 
-    if ($scope.filter1 === "training") {
+    if (vm.filter1 === "training") {
 
-      if($scope.filter3 === "single") {
-        $scope.filter4 = undefined;
+      if(vm.filter3 === "single") {
+        vm.filter4 = undefined;
       }
     }
 
-    query += "f1=" + ($scope.filter1 ? $scope.filter1 : "") + "&";
-    query += "f2=" + ($scope.filter2 ? $scope.filter2 : "") + "&";
-    query += "f3=" + ($scope.filter3 ? $scope.filter3 : "") + "&";
-    query += "f4=" + ($scope.filter4 ? $scope.filter4 : "") + "&";
+    query += "f1=" + (vm.filter1 ? vm.filter1 : "") + "&";
+    query += "f2=" + (vm.filter2 ? vm.filter2 : "") + "&";
+    query += "f3=" + (vm.filter3 ? vm.filter3 : "") + "&";
+    query += "f4=" + (vm.filter4 ? vm.filter4 : "") + "&";
 
     console.log(query);
 
     $http.get(query).success(function(data, status) {
 
-      $scope.downloadData = true;
+      vm.downloadData = true;
       var link = angular.element( document.querySelector( '#dlLink' ) );
 
        link.attr({
@@ -198,16 +199,16 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
 
        var jsonData = CSV.parse(data);
 
-       $scope.datarows = jsonData;
+       vm.datarows = jsonData;
 
 
     });
   };
 
   overviewService.getUsers().then(function() {
-    $scope.users = overviewService.users;
-    $scope.users.unshift({userId:"all"});
-    $scope.training = overviewService.training;
+    vm.users = overviewService.users;
+    vm.users.unshift({userId:"all"});
+    vm.training = overviewService.training;
   });
 
  /* overviewService.loadData(function(data) {
