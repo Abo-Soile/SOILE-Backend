@@ -30,7 +30,7 @@ var utils = require("utils");
 var babyparser = require("libs/babyparse");
 var csvUtils = require("csvUtils");
 
-var Promise = require("mPromise");
+var Promise = require("mPromise")//();
 
 // Promise demo
 var p = new Promise(function(resolve, reject) {
@@ -43,6 +43,51 @@ var p = new Promise(function(resolve, reject) {
 p.then(function(res) {
   console.log("Promise " + res);
 })
+
+var A = function() {
+
+    return new Promise(function(resolve, reject) {
+        var result = 'A is done'
+
+        console.log(result)
+        resolve(result);
+    })
+}
+
+var B = function() {
+
+    return new Promise(function(resolve, reject) {
+        var result = 'B is done'
+
+        vertx.setTimer(2000,function() {
+            console.log(result)
+            resolve(result);
+        })
+    })
+}
+
+var C = function() {
+
+    return new Promise(function(resolve, reject) {
+        var result = 'C is done'
+        console.log(result)
+        resolve(result);
+    })
+}
+
+var D = function() {
+
+    return new Promise(function(resolve, reject) {
+        var result = 'D is done'
+        console.log(result)
+        resolve(result);
+    })
+}
+
+A().then(function(result) { 
+    return B();
+}).then(C)
+  .then(D)
 
 /*
 Architectural ideas. 
