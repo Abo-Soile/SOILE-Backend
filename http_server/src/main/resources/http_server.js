@@ -553,16 +553,12 @@ customMatcher.get('/', function(request) {
               }
             }
           }
-
-
+          
           context.training = training;
           templateManager.render_template('userV2', context, request);
         });
-
-
       });
     }
-
   }
   // Anonymous user, showing ladning page
   else {

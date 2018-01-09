@@ -63,9 +63,20 @@
         }
       }
     }
-
   }
-  
+
+  &.trainingAdmin{
+    .dataFilter {
+      label {
+        position: absolute;
+        top: -20px;
+      }
+    }
+  } 
+}
+
+.nav-default {
+  background-color: red !important;
 }
 
 .training-edit {
@@ -93,5 +104,4 @@
       background-color: yellow !important;
     }
   }
-
 }

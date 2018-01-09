@@ -15,7 +15,6 @@ var Training = models.Training;
 var TrainingData = models.TrainingData;
 var ExpData = models.Data;
 
-
 function UserDAO() {
     BaseDAO.call(this);
     this._baseObject = models.User;

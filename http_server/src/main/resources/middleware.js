@@ -1,6 +1,8 @@
 var console = require('vertx/console');
 
-
+/**
+ * Limits a view to only admins
+ */
 function requireAdmin(request, callback) {
   //console.log("CHECKING FOR ADMIN MIDDLEWARE" + request)
   if (!request.session.isAdmin()) {
@@ -11,6 +13,9 @@ function requireAdmin(request, callback) {
   }
 }
 
+/**
+ * Limits a view to admins or editors
+ */
 function requireEditor(request, callback) {
   console.log("Checking for editor");
   if(request.session.currentUser){
