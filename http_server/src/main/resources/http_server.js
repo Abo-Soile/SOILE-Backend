@@ -359,24 +359,27 @@ customMatcher.post("/signup", function(request) {
     newUser.username = email;
     newUser.setPassword(passwd);
 
-    newUser.save(function(result) {
-      console.log("Trying to create new user");
 
-      request.session.login(newUser);
+    userDAO.get({username:newUser.username}, function(existingUser) {
 
-      if(origin){
-          return request.redirect(decodeURIComponent(origin));
-        }
-      return request.redirect('/');
-    });
-
-    /* On failure
-     else {
+      /* Check for existing username */
+      if (existingUser) {
         templateVars.registererrors = "Username already exists!, try logging in";
         //templateManager.render_template('signup', templateVars, request);
-        templateManager.render_template('login', templateVars, request);
+        return templateManager.render_template('login', templateVars, request);
+      }
 
-    */
+      newUser.save(function(result) {
+        console.log("Trying to create new user");
+
+        request.session.login(newUser);
+
+        if(origin){
+            return request.redirect(decodeURIComponent(origin));
+          }
+        return request.redirect('/');
+      });
+    });
 
     /*mongo.user.new(email, passwd, function(r) {
       console.log("Trying to create new user");
