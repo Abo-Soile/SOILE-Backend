@@ -50,12 +50,17 @@ router.get("/test/folder/json", requireEditor, function(request) {
   });
 });
 
-router.get("/test/json/compiled", function(request) {
+router.get("/test/json/compiled", requireEditor, function(request) {
  /* testDAO.list({"compiled":true}, function(result) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(result)); 
   });*/
-  testDAO.rawQuery({"compiled":true}, function(tests) {
+  var query =  {compiled:true};
+  if(request.session.currentUser.isEditor()){
+    query.users = request.session.currentUser.username;
+  }
+
+  testDAO.rawQuery(query, function(tests) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(tests));
   },{keys:{js:0, code:0}});
