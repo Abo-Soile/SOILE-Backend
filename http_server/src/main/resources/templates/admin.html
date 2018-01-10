@@ -8,22 +8,34 @@
 		<div id="toolButtons" class="col-md-12">
 
 			
-				<a class="btn btn-primary" href="experiment/new"><span class="glyphicon glyphicon-plus"></span>New Experiment</a>
+			<a class="btn btn-primary" href="experiment/new">
+				<span class="glyphicon glyphicon-plus"></span>New Experiment	
+			</a>
 <!-- 				<a class="btn btn-primary" href="experiment">Experiment list</a> -->	
-				<!-- <a class="btn btn-primary" href="test">Tests</a> -->
-				<form action="/test", method="POST">
-					<div class="input-group">
-						
-						<input type="text" name="name" class="form-control" placeholder="Testname">
-						<span class="input-group-btn">
-							<input type="submit" value="New Test" class="btn btn-primary">
-						</span>
+			<!-- <a class="btn btn-primary" href="test">Tests</a> -->
+			<form action="/test", method="POST">
+				<div class="input-group">
+					<input type="text" name="name" class="form-control" placeholder="Testname">
+					<span class="input-group-btn">
+						<input type="submit" value="New Test" class="btn btn-primary">
+					</span>
+				</div>
+			</form>
 
-					</div>
-				</form>
+			<a class="btn btn-info" href="/training/">
+				<span class="glyphicon glyphicon"></span> Training
+			</a>
+			
+			<a class="btn btn-info" href="/docs/index.html" target="_blank">
+				<span class="glyphicon glyphicon-book"></span>  Documentation
+			</a>
 
-				<a class="btn btn-info" href="/training/"><span class="glyphicon glyphicon"></span> Training</a>
-				<a class="btn btn-info" href="/docs/index.html" target="_blank"><span class="glyphicon glyphicon-book"></span>  Documentation</a>
+			{@eq key=user.role value="admin"}
+			<a class="btn btn-info" href="/admin/user/">
+				<span class="glyphicon glyphicon"></span> Manage users
+			</a>
+			{/eq}
+
 		</div>
 	</div>
 	<div class="row">
