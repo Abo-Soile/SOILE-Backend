@@ -55,6 +55,10 @@ function User(arg) {
  
     //this._collection = "users"
     this._collection = User.collection;
+
+    if(this.isTestLeader()) {
+      this.admin = true;
+    }
 }
 
 User.prototype = new BaseModel();
