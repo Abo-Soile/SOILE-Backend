@@ -30,16 +30,19 @@ router.get('/test/json', function(request) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(r.results));
   });*/
+  var query = {};
+  if (request.session.currentUser.isEditor() && !request.session.currentUser.isAdmin()) {
+    query = {users:request.session.currentUser.username}
+  }
 
-
-  testDAO.rawQuery({}, function(tests) {
+  testDAO.rawQuery(query, function(tests) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(JSON.stringify(tests));
   },{keys:{js:0, code:0}});
 });
 
 router.get("/test/folder/json", requireEditor, function(request) {
-  testDAO.listFolders(function(folders) {
+  testDAO.listFolders(request.session.currentUser, function(folders) {
     console.log(JSON.stringify(folders));
 
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");

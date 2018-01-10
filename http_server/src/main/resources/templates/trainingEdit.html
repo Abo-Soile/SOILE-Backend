@@ -62,20 +62,14 @@
         </div>
 
         <div class="col-md-3 ">
-          <label>Pause between tries</label>
+          <label>Pause between tries (h)</label>
           <input class="form-control" ng-model="training.repeatpause">
-        </div>
-
-        <div class="col-md-3 ">
-          <label>Max pause</label>
-          <input class="form-control" ng-model="training.maxpause">
         </div>
 
         <div class="col-md-3">
           <label>Submit button </label>
           <input  class="form-control"  ng-model="training.submitbutton">
         </div>
-        
       </div>
 
       <div class="row">
@@ -83,32 +77,58 @@
       <div class="col-md-12 form-inline">
         <label class="checkbox bigcheckbox">
           Control group
-          <input type="checkbox" ng-model="training.controlgroup" ng-true-value="true" ng-false-value="false"
-          ng-click="toggleControlGroup($event)"
-          >
+          <input type="checkbox" ng-model="training.controlgroup" ng-true-value="true" ng-false-value="false" ng-click="toggleControlGroup($event)">
         </label>
 
         <label class="checkbox bigcheckbox">
           Show historic score
-          <input type="checkbox" ng-model="training.showScore" ng-true-value="true" ng-false-value="false"
-          >
+          <input type="checkbox" ng-model="training.showScore" ng-true-value="true" ng-false-value="false">
         </label>
 
         <label class="checkbox bigcheckbox">
           Show score at end of training
-          <input type="checkbox" ng-model="training.showScoreEndTraining" ng-true-value="true" ng-false-value="false"
-          >
+          <input type="checkbox" ng-model="training.showScoreEndTraining" ng-true-value="true" ng-false-value="false">
         </label>
 
         <label class="checkbox bigcheckbox">
           Require Login
-          <input type="checkbox" ng-model="training.requireLogin" ng-true-value="true" ng-false-value="false"
-          >
+          <input type="checkbox" ng-model="training.requireLogin" ng-true-value="true" ng-false-value="false">
         </label>
         </div>
       </div>
+
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="form-inline">
+            <label class="checkbox bigcheckbox">
+              Enable reminder emails
+              <input type="checkbox" ng-model="training.reminderEmail" ng-true-value="true" ng-false-value="false">
+            </label>
+          </div>
+        </div>
+
+        <div ng-show="training.reminderEmail">
+          <div class="col-md-3">
+              <label>Reminder subject</label>
+              <input class="form-control" ng-model="training.reminderSubject">
+          </div>
+
+          <div class="col-md-3">
+              <label>Send reminder after(h)</label>
+              <input class="form-control" ng-model="training.maxpause">
+          </div>
+
+          <div class="col-md-12">
+            <label>Reminder email message, <span>the <i>{link}</i> tag will be replaced by a clickable link</span></label>
+            <textarea class="form-control" ng-model="training.reminderEmailMessage"> </textarea>
+          </div>
+        </div>
+        
+      </div>
     </div> 
   </div>
+
   <div ng-controller="componentController">
     <div class="row">
       <div class="col-md-12" > 

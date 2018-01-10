@@ -7,6 +7,11 @@ var console = require('vertx/console');
 var models = require('models/Models');
 var BaseDAO = require('models/baseDAO');
 
+var Promise = require("mPromise")//();
+
+var lodash = require("../node_modules/lodash/index");
+var _ = lodash;
+
 var User = models.User;
 var Test = models.Test;
 var Form = models.Form;
@@ -337,6 +342,100 @@ TrainingDAO.prototype.enrollUser = function(trainingID, userid, callback) {
         });
     });
 };
+
+TrainingDAO.prototype.getUsersToRemind = function(trainingID, callback) {
+    that = this;
+
+    // 1: Find all training experiments where emailing is activated
+    // 2: Find general data for users who are past the timelimit type:general, trainingid, mode:training'
+    // 3: 
+
+    // Promise.setScheduler(function(fn){ // fn is what to execute
+    //     vertx.setTimer(1, fn);
+    // });
+
+    var tDataDao = new TrainingDataDAO();
+
+    var trainingData = [];
+    var trainingExpDealy = {};
+    var trainingCollections = {}
+
+    // Find training experiments with email enabled
+    var getExps = function() {
+        var p = new Promise(function(resolve, reject) {
+            that.list({reminderEmail:true}, function(res) {
+                resolve(res);
+            })
+        });
+        return p;
+    }
+
+    // Find general trainingdata based on a set of ids
+    // TODO: Check that the next mailing data is after the reminder
+    var getTData = function(ids) {
+        return new Promise(function(resolve, reject) {
+            tDataDao.list({
+                trainingId:{$in:ids},
+                type:"general",
+                mode:"training",
+                nextMail:{$lt:new Date()}
+            },function(res) {
+                trainingData = res;
+                resolve(res);
+            });
+        });
+    }
+
+    // Find a list of users
+    // TODO: implement allow/forbid emailing switch
+    // TODO: don't fetch users who have banne emailing
+    var getUsers = function(userIDs) {
+        return new Promise(function(resolve, reject) {
+            module.exports.UserDAO.list({
+                _id:{$in:userIDs}
+            },function(res) {
+                resolve(res);
+            });
+        });
+    }
+
+    var matcher = {
+        type:"general",
+        trainingId:trainingID,
+    }
+
+    var prom = new Promise(function(resolve, reject) {
+
+        getExps().then(function(trainingObjects) {
+            var ids =[];
+            for (var i = trainingObjects.length - 1; i >= 0; i--) {
+                trainingExpDealy[trainingObjects[i]._id] = trainingObjects[i].maxpause;
+                trainingCollections[trainingObjects[i]._id] = trainingObjects[i];
+                ids.push(trainingObjects[i]._id);
+            }
+            return getTData(ids);
+        }).then(function(res) {
+            var userIDs =[];
+            for (var i = res.length - 1; i >= 0; i--) {
+                userIDs.push(res[i].userId);
+            }
+
+            return getUsers(userIDs)
+        }).then(function(users) {
+            _.each(users, function(usr){
+                usr.tData = _.chain(trainingData).where({userId:usr._id}).first().value();
+                usr.mailDelay = trainingExpDealy[usr.tData.trainingId];
+                usr.training = trainingCollections[usr.tData.trainingId];
+            });
+            resolve(users);
+        }).catch(function(err) {
+            console.log(err);
+        })
+    });
+
+
+    return prom;
+}
 
 function TrainingDataDAO() {
     BaseDAO.call(this);

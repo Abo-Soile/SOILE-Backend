@@ -30,6 +30,8 @@ var utils = require("utils");
 var babyparser = require("libs/babyparse");
 var csvUtils = require("csvUtils");
 
+var mailManager = require('mailManager');
+
 var Promise = require("mPromise")//();
 
 // Promise demo
@@ -123,7 +125,55 @@ Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
 function periodicReminder() {
   console.log("Running reminder");
 
+  trainingDAO.getUsersToRemind()
+  .then(function(res) {
+    console.log("Found users to remind " + res.length)
+
+    for (var i = res.length - 1; i >= 0; i--) {
+      var usr = res[i]
+      console.log("Sending mail to: " + usr.username);
+      console.log("Delay " + JSON.stringify(usr.mailDelay));
+
+      if(!usr.noMail) {
+        var now = new Date();
+        if(!usr.nextMail || now > usr.tData.nextMail) {
+          //Send mail
+          //Update trainingdata.nextmail
+          console.log("Sending mail, updating nextmail");
+          // console.log("Test add date " + t.setHours(t.getHours() + 24).toISOString())
+
+          var t = new Date();
+          t.setTime(t.getTime() + ((/*usr.mailDelay + */1)*60*60*1000*240000)) 
+          //Large number so that we dont's send additional mail for this round
+
+          var trainingId = usr.tData.trainingId;
+          var linkToTraining = "http://soile.braintrain.fi/training/" + trainingId;
+          // var d = now.setHours(now.getHours() + usr.mailDelay);
+
+          console.log("Before mailmanager ", typeof mailManager.sendTrainingReminder)
+
+          mailManager.sendTrainingReminder(
+              usr.training.reminderSubject,
+              usr.training.reminderEmailMessage,
+              usr,
+              linkToTraining
+              // function(res) {
+              //   console.log("MailManager:::Mail sent!")
+              // }
+            );
+          console.log("After mailmanager")
+
+          trainingDataDAO.update(usr.tData._id, {$set:{nextMail:t}}, function(){
+            console.log("Tdata updated reminder done\n-------------------")
+          });
+
+        }
+      }
+    }
+  });
   /*
+    Select tra
+    
     Select active trainings...
 
     Select active users.
@@ -134,10 +184,11 @@ function periodicReminder() {
   */
 }
 
-/*var timerID = vertx.setPeriodic(10000, function(timerID) {
-    periodicReminder();
+var twelveHours = 12*60*60*1000
+// var timerID = vertx.setPeriodic(5000, function(timerID) {
+var timerID = vertx.setPeriodic(twelveHours, function(timerID) {
+    periodicReminder(); 
 });
-*/
 
 
 function merge_options(obj1,obj2){
@@ -725,6 +776,7 @@ Translates phases to match over the whole training dataset
 */
 function fixPhases(arr, training) {
   var translationArray = buildTranslationArray(training);
+  console.log(JSON.stringify(translationArray));
   /*var shift = 0;
 
   for (var i = 0; i < training.repeatcount; i++) {
@@ -900,7 +952,9 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
       var csv = "";
 
       if (command === "single") {
-        res = fixPhases(res, training);
+        if (matcher.mode == "training") {
+          res = fixPhases(res, training);
+        }
         csv = csvUtils.jsonRowDataToCsv(res, groupby);
       }
       if (command === "raw") {
