@@ -251,7 +251,7 @@ router.get("/training/:id",function(request) {
     console.log("##### FIRST TRAINING");
     console.log(JSON.stringify(training));
 
-    if (request.session.isEditor()) {
+    if (request.session.isTestLeader()) {
       return trainingAdminView(request, training);
     }
 
