@@ -31,6 +31,8 @@ SOILE2 = (function(){
   var testDuration = 0;
   var startTime = 0;
 
+  var assignDebugCallback = null;
+
   soile2.defs = defs;
   soile2.rt = rt;
   soile2.bin = bin;
@@ -2177,6 +2179,11 @@ SOILE2 = (function(){
         break;
       }
       if (opcode === opcodes.Assign){
+        if (soile2.assignDebugCallback) {
+          //soile2.assignDebugCallback(pi.host);
+          soile2.assignDebugCallback(soile2.defs.gvars, soile2.defs.vars);
+        }
+          
         pi.host[pi.name] = (pi.value)();
         continue;
       }
@@ -2566,6 +2573,10 @@ SOILE2 = (function(){
   util.setDebug = function(func) {
     soile2.util.debug = true;
     soile2.util.debugFunction = func;
+  };
+
+  util.setAssignCallback = function(callback) {
+    soile2.assignDebugCallback = callback;
   };
 
   soile2.bin = soile2.rt.seal(bin);
