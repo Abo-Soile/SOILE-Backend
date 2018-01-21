@@ -241,6 +241,21 @@ router.post("/training", requireEditor,function(request) {
   });
 });
 
+//Shortned url
+router.get("/t/:name",function(request){
+  var name = request.params().get('name');
+
+  trainingDAO.get({"shortname":name}, function(training) {
+    if(training != "") {
+      return request.redirect("/training/" + training._id);
+    }
+    else {
+      return request.notfound();
+    }
+  });
+});
+
+
 //View  training experiment
 router.get("/training/:id",function(request) {
   var id = request.params().get('id');

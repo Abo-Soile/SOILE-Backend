@@ -33,7 +33,7 @@
       <textarea class="form-control" ng-model="training.completeSessionMessage"> </textarea>
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label>Start date</label>
           <p class="input-group">
             <input type="text" class="form-control" ng-model="training.startDate" ng-required:"true" is-open="opened" options="dateOptions" close-text="Close" datepicker-popup="[([format])]" />
@@ -43,7 +43,7 @@
           </p>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label>End Date</label>
           <p class="input-group">
             <input type="text" class="form-control" ng-model="training.endDate" ng-required:"true" is-open="opened" min-date="training.startDate" options="dateOptions"  close-text="Close" datepicker-popup="[([format])]"/>
@@ -51,6 +51,11 @@
               <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
           </p>
+        </div>
+
+        <div class="col-md-3">
+          <label>Short url <a ng-if="training.shortname" href="/e/[([training.shortname])]">http://soile.braintrain.fi/t/[([training.shortname])]</a> </label>
+          <input  class="form-control"  ng-model="training.shortname">
         </div>
 
       </div>
