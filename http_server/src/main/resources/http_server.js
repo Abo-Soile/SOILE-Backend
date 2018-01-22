@@ -2,6 +2,8 @@ var vertx = require('vertx');
 var container = require('vertx/container');
 var console = require('vertx/console');
 
+var Promise = require("node_modules/bluebird/js/release/bluebird");
+
 var server = vertx.createHttpServer();
 
 var config = container.config;
@@ -129,42 +131,43 @@ customMatcher.post("/login", function(request) {
     var password = params.password;
     var remember = params.remember;
 
+    var origin = params.origin;
+    var templateVars = {};
+
+    login(username, password, remember).then(function(user) {
+      console.log("Login success", user);
+      request.session.login(user);
+      if(origin){
+        return request.redirect(decodeURIComponent(origin));
+      }
+      return request.redirect("/");
+    }).catch(function(e) {
+      // console.log("Error: " + e)
+      templateVars.origin = decodeURIComponent(origin);
+      templateVars.errors = e;
+
+      templateManager.render_template('login', templateVars, request);
+    });
+  });
+});
+
+function login(username, passwd, remember) {
+  return new Promise(function(resolve, reject) {
     if (remember) {
       remember = true;
     }else {
       remember = false;
     }
 
-    var origin = params.origin;
-
-    var templateVars = {};
-
-    templateVars.origin = decodeURIComponent(origin);
-
-    userDAO.auth(username, password, remember, function(user) {
-      
+    userDAO.auth(username, passwd, remember, function(user) {
       if (user) {
-        request.session.login(user);
-        //mongo.experiment.updateDataIdentifier(user._id, 
-        //  request.session.getPersonToken(), function(s) {
-
-          if(origin){
-            return request.redirect(decodeURIComponent(origin));
-          }
-          return request.redirect("/");
-        //});
-        
-      }
-      //No user was found, error
-      else {
-        templateVars.errors = "Wrong username or password";
-        console.log(JSON.stringify(templateVars));
-        templateManager.render_template('login', templateVars, request);
+        resolve(user);        
+      } else { //No user was found, error
+        reject("Wrong username or password")        
       }
     });
   });
-});
-
+}
 
 customMatcher.get("/login/forgotten", function(request) {
     templateManager.render_template("forgotten", {}, request);
@@ -258,7 +261,6 @@ customMatcher.post("/login/forgotten/:token", function(request) {
   });
 });
 
-
 customMatcher.get("/logout", function(request) {
   var uname = request.session.loggedIn();
 
@@ -305,6 +307,42 @@ customMatcher.get('/signup', function(request) {
   templateManager.render_template('signup', {},request);
 });
 
+function register(username, passwd, passwdAgain) {
+  return new Promise(function(resolve, reject) {
+    if(!(email && passwd && passwdAgain)) {
+      return reject("All fields are required")
+    }
+
+    /*if(!looksLikeMail(email)) {
+      templateVars.registererrors = "Enter a valid email address";
+      templateManager.render_template('login', templateVars,request);
+      return;
+    }*/
+
+    if((passwd !== passwdAgain)) {
+      return reject("Password didn't match");
+    }
+
+    var newUser = new userModel();
+    newUser.username = email;
+    newUser.setPassword(passwd);
+
+    userDAO.get({username:newUser.username}, function(existingUser) {
+
+      /* Check for existing username */
+      if (existingUser) {
+        return reject("Username already exists!, try logging in")
+      }
+
+      newUser.save(function(result) {
+        console.log("Trying to create new user");
+        request.session.login(newUser);
+
+        resolve(result)
+      });
+    });
+  });
+}
 
 customMatcher.post("/signup", function(request) {
   var data = new vertx.Buffer();
@@ -330,76 +368,16 @@ customMatcher.post("/signup", function(request) {
     templateVars.username = email;
     templateVars.origin = decodeURIComponent(origin);
 
-    console.log(JSON.stringify(params));
-    console.log(passwd + "===" + passwdAgain);
-
-
-    if(!(email && passwd && passwdAgain)) {
-      templateVars.registererrors = "All fields are required";
-      templateManager.render_template('login', templateVars,request);
-
-      return;
-    }
-
-    /*if(!looksLikeMail(email)) {
-      templateVars.registererrors = "Enter a valid email address";
-      templateManager.render_template('login', templateVars,request);
-      return;
-    }*/
-
-    if((passwd !== passwdAgain)) {
-      templateVars.registererrors = "Password didn't match";
-      //templateManager.render_template('signup', templateVars,request);
-      templateManager.render_template('login', templateVars,request);
-
-      return;
-    }
-
-    var newUser = new userModel();
-    newUser.username = email;
-    newUser.setPassword(passwd);
-
-
-    userDAO.get({username:newUser.username}, function(existingUser) {
-
-      /* Check for existing username */
-      if (existingUser) {
-        templateVars.registererrors = "Username already exists!, try logging in";
-        //templateManager.render_template('signup', templateVars, request);
-        return templateManager.render_template('login', templateVars, request);
+    register(email, passwd, passwdAgain).then(function(res){
+      if(origin){
+        return request.redirect(decodeURIComponent(origin));
       }
-
-      newUser.save(function(result) {
-        console.log("Trying to create new user");
-
-        request.session.login(newUser);
-
-        if(origin){
-            return request.redirect(decodeURIComponent(origin));
-          }
-        return request.redirect('/');
-      });
+      return request.redirect('/');
+    }).catch(function(err){
+      templateVars.registererrors = err;
+      templateManager.render_template('login', templateVars,request);
     });
-
-    /*mongo.user.new(email, passwd, function(r) {
-      console.log("Trying to create new user");
-      console.log(JSON.stringify(r));
-      if (r.status==="ok") {
-        //templateManager.render_template('landing', {}, request);
-        console.log(origin);
-        request.session.login(r._id, email,false);
-        if(origin){
-          return request.redirect(decodeURIComponent(origin));
-        }
-        return request.redirect('/');
-      }
-      else {
-        templateVars.registererrors = "Username already exists!, try logging in";
-        //templateManager.render_template('signup', templateVars, request);
-        templateManager.render_template('login', templateVars, request);
-
-      }
-    });*/
+  
   });
 });
 
