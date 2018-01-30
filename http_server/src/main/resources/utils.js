@@ -218,9 +218,9 @@ var utils = (function() {
       }
 
 
-      console.log(JSON.stringify(randomList))
-      console.log(JSON.stringify(randomMapping))
-      console.log(JSON.stringify(randomGroups))
+      console.log("Random list   : " +JSON.stringify(randomList))
+      console.log("Random mapping: " +JSON.stringify(randomMapping))
+      console.log("Random groups : " +JSON.stringify(randomGroups))
     
       randomGroups[0] = 0;
       var startRandomSequence = null;

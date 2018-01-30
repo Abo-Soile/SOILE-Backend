@@ -22,6 +22,8 @@ var testImages = config.directory + "/testimages";
 var utils = require('utils');
 var BaseModel = require('models/baseModel');
 
+var lodash = require("../node_modules/lodash/index");
+var _ = lodash;
 
 
 function userHasAccess(userObject) {
@@ -645,6 +647,56 @@ TrainingData.prototype.initGeneral = function(training) {
   this.trainingId = training._id;
 };
 
+
+/**
+ * Filter out components that arent in that trainingiteration
+ * @param  {[type]} components [description]
+ * @param  {[type]} iteration  [description]
+ * @return {[type]}            [description]
+ */
+function filterTrainingRandomness(components, iteration){
+  var comps = _.cloneDeep(components);
+
+  var newComps = [];
+
+  _.each(comps, function(component) {
+    if (component.iterationcontrol) {
+      var r = "";
+      if (!component.iterationcontrolarray[iteration]) {
+        component.random = false;
+        r = "| random -> false "
+      } else {
+        newComps.push(component);
+      }
+      console.log("Iterationcontrol " + iteration + " - " + component.iterationcontrolarray[iteration] + " --random:"+component.random + r)
+    }
+  });
+
+  return newComps
+  // return comps
+}
+/**
+ * Get phase number for the randomized phase
+ * @return {[integer]} Translated phase
+ */
+TrainingData.prototype.getRandomPhase = function(positionInMode) {
+  if(this.type=="general") {
+    var result = positionInMode;
+    var mode = this.getMode();
+
+    if (mode == "control" || mode == "training") {
+      console.log("Translating random training");
+      var tempRes = this.randomorder[mode];
+      result = tempRes[this.trainingIteration][positionInMode];
+    }else {
+      result = this.randomorder[mode][positionInMode];
+    }
+
+    console.log("Random translation " + positionInMode + " -> " +  result);
+    return result;
+  }
+};
+
 TrainingData.prototype.buildRandomOrder = function(training) {
   var isRandom = training.isRandom();
   if (!isRandom) {
@@ -659,7 +711,22 @@ TrainingData.prototype.buildRandomOrder = function(training) {
   for (var i = 0; i < orders.length; i++) {
     var ord = orders[i];
     if (isRandom[ord]) {
-      this.randomorder[ord] = utils.generateRandomOrder(training.components[ord]);
+      if(ord=="training"||ord=="control") {
+        var rand = [];
+        for(var j = 0; j<training.repeatcount; j++) {
+          console.log("\nBuilding "+ ord +" random order: "+ j);
+          var randComponents = filterTrainingRandomness(training.components[ord], j);
+          // console.log(JSON.stringify(randComponents||"No random components"))
+          if (randComponents.length > 0) {
+            rand.push(utils.generateRandomOrder(randComponents));
+          } else {
+            rand.push(false);
+          }
+        }
+        this.randomorder[ord] = rand;
+      }else {
+        this.randomorder[ord] = utils.generateRandomOrder(training.components[ord]);
+      }
     } else {
       this.randomorder[ord] = false;
     }
@@ -670,13 +737,19 @@ TrainingData.prototype.buildRandomOrder = function(training) {
 */
 };
 
+/**
+ * Check if a phase actually is random
+ * @return {[type]} [description]
+ */
 TrainingData.prototype.checkRandom = function() {
   if (!this.randomorder) {
     return false;
   } else {
 
     if (typeof this.randomorder[this.getMode()] !== "undefined"){
-      if (typeof this.randomorder[this.getMode()][this.position] === "number") {
+      if (typeof this.randomorder[this.getMode()][this.position] === "number" ||
+          _.isArray(this.randomorder[this.getMode()][this.position])
+          ) {
         return true;
       }
     }

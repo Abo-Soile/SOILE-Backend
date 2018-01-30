@@ -558,16 +558,19 @@ router.get("/training/:id/execute", function(request) {
     var phase = positionInMode;
 
     var isRandom = training.isRandom();
+    console.log("Checking israndom "+ JSON.stringify(isRandom) + " - " + trainingData.checkRandom());
     if (isRandom) {
-      console.log(JSON.stringify(isRandom));
       if (isRandom[trainingData.getMode()] && trainingData.checkRandom()) {
-        console.log("Random translation " + positionInMode + " -> " +  trainingData.randomorder[trainingData.getMode()][positionInMode]);
-        phase = trainingData.randomorder[trainingData.getMode()][positionInMode];
+        // console.log("Random translation " + positionInMode + " -> " +  trainingData.randomorder[trainingData.getMode()][positionInMode]);
+
+        phase = trainingData.getRandomPhase(positionInMode, training);
+
+        // phase = trainingData.randomorder[trainingData.getMode()][positionInMode];
       }
     }
 
     console.log("Executin training");
-    console.log("mode = " + trainingData.getMode() + " position:" + positionInMode);
+    console.log("mode = " + trainingData.getMode() + " position:" + positionInMode + " phase " + phase);
     console.log("Component:" + JSON.stringify(modeComponents[positionInMode]));
 
     var nextTaskTime = new Date(trainingData.nextTask);
