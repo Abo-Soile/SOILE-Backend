@@ -74,8 +74,8 @@ function testUser() {
 
         u.anotherField="anotherField";
         u.save(function(r2) {
-          console.log("\n\n#####Updated user");
-          console.log(JSON.stringify(u)+"\n");
+          // console.log("\n\n#####Updated user");
+          // console.log(JSON.stringify(u)+"\n");
           callback(null,u);
         });
       });
@@ -84,8 +84,8 @@ function testUser() {
     function getUser(arg, callback) {
       userDao.get(arg._id, function(reply) {
         console.log("\n#GOT USER!");
-        console.log(JSON.stringify(reply));
-        console.log(JSON.stringify(arg));
+        // console.log(JSON.stringify(reply));
+        // console.log(JSON.stringify(arg));
 
         vassert.assertEquals(arg.email, reply.email);
 
@@ -146,9 +146,9 @@ function testBatching() {
       dataDAO.list(function(result) {
         console.log("Fetch complete");
         vassert.assertEquals(result.length, dataCount,5);
-        console.log(result.length);
 
-        console.log(JSON.stringify(result.splice(55,63)))
+        // console.log(result.length);
+        // console.log(JSON.stringify(result.splice(55,63)))
 
         vassert.testComplete();
         callback();
@@ -193,9 +193,8 @@ function testRawQuery() {
 
         vassert.assertEquals(result.length, dataCount,5);
 
-        console.log(result.length);
-
-        console.log(JSON.stringify(result.splice(55,63)));
+        // console.log(result.length);
+        // console.log(JSON.stringify(result.splice(55,63)));
 
         vassert.testComplete();
         callback();
