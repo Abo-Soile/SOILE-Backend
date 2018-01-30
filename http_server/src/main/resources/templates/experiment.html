@@ -8,7 +8,8 @@
 			<p> {exp.description|s}</p>
 			<ol class="componentlist fancyList">
 				{#exp.components uri=URI}
-				<li><a class="phaselistlink" href="{uri}/phase/{$idx}">phase {$idx} - {name}</a>
+				<li>
+					<a class="phaselistlink" href="{uri}/phase/{$idx}">phase {$idx} - {name}</a>
 					{@eq key=type value="test"}
 					<span class="label label-info">{type}</span>
 						<a href="{uri}/phase/{$idx}/rawdata" type="button" class="btn btn-default btn-xs">Raw data</a>

@@ -73,7 +73,6 @@ function looksLikeMail(str) {
 // needed.
 //var routeMatcher = new CustomMatcher();
 
-
 var customMatcher = require('router')();
 
 // TODO: Load this from config
@@ -147,6 +146,26 @@ customMatcher.post("/login", function(request) {
       templateVars.errors = e;
 
       templateManager.render_template('login', templateVars, request);
+    });
+  });
+});
+
+customMatcher.post("/login/json", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+    var params = JSON.parse(data.getString(0, data.length()));
+
+    login(params.username, params.password, params.remember).then(function(user) {
+      console.log("Login success", user);
+      request.session.login(user);
+      request.response.json({status:"ok"})
+    }).catch(function(e) {
+      request.response.json({status:"error", error:e})
     });
   });
 });
@@ -307,7 +326,7 @@ customMatcher.get('/signup', function(request) {
   templateManager.render_template('signup', {},request);
 });
 
-function register(username, passwd, passwdAgain) {
+function register(email, passwd, passwdAgain) {
   return new Promise(function(resolve, reject) {
     if(!(email && passwd && passwdAgain)) {
       return reject("All fields are required")
@@ -336,9 +355,7 @@ function register(username, passwd, passwdAgain) {
 
       newUser.save(function(result) {
         console.log("Trying to create new user");
-        request.session.login(newUser);
-
-        resolve(result)
+        resolve(newUser)
       });
     });
   });
@@ -368,7 +385,8 @@ customMatcher.post("/signup", function(request) {
     templateVars.username = email;
     templateVars.origin = decodeURIComponent(origin);
 
-    register(email, passwd, passwdAgain).then(function(res){
+    register(email, passwd, passwdAgain).then(function(user){
+      request.session.login(user);
       if(origin){
         return request.redirect(decodeURIComponent(origin));
       }
@@ -376,6 +394,29 @@ customMatcher.post("/signup", function(request) {
     }).catch(function(err){
       templateVars.registererrors = err;
       templateManager.render_template('login', templateVars,request);
+    });
+  
+  });
+});
+
+customMatcher.post("/signup/json", function(request) {
+  var data = new vertx.Buffer();
+
+  request.dataHandler(function(buffer) {
+    data.appendBuffer(buffer);
+  });
+
+  request.endHandler(function() {
+    var params = JSON.parse(data.getString(0, data.length()));
+
+    register(params.username, params.password, params.passwordAgain).then(function(user){
+      console.log("Register promise resolve")
+       request.session.login(user);
+      return request.response.json({status:"ok"})
+    }).catch(function(err){
+      console.log("Register promise reject")
+      console.log(err)
+      return request.response.json({status:"error", error:err})
     });
   
   });

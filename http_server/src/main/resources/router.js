@@ -26,6 +26,14 @@ function logHttp(request) {
 //
 // Adds some usefull functions to the request object
 function extendRequest(request, func) {
+
+  if (request.response) {
+    request.response.json = function(data) {
+      request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+      request.response.end(JSON.stringify(data));
+    }
+  }
+
   request.redirect = function(url) {
     console.log("Redirecting to " + url);
     console.log(this.remoteAddress());
