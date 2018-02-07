@@ -437,6 +437,39 @@ TrainingDAO.prototype.getUsersToRemind = function(trainingID, callback) {
     return prom;
 }
 
+TrainingDAO.prototype.saveLinks = function(training,linksToRemove, linksToAdd) {
+  var that = this;
+
+  console.log("Saving links " + typeof linksToRemove + "  " + typeof linksToAdd)
+
+  if (typeof linksToRemove == 'object') {
+    if (linksToRemove.length > 0) {
+        console.log("Linkstoremove: " + linksToRemove.length)
+        var ids = [];
+        linksToRemove.forEach(function(l) {
+            ids.push(l._id)
+        })
+        that.update({_id:{$in:ids}}, {$set:{linkParent:false}}, function(res) {
+
+        }, true);
+    }
+  }  
+  if (typeof linksToAdd == 'object') {
+    if (linksToAdd.length > 0) {
+        console.log("linksToAdd: " + linksToAdd.length)
+        var ids = [];
+        linksToAdd.forEach(function(l) {
+            ids.push(l._id)
+        })
+        that.update({_id:{$in:ids}}, {$set:{linkParent:{name:training.name, _id:training._id, links:ids}}}, function(res) {
+
+        }, true);
+    }
+  }
+
+
+};
+
 function TrainingDataDAO() {
     BaseDAO.call(this);
     this._baseObject = models.TrainingData;
@@ -493,16 +526,62 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, co
 };
 */
 
-TrainingDataDAO.prototype.getGeneralData = function(userid, trainingId,callback) {
-  var that = this;
-  that.get({userId:userid, type:"general", trainingId:trainingId}, 
-        function(trainingData, message) {
-    if (trainingData === "") {
-        callback("")
-    } else {
-        callback(trainingData);
+TrainingDataDAO.prototype.handleLinks = function(userid, training) {
+    var that = this;
+
+    var idsToCheck = [training._id];
+
+    if (training.links) {
+        training.links.forEach(function(link) {
+            idsToCheck.push(link._id)
+        })
+    } else if (training.linkParent) {
+        training.linkParent.links.forEach(function(link) {
+            idsToCheck.push(link);
+        })
+
+        idsToCheck.push(training.linkParent._id);
     }
-  });
+
+    var p = new Promise(function(resolve, reject) {
+        that.get({userId:userid, type:"general", trainingId:{$in:idsToCheck}}, function(res) {
+            if (res.trainingId == training._id) {
+                resolve(res);
+            } else {
+                resolve({_redirect:res.trainingId});
+                // reject(res.trainingId)
+            }
+        });
+    });
+    return p
+    // that.get({userId:userid, type:"general", trainingId:$in:training._id}) 
+}
+
+TrainingDataDAO.prototype.getGeneralData = function(userid, training,callback) {
+  var that = this;
+  if (!training.isLinked()) {
+      that.get({userId:userid, type:"general", trainingId:training._id}, 
+            function(trainingData, message) {
+        if (trainingData === "") {
+            callback("")
+        } else {
+            callback(trainingData);
+        }
+      });
+  } else {
+    that.handleLinks(userid, training).then(function(res) {
+        if(res._redirect) {
+            return callback("", res._redirect);
+        }
+        callback(res);
+    })/*.catch(function(redir) {
+        console.log("DAO REDIRECT: " + redir);
+        if(redir) {
+            callback({}, redir);
+        }
+    });  */
+  }
+
 };
 
 /*

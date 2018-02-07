@@ -203,6 +203,26 @@ function handleResultData(data, datatype, callback) {
 
 }
 
+/**
+ * Return all training experiments as a json
+ * @return {[json]}   Json array containing all training experiments     
+ */
+router.get("/training/json", requireEditor,function(request) {
+  var user = request.session.currentUser;
+
+  if (user.isTestLeader()) {
+    var query = {};
+
+    if (user.isEditor() && !user.isAdmin()) {
+      query = {users:user.username};
+    }
+
+    trainingDAO.list(query ,function(trainings) {
+      request.response.json(trainings);
+    });
+  }
+});
+
 //Admin view, shows a list of training experiments
 router.get("/training", requireEditor,function(request) {
   var user = request.session.currentUser;
@@ -278,7 +298,13 @@ function trainingView(request, training) {
   var id = training._id;
   var userid = request.session.getUserId();
 
-  trainingDataDAO.getGeneralData(userid, id, function(trainingData) {
+  trainingDataDAO.getGeneralData(userid, training, function(trainingData,redirect) {
+
+    if (redirect) {
+      console.log("Redirected to linked training");
+      request.redirect("/training/"+redirect);
+      return 
+    }
 
     if(trainingData === "") {
       templateManager.render_template('trainingLanding',{training:training},request);
@@ -1040,6 +1066,9 @@ router.post("/training/:id/edit", requireEditor,function(request) {
     var dataObj = JSON.parse(data.getString(0, data.length()));
     trainingDAO.get(id, function(training) {
 
+      var linksToRemove =  _.cloneDeep(training.links);
+      var linksToAdd = dataObj.links;
+
       training = merge_options(training, dataObj);
 
       training.buildIsRandom();
@@ -1047,6 +1076,8 @@ router.post("/training/:id/edit", requireEditor,function(request) {
       training.save(function() {
         request.response.end(200);
       });
+
+      trainingDAO.saveLinks({name:training.name, _id:training._id}, linksToRemove, linksToAdd);
     });
   });
 });

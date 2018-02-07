@@ -33,13 +33,38 @@ app.filter('range', function() {
   };
 });
 
-app.controller('trainingController', function($scope, $http, $location) {
+app.service('trainingService', function($http, $location, $q) {
+  var deferred = $q.defer();
+
+  /**
+   * Returns all available trainingexperiments
+   * @return {promise} Resolves to the training list data
+   */
+  this.getTrainings = function() {
+    var promise = $http.get("/training/json").success(function(data,status) {
+      deferred.resolve(data);
+    });
+
+    return deferred.promise;
+  }
+});
+
+app.controller('trainingController', function($scope, $http, $location, trainingService) {
   var baseUrl = $location.absUrl();
 
   $scope.format = 'yyyy/MM/dd';
 
+  $scope.availableTrainings = [];
 
   $scope.training = {};
+
+  trainingService.getTrainings().then(function(res){
+    $scope.availableTrainings = [];
+    res.forEach(function(r) {
+      $scope.availableTrainings.push({name:r.name, _id:r._id});
+    })
+    $scope.availableTrainings = res;
+  });
 
   $scope.getRepeatCount = function() {
     if (isNaN(parseInt($scope.training.repeatcount))) {

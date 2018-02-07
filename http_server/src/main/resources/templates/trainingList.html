@@ -17,6 +17,9 @@
                 Unnamed Experiment
               {/name}
               </a>
+              {?linkParent}
+              <small>linked to {linkParent.name}</small>
+              {/linkParent}
               </li>
           {/trainings}
         </ul>

@@ -214,6 +214,29 @@
       </div>
     </div>
   </div>  
+
+  <div class="row" ng-show="!training.linkParent">
+    <div class="col-md-3 form-inline">
+      <h4 class="pull-left bigcheckbox">Link experiments <input type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="training.enableLink"></h4>
+    </div>
+    <div ng-show="!training.linked || training.linked.length == 0">
+        <!-- <div class="col-md-3">
+            <label>Main link</label>
+            <input type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="training.reminderSubject">
+        </div> -->
+        <div ng-show="training.enableLink" class="col-md-8">
+            <label>Select links</label>
+            <ui-select multiple ng-model="training.links" theme="bootstrap">
+              <ui-select-match placeholder="Select an experiment">[([$item.name])]</ui-select-match>
+              <ui-select-choices repeat="t in availableTrainings | filter:{name:$select.search}">
+                <div ng-bind-html="t.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>  
+        </div>
+    </div>
+  </div>
+  <div ng-show="linkParent"><h4>Linked to <a href="/training/[([training.linkParent._id])]">[([training.linkParent.name])]</a></h4></div>
+
   <div class="row">
     <div class="col-md-12">
       <useraccess users="training.users" savefunction="null"></useraccess>

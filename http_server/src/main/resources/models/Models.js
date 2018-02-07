@@ -330,6 +330,24 @@ Training.prototype.getComponentsForRound = function(trainingData) {
     return modeComponents;
 };
 
+/**
+ * Check if the training experiment is linked to another one
+ * @return {Boolean} 
+ */
+Training.prototype.isLinked = function() {
+  if(this.enableLink && this.links) {
+    if(this.links.length > 0) {
+      return true
+    }
+  }
+
+  if(this.linkParent) {
+    return true
+  }
+
+  return false
+};
+
 Training.prototype.userHasAccess = userHasAccess;
 
 /*
