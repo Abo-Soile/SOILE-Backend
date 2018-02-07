@@ -1,4 +1,4 @@
-var app = angular.module('trainingAdmin', ['angularMoment']);
+var app = angular.module('trainingAdmin', ['angularMoment', 'ui.bootstrap']);
 
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
@@ -123,6 +123,14 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
   var vm = this;
   // this.
   vm.downloadData = false;
+  vm.format = 'yyyy/MM/dd';
+
+  vm.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    vm.opened = true;
+    };
 
   vm.getUsers = function() {
     return vm.users;
@@ -178,6 +186,12 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
     query += "f2=" + (vm.filter2 ? vm.filter2 : "") + "&";
     query += "f3=" + (vm.filter3 ? vm.filter3 : "") + "&";
     query += "f4=" + (vm.filter4 ? vm.filter4 : "") + "&";
+
+    var startDateString = (vm.startdate ? vm.startdate.toISOString(): "");
+    var endDateString =   (vm.enddate ? vm.enddate.toISOString(): "");
+
+    query += "startdate=" + startDateString + "&";
+    query += "enddate=" +    endDateString + "&";
 
     console.log(query);
 

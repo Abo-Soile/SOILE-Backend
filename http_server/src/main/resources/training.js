@@ -898,6 +898,10 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
   var filter2 = request.params().get("f2");
   var filter3 = request.params().get("f3");
   var filter4 = request.params().get("f4");
+
+  var startDate = request.params().get("startdate");
+  var endDate = request.params().get("enddate");
+
   var offest = request.params().get("offset");
   var limit = request.params().get("limit");
 
@@ -909,8 +913,25 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
   console.log("filter3 " + filter3);
   console.log("filter4 " + filter4);
 
+  console.log("startDate " + startDate);
+  console.log("endDate " + endDate);
+
   matcher.trainingId = id;
   matcher.mode = filter1;
+
+  var tempTimestamp= {}
+  if (startDate) {
+    startDate = new Date(startDate);
+    tempTimestamp["$gte"] = startDate;
+  }
+  if (endDate) {
+    endDate = new Date(endDate);
+    tempTimestamp["$lte"] = endDate;
+  }
+
+  if(tempTimestamp["$lte"] || tempTimestamp["$gte"]) {
+    matcher.timestamp = tempTimestamp;
+  }
 
   var command = "single";
   var groupby = "userId";
