@@ -841,7 +841,9 @@ TrainingData.prototype.completePhase = function(training) {
 
     if (mode === "training" || mode === "control") {
       this.nextTask = hoursFromNow(training.repeatpause);
-      this.nextMail = hoursFromNow(training.maxpause);
+      if(training.reminderEmail && training.maxpause) {
+        this.nextMail = hoursFromNow(training.maxpause || 1000000);
+      }
 
       if (training.repeatcount == (this.trainingIteration + 1)) {
         this.mode = "post";
