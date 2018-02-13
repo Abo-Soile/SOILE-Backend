@@ -8,6 +8,10 @@
 <script src="/javascript/bower_components/CSV-JS/csv.js"></script>
 <script type="text/javascript" src="/javascript/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 
+<!-- Excel export related functions -->
+ -->
+<script type="text/javascript" src="/javascript/bower_components/js-xlsx/dist/xlsx.full.min.js"></script>
+
 <div id="main" class="container" ng-app="experimentAdmin">
   <div class="row">
     <div id="expview" class="col-md-12"> 
@@ -89,7 +93,8 @@
           </select>
 
           <button ng-click="buildQuery()" class="btn btn-success">Load</button>
-          <a id="dlLink" class="ng-hide" ng-show="downloadData"  ng-href="[([fileUrl])]" download="data.csv">Download data</a>
+          <a id="dlLink"      class="dl-link ng-hide" ng-show="downloadData"  ng-href="[([fileUrl])]" download="data.csv">Download data</a>
+          <a id="dlLinkExcel" class="dl-link ng-hide" ng-show="downloadData"  ng-href="[([fileUrlExcel])]" download="data.xlsx">Download excel</a>
         </div>
       </div>
       <div class="col-md-4">

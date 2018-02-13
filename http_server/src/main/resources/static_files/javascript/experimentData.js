@@ -9,6 +9,18 @@ app.config(['$compileProvider', function ($compileProvider) {
 }]);
 
 
+/**
+ * Generate buffer from excel workbook
+ * @param  {[type]} s [description]
+ * @return {[type]}   [description]
+ */
+function s2ab(s) {
+  var buf = new ArrayBuffer(s.length);
+  var view = new Uint8Array(buf);
+  for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+  return buf;
+}
+
 app.controller('experimentDataFilterController', function($scope, $http, $location, $window) {
   var baseUrl = $location.absUrl();
   $scope.components = [];
@@ -106,6 +118,15 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
       $scope.datarows = jsonData;
       $scope.downloadData = true;
 
+
+      var excelWb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(excelWb, XLSX.utils.json_to_sheet(jsonData), "Data");
+
+      var wbout = XLSX.write(excelWb, {bookType:'xlsx', type:'binary'});
+      
+      var excelBolb =new Blob([s2ab(wbout)],{type:"application/octet-stream"});  
+      $scope.excelUrl = $window.URL || $window.webkitURL; 
+      $scope.fileUrlExcel = $scope.excelUrl.createObjectURL(excelBolb);
 
       var blob=new Blob([data]);
       $scope.url = $window.URL || $window.webkitURL;

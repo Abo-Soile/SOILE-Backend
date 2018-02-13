@@ -25,7 +25,8 @@
     "fast-levenshtein": "~1.0.7",
     "ace-builds": "~1.2.0",
     "angular-moment": "~0.10.3",
-    "CSV-JS": "csv-js#^1.1.1"
+    "CSV-JS": "csv-js#^1.1.1",
+    "js-xlsx": "^0.12.0"
   },
   "moduleType": [
     "globals"

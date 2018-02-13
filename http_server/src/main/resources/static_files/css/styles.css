@@ -524,6 +524,10 @@ body {
 .overflow {
   overflow: auto; }
 
+.dl-link {
+  padding-left: 3px;
+  padding-right: 3px; }
+
 /*TestList*/
 .testlist .testlist-folders tr > td {
   cursor: pointer; }

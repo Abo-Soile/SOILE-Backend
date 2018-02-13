@@ -4,6 +4,22 @@ app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('[([').endSymbol('])]');
 });
 
+app.config(['$compileProvider', function ($compileProvider) {
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|):/);
+}]);
+
+/**
+ * Generate buffer from excel workbook
+ * @param  {[type]} s [description]
+ * @return {[type]}   [description]
+ */
+function s2ab(s) {
+  var buf = new ArrayBuffer(s.length);
+  var view = new Uint8Array(buf);
+  for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+  return buf;
+}
+
 /*Marks html as safe*/
 app.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
@@ -118,7 +134,7 @@ app.controller('userProgressController', function($scope, $http, $location, over
 });
 
 
-app.controller('trainingDataFilterController', function($scope, $http, $location, overviewService) {
+app.controller('trainingDataFilterController', function($scope, $http, $location, $window,overviewService) {
   var baseUrl = $location.absUrl();
   var vm = this;
   // this.
@@ -215,6 +231,13 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
 
        vm.datarows = jsonData;
 
+      var excelWb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(excelWb, XLSX.utils.json_to_sheet(jsonData), "Data");
+
+      var wbout = XLSX.write(excelWb, {bookType:'xlsx', type:'binary'});
+      var excelBolb =new Blob([s2ab(wbout)],{type:"application/octet-stream"});  
+      var excelUrl = $window.URL || $window.webkitURL; 
+      vm.fileUrlExcel = excelUrl.createObjectURL(excelBolb);
 
     });
   };

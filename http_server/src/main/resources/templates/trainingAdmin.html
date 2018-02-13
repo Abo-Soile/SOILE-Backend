@@ -15,6 +15,8 @@
 
 <script src="/javascript/bower_components/CSV-JS/csv.js"></script>
 
+<script type="text/javascript" src="/javascript/bower_components/js-xlsx/dist/xlsx.full.min.js"></script>
+
 <script type="text/javascript">
   //window.chartData={chartData|s|js}
   //console.log(window.chartData)
@@ -186,7 +188,9 @@
 
               <button ng-click="tDataVm.buildQuery()" class="btn btn-success">Run</button>
 
-              <a id="dlLink" class="ng-hide" ng-show="downloadData">Download data</a>
+              <a id="dlLink"      class="dl-link ng-hide" ng-show="tDataVm.downloadData">Download data</a>
+              <a id="dlLinkExcel" class="dl-link ng-hide" ng-show="tDataVm.downloadData"  ng-href="[([tDataVm.fileUrlExcel])]" download="data.xlsx">Download excel</a>
+
             </div>  
           </div>
         </div>
