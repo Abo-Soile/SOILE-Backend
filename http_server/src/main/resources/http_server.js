@@ -309,7 +309,7 @@ customMatcher.post("/user", function(request) {
 
     if (params.password === params.passwordAgain) {
       console.log(JSON.stringify(request.session.loggedIn()));
-      userDAO.get(request.session.loggedIn()._id, function(user) {
+      userDAO.get(request.session.getUserId(), function(user) {
         user.setPassword(params.password);
         user.save(function() {
           templateManager.render_template("usersettings",{"success":true}, request);
