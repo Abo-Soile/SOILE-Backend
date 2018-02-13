@@ -32,6 +32,9 @@ var csvUtils = require("csvUtils");
 
 var mailManager = require('mailManager');
 
+var lodash = require("./node_modules/lodash/index");
+var _ = lodash;
+
 var Promise = require("mPromise")//();
 
 // Promise demo
@@ -638,11 +641,13 @@ router.post("/training/:id/execute", function(request) {
       tData.phase = generalData.position;
 
       //Random order, save testdata with the right phase number
+      // TODO fix this for the new randomize functionality
       var isRandom = training.isRandom();
       if (isRandom) {
         if (isRandom[generalData.getMode()] && generalData.checkRandom()) {
-          console.log("###SAVE### Random translation " + generalData.position + " -> " +  generalData.randomorder[generalData.getMode()][generalData.position]);
-          tData.phase = generalData.randomorder[generalData.getMode()][generalData.position];
+          // console.log("###SAVE### Random translation " + generalData.position + " -> " +  generalData.randomorder[generalData.getMode()][generalData.position]);
+          // tData.phase = generalData.randomorder[generalData.getMode()][generalData.position];
+          tData.phase = generalData.getRandomPhase(generalData.position, training);
         }
       }
 
