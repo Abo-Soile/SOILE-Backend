@@ -82,7 +82,7 @@ var sessionManager =  {
   setPersonToken: function() {
     //console.log(this.readCookie("PersonToken"));
     if(!this.readCookie("PersonToken")) {
-      var c = this.createCookie("PersonToken", utils.getRandomInt(0, 10000000000000000), 900);
+      var c = this.createCookie("PersonToken", utils.getRandomInt(0, 10000000000000000)+"a", 900);
 
       this.request.response.headers().add("Set-Cookie",c);
     }
