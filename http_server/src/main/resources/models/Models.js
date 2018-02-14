@@ -680,7 +680,7 @@ function filterTrainingRandomness(components, iteration){
   _.each(comps, function(component) {
     if (component.iterationcontrol) {
       var r = "";
-      if (!component.iterationcontrolarray[iteration]) {
+      if (!component.iterationcontrolarray[iteration] || !component.iterationcontrol) {
         component.random = false;
         r = "| random -> false "
       } else {
