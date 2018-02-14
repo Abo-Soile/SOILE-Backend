@@ -678,15 +678,21 @@ function filterTrainingRandomness(components, iteration){
   var newComps = [];
 
   _.each(comps, function(component) {
+    var r = "";
     if (component.iterationcontrol) {
-      var r = "";
-      if (!component.iterationcontrolarray[iteration] || !component.iterationcontrol) {
+      if (!component.iterationcontrolarray[iteration]) {
         component.random = false;
         r = "| random -> false "
       } else {
         newComps.push(component);
       }
       console.log("Iterationcontrol " + iteration + " - " + component.iterationcontrolarray[iteration] + " --random:"+component.random + r)
+    } else {
+      // if (component.random) {
+        r = "| random -> " + component.random;
+        newComps.push(component);
+        console.log("Iterationcontrol " + iteration + " - no iterationcontrol --random:"+component.random + r)
+      // }
     }
   });
 
