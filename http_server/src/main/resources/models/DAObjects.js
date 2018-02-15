@@ -545,6 +545,13 @@ TrainingDataDAO.prototype.handleLinks = function(userid, training) {
 
     var p = new Promise(function(resolve, reject) {
         that.get({userId:userid, type:"general", trainingId:{$in:idsToCheck}}, function(res) {
+            
+            // No general data exists
+            if (res == "") {
+                console.log("No trainingdata, ignore link")
+                return resolve("");
+            }     
+            
             if (res.trainingId == training._id) {
                 resolve(res);
             } else {
