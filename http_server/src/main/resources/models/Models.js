@@ -772,7 +772,7 @@ TrainingData.prototype.checkRandom = function() {
 
     if (typeof this.randomorder[this.getMode()] !== "undefined"){
       if (typeof this.randomorder[this.getMode()][this.position] === "number" ||
-          _.isArray(this.randomorder[this.getMode()][this.position])
+          _.isArray(this.randomorder[this.getMode()][this.trainingIteration])
           ) {
         return true;
       }
