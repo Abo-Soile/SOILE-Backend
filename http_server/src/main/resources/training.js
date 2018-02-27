@@ -1013,6 +1013,13 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
 
     }
 
+    if (matcher.mode === "trainingiterations") {
+      projection['data.rows'] = 0;
+      matcher.mode = "training";
+      matcher.trainingIteration = parseInt(filter2)-1;
+      groupby = "userId";
+    }
+
     matcher.type = {"$ne":"general"};
 
     console.log(JSON.stringify(matcher));

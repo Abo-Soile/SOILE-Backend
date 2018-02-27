@@ -153,7 +153,7 @@
           <div class="col-md-12">
             <div class="dataFilter form-inline">
               <label>Selectphase</label>
-              <select ng-model="tDataVm.filter1" ng-options="o as o for o in ['pre', 'post', 'training']" class="form-control"></select>
+              <select ng-model="tDataVm.filter1" ng-options="o as o for o in ['pre', 'post', 'training', 'trainingiterations']" class="form-control"></select>
 
               <span ng-if="tDataVm.filter1 == 'pre' || tDataVm.filter1 == 'post'">
                 <label>DataType</label>
@@ -184,6 +184,11 @@
                     
                   </span>
                 </span>
+              </span>
+
+              <span ng-if="tDataVm.filter1 == 'trainingiterations'">
+                <label>Select training iteration</label>
+                <select ng-model="tDataVm.filter2" ng-options="o as o for o in tDataVm.getIterations()" class="form-control"></select>
               </span>
 
               <button ng-click="tDataVm.buildQuery()" class="btn btn-success">Run</button>
