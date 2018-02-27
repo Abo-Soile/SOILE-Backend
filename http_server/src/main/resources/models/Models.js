@@ -785,12 +785,18 @@ TrainingData.prototype.checkRandom = function() {
 };
 
 /*
-  Generates a date x hours in the future
+  Generates a date x hours in the future,
+  Returns current date if if hours isn't an integer
 */
 function hoursFromNow(hours) {
   var date = new Date();
 
   hours = parseInt(hours);
+
+  if(_.isNaN(hours)) {
+    return date
+  }
+
   date.setHours(hours + date.getHours());
 
   return date;
@@ -834,7 +840,12 @@ TrainingData.prototype.completePhase = function(training) {
     console.log("IN LAST PHASE");
 
     if (mode === "pre") {
-      this.nextTask = hoursFromNow(training.repeatpause);
+
+      if (training.repeatpauseadvance && !_.isNaN(parseInt(training.repeatpausepre))) {
+        this.nextTask = hoursFromNow(training.repeatpausepre);
+      } else {
+        this.nextTask = hoursFromNow(training.repeatpause);
+      }
 
       if (this.inControlGroup) {
         //this.mode = "control";
@@ -847,12 +858,18 @@ TrainingData.prototype.completePhase = function(training) {
 
     if (mode === "training" || mode === "control") {
       this.nextTask = hoursFromNow(training.repeatpause);
+
       if(training.reminderEmail && training.maxpause) {
         this.nextMail = hoursFromNow(training.maxpause || 1000000);
       }
 
+      // Last training phase completed, go to post
       if (training.repeatcount == (this.trainingIteration + 1)) {
         this.mode = "post";
+
+        if(training.repeatpauseadvance && !_.isNaN(parseInt(training.repeatpausepost))) {
+          this.nextTask = hoursFromNow(training.repeatpausepost);
+        }
 
         /*Set mode to done if the posttest is empty*/
         if (training.components.post.length === 0) {

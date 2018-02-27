@@ -58,6 +58,10 @@
           <input  class="form-control"  ng-model="training.shortname">
         </div>
 
+        <div class="col-md-3">
+          <label>Submit button </label>
+          <input  class="form-control"  ng-model="training.submitbutton">
+        </div>
       </div>
 
       <div class="row">
@@ -65,15 +69,37 @@
           <label>Repeat training</label>
           <input class="form-control" ng-model="training.repeatcount">
         </div>
+      </div>
 
-        <div class="col-md-3 ">
-          <label>Pause between tries (h)</label>
-          <input class="form-control" ng-model="training.repeatpause">
-        </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-inline">
+            <label class="checkbox bigcheckbox">Pause between tries (h) - Advanced
+                <input type="checkbox"  ng-model="training.repeatpauseadvance" ng-true-value="true" ng-false-value="false">
+            </label>
+          </div>
+          <div ng-if="training.repeatpauseadvance">
+            <div class="col-md-3">
+              <label>Pause between training steps</label>
+              <input class="form-control" ng-model="training.repeatpause">
+            </div>
 
-        <div class="col-md-3">
-          <label>Submit button </label>
-          <input  class="form-control"  ng-model="training.submitbutton">
+            <div class="col-md-3">
+              <label>Pause pre-training</label>
+              <input class="form-control" ng-model="training.repeatpausepre">
+            </div>
+
+            <div class="col-md-3">
+              <label>Pause training-post</label>
+              <input class="form-control" ng-model="training.repeatpausepost">
+            </div>
+
+          </div>
+          <div ng-if="!training.repeatpauseadvance">
+            <input class="form-control" ng-model="training.repeatpause">
+          </div>
+          
+            
         </div>
       </div>
 
