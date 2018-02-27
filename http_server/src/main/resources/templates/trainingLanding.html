@@ -10,7 +10,15 @@
       <div class="row">
         <div class="col-md-12">
           <h1>{training.name}  </h1>
-          <p> {training.introduction|s}</p>
+          {?training.loggedInIntroVersion}
+            {?loggedIn}
+              <p> {training.introductionLoggedIn|s}</p>
+            {:else}
+              <p> {training.introduction|s}</p>
+            {/loggedIn}
+          {:else}
+            <p> {training.introduction|s}</p>
+          {/training.loggedInIntroVersion}
         </div>
       </div>
       

@@ -20,8 +20,28 @@
       <label>Experiment name</label>
       <input  class="form-control"  ng-model="training.name">
 
-      <label>Introduction</label>
-      <textarea class="form-control" ng-model="training.introduction"> </textarea>
+      <div class="bigcheckbox">
+        <label>Introduction - Different message for logged in users</label>
+        <input type="checkbox" ng-model="training.loggedInIntroVersion" ng-true-value="true" ng-false-value="false">
+      </div>
+
+      <div ng-if="!training.loggedInIntroVersion">
+        <textarea class="form-control" ng-model="training.introduction"> </textarea>
+      </div>
+
+      <div ng-if="training.loggedInIntroVersion">
+        <div class="row">
+          <div class="col-md-6">
+            <label>When user <i>not</i> logged in</label>
+            <textarea rows="8" class="form-control" ng-model="training.introduction"> </textarea>
+          </div>
+
+          <div class="col-md-6">
+            <label>When is is logged in</label>
+            <textarea rows="8" class="form-control" ng-model="training.introductionLoggedIn"></textarea>
+          </div>
+        </div>
+      </div>
 
       <label>Description</label>
       <textarea class="form-control" ng-model="training.description"> </textarea>
