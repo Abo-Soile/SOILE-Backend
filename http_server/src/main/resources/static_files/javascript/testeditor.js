@@ -78,6 +78,19 @@ var autoCompleteList = [
 
 ace.config.set("modePath", "/javascript");
 
+app.directive('animateOnChange', function($timeout) {
+    return function(scope, element, attr) {
+        scope.$watch(attr.animateOnChange, function(nv,ov) {
+            if (nv!=ov) {
+                element.addClass('changed');
+                $timeout(function() {
+                    element.removeClass('changed');
+                }, 500);
+            }
+        });
+    };  
+});
+
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
@@ -186,6 +199,20 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   $scope.userCanEdit = false;
   $scope.userIsOwner = false;
+
+  $scope.showVariables = false;
+
+  $scope.toggleShowVariables = function() {
+    $scope.showVariables = !$scope.showVariables;
+
+ console.log($scope.showVariables) 
+
+    if ($scope.showVariables) {
+      SOILE2.util.setAssignCallback($scope.assignCallback);
+    } else {
+      SOILE2.util.setAssignCallback(null);
+    }
+  }
 
 	$scope.aceLoaded = function(_editor) {
     // Options
@@ -364,6 +391,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
     SOILE2.util.resetData();
     SOILE2.util.setDebug(setRuntimeError);
+    //SOILE2.util.setAssignCallback($scope.assignCallback);
 
     $timeout(function() {
       //SOILE2.run()
@@ -459,6 +487,10 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     });
   };
 
+  $scope.assignCallback = function(data1, data2){
+    $scope.variables = angular.extend({},data1, data2);
+    $scope.$apply();
+  };
 
   $scope.getTest();
 

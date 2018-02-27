@@ -10,6 +10,17 @@
     #editor { 
         height: 550px;
     }
+
+    [animate-on-change] {
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+[animate-on-change].changed {
+    background-color: lightgreen;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+}
+
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
@@ -83,6 +94,8 @@
             <button ng:click="runTest()" type="button" id="runButton" class="btn btn-success"
             ng-class="compiled ? '' : 'disabled'"
             > [([runbutton])]</button> </span>
+
+
            
         </div>
     </div>
@@ -106,9 +119,12 @@
             </div>
         </div>
        
+
         <div class="col-md-5">
             <div class="panel">
-                <h5>DebugLog</h5>
+                <h5>DebugLog             <button ng-click="toggleShowVariables()" type="button" id="" class="btn btn-xs btn-default"> 
+            Show/hide variables
+            </button></h5>
                 <div id="logdiv" class="overflow300">
                     <table class="table table-striped table-condensed" id="log">
                         <thead>
@@ -122,6 +138,22 @@
                     </table>
                 </div>
             </div>
+        </div>
+
+        <div class="col-md-7" ng-show="showVariables">
+            <div class="panel">
+                <h5>Variable inspector</h5>
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <th>Variable</th>
+                        <th>Value</th>
+                    </thead>
+                    <tr ng-repeat="(key,value) in variables">
+                        <td >[([key])]</td>
+                        <td animate-on-change='value'>[([value])]</td>
+                    </tr>
+                </table>
+              </div>  
         </div>
 
         <div class="col-md-7">
