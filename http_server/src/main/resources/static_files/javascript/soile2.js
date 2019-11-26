@@ -615,7 +615,12 @@ SOILE2 = (function(){
       }
     }
   };
-  
+
+  bin.setstyle = function(id, styles) {
+    var id = soile2.util.getid(id)
+    jQuery(id).css(styles)
+  }
+
   bin.imagefile = function(url){
     var id = soile2.rt.uniqueid();
     var props = {

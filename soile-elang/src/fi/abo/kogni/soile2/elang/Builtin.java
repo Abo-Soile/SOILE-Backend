@@ -18,7 +18,7 @@ public class Builtin {
     public static boolean isBuiltinFunction(String name) {
         return builtinFunctions.contains(name);
     }
-    
+
     public static void addBuiltins(SymbolTable symtab, STGroup tmpl) {
         Iterator<String> it1 = builtinFunctions.iterator();
         ST st = tmpl.getInstanceOf("ref2bin");
@@ -29,12 +29,14 @@ public class Builtin {
             st.remove("name");
         }
     }
-    
+
     private static Set<String> builtinFunctions;
-    
+
     static {
         builtinFunctions = new HashSet<>();
-        
+
+        builtinFunctions.add("calljs");
+
         builtinFunctions.add("copydata");
         builtinFunctions.add("copystimulus");
 
@@ -89,6 +91,7 @@ public class Builtin {
         builtinFunctions.add("seconds");
         builtinFunctions.add("minutes");
 
+        builtinFunctions.add("setstyle");
         builtinFunctions.add("show");
         builtinFunctions.add("animate");
 
