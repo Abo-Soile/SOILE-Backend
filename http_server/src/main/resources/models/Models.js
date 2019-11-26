@@ -359,6 +359,8 @@ function Test(arg) {
     this.name = "Unnamed";
     this.folder = "Unspecified";
 
+    this.users = [];
+
     BaseModel.call(this, arg);
 
     this._collection = Test.collection;

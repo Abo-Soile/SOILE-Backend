@@ -37,7 +37,7 @@ mApp.directive('useraccess',  ['$http', function($http) {
           }
 
           scope.loadUsers = function() {
-          
+
             var url = scope.address;
           };
 
@@ -49,6 +49,11 @@ mApp.directive('useraccess',  ['$http', function($http) {
               scope.userList = data;
 
               /*Removing already added users from the list*/
+
+              if (!scope.users) {
+                scope.users = [];
+              }
+
               for (var i = 0; i < scope.users.length; i++) {
                 var usr = scope.users[i];
                 for (var j = 0; j < scope.userList.length; j++) {
@@ -83,7 +88,7 @@ mApp.directive('useraccess',  ['$http', function($http) {
           };
 
           /*
-            Removes user from the user list and re-adds him to the available users list 
+            Removes user from the user list and re-adds him to the available users list
           */
           scope.removeUser = function(user) {
             console.log("Removing useraccess " + user);

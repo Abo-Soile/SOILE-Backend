@@ -88,7 +88,7 @@ app.directive('animateOnChange', function($timeout) {
                 }, 500);
             }
         });
-    };  
+    };
 });
 
 app.run(function(editableOptions) {
@@ -205,7 +205,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
   $scope.toggleShowVariables = function() {
     $scope.showVariables = !$scope.showVariables;
 
- console.log($scope.showVariables) 
+ console.log($scope.showVariables)
 
     if ($scope.showVariables) {
       SOILE2.util.setAssignCallback($scope.assignCallback);
@@ -217,8 +217,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 	$scope.aceLoaded = function(_editor) {
     // Options
     $scope.editor = _editor;
-  
-    $scope.editor.renderer.setShowGutter(true); 
+
+    $scope.editor.renderer.setShowGutter(true);
 
     $scope.lastSave = $scope.editor.getValue();
 
@@ -263,7 +263,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     var url = $location.absUrl() + "/compile";
 
   	$http.post(url, code).success(function(data, status, headers, config) {
-  		
+
       $scope.savebutton = "Save&Compile";
 
       $scope.compileErrors = data.errors;
@@ -345,7 +345,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
       if (score || persistantData) {
         $scope.trainingdata = true;
-      } 
+      }
       else {
         $scope.trainingdata = false;
       }
@@ -399,22 +399,11 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     }, 1500);
   };
 
-  var editnameurl = $location.absUrl() + "/editname";
-
-  $scope.updateMeta = function() {
-    var data = {};
-    data.name = $scope.test.name;
-    data.folder = $scope.test.folder;
-    data.published = $scope.test.published;
-    $http.post($location.absUrl(), data);
-  };
-
   $scope.updatename = function(data) {
     console.log("Updating " + $scope.testname + "    " + data);
     $scope.testname = data;
     $scope.test.name = data;
-    $http.post(editnameurl, {name: $scope.testname});
-    $scope.updateMeta();
+    $scope.saveTest()
   };
 
   $scope.updateUsers = function() {
@@ -427,7 +416,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     console.log("Watch");
   if(timer){
       $timeout.cancel(timer);
-    }  
+    }
     timer= $timeout(function(){
         $scope.saveTest();
      },delay);
@@ -465,7 +454,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
         /*
           User can edit if he is admin, on the list, or if the test is publically editable
         */
-        if (_.includes($scope.test.users, $scope.currentUserName) || 
+        if (_.includes($scope.test.users, $scope.currentUserName) ||
             data.role == "admin"
             ) {
 
