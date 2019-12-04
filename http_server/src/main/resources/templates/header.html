@@ -21,7 +21,7 @@
 <!--     Bootstrap3 theme -->
 <!--     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css"> -->
 <!--     <link rel="stylesheet" type="text/css" href="/css/flat-ui.css"> -->
-    <script src="https://cdn.ravenjs.com/1.1.22/jquery,native/raven.min.js"></script>
+    <script src="https://cdn.ravenjs.com/3.26.4/raven.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
       Raven.config('https://02e33d5636ef4973b53cd96eb8121747@app.getsentry.com/55681').install();
     </script>
@@ -34,8 +34,8 @@
           {name: "myWidgets", location:"myWidgets"},
           {name: "dbootstrap", location:"dbootstrap"}
         ],
-        aliases: [  
-          ['levenshtein', '/javascript/bower_components/fast-levenshtein/levenshtein.js']  
+        aliases: [
+          ['levenshtein', '/javascript/bower_components/fast-levenshtein/levenshtein.js']
         ]
       };
     </script>
@@ -68,7 +68,7 @@
       <div class="container">
 
         {?hideLogin}
-          
+
         {:else}
         <a class="navbar-brand" href="/">Soile</a>
         {/hideLogin}
@@ -78,7 +78,7 @@
            <li><p class="navbar-text">Signed in as <a href="/user" class="navbar-link">{user.username}</a></p></li>
            <li>
             <form action="/logout">
-         {?user.admin} 
+         {?user.admin}
              <button type="submit" class="btn btn-danger navbar-btn">Logout</button>
             {:else}
              <button type="submit" class="btn btn-warning navbar-btn">Logout</button>
@@ -87,14 +87,14 @@
          </li>
         {:else}
           {?hideLogin}
-          
+
           {:else}
             <a type="button" class="btn btn-success navbar-btn" href="/login">Login</a>
           {/hideLogin}
 
         {/loggedIn}
       </ul>
-       
+
       </div>
     </nav>
     <!-- <div class="container">
@@ -102,9 +102,9 @@
         <div class="span9">
         </div>
         <div id="usercontrol">
-          <p><a href="/logout">{name}</a></p> 
+          <p><a href="/logout">{name}</a></p>
         </div>
       </div>
     </div> -->
-      
+
 
