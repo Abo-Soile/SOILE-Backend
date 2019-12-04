@@ -26,11 +26,23 @@ var requireEditor = require('middleware').requireEditor;
 var bowser = require("node_modules/bowser/bowser");
 //var lodash = require("node_modules/lodash");
 
+var container = require('vertx/container');
+
+var config = container.config;
+var externalPort = config.externalport;
+
+function swapUrlPort(url, newPort) {
+  var uriRegex = /([a-zA-Z+.\-]+):\/\/([^\/]+):([0-9]+)\//;
+
+  return url.replace(uriRegex, "$1://$2:" + newPort + "/");
+}
+
+
 function merge_options(obj1,obj2){
-    var obj3 = {};
-    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
-    return obj3;
+  var obj3 = {};
+  for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+  for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+  return obj3;
 }
 
 router.get("/experiment", function(request){
@@ -98,7 +110,7 @@ router.get('/experiment/:id', function(request){
       experimentDAO.countParticipants(id, function(count) {
         experiment.participants = count;
         console.log(JSON.stringify(count));
-  
+
         templateManager.render_template("experimentAdmin", {"exp":experiment, "hideLogin":hidelogin},request);
       });
     } else {
@@ -139,7 +151,7 @@ router.get('/experiment/:id', function(request){
       Checking for userdata and generating it when needed.
       */
       dataDAO.getOrGenerateGeneral(userID, exp, request, function(userdata) {
-        if(userdata.position > 0) {          
+        if(userdata.position > 0) {
             request.redirect(request.absoluteURI() + "/phase/" + (userdata.position));
           }
         else {
@@ -151,7 +163,7 @@ router.get('/experiment/:id', function(request){
     else {
 
       if (exp.userHasAccess(request.session.currentUser)) {
-        renderExp(exp, true); 
+        renderExp(exp, true);
       }
       else {
         return request.unauthorized();
@@ -187,7 +199,7 @@ router.get('/experiment/:id/phase/:phase', function(request) {
         return request.redirect(request.absoluteURI().toString().replace(reg,""));
       }
       return request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (userdata.position)));
-    } 
+    }
 
     else {
       experimentDAO.get(expID, function(exp) {
@@ -196,6 +208,8 @@ router.get('/experiment/:id/phase/:phase', function(request) {
         //Redirecting to experiment end
         if(phase===undefined) {
           var url = request.absoluteURI().toString();
+          url = swapUrlPort(url, externalPort);
+
           var cut = url.indexOf("/phase/");
           url = url.substr(0,cut) + "/end";
 
@@ -223,7 +237,7 @@ router.get('/experiment/:id/phase/:phase', function(request) {
           if (exp.israndom) {
             console.log("------Translating phase number---------");
             console.log(phaseNo + " -> " + userdata.randomorder[phaseNo]);
-            phase = exp.components[userdata.randomorder[phaseNo]]; 
+            phase = exp.components[userdata.randomorder[phaseNo]];
           }
 
           //Formphase, rendering form template
@@ -250,7 +264,7 @@ router.get('/experiment/:id/phase/:phase', function(request) {
               templateManager.render_template("testphase", context, request);
             });
           }
-          
+
           else {
             console.log(phase.type);
             console.log("Phase type is undefined");
@@ -263,7 +277,7 @@ router.get('/experiment/:id/phase/:phase', function(request) {
 
 
 /*
-/ Saves data from a certain phase, while also checking that the phase hasn't been 
+/ Saves data from a certain phase, while also checking that the phase hasn't been
 /
 */
 router.post('/experiment/:id/phase/:phase', function(request) {
@@ -337,7 +351,7 @@ router.get('/experiment/:id/end', function(request) {
       }
 
       var context = {"endtitle":endTitle, "endmessage":endMessage};
-      
+
       if (typeof exp.hidelogin !== 'undefined') {
         context.hideLogin = exp.hidelogin;
       }
@@ -359,7 +373,7 @@ router.get('/experiment/:id/end', function(request) {
 
 router.get('/experiment/:id/phase/:phase/json', function(request) {
   var expID = request.params().get('id');
-  var phaseNo = request.params().get('phase'); 
+  var phaseNo = request.params().get('phase');
 
   var userID = request.session.getPersonToken();
 
@@ -391,7 +405,7 @@ router.get("/experiment/:id/edit", requireEditor, function(request) {
   var id = request.params().get('id');
 
   experimentDAO.get(id, function(exp) {
-    if (exp.userHasAccess(request.session.currentUser)) { 
+    if (exp.userHasAccess(request.session.currentUser)) {
       return templateManager.render_template('a_experimentEdit', {}, request);
     }
     return request.unauthorized();
@@ -492,7 +506,7 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
     //projection.data = {};
     projection["data.single"] = 0;
     matcher.type === "test";
-  
+
     matcher.phase = parseInt(filter3)-1;
     /*matcher.format = filter4;*/
 
@@ -565,4 +579,4 @@ router.post("/experiment/:id/addform", requireEditor,function(request) {
       request.response.end(form.toJson());
     });
   });
-}); 
+});
