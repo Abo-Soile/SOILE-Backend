@@ -3,23 +3,24 @@
   "version": "1.0.0",
   "description": "Contains dev dependencies for the whole vertx/js project",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp": "gulp install"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "gulp": "~3.9.0",
     "gulp-concat": "~2.6.0",
     "gulp-install": "^0.6.0",
     "gulp-rename": "~1.2.2",
-    "gulp-sass": "~2.2.0",
+    "gulp-sass": "~3",
     "gulp-util": "~3.0.6",
     "jasmine-core": "~2.4.1",
     "karma": "~0.13.11",
     "karma-jasmine": "~0.3.6",
-    "phantomjs": "~2.1.7",
+    "phantomjs-prebuilt": "^2.1.7",
     "karma-phantomjs-launcher": "~1.0",
-    "karma-coverage": "~0.5.2"
+    "karma-coverage": "~0.5.2",
+    "bower": "1.8.8"
   },
   "author": "Daniel Wärnå",
   "license": "ISC",
