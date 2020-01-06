@@ -3,6 +3,8 @@ var eb = vertx.eventBus;
 var utils = require('utils');
 
 var console = require('vertx/console');
+var Promise = require("mPromise");
+
 
 if (!Object.assign) {
   Object.defineProperty(Object, 'assign', {
@@ -58,22 +60,34 @@ function BaseModel(arg) {
 }
 
 BaseModel.prototype.save = function(callback) {
-    //console.log("Saving " + this.constructor.name);
-    
-    var obj = {"action":"save"};
-    obj.document = this.filter();
+  //console.log("Saving " + this.constructor.name);
 
-    var that = this;
-    this.sendToMongo(obj, function(reply) {
-        if(typeof reply._id === "string" && reply.status === "ok") {
-          that._id = reply._id;
-          //console.log("THAT.id " + that._id)
-        }
+  var obj = {"action":"save"};
+  obj.document = this.filter();
 
-        that._testfieldFDGFDGFDG = "TEST"
-        callback(reply);
-    });
+  var that = this;
+  this.sendToMongo(obj, function(reply) {
+    if(typeof reply._id === "string" && reply.status === "ok") {
+      that._id = reply._id;
+      //console.log("THAT.id " + that._id)
+    }
+
+    that._testfieldFDGFDGFDG = "TEST"
+    callback(reply);
+  });
 };
+
+BaseModel.prototype.saveP = function() {
+  var that = this;
+
+  var p = new Promise(function(resolve, reject) {
+    that.save(function(res) {
+      resolve(res);
+    });
+  });
+
+  return p;
+}
 
 BaseModel.prototype.update = function(objNew, callback) {
 
@@ -89,7 +103,7 @@ BaseModel.prototype.softDelete = function(callback) {
 
 /*
 Sends the specified command to mongo-persistor and returns
-calls the callback function when done. 
+calls the callback function when done.
  */
 BaseModel.prototype.sendToMongo = function(arg, callback) {
     arg.collection = this._collection;
