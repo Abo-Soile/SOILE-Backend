@@ -1,6 +1,6 @@
 package fi.abo.kogni.soile2.qmarkup;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+// import com.sun.org.apache.xpath.internal.operations.Bool;
 import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
 import junit.framework.TestCase;
 import org.junit.After;

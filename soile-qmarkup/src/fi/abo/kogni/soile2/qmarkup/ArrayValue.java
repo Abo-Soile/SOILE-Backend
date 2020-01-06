@@ -9,7 +9,7 @@ public class ArrayValue extends CompoundValue {
         this.values = values;
     }
 
-    public ArrayValue() { 
+    public ArrayValue() {
         this(new ArrayList<Value>());
     }
 
@@ -32,7 +32,7 @@ public class ArrayValue extends CompoundValue {
     }
 
     @Override
-    public void setValue(String _, Object value) {
+    public void setValue(String var, Object value) {
         if (value instanceof Value) {
             Value v = (Value) value;
             values.add(v);
@@ -43,7 +43,7 @@ public class ArrayValue extends CompoundValue {
     public Object asJavaObject() {
         return this.values;
     }
-    
+
     @Override
     public String toString() {
         return values.toString();

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
@@ -29,13 +29,13 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         this.spacer = group.getInstanceOf("vspacer");
         this.body = new StringBuilder();
         this.validStmt = new StringBuilder();
-        
+
         Tag tag = Tag.newTag("p");
         this.paragraphOpenTag = tag.toString();
         this.paragraphCloseTag = Tag.closingTag(tag);
         this.questionnaireId = "";
         this.encryptionKey = "";
-        
+
         this.inParagraph = false;
         this.textAsArgument = false;
         this.expectPageTitle = false;
@@ -50,7 +50,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
     public void questionnaireId(String id) {
         this.questionnaireId = id;
     }
-    
+
     public String questionnaireId() {
         return this.questionnaireId;
     }
@@ -58,7 +58,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
     public void encryptionKey(String key) {
         this.encryptionKey = key;
     }
-    
+
     public String encryptionKey() {
         return this.encryptionKey;
     }
@@ -67,25 +67,25 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
     @Override
     public void processCommand(String command, ArrayList<String> args) throws MalformedCommandException {
         Tag tag = Tag.newTag(command);
-        
+
         if (addSpacer) {
             addTag(spacer.render());
             addSpacer = false;
         }
-        
+
         if (textAsArgument) {
             /*
-             * We were probably expecting text, but 
+             * We were probably expecting text, but
              * never mind. Proceed as usual, but close the pending tag.
              */
             textAsArgument = false;
             clearPendingTag();
         }
- 
+
         switch (command) {
-        
+
         // Process those commands which take an object as argument.
-        
+
         case "dropdownmenu":
             if (args.size() > 0) {
                 //closeParagraph();
@@ -145,7 +145,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
 
                 ST tmpl = group.getInstanceOf("select");
                 String defaultValue = value.getValue("default_value").toString();
-                ArrayList<Value> options = 
+                ArrayList<Value> options =
                         (ArrayList<Value>)  value.getValue("options").asJavaObject();
                 int numColumns = options.size();
 //                int width = CONTENT_WIDTH_PX  / numColumns;
@@ -158,7 +158,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Iterator<Value> it = options.iterator();
                 while (it.hasNext()) {
                     // Iterating over columns, basically.
-                    
+
                     Value c = it.next();
                     ST columnTmpl = group.getInstanceOf("selection_column");
                     if(colalign) {
@@ -170,7 +170,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                     Iterator<Value> iter = column.iterator();
                     while (iter.hasNext()) {
                         // Fill one column.
-                        
+
                         Value opt = iter.next();
                         ST optTmpl = group.getInstanceOf("checkbox");
                         String colname = createColumnName(questionnaireId(),
@@ -276,7 +276,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 }
 
                 sswd.setDefaultValue(defaultValue);
-                ArrayList<Value> options = 
+                ArrayList<Value> options =
                         (ArrayList<Value>)  value.getValue("options").asJavaObject();
                 int numColumns = options.size();
                 //int width = CONTENT_WIDTH_PX  / numColumns;
@@ -286,7 +286,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Iterator<Value> optionsIt = options.iterator();
                 while (optionsIt.hasNext()) {
                     // Iterating over columns, basically.
-                    
+
                     Value c = optionsIt.next();
                     ST columnTmpl = group.getInstanceOf("selection_column");
                     if (colalign) {
@@ -299,7 +299,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                     Iterator<Value> iter = column.iterator();
                     while (iter.hasNext()) {
                         // Fill one column.
-                        
+
                         Value opt = iter.next();
                         ST optTmpl = group.getInstanceOf("radiobutton");
                         String id = idGen.generate();
@@ -398,16 +398,16 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
             break;
         case "textbox":
             if (args.size() > 0) {
-                
+
                 /*
-                 * Text boxes are "in-line elements." That is, they can appear only 
+                 * Text boxes are "in-line elements." That is, they can appear only
                  * inside a paragraph.
                  */
                 if (inParagraph == false) {
                     addTag(paragraphOpenTag);
                     inParagraph = true;
                 }
-                
+
                 Value value = Value.parse(args.get(0));
                 Validator validator = Validator.validatorFor(command);
                 validator.validate(value);
@@ -450,9 +450,9 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 validationCode(tbwd);
             }
             break;
-            
+
         // Process other commands (with simple arguments).
-            
+
         case "bs":          // "Block Style"
             if (args.size() > 0) {
                 closeParagraph();
@@ -531,7 +531,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         }
         body.append(' ');
     }
-    
+
     @Override
     public void finish() {
         closeParagraph();
@@ -544,7 +544,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         questionnaire.add("stmts", validStmt.toString());
         return questionnaire.render();
     }
-    
+
     public void reset() {
         pendingTags.clear();
         tsStack.clear();
@@ -564,37 +564,37 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         addSpacer = false;
         questionnaireId = "";
     }
-    
+
     private void setPendingTag(Tag tag) {
         // Only one tag may be pending at any given time.
-        
+
         if (pendingTags.isEmpty() == false) {
             pendingTags.clear();
         }
         pendingTags.push(Tag.closingTag(tag));
     }
-    
+
     private void clearPendingTag() {
         if (pendingTags.isEmpty() == false) {
             addTag(pendingTags.pop());
-            
+
             // Only one tag is allowed to be pending at a time.
             pendingTags.clear();
         }
     }
-    
+
     private void emptyTsStack() {
         while (tsStack.isEmpty() == false) {
             body.append(Tag.closingTag(tsStack.pop()));
         }
     }
-    
+
     private void emptyBsStack() {
         while (bsStack.isEmpty() == false) {
             body.append(Tag.closingTag(bsStack.pop()));
         }
     }
-    
+
     private void closeParagraph() {
         if (inParagraph) {
             clearPendingTag();
@@ -613,10 +613,10 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         body.append(tag);
         body.append('\n');
     }
-    
+
     private void workOnStack(ArrayList<String> args, ArrayDeque<Tag> stack, Tag tag) {
         String arg = decodeStackArg(args.get(0));
-        
+
         switch (arg) {
         case "push":
             if (args.size() > 1) {
@@ -650,7 +650,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
             throw new MalformedCommandException(msg);
         }
     }
-    
+
     private String decodeStackArg(String arg) {
         if (arg.length() == 1) {
             if (arg.charAt(0) == '+') {
@@ -665,7 +665,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         }
         return arg;
     }
-    
+
     private String createColumnName(String qid, String col) {
         col = col.replace(".", "").replace("\n", "");
         int len = qid.length() + col.length() + 1;
@@ -676,7 +676,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         sb.append(col);
         return sb.toString();*/
     }
-    
+
     private void validationCode(Qdata data) {
         validationCode(data.render());
     }
@@ -695,17 +695,17 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
     private ST questionnaireST() {
         return group.getInstanceOf("questionnaire_html");
     }
-    
+
     private ArrayDeque<String> pendingTags;
     private ArrayDeque<Tag> tsStack;
     private ArrayDeque<Tag> bsStack;
-    
+
     // The body of the questionnaire
     private StringBuilder body;
-    
+
     // Validation statements.
     private StringBuilder validStmt;
-    
+
     private STGroup group;
     private ST spacer;
     private ST questionnaire;
@@ -719,12 +719,12 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
     private boolean addSpacer;
     private UniqueStringGenerator idGen;
     private UniqueStringGenerator nameGen;
-    
+
     private abstract class Qdata {
         public Qdata(String n) {
             this.tmpl = group.getInstanceOf(n);
         }
-        
+
         protected ST getTmpl() {
             return tmpl;
         }
@@ -732,7 +732,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         public String render() {
             return getTmpl().render();
         }
-        
+
         private ST tmpl;
     }
 
@@ -757,7 +757,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
             return this;
         }
     }
-    
+
     private class DropDownMenuWidgetData extends Qdata {
         public DropDownMenuWidgetData() {
             super("qdata_widgetdata_dropdownmenu");
@@ -766,11 +766,11 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         public void setId(String id) {
             getTmpl().add("id", id);
         }
-        
+
         public void setColumn(String col) {
             getTmpl().add("column", col);
         }
-        
+
     }
 
     private class SingleselectWidgetData extends Qdata {
@@ -781,19 +781,19 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         public void addId(String id) {
             getTmpl().addAggr("ids.{text}", id);
         }
-        
+
         public void setColumn(String col) {
             getTmpl().add("columnName", col);
         }
-        
+
         public void addValue(String col) {
             getTmpl().addAggr("values.{text}", col);
         }
-        
+
         public void setDefaultValue(String dw) {
             getTmpl().add("defaultValue", dw);
         }
-        
+
     }
 
     private class MultiselectWidgetData extends Qdata {
@@ -804,19 +804,19 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         public void addId(String id) {
             getTmpl().addAggr("ids.{text}", id);
         }
-        
+
         public void addColumn(String col) {
             getTmpl().addAggr("columns.{text}", col);
         }
-        
+
         public void addValue(String col) {
             getTmpl().addAggr("values.{text}", col);
         }
-        
+
         public void setDefaultValue(String dw) {
             getTmpl().add("defaultValue", dw);
         }
-        
+
     }
 
     private class NumberFieldWidgetData extends Qdata {
@@ -827,11 +827,11 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         public void setId(String id) {
             getTmpl().add("id", id);
         }
-        
+
         public void setColumn(String col) {
             getTmpl().add("columnName", col);
         }
-        
+
     }
 
     private class SliderWidgetData extends Qdata {
@@ -842,49 +842,49 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         public void setId(String id) {
             getTmpl().add("id", id);
         }
-        
+
         public void setColumn(String col) {
             getTmpl().add("columnName", col);
         }
-        
+
     }
 
     private class TextareaWidgetData extends Qdata {
         public TextareaWidgetData() {
             super("qdata_widgetdata_textarea");
         }
-        
+
         public void setId(String id) {
             getTmpl().add("id", id);
         }
-        
+
         public void setColumn(String col) {
             getTmpl().add("columnName", col);
         }
-        
+
         public void setMaxLength(String len) {
             getTmpl().add("maxlength", len);
         }
     }
-    
+
     private class TextboxWidgetData extends Qdata {
         public TextboxWidgetData() {
             super("qdata_widgetdata_textbox");
         }
-        
+
         public void setId(String id) {
             getTmpl().add("id", id);
         }
-        
+
         public void setColumn(String col) {
             getTmpl().add("columnName", col);
         }
-        
+
         public void setMaxLength(String len) {
             getTmpl().add("maxlength", len);
         }
     }
-    
+
     private static final int CONTENT_WIDTH_PX = 600;
 
 }
