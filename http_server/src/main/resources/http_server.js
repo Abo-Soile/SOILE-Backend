@@ -2,7 +2,7 @@ var vertx = require('vertx');
 var container = require('vertx/container');
 var console = require('vertx/console');
 
-var Promise = require("node_modules/bluebird/js/release/bluebird");
+var Promise = require("mPromise");
 
 var server = vertx.createHttpServer();
 
@@ -69,7 +69,7 @@ function looksLikeMail(str) {
 
 // Generates  a new customMatcher and sets it to routmatcher
 // this matcher is then bound to de server object at the bottom
-// of this file. The normal routematcher can also be called if 
+// of this file. The normal routematcher can also be called if
 // needed.
 //var routeMatcher = new CustomMatcher();
 
@@ -109,7 +109,7 @@ require('admin.js');
 
 customMatcher.get("/login", function(request) {
   var previous = request.headers().get("Referer");
-  
+
   templateManager.render_template('login', {"origin":previous},request);
 });
 
@@ -180,9 +180,9 @@ function login(username, passwd, remember) {
 
     userDAO.auth(username, passwd, remember, function(user) {
       if (user) {
-        resolve(user);        
+        resolve(user);
       } else { //No user was found, error
-        reject("Wrong username or password")        
+        reject("Wrong username or password")
       }
     });
   });
@@ -235,14 +235,14 @@ customMatcher.post("/login/forgotten", function(request) {
       mailManager.passwordReset(username, uri, function(r) {
         console.log("Reset mail sent to: " + username + " " + JSON.stringify(r));
         templateManager.render_template("forgotten", templateParams, request);
-        
+
       });
 
     });
   });
 });
 
-customMatcher.get("/login/forgotten/:token", function(request) { 
+customMatcher.get("/login/forgotten/:token", function(request) {
     var token = request.params().get('token');
 
     mongo.user.getWithToken(token, function(r) {
@@ -255,7 +255,7 @@ customMatcher.get("/login/forgotten/:token", function(request) {
     });
 });
 
-customMatcher.post("/login/forgotten/:token", function(request) { 
+customMatcher.post("/login/forgotten/:token", function(request) {
   var data = new vertx.Buffer();
   var token = request.params().get('token');
 
@@ -263,7 +263,7 @@ customMatcher.post("/login/forgotten/:token", function(request) {
     data.appendBuffer(buffer);
   });
 
-  request.endHandler(function() { 
+  request.endHandler(function() {
     var params = data.getString(0, data.length());
     params = utils.getUrlParams(params);
 
@@ -303,7 +303,7 @@ customMatcher.post("/user", function(request) {
     data.appendBuffer(buffer);
   });
 
-  request.endHandler(function() { 
+  request.endHandler(function() {
     var params = data.getString(0, data.length());
     params = utils.getUrlParams(params);
 
@@ -395,7 +395,7 @@ customMatcher.post("/signup", function(request) {
       templateVars.registererrors = err;
       templateManager.render_template('login', templateVars,request);
     });
-  
+
   });
 });
 
@@ -418,7 +418,7 @@ customMatcher.post("/signup/json", function(request) {
       console.log(err)
       return request.response.json({status:"error", error:err})
     });
-  
+
   });
 });
 
@@ -490,7 +490,7 @@ customMatcher.get('/questionnaire/generated/:id', function(request) {
     //console.log(err);
     var i;
     for (i = 0; i < res.length; i++) {
-      console.log(res[i]);  
+      console.log(res[i]);
     }
   });
   request.response.sendFile(file);
@@ -553,7 +553,7 @@ customMatcher.get('/', function(request) {
 
       experimentDAO.list(query,function(experiments) {
         return templateManager.render_template('admin', {"experiments":experiments},request);
-      }); 
+      });
     }
     else {
       trainingDataDAO.list({userId:user._id, type:"general"}, function(training) {
@@ -575,7 +575,7 @@ customMatcher.get('/', function(request) {
               }
             }
           }
-          
+
           context.training = training;
           templateManager.render_template('userV2', context, request);
         });
@@ -586,13 +586,13 @@ customMatcher.get('/', function(request) {
   else {
     templateManager.render_template('landing', {} ,request);
   }
-  
+
 });
 
 
 /*
-  Matches static files. Uses the normal routmatcher so that session stuff is 
-  ignored when sending static files. 
+  Matches static files. Uses the normal routmatcher so that session stuff is
+  ignored when sending static files.
 */
 customMatcher.routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff)$', function(request) {
   //logHttp(request);
