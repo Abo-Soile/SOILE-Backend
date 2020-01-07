@@ -1185,28 +1185,25 @@ function updateComponents(item) {
   return item;
 }
 
-function getAndUpdateForm(f) {
-  var tempP = formDAO.getP({ _id: f.old_id })
+function getAndUpdateForm(fItem) {
+  var tempP = formDAO.getP({ _id: fItem.old_id })
     .then(function (f) {
-      print("Update form item")
-      console.log("Update form item")
-      f._id = formItem.id;
+      f._id = fItem.id;
       return f.saveP();
     }).then(function (res) {
-      console.log("Saved form")
-    }).catch(function(e) {
-      print(e);
-      print("Something didnät wokr")
-    })
+    }).catch(function (e) {
+      console.log(e);
+      console.log("Form update didn't work " + fItem.old_id)
+    });
 
   return tempP
 }
 
-router.get("/training/:id/clone", function(request) {
+router.get("/training/:id/clone", function (request) {
   var id = request.params().get('id');
   console.log("Statring clone " + id);
 
-  trainingDAO.get(id, function(train) {
+  trainingDAO.get(id, function (train) {
     console.log("Cloning with model " + train.name);
 
     // trainingDAO.duplicate(training)
@@ -1220,22 +1217,19 @@ router.get("/training/:id/clone", function(request) {
     train.components.post = train.components.post.map(updateComponents);
     train.components.training = train.components.training.map(updateComponents);
 
-    console.log("Mapped new components");
-    console.log(JSON.stringify(train.components.training));
-
-/*     train.save(function (res) {
-      console.log("Saved training with id " + train._id);
-      formsToClone.forEach(function (formItem) {
-        console.log("cloning form " + formItem.old_id);
-        formDAO.get({ _id: formItem.old_id }, function (f) {
-          console.log("Update form item")
-          f._id = formItem.id;
-          f.save(function () {
-            console.log("Saved form");
+    /*     train.save(function (res) {
+          console.log("Saved training with id " + train._id);
+          formsToClone.forEach(function (formItem) {
+            console.log("cloning form " + formItem.old_id);
+            formDAO.get({ _id: formItem.old_id }, function (f) {
+              console.log("Update form item")
+              f._id = formItem.id;
+              f.save(function () {
+                console.log("Saved form");
+              });
+            });
           });
-        });
-      });
-    }); */
+        }); */
 
 
     train.saveP().then(function (res) {
@@ -1260,18 +1254,19 @@ router.get("/training/:id/clone", function(request) {
 
       //   // pList.push(getAndUpdateForm(formItem));
       // });
-      // var p = Promise.each(formsToClone, function(formItem) {
-      //   return(getAndUpdateForm(formItem));
-      // });
+      var p = Promise.each(formsToClone, function (formItem) {
+        return (getAndUpdateForm(formItem));
+      });
 
-      print("return all promises ");
+      console.log("return all promises ");
       // return Promise.all(pList)
-      // return p
+      return p
+    }).then(function (res) {
       request.response.end("CLONE SUCCESSFULL");
-    })/* .then(function (res) {
-      request.response.end("CLONE SUCCESSFULL");
-    }).catch() */
-
+    }).catch(function (res) {
+      console.log("Something didn't work")
+      console.log(res);
+    })
   });
 });
 
@@ -1290,4 +1285,3 @@ router.get("/training/:id/clone", function(request) {
 //     request.response.end("CLONE DONE ISH");
 //   });
 // });
-
