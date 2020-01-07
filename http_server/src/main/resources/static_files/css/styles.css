@@ -100,12 +100,12 @@ dBootstrap fixes
 /*Overriding dojo buttons*/
 .customDojo .dijitButton {
   background-image: none;
-  border: solid 1px transparent;
+  border: solid 1px rgba(0, 0, 0, 0);
   /*height: 30px;*/ }
   .customDojo .dijitButton .dijitButtonNode {
     display: block;
     padding: 6px 12px;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0);
     background-image: none;
     color: inherit; }
 
@@ -119,7 +119,7 @@ dBootstrap fixes
   background-color: #EEEEEE; }
 
 .customDojo .dijitButton .dijitReset {
-  background-color: transparent; }
+  background-color: rgba(0, 0, 0, 0); }
 
 .customDojo .dijitButton .btn {
   border-style: solid;
@@ -405,7 +405,8 @@ body {
       border: 2px solid #fa8072;
       left: -1.65em;
       top: 2em;
-      z-index: 1; }
+      z-index: 1;
+      height: 100%; }
     .fancyList li:last-child:after {
       content: "";
       display: none; }

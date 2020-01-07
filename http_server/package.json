@@ -4,7 +4,8 @@
   "description": "Contains dev dependencies for the whole vertx/js project",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gulp": "gulp install"
+    "gulp": "gulp install",
+    "gulpsass": "gulp sass"
   },
   "dependencies": {},
   "devDependencies": {
