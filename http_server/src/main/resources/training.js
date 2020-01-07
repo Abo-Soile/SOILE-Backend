@@ -1222,7 +1222,7 @@ router.get("/training/:id/clone", function (request) {
       });
       return p
     }).then(function (res) {
-      request.response.end("CLONE SUCCESSFULL");
+      return request.redirect("/training/" + train._id);
     }).catch(function (res) {
       console.log("Something didn't work")
       console.log(res);
