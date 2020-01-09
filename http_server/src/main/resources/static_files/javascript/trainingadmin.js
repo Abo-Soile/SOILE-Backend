@@ -63,6 +63,32 @@ app.service('overviewService', function($http, $location, $q) {
 
 });
 
+app.controller('overallStatsController', function ($scope, $http, $location, overviewService) {
+  var baseUrl = $location.absUrl();
+  var vm = this;
+  $scope.loadData = function () {
+    /*$http.get($location.absUrl() + "/useroverview").success(function(data,status) {
+        console.log("Load ing data");
+      console.log(data);
+      //$scope.participants = JSON.parse(data.participants);
+      $scope.participants = data.participants.map(function(obj){return JSON.parse(obj)});
+      $scope.training = JSON.parse(data.training);*/
+    overviewService.getUsers().then(function () {
+      $scope.participants = overviewService.users;
+      $scope.particpantCount = overviewService.users.length;
+
+      $scope.completed = 0;
+      overviewService.users.forEach(user => {
+        console.log(user);
+        if (user.mode == "done") {
+          $scope.completed += 1;
+        }
+      });
+    })
+  }
+
+  $scope.loadData()
+});
 
 app.controller('userProgressController', function($scope, $http, $location, overviewService) {
   var baseUrl = $location.absUrl();
@@ -152,6 +178,10 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
     return vm.users;
   };
 
+  vm.getUsersWithAll = function() {
+    return vm.usersWithall;
+  };
+
 
   /*
     Returns a array with trainingiterations
@@ -164,7 +194,7 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
     }
 
     return arr;
-  }; 
+  };
   /*
     Returns an array with component numbers
   */
@@ -189,7 +219,7 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
       if(vm.filter2 === "single") {
         vm.filter3 = undefined;
       }
-    } 
+    }
 
     if (vm.filter1 === "training") {
 
@@ -235,16 +265,17 @@ app.controller('trainingDataFilterController', function($scope, $http, $location
       XLSX.utils.book_append_sheet(excelWb, XLSX.utils.json_to_sheet(jsonData), "Data");
 
       var wbout = XLSX.write(excelWb, {bookType:'xlsx', type:'binary'});
-      var excelBolb =new Blob([s2ab(wbout)],{type:"application/octet-stream"});  
-      var excelUrl = $window.URL || $window.webkitURL; 
+      var excelBolb =new Blob([s2ab(wbout)],{type:"application/octet-stream"});
+      var excelUrl = $window.URL || $window.webkitURL;
       vm.fileUrlExcel = excelUrl.createObjectURL(excelBolb);
-
     });
   };
 
   overviewService.getUsers().then(function() {
     vm.users = overviewService.users;
-    vm.users.unshift({userId:"all"});
+    // vm.users.unshift({userId:"all"});
+    vm.usersWithall = vm.users.slice(0);
+    vm.usersWithall.unshift({ userId: "all" });
     vm.training = overviewService.training;
   });
 
