@@ -8,6 +8,8 @@ var logger = container.logger;
 var console = require('vertx/console');
 var mongoAddress = "vertx.mongo-persistor";
 
+var Promise = require("mPromise");
+
 function BaseDAO() {
     this._collection = "temp";
     this._mongoAddress = mongoAddress;
@@ -40,9 +42,18 @@ BaseDAO.prototype.get = function(matcher, callback) {
     });
 };
 
+BaseDAO.prototype.getP = function(matcher) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.get(matcher, function(res) {
+            resolve(res);
+        });
+    });
+};
+
 /*
-    Params:
-    @Matcher: object with mongo find parameters
+Params:
+@Matcher: object with mongo find parameters
     @callback: call this funtion with the result as a parameter
     @sort: sort resut, object
     @limit:number of objects to include
@@ -111,7 +122,7 @@ BaseDAO.prototype.list = function(matcher, callback, sort, limit, offset) {
 /*
  * Update the element specified in matcher with data specified in objNew
  * Will update multiple objects by default, set multi to false to only update
- * one. 
+ * one.
  */
 
 BaseDAO.prototype.update = function(matcher, objnew, callback, multi) {
@@ -281,7 +292,7 @@ BaseDAO.prototype.rawQuery = function(matcher, callback, extra) {
 
         if (typeof extra.batch_size !== "undefined") {
             mongoCommand.batch_size = extra.batch_size;
-        }        
+        }
     }
 
 
@@ -317,7 +328,7 @@ BaseDAO.prototype.handleMore = function(obj, data, callback) {
             }
             callback(resultObjects);
         }
-        
+
     };
 };
 

@@ -7,7 +7,7 @@ var console = require('vertx/console');
 var models = require('models/Models');
 var BaseDAO = require('models/baseDAO');
 
-var Promise = require("mPromise")//();
+var Promise = require("mPromise");
 
 var lodash = require("../node_modules/lodash/index");
 var _ = lodash;
@@ -122,7 +122,7 @@ ExperimentDAO.prototype.completePhase = function(dataObject, experimentId, callb
     function save(dataObj) {
         dataObj.save(function() {
             var command = {
-                "action":"update", 
+                "action":"update",
                 "criteria":{
                     "expId":dataObject.expId,
                     "userid":dataObject.userid,
@@ -131,7 +131,7 @@ ExperimentDAO.prototype.completePhase = function(dataObject, experimentId, callb
                 objNew : {
                     $inc: {
                         position:1
-                    } 
+                    }
                 }
             };
 
@@ -189,7 +189,7 @@ DataDAO.prototype.getGeneral = function(userid, exp, callback) {
 
    // console.log("Getting general " + userid + " " + exp._id);
 
-    that.get({userid:userid, type:"general", expId:exp._id}, 
+    that.get({userid:userid, type:"general", expId:exp._id},
       function(data, message) {
         callback(data);
     });
@@ -198,7 +198,7 @@ DataDAO.prototype.getGeneral = function(userid, exp, callback) {
 DataDAO.prototype.getOrGenerateGeneral = function(userid, exp, request, callback) {
   var that = this;
 
-  that.get({userid:userid, type:"general", expId:exp._id}, 
+  that.get({userid:userid, type:"general", expId:exp._id},
         function(data, message) {
     if (data === "") {
         //console.log("Generating new data object");
@@ -250,7 +250,7 @@ DataDAO.prototype.completeExperiment = function(expId, userid, callback) {
 
 DataDAO.prototype.getPhaseCompletion = function(expId, callback) {
     var pipe = [
-        {$match:{expId:expId, 
+        {$match:{expId:expId,
                  phase:{$gte:0},
                  deleted:{$in: [null, false]}}},
         {$group:{_id:"$phase", count:{$sum:1}}}
@@ -271,7 +271,7 @@ DataDAO.prototype.getPhaseCompletionWithoutAggregate = function(expId, callback)
     that.rawQuery(matcher, function(res) {
         var positionCount = [];
         for (var i = 0; i < res.length; i++) {
-            var pos = res[i].position; 
+            var pos = res[i].position;
             if (pos || pos == 0) {
                 if(typeof positionCount[pos] === "undefined") {
                     positionCount[pos] = 1;
@@ -308,7 +308,7 @@ db.data.aggregate([
         {$match:{expId:"8d4f15f3-d2a8-4001-a83c-6cd080b46911",deleted:{$in: [null, false]}}},
         {$group:{_id:"$phase", count:{$sum:1}}}
     ]
-}  
+}
 */
 function TrainingDAO() {
     BaseDAO.call(this);
@@ -348,7 +348,7 @@ TrainingDAO.prototype.getUsersToRemind = function(trainingID, callback) {
 
     // 1: Find all training experiments where emailing is activated
     // 2: Find general data for users who are past the timelimit type:general, trainingid, mode:training'
-    // 3: 
+    // 3:
 
     // Promise.setScheduler(function(fn){ // fn is what to execute
     //     vertx.setTimer(1, fn);
@@ -453,7 +453,7 @@ TrainingDAO.prototype.saveLinks = function(training,linksToRemove, linksToAdd) {
 
         }, true);
     }
-  }  
+  }
   if (typeof linksToAdd == 'object') {
     if (linksToAdd.length > 0) {
         console.log("linksToAdd: " + linksToAdd.length)
@@ -466,9 +466,47 @@ TrainingDAO.prototype.saveLinks = function(training,linksToRemove, linksToAdd) {
         }, true);
     }
   }
-
-
 };
+/*
+var formsToClone = [];
+
+function generateDuplicateId(id) {
+    return id + "_d_" + java.util.UUID.randomUUID().toString();
+}
+
+function updateComponents(item) {
+    console.log("MAPFUNC")
+    if (item.type == "form") {
+        item.old_id = item.id;
+        item.id = generateDuplicateId(item.id);
+        formsToClone.push(item);
+    }
+}
+
+TrainingDAO.prototype.duplicate = function(train) {
+    train._id = generateDuplicateId(train._id);
+    train.name = train.name + "_copy";
+
+    console.log("set new name and id " + train._id);
+
+    train.components.pre = train.components.pre.map(updateComponents);
+    train.components.post = train.components.post.map(updateComponents);
+    train.components.training = train.components.training.map(updateComponents);
+
+    console.log("Mapped new components");
+
+    train.save(function(res) {
+        console.log("Saved training with id " + train._id);
+        formsToClone.forEach(function(formItem) {
+            console.log("cloning form " + formItem.old_id);
+            FormDAO.get({_id:formItem.old_id}, function(f) {
+                console.log("Update form item")
+                f._id = formItem.id;
+                f.save();
+            });
+        });
+    });
+} */
 
 function TrainingDataDAO() {
     BaseDAO.call(this);
@@ -507,7 +545,7 @@ TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, training, call
 /*
 TrainingDataDAO.prototype.getOrGenerateGeneral = function(userid, trainingId, controlGroup,callback) {
   var that = this;
-  that.get({userId:userid, type:"general", trainingId:trainingId}, 
+  that.get({userId:userid, type:"general", trainingId:trainingId},
         function(trainingData, message) {
     if (trainingData === "") {
         //console.log("Generating new data object");
@@ -545,13 +583,13 @@ TrainingDataDAO.prototype.handleLinks = function(userid, training) {
 
     var p = new Promise(function(resolve, reject) {
         that.get({userId:userid, type:"general", trainingId:{$in:idsToCheck}}, function(res) {
-            
+
             // No general data exists
             if (res == "") {
                 console.log("No trainingdata, ignore link")
                 return resolve("");
-            }     
-            
+            }
+
             if (res.trainingId == training._id) {
                 resolve(res);
             } else {
@@ -561,13 +599,13 @@ TrainingDataDAO.prototype.handleLinks = function(userid, training) {
         });
     });
     return p
-    // that.get({userId:userid, type:"general", trainingId:$in:training._id}) 
+    // that.get({userId:userid, type:"general", trainingId:$in:training._id})
 }
 
 TrainingDataDAO.prototype.getGeneralData = function(userid, training,callback) {
   var that = this;
   if (!training.isLinked()) {
-      that.get({userId:userid, type:"general", trainingId:training._id}, 
+      that.get({userId:userid, type:"general", trainingId:training._id},
             function(trainingData, message) {
         if (trainingData === "") {
             callback("")
@@ -592,7 +630,7 @@ TrainingDataDAO.prototype.getGeneralData = function(userid, training,callback) {
 };
 
 /*
-    Returns score from the previous training phase. 
+    Returns score from the previous training phase.
 */
 TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
     var iteration = null;
@@ -640,19 +678,19 @@ TrainingDataDAO.prototype.getScore = function(trainingId, userid, callback) {
                     scores.push(scoreList[i].score);
                 }
             }
-            
-            callback(totalScore, scores); 
+
+            callback(totalScore, scores);
         });
     });
 };
 
 /*
-    Returns score statistics. 
+    Returns score statistics.
 */
 TrainingDataDAO.prototype.getScoreHistory = function(trainingId, userid, callback) {
     var that = this;
 
-       
+
     var matcher = {
         "trainingId":trainingId,
         "userId":userid,
@@ -670,12 +708,12 @@ TrainingDataDAO.prototype.getScoreHistory = function(trainingId, userid, callbac
                 if (scoreList[i].score != null) {
 
                     iterationScores[scoreList[i].trainingIteration] += scoreList[i].score.score;
-            
+
                 }
             }
         }
-        
-        callback(iterationScores); 
+
+        callback(iterationScores);
     });
 };
 
@@ -703,8 +741,8 @@ TrainingDataDAO.prototype.getPrePostScore = function(trainingId, userid, callbac
                 }
             }
         }
-        
-        callback(preScore, postScore); 
+
+        callback(preScore, postScore);
     });
 
 };

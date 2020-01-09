@@ -43,7 +43,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
         msg.putString("filename", id);
         msg.putString("data", questionnaire);
         sendMessage(getAddress("disk_io"), msg);
-        
+
         // TODO Send a message to garbage collector verticle, too.
     }
 
@@ -84,7 +84,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
             generator.seed(1024);
             generator.init();
         }
-        
+
         @Override
         public void handle(Message<JsonObject> message) {
             JsonObject json = message.body();
@@ -108,7 +108,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
             buffer.putLong(0, System.currentTimeMillis());
             generator.update(buffer);
             String id = generator.getId();
-            
+
             try {
                 reader.processInput();
                 builder.finish();
@@ -144,11 +144,11 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
 
             message.reply(reply);
             }
-        
+
         private QuestionnaireBuilder builder;
         private IdGenerator generator;
         private String directory;
     }
-    
+
     private Handler handler;
 }

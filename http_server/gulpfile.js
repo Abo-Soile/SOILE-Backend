@@ -14,7 +14,7 @@ var cssName = "styles.css";
 
 var gulp = require('gulp');
 var Server = require('karma').Server;
- 
+
 gulp.task('default', ["sass"],function() {
   // place code for your default task here
 });
@@ -24,7 +24,7 @@ gulp.task("install", function() {
   .pipe(install());
 });
 
-gulp.task("sass", function(){ 
+gulp.task("sass", function() {
   log("Generate CSS files " + (new Date()).toString());
     gulp.src(sassFiles)
     .pipe(sass({ style: 'expanded' }))

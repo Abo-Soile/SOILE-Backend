@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd http_server
+npm run gulpsass
 ./gradlew assemble
 
 cd ..

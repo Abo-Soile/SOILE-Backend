@@ -35,7 +35,7 @@ var mailManager = require('mailManager');
 var lodash = require("./node_modules/lodash/index");
 var _ = lodash;
 
-var Promise = require("mPromise")//();
+var Promise = require("mPromise");
 
 // Promise demo
 var p = new Promise(function(resolve, reject) {
@@ -89,21 +89,21 @@ var D = function() {
     })
 }
 
-A().then(function(result) { 
+A().then(function(result) {
     return B();
 }).then(C)
   .then(D)
 
 /*
-Architectural ideas. 
+Architectural ideas.
 
 Tränings experimentet sparar:
   pre komponenter
   post komponenter
   training komponenter
   dataumintervall
-  
-Per användare sparas: 
+
+Per användare sparas:
   Var i testen en person er: pre - träning - post?
   Data för varje fas, samma som i ett vanligt experiment
   Datum intervall för nästa träning
@@ -113,9 +113,9 @@ Urlar:
   /training/pre   -  pre
   /training/post  -  post
   /training/task  -  träningsuppgift
-  
+
   Skippa juttun med faser, istället visas bara rätt experiment/form
-  kan ju ändu int navigera mellan olika juttun så, och soile sköter 
+  kan ju ändu int navigera mellan olika juttun så, och soile sköter
   ändå om allt redirectande.
 
   såå flöde /training -> training/pre -> /training/task (repeat) -> training/post -> /training
@@ -146,7 +146,7 @@ function periodicReminder() {
           // console.log("Test add date " + t.setHours(t.getHours() + 24).toISOString())
 
           var t = new Date();
-          t.setTime(t.getTime() + ((/*usr.mailDelay + */1)*60*60*1000*240000)) 
+          t.setTime(t.getTime() + ((/*usr.mailDelay + */1)*60*60*1000*240000))
           //Large number so that we dont's send additional mail for this round
 
           var trainingId = usr.tData.trainingId;
@@ -176,7 +176,7 @@ function periodicReminder() {
   });
   /*
     Select tra
-    
+
     Select active trainings...
 
     Select active users.
@@ -190,7 +190,7 @@ function periodicReminder() {
 var twelveHours = 12*60*60*1000
 // var timerID = vertx.setPeriodic(5000, function(timerID) {
 var timerID = vertx.setPeriodic(twelveHours, function(timerID) {
-    periodicReminder(); 
+    periodicReminder();
 });
 
 
@@ -208,7 +208,7 @@ function handleResultData(data, datatype, callback) {
 
 /**
  * Return all training experiments as a json
- * @return {[json]}   Json array containing all training experiments     
+ * @return {[json]}   Json array containing all training experiments
  */
 router.get("/training/json", requireEditor,function(request) {
   var user = request.session.currentUser;
@@ -243,7 +243,7 @@ router.get("/training", requireEditor,function(request) {
   }
 });
 
-//Create a new training task 
+//Create a new training task
 router.post("/training", requireEditor,function(request) {
 
   var sDate = Date.now() + (1000*60*60*24*2); //Two days in the future
@@ -306,7 +306,7 @@ function trainingView(request, training) {
     if (redirect) {
       console.log("Redirected to linked training");
       request.redirect("/training/"+redirect);
-      return 
+      return
     }
 
     if(trainingData === "") {
@@ -398,7 +398,7 @@ function trainingView(request, training) {
     }
 
     if (status.showscore) {
-      
+
       trainingDataDAO.getScoreHistory(id, userid, function(score) {
         status.scoreHistory = score;
         templateManager.render_template('trainingUser', {training:training, status:status}, request);
@@ -471,7 +471,7 @@ router.post("/training/:id/enrolluser", requireEditor,function (request) {
         redirectToTraining();
       } else {
         trainingDAO.enrollUser(trainingId, id, function(res, enrollStatus) {
-          if (enrollStatus) { 
+          if (enrollStatus) {
             usersEnrolled += 1;
           }
           func(next);
@@ -674,7 +674,7 @@ router.post("/training/:id/execute", function(request) {
                                                    jsonData.persistantData);
 
         generalData.save(function() {
-          
+
           //TODO: Check if there is any stored score
         if (isLastPhase) {
           if(training.showScore && oldMode !== "pre") {
@@ -682,7 +682,7 @@ router.post("/training/:id/execute", function(request) {
           }
           else {
             request.jsonRedirect("/training/"+id);
-          } 
+          }
         }
         else {
           request.jsonRedirect("/training/"+id+"/execute");
@@ -690,7 +690,7 @@ router.post("/training/:id/execute", function(request) {
 
         });
       });
-    
+
     });
   });
 });
@@ -769,7 +769,7 @@ router.get("/training/:id/score", function(request) {
         return templateManager.render_template("endoftrainingphase", context, request);
       });
     } else {
-      return templateManager.render_template("endoftrainingphase", context, request); 
+      return templateManager.render_template("endoftrainingphase", context, request);
     }
     //request.response.end("SCORE!!!")
   });
@@ -791,7 +791,7 @@ Filter 1 pre/post/training/control/
             Filter 2 score
             filter 2 all + id
 
-      Only select stuff from a single user if a id is specified                
+      Only select stuff from a single user if a id is specified
 
 
 */
@@ -944,7 +944,7 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
   trainingDAO.get(id, function(training) {
     if (matcher.mode === "pre" || matcher.mode === "post") {
       /*
-        Pre or post, fetch either raw or single data for all users. 
+        Pre or post, fetch either raw or single data for all users.
       */
       if (filter2 === "raw") {
         matcher.phase = parseInt(filter3) - 1;
@@ -986,11 +986,11 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
         projection["data."+filter3] = 1;
         projection.userId = 1;
         projection.trainingIteration = 1;
-        
+
         // CHange this to take phase shifts into consideration
         /* Select test where
           $or($and(iteration:1, phase:x), (iteration:2, phase:x))
-          
+
       {$or : [
           { $and : [ { trainingIteration : 1 }, { phase : 1 } ] },
           { $and : [ { trainingIteration : 2 }, { phase : 3 } ] }
@@ -1007,7 +1007,7 @@ router.get("/training/:id/loaddata", requireEditor, function(request) {
 
         groupby = filter3;
       }
-      
+
       //matcher.type = "{$in:['form','test']}";
       //matcher.type = {$not:"generel"};
 
@@ -1062,7 +1062,7 @@ router.get("/training/:id/post", function(request) {
 
 });
 
-//Repeated training task 
+//Repeated training task
 router.get("/training/:id/task", function(request) {
 
 });
@@ -1138,7 +1138,7 @@ router.get("/training/:id/useroverview", requireEditor,function(request) {
   var id = request.params().get('id');
 
   trainingDAO.get(id, function(training) {
-    
+
     trainingDataDAO.list({type:"general", trainingId:id}, function(data) {
 
       var response = {
@@ -1163,5 +1163,69 @@ router.get("/training/:id/json", function(request) {
 
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
     request.response.end(js);
+  });
+});
+
+var formsToClone = [];
+
+
+function generateDuplicateId(id) {
+  // return id + "_d_" + java.util.UUID.randomUUID().toString();
+  return "d_" + java.util.UUID.randomUUID().toString();
+}
+
+function updateComponents(item) {
+  console.log("MAPFUNC")
+  if (item.type == "form") {
+    item.old_id = item.id;
+    item.id = generateDuplicateId(item.id);
+    formsToClone.push(item);
+  }
+
+  return item;
+}
+
+function getAndUpdateForm(fItem) {
+  var tempP = formDAO.getP({ _id: fItem.old_id })
+    .then(function (f) {
+      f._id = fItem.id;
+      return f.saveP();
+    }).then(function (res) {
+    }).catch(function (e) {
+      console.log(e);
+      console.log("Form update didn't work " + fItem.old_id)
+    });
+
+  return tempP
+}
+
+router.get("/training/:id/clone", function (request) {
+  var id = request.params().get('id');
+  console.log("Statring clone " + id);
+
+  trainingDAO.get(id, function (train) {
+    console.log("Cloning with model " + train.name);
+
+    train.original_id = train._id;
+    train._id = generateDuplicateId(train._id);
+    train.name = train.name + "_copy";
+
+    train.components.pre = train.components.pre.map(updateComponents);
+    train.components.post = train.components.post.map(updateComponents);
+    train.components.training = train.components.training.map(updateComponents);
+
+    train.saveP().then(function (res) {
+      console.log("Saved training with id " + train._id);
+
+      var p = Promise.each(formsToClone, function (formItem) {
+        return (getAndUpdateForm(formItem));
+      });
+      return p
+    }).then(function (res) {
+      return request.redirect("/training/" + train._id);
+    }).catch(function (res) {
+      console.log("Something didn't work")
+      console.log(res);
+    })
   });
 });
