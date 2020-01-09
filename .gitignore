@@ -29,6 +29,7 @@ prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-verticle.jar
 *.sublime-workspace
 
 prod/mods/fi.abo.kogni.soile~http-server~1.1/
+prod/mods/fi.abo.kogni.soile~http-server~1.0/
 
 docs/_build
 
