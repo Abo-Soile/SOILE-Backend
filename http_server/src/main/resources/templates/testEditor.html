@@ -7,7 +7,7 @@
 <script src="/javascript/soile2.js"></script>
 
 <style type="text/css" media="screen">
-    #editor { 
+    #editor {
         height: 550px;
     }
 
@@ -57,29 +57,30 @@
         <div class="col-md-9">
 <!--            <textarea data-dojo-type="dijit/form/Textarea" id="code">
                 {test.code}
-            </textarea>    -->
+            </textarea>-->
             <div ui-ace="{showGutter: false, onLoad: aceLoaded}"  id="editor">
                 {test.code}
             </div>
         </div>
 
-        <div class="col-md-3" ng-controller="fileController"> 
+        <div class="col-md-3" ng-controller="fileController">
             <h3>Images</h3>
-            <div id="uploader"></div>
+            <div id="uploader">
                 <input ng-show="$parent.userCanEdit" type="file" nv-file-select uploader="uploader" multiple/>
-                <h4>Available images</h4>
-                <div id="images">
-                <ul id="imagelist"> 
-                    <li ng-repeat="img in images"> 
+            </div>
+            <h4>Available images</h4>
+            <div id="images">
+                <ul id="imagelist">
+                    <li ng-repeat="img in images">
                         <span class="imgenlarge"><img ng-src="/[([img.url])]">
-                            <span > 
-                                <img align="right" ng-src="/[([img.url])]"> 
+                            <span >
+                                <img align="right" ng-src="/[([img.url])]">
                                 <p>[([img.name])]</p>
                             </span>
                         </span>
                         <span class='imgname'>[([img.name])]</span>
                         <span ng-show="$parent.userCanEdit">
-                            <button ng:click="useImage(img)" class="btn btn-xs btn-primary">Use</button>  
+                            <button ng:click="useImage(img)" class="btn btn-xs btn-primary">Use</button>
                             <button type="button" class="btn btn-xs btn-danger" ng:click="delImage($index)" >Del</button>
                         </span>
                     </li>
@@ -87,18 +88,22 @@
             </div>
         </div>
     </div>
-    <div class="row">  
-        <div class="col-md-12 btn-row">
-            <span> <button ng:click="compileTest()"  ng-bind-html="savebutton | unsafe" id="compileButton" class="btn btn-primary" ng-class="userCanEdit ? '' : 'disabled'"></button>   
-  
-            <button ng:click="runTest()" type="button" id="runButton" class="btn btn-success"
-            ng-class="compiled ? '' : 'disabled'"
-            > [([runbutton])]</button> </span>
 
+    <div class="row">
+        <div class="col-md-9 btn-row">
+            <span>
+                <button ng:click="compileTest()"  ng-bind-html="savebutton | unsafe" id="compileButton" class="btn btn-primary" ng-class="userCanEdit ? '' : 'disabled'"></button>
+                <button ng:click="runTest()" type="button" id="runButton" class="btn btn-success" ng-class="compiled ? '' : 'disabled'">[([runbutton])]</button>
 
-           
+                <label class="radiobutton pull-right">
+                    Pilotmode
+                    <input ng-model="isPilotMode" type="checkbox" name="inlineCheckboxOptions" id="Pilotmode" data-ng-value="false" />
+                </label>
+            </span>
+
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-9">
             <div class="alert alert-danger" id="errorbox" ng-show="compileErrors">
@@ -118,11 +123,10 @@
                 <p id="message" style="display:none"></p>
             </div>
         </div>
-       
 
         <div class="col-md-5">
             <div class="panel">
-                <h5>DebugLog             <button ng-click="toggleShowVariables()" type="button" id="" class="btn btn-xs btn-default"> 
+                <h5>DebugLog             <button ng-click="toggleShowVariables()" type="button" id="" class="btn btn-xs btn-default">
             Show/hide variables
             </button></h5>
                 <div id="logdiv" class="overflow300">
@@ -153,7 +157,7 @@
                         <td animate-on-change='value'>[([value])]</td>
                     </tr>
                 </table>
-              </div>  
+            </div>
         </div>
 
         <div class="col-md-7">
@@ -165,7 +169,7 @@
                             <tr>
                                 <td ng-repeat="key in rawHeaders">
                                     [([key])]
-                                </td> 
+                                </td>
                             </tr>
                         </thead>
                         <tbody>
@@ -188,11 +192,11 @@
                         <thead>
                             <td ng-repeat="(key, value) in singleData">
                                 [([key])]
-                            </td> 
+                            </td>
                         </thead>
                         <tbody>
                             <td ng-repeat="(key, valuee) in singleData">
-                                [([valuee])]    
+                                [([valuee])]
                             </td>
                         </tbody>
 
@@ -210,11 +214,11 @@
                         <thead>
                             <td ng-repeat="(key, value) in score">
                                 [([key])]
-                            </td> 
+                            </td>
                         </thead>
                         <tbody>
                             <td ng-repeat="(key, valuee) in score">
-                                [([valuee])]    
+                                [([valuee])]
                             </td>
                         </tbody>
 
@@ -231,22 +235,19 @@
                         <thead>
                             <td ng-repeat="(key, value) in storedVariables">
                                 [([key])]
-                            </td> 
+                            </td>
                         </thead>
                         <tbody>
                             <td ng-repeat="(key, valuee) in storedVariables">
-                                [([valuee])]    
+                                [([valuee])]
                             </td>
                         </tbody>
-
                     </table>
                 </div>
             </div>
             </div>
-            
         </div>
     </div>
-
 
     <div class="row" id="advancedSettings">
         <div class="showadvance col-md-12">
@@ -258,26 +259,23 @@
                 <span>Advanced settings</span>
             </h3>
 
-            <div ng-if="!showAdvanced" class="col-md-12">
-                
-            </div>
+            <div ng-if="!showAdvanced" class="col-md-12"></div>
             <div ng-if="showAdvanced">
-            
                 <div ng-show="userCanEdit && userIsOwner" class="col-md-8 form-inline">
                     <label class="radiobutton">
                         Private
-                        <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" data-ng-value="false" /> 
+                        <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="private" data-ng-value="false" />
                     </label>
                     <label class="radiobutton">
                         Published
-                        <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="published" data-ng-value="true" /> 
+                        <input ng-change="saveTest()" ng-model="test.published" type="radio" name="inlineRadioOptions" id="published" data-ng-value="true" />
                     </label>
                     <label ng-show="test.published == true" class="checkbox">
                         Others can edit
-                        <input ng-change="saveTest()" ng-model="test.allCanEdit" type="checkbox" ng-true-value="true" ng-false-value="false"/> 
+                        <input ng-change="saveTest()" ng-model="test.allCanEdit" type="checkbox" ng-true-value="true" ng-false-value="false"/>
                     </label>
-
                 </div>
+
                 <div class="col-md-2">
                     <a class="btn btn-success"href="{URI}/copy">Copy test</a>
                 </div>
@@ -295,11 +293,9 @@
                     </div>
                 </div>-->
         </div>
-
-    </div>  
+    </div>
 </div>
 
 <script type="text/javascript" src="/javascript/testeditor.js"></script>
-
 
 {>footer /}

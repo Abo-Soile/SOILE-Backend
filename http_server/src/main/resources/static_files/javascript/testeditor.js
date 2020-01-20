@@ -202,6 +202,8 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
   $scope.showVariables = false;
 
+  $scope.isPilotMode = false;
+
   $scope.toggleShowVariables = function() {
     $scope.showVariables = !$scope.showVariables;
 
@@ -388,6 +390,7 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
     SOILE2.util.eval($scope.compiledCode);
     SOILE2.util.setEndFunction($scope.endFunc);
     SOILE2.util.setLogFunction($scope.logFunc);
+    SOILE2.util.setPilotMode($scope.isPilotMode);
 
     SOILE2.util.resetData();
     SOILE2.util.setDebug(setRuntimeError);

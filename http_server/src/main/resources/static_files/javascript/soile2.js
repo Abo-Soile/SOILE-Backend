@@ -39,6 +39,7 @@ SOILE2 = (function(){
   soile2.util = util;
 
   soile2.util.debug = false;
+  soile2.util.pilotMode = false;
 
   bin.onmouseclick = function(id, conf){
 
@@ -2229,6 +2230,13 @@ SOILE2 = (function(){
       if (opcode === opcodes.Wait){
         dowait = true;
         waitfor = pi.ms();
+
+        if (soile2.util.pilotMode) {
+          if (waitfor > 0 && waitfor < 999999999) { // Wait time is set to 999999999 when wait() is called
+            waitfor = 1;
+          }
+        }
+
         break;
       }
     }
@@ -2573,6 +2581,17 @@ SOILE2 = (function(){
 
   util.setPersistantData = function(data) {
     soile2.rt.persistantDataHandler.set(data);
+  };
+
+  /**
+   * Pilot mode will sets all waits to 1 ms which makes it easier to debug long
+  */
+  util.setPilotMode = function(state) {
+    if (!state) {
+      soile2.util.pilotMode = false;
+    }
+
+    soile2.util.pilotMode = state;
   };
 
   util.setDebug = function(func) {
