@@ -1,0 +1,1 @@
+rsync -rvu http_server/src/main/resources/ prod/mods/fi.abo.kogni.soile~http-server~1.1/
