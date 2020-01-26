@@ -39,3 +39,5 @@ docs/_build
 seleniumtests/selenium-server-standalone-2.44.0.jar
 seleniumtests/reports/
 seleniumtests/node_modules/
+
+prod/*.log
