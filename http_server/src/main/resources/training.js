@@ -538,6 +538,12 @@ function renderTrainingPhase(components, position, translatedPhase,request, pers
     template = "testphase";
     contextObj = "test";
     context.persistantData = persistantData;
+
+    context.testConfig = {};
+
+    if (training.pilotMode) {
+      context.testConfig.pilotMode = true;
+    }
   }
 
   context.completed = ((position+1)/components.length * 100);

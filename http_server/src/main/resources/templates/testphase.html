@@ -29,7 +29,7 @@
                 </div>
 
             </div>
-            
+
             <div class="col-md-9">
 <!--                 <button data-dojo-type="dijit/form/Button" type="button" id="submitButton"> Next</button> -->
             </div>
@@ -54,6 +54,13 @@
         window.persistantData = {persistantData|s|js};
     </script>
     {/persistantData}
+
+    {?testConfig}
+    <script type="text/javascript">
+        window.testConfig = {testConfig|s|js};
+    </script>
+    {/testConfig}
+
 
     </div>
 

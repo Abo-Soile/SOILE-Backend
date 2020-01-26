@@ -19,8 +19,8 @@ function(
         //console.log(e);
         if(e.target.tagName == "INPUT" || e.target.type == "text" || e.target.tagName == "TEXTAREA") {
           return
-        } 
-        
+        }
+
         e.preventDefault();
 
         // Do whatever else you want with the keydown event (i.e. your navigation).
@@ -94,6 +94,10 @@ function(
       	SOILE2.util.setPersistantData(window.persistantData);
       }
 
+      if(typeof window.testConfig !== "undefined") {
+        SOILE2.util.setPilotMode(window.testConfig.pilotMode);
+      }
+
       SOILE2.util.setStartFunction(startFunc);
       SOILE2.util.eval(data);
 
@@ -113,7 +117,7 @@ function(
       //console.log("dklfjd");
       var jsonUrl = document.URL + "/json";
       xhr.get(jsonUrl).then(function(data) {
-        
+
         startSoile(data);
         //setTimeout(function() {
         //  SOILE2.rt.exec_pi();
