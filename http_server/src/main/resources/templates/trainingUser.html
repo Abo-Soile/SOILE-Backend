@@ -34,25 +34,27 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-4">
             {?status.timeLeft}
               {?status.done}
               {:else}
-              <div class="infopanel">
-                <h4>Next task available</h4>
-                <p>{status.timeLeft}</p>
+              <div class="col-md-4">
+                <div class="infopanel">
+                  <h4>Next task available</h4>
+                  <p>{status.timeLeft}</p>
+                </div>
               </div>
               {/status.done}
             {:else}
               {?status.done}
               {:else}
-              <div class="infopanel">
-                <h4>Next task available</h4>
-                <p>Now</p>
+              <div class="col-md-4">
+                <div class="infopanel">
+                  <h4>Next task available</h4>
+                  <p>Now</p>
+                </div>
               </div>
               {/status.done}
             {/status.timeLeft}
-            </div>
 
             <div class="col-md-4">
               <div class="infopanel">
