@@ -5,18 +5,18 @@
 
 <div id="main" class="container">
   <div class="row">
-    <div id="expview" class="col-md-9"> 
+    <div id="expview" class="col-md-12">
 
       <div class="row">
         <div class="col-md-12">
           <h1>{training.name}  </h1>
-          <p> {training.description|s}</p> 
+          <p> {training.description|s}</p>
         </div>
 
         {?status.done}
         <div class="col-md-12">
         <div class="alert alert-success" role="alert">
-          
+
           <p> {training.endmessage|s}</p>
         </div>
 
@@ -40,36 +40,39 @@
               {:else}
               <div class="infopanel">
                 <h4>Next task available</h4>
-                <p>{status.timeLeft}</p> 
+                <p>{status.timeLeft}</p>
               </div>
               {/status.done}
             {:else}
+              {?status.done}
+              {:else}
               <div class="infopanel">
                 <h4>Next task available</h4>
-                <p>Now</p> 
-              </div>  
+                <p>Now</p>
+              </div>
+              {/status.done}
             {/status.timeLeft}
             </div>
 
             <div class="col-md-4">
               <div class="infopanel">
-                <h4>Progress</h4>   
+                <h4>Progress</h4>
                 <p> {status.roundsLeft} </p>
               </div>
-            </div> 
-          
+            </div>
+
             {?status.done}
             {:else}
             <div class="col-md-4">
               <div class="infopanel">
-                <h4>Deadline</h4>
-                <p> {status.deadline}</p>
+                <!-- <h4>Deadline</h4>
+                <p> {status.deadline}</p> -->
                <!-- <p> {status.totalTimeLeft}</p>-->
               </div>
             </div>
             {/status.done}
           </div>
-        
+
         </div>
       </div>
 
@@ -87,7 +90,7 @@
 
         {?status.showscore}
         <div class="col-md-12">
-          <div id="chartcontainer" class="">  
+          <div id="chartcontainer" class="">
         </div>
         {/status.showscore}
 
@@ -100,7 +103,7 @@
 
 
 <script type="text/javascript">
-  
+
 $(function () {
   var score = [{status.scoreHistory}];
     $('#chartcontainer').highcharts({
