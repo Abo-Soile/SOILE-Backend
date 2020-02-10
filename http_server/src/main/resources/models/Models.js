@@ -3,7 +3,7 @@ Masterplan, laga ett bas object för enskilda object sparade i databasen.
 Olika object kan sedan extenda detta och implementera sina egna metoder.
 
 Samma sak med DAO-object, basobject med vanligaste functionerna, typ get, list
-osv. Sedan extendas den med mera specifika, t.ex User-dao. 
+osv. Sedan extendas den med mera specifika, t.ex User-dao.
 
 funktioner i dao:n ska alltså då initiera och returnera object som extendar
 data objecten
@@ -47,14 +47,14 @@ function userHasAccess(userObject) {
 }
 
 /*
-  Main user class; 
+  Main user class;
 */
 function User(arg) {
     this.role = "user";
     this.org = "standard";
 
     BaseModel.call(this, arg);
- 
+
     //this._collection = "users"
     this._collection = User.collection;
 
@@ -173,7 +173,7 @@ Experiment.prototype.isRandom = function() {
   if (typeof this.components === 'undefined') {
     this.israndom = false;
     return;
-  } 
+  }
 
   var randomCount = 0;
 
@@ -188,7 +188,7 @@ Experiment.prototype.isRandom = function() {
     }
     else {
       longestRandom = 0;
-    } 
+    }
   }
 
   if(randomCount > 1) {
@@ -263,7 +263,7 @@ function Training(arg) {
     this._isRandom = false;
 
     BaseModel.call(this, arg);
-    
+
     this._collection = Training.collection;
 }
 
@@ -278,7 +278,7 @@ Training.prototype.isRandom = function(mode) {
 //  isRandom.post = utils.isRandom(this.components["post"]);
 //  isRandom.training = utils.isRandom(this.components["training"]);
 //  isRandom.control = utils.isRandom(this.components["control"]);
-//  
+//
 //  if (!(isRandom.pre || isRandom.post || isRandom.training || isRandom.control)) {
 //    return false;
 //  }
@@ -293,7 +293,7 @@ Training.prototype.buildIsRandom = function() {
   isRandom.post = utils.isRandom(this.components["post"]);
   isRandom.training = utils.isRandom(this.components["training"]);
   isRandom.control = utils.isRandom(this.components["control"]);
-  
+
   if (!(isRandom.pre || isRandom.post || isRandom.training || isRandom.control)) {
     return false;
   }
@@ -305,7 +305,7 @@ Training.prototype.buildIsRandom = function() {
 };
 
 /*
-Returns the components for the current training round, takes care 
+Returns the components for the current training round, takes care
 */
 Training.prototype.getComponentsForRound = function(trainingData) {
 
@@ -332,7 +332,7 @@ Training.prototype.getComponentsForRound = function(trainingData) {
 
 /**
  * Check if the training experiment is linked to another one
- * @return {Boolean} 
+ * @return {Boolean}
  */
 Training.prototype.isLinked = function() {
   if(this.enableLink && this.links) {
@@ -392,7 +392,7 @@ Test.prototype.copy = function(userid, callback) {
 
   if (typeof test.code === 'undefined') {
     test.code = "";
-  } 
+  }
 
   delete test.id;
   delete test._id;
@@ -407,7 +407,7 @@ Test.prototype.copy = function(userid, callback) {
 
     test.code = test.code.split(that._id).join(test._id);
 
-    test.save(function(){ 
+    test.save(function(){
       var oldDir = testImages + "/" + that._id;
       var dirName = testImages + "/" + test._id;
 
@@ -441,7 +441,7 @@ Test.prototype.init = function(callback) {
 Test.prototype.compile = function(code, callback) {
   var address = utils.get_address('experiment_language');
   var eb = vertx.eventBus;
-  
+
   this.code = code;
 
   var msg = {
@@ -616,7 +616,7 @@ Data.prototype.generateRandomOrder = function(exp) {
 /*
 TRAINING DATA
 */
-function TrainingData(arg) {  
+function TrainingData(arg) {
   this.confirmed = false;
   this.timestamp = new Date().toISOString();
 
@@ -630,7 +630,7 @@ TrainingData.collection = "trainingdata";
 
 
 /*
-  Sets the general datafiled to the initial state. 
+  Sets the general datafiled to the initial state.
 */
 TrainingData.prototype.initGeneral = function(training) {
   this.type = "general";
@@ -652,7 +652,7 @@ TrainingData.prototype.initGeneral = function(training) {
 
   if (training.components.pre.length === 0) {
     this.mode = "training";
-  }  
+  }
 
 //  var isRandom = training.isRandom();
 //  if(isRandom) {
@@ -756,7 +756,7 @@ TrainingData.prototype.buildRandomOrder = function(training) {
     } else {
       this.randomorder[ord] = false;
     }
-  }  
+  }
 
   /*console.log("Created random order");
   console.log(JSON.stringify(this.randomorder));
@@ -804,6 +804,9 @@ function hoursFromNow(hours) {
   return date;
 }
 
+/**
+ * Check if we're in the last phase
+ */
 TrainingData.prototype.isLastPhase = function(training) {
   var isLast = false;
   var components = training.components[this.getMode()];
@@ -816,11 +819,24 @@ TrainingData.prototype.isLastPhase = function(training) {
   return isLast;
 };
 
+
+TrainingData.prototype.isSecondLastPhase = function() {
+  var isSecondLast = false;
+
+  var components = training.components[this.getMode()];
+
+  components = training.getComponentsForRound(this);
+
+  if (components.length === (this.position + 2) || components.length === 2) {
+    isLast = true;
+  }
+}
+
 /*Increment use position when a phase is completed*/
 TrainingData.prototype.completePhase = function(training) {
   //If last phase, complete the whole set.
   //  If pre -> go to training + waittime
-  //           -> or to control 
+  //           -> or to control
   //  If training -> training if iterations left
   //              -> post if no iterations left
   //  if post -> finish experiment
@@ -885,7 +901,7 @@ TrainingData.prototype.completePhase = function(training) {
 
     if (mode === "post") {
       this.mode = "done";
-    } 
+    }
 
     //Resetting task position
     this.position = 0;

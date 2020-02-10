@@ -187,6 +187,19 @@
           </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-inline">
+            <label class="checkbox bigcheckbox">
+                Last phase finalizes training round
+                <input type="checkbox" ng-model="training.skipLastPhase" ng-true-value="true" ng-false-value="false">
+            </label>
+          </div>
+          <p ng-if="training.skipLastPhase">Ensure that the last phase training phase is a form, and that it doesn't collect any data, as none will be saved</p>
+        </div>
+      </div>
+
     </div>
   </div>
 

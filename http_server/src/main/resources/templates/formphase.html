@@ -7,12 +7,17 @@
         <div class="row">
             <div id="formcol" class="col-md-12" data-dojo-type="dijit/form/Form" data-dojo-id="formcol">
 
-    
+
                 {form|s}
 
-                
+
             </div>
 
+            {?noSubmit}
+            <div class="col-md-12">
+                <a class="btn btn-success" href="./">Submit</a>
+            </div>
+            {:else}
             <div class="col-md-12">
                 {?submitbutton}
                 <button data-dojo-type="dijit/form/Button" type="button" id="submitButton">{submitbutton}</button>
@@ -20,6 +25,7 @@
                 <button data-dojo-type="dijit/form/Button" type="button" id="submitButton"> Submit</button>
                 {/submitbutton}
             </div>
+            {/noSubmit}
 
             <div class="col-md-6 col-md-offset-3">
                 <div class="progress">

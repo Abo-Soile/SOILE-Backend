@@ -549,6 +549,19 @@ function renderTrainingPhase(components, position, translatedPhase,request, pers
   context.completed = ((position+1)/components.length * 100);
   context.phasesLeft = (parseInt(position) + 1) + "/" + components.length;
 
+  // Don't submit any form data if skiplastphase is enabled
+  if (training.skipLastPhase) {
+
+    console.log("RENDERING - SKIP LASTP PHASE")
+
+    if (parseInt(position +1 ) == components.length ) {
+      console.log("LAST POS SKIPING")
+
+      context.noSubmit = true;
+    }
+
+  }
+
   dao.get(id, function(phase) {
 
     context[contextObj] = phase;
@@ -616,6 +629,21 @@ router.get("/training/:id/execute", function(request) {
     }
      else {
       renderTrainingPhase(modeComponents, positionInMode, phase,request, trainingData.persistantData, training);
+
+      if (training.skipLastPhase) {
+        var isSecondLastPhase = trainingData.isLastPhase(training);
+        console.log("Check skip last phase");
+
+        if (isSecondLastPhase) {
+          console.log("LASTPHASE COMPLETEING AHEAD OF TIME");
+
+          trainingData.completePhase(training);
+          trainingData.save(function f(res) {
+            console.log("Skipped last phase!!")
+          });
+        }
+      }
+
     }
   });
 
@@ -682,17 +710,17 @@ router.post("/training/:id/execute", function(request) {
         generalData.save(function() {
 
           //TODO: Check if there is any stored score
-        if (isLastPhase) {
-          if(training.showScore && oldMode !== "pre") {
-            request.jsonRedirect("/training/"+id+"/score");
+          if (isLastPhase) {
+            if(training.showScore && oldMode !== "pre") {
+              request.jsonRedirect("/training/"+id+"/score");
+            }
+            else {
+              request.jsonRedirect("/training/"+id);
+            }
           }
           else {
-            request.jsonRedirect("/training/"+id);
+            request.jsonRedirect("/training/"+id+"/execute");
           }
-        }
-        else {
-          request.jsonRedirect("/training/"+id+"/execute");
-        }
 
         });
       });
