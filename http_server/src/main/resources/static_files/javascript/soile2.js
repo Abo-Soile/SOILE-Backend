@@ -69,7 +69,7 @@ SOILE2 = (function(){
               }
               console.log('mouse down. ' + _inputid);
               action.call({}, _inputid);
-            });            
+            });
           } else {
             jQuery(_id).click(function(e){
               if (_resettimer) {
@@ -98,7 +98,7 @@ SOILE2 = (function(){
 
   //   }
   // }
-  
+
   bin.onkeypress = function(key, func) {
     var keycode = soile2.rt.kbd.keycode(key);
     if(func) {
@@ -146,20 +146,20 @@ SOILE2 = (function(){
   bin.copydata = function(data){
     return soile2.util.copyobject(data);
   };
-  
+
   /*
    * Stimuli are basically implemented as id strings (DOM id's),
-   * so copying a stimulus means copying the DOM element 
+   * so copying a stimulus means copying the DOM element
    * identified by the ID string.
    */
   bin.copystimulus = function(stim){
     var id;
     var newId, newStim;
-    
+
     if (soile2.util.is_string(stim)){
       id = soile2.util.getid(stim);
     }
-    
+
     if (soile2.util.is_string(id)){
       // http://api.jquery.com/clone/
       // http://stackoverflow.com/questions/1226029/jquery-clone-id
@@ -172,20 +172,20 @@ SOILE2 = (function(){
   };
 
   /*
-  The message is a static object that is displayed starting from the top left 
+  The message is a static object that is displayed starting from the top left
   corner that is used to easily display text, for example instructions.
   */
   bin.emptymsg = function(){
     var id = soile2.util.getid('message');
     jQuery(id).text('');
   };
-  
+
   bin.hidemsg = function(){
     var id = soile2.util.getid('message');
     jQuery(id).css('display', 'none');
     jQuery(id).text('');
   };
-  
+
   bin.showmsg = function(msg){
     var id = soile2.util.getid('message');
     jQuery(id).css('display', 'block');
@@ -223,7 +223,7 @@ SOILE2 = (function(){
   };
 
   bin.msgbox = function(msg, _size, maxwidth){
-    var id = soile2.rt.uniqueid(); 
+    var id = soile2.rt.uniqueid();
     var size;
 
     if(!_size && !_.isNumber(_size)) {
@@ -265,10 +265,10 @@ SOILE2 = (function(){
     }
 
     var styleSize = "width:"+width+"px; " + "height:"+height+"px;";
-    var styleBorder = "border:"+borderWidth+"px solid black;"; 
+    var styleBorder = "border:"+borderWidth+"px solid black;";
     var colourStyle = "";
-    
-    if(_colour !== undefined) {   
+
+    if(_colour !== undefined) {
       colourStyle = "background-color:" + _colour + ";";
     }
 
@@ -278,7 +278,7 @@ SOILE2 = (function(){
       "style": styleSize + " " + styleBorder + " " + colourStyle
       //"src": url
     };
-    
+
     jQuery("<div/>", props).appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
     return id;
@@ -361,7 +361,7 @@ SOILE2 = (function(){
   bin.readtext = function(id, clear) {
     var box = jQuery(soile2.util.getid(id));
     var value = box.val();
-    
+
     if (clear) {
       box.val("");
     }
@@ -394,7 +394,7 @@ SOILE2 = (function(){
     var jBar = jQuery(bar);
     jBar.css("width",(width + "px"));
     jBar.attr("id",id);
-    
+
     jBar.appendTo(soile2.util.getid("display"));
 
     soile2.rt.dyn.add(id);
@@ -469,7 +469,7 @@ SOILE2 = (function(){
       return x == y;
     }
   };
-  
+
   bin.equals = bin.eq;
 
   bin.fuzzyequal = function(obj1, obj2, ignorecases) {
@@ -478,11 +478,11 @@ SOILE2 = (function(){
       var str2 = obj2.toString();
 
       if(ignorecases || typeof ignorecases === "undefined") {
-        str1 = obj1.toString().toLowerCase();       
-        str2 = obj2.toString().toLowerCase();      
+        str1 = obj1.toString().toLowerCase();
+        str2 = obj2.toString().toLowerCase();
       }
 
-      return window.Levenshtein.get(str1, str2);      
+      return window.Levenshtein.get(str1, str2);
     }
 
     return -1;
@@ -507,7 +507,7 @@ SOILE2 = (function(){
     }
     return false;
   };
-  
+
   bin.greaterthan = bin.gt;
 
   bin.hide = function(id){
@@ -526,7 +526,7 @@ SOILE2 = (function(){
 */
     //elem.addClass("noAnimation");
     //elem.children("*").addClass("noAnimation");
-    
+
     //jQuery(id).addClass("invisibleElement");
     //jQuery(id).css("animation", "none");
     //jQuery(id).children("*").css("animation", "none");
@@ -538,7 +538,7 @@ SOILE2 = (function(){
   bin.hideall = function() {
     jQuery("#display").children().addClass("invisibleElement");
   }
-  
+
   bin.show = function(mId){
     var args = Array.prototype.slice.call(arguments);
     var id, pos;
@@ -568,7 +568,7 @@ SOILE2 = (function(){
       });
     return;
     }
-    
+
     if (typeof id !== 'undefined'){
       if (jQuery(id).length > 0){
         jQuery(id).removeClass("hiddenelem");
@@ -602,7 +602,7 @@ SOILE2 = (function(){
         //Removing and reapplying animation to make it repeatable
         /*elem.addClass("noAnimation");
         elem.children("*").addClass("noAnimation");
-  
+
         elem.offsetHeight;
 
         setTimeout(function() {
@@ -631,14 +631,23 @@ SOILE2 = (function(){
     };
     var img = jQuery('<img />', props).appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
-    if(loadScreen) {  
+    if(loadScreen) {
       //console.log(performance.now() + " LOADING IMAGE");
       toLoad += 1;
       img.on('load', soile2.util.onImageLoad);
     }
+
+    if (soile2.util.debug) {
+      console.log("ImageLoaderror")
+      img.on("error", function(e) {
+
+        soile2.util.debugFunction({message:"Failed to load image " + url})
+      })
+    }
+
     return id;
   };
-  
+
 
   bin.draggable = function(mId, isdraggable, data) {
     var id = soile2.util.getid(mId);
@@ -733,7 +742,7 @@ SOILE2 = (function(){
     };
     var audio = jQuery('<audio />', props).appendTo(soile2.util.getid("display"));
     soile2.rt.dyn.add(id);
-    if(loadScreen) {  
+    if(loadScreen) {
       //console.log(performance.now() + " LOADING IMAGE");
       toLoad += 1;
       audio.on('load', soile2.util.onImageLoad);
@@ -781,7 +790,7 @@ SOILE2 = (function(){
     }
     return 0;
   };
-  
+
   /*
    * Convert an integer representing seconds to milliseconds.
    */
@@ -797,7 +806,7 @@ SOILE2 = (function(){
     rt.schd.cancel();
     rt.schd.resume();
   };
-  
+
   bin.position = function(){
     var arr = Array.prototype.slice.call(arguments);
     var id, top, left, args, pos;
@@ -814,10 +823,10 @@ SOILE2 = (function(){
       if (typeof args[0] === 'object' &&
           args[0].hasOwnProperty('top') &&
           args[0].hasOwnProperty('left')) {
-            
+
         top = args[0].top;
         left = args[0].left;
-        
+
       }
     }
     else if (args.length > 1){
@@ -839,7 +848,7 @@ SOILE2 = (function(){
       //console.log("width: " + imgWidth + " height " + imgHeight);
       //soile2.bin.position(id, {"top":posTop, "left":posLeft})
     }
-    
+
     if (soile2.util.is_number(top) && soile2.util.is_number(left)){
       // http://stackoverflow.com/questions/4724794/how-do-i-give-a-jquery-element-absolute-positioning-on-a-page
       jQuery(id).css({
@@ -859,7 +868,7 @@ SOILE2 = (function(){
     }
     return false;
   };
-  
+
   bin.lessthan = bin.lt;
 
   bin.lte = function(x, y){
@@ -991,7 +1000,7 @@ SOILE2 = (function(){
   bin.stimulus = function(){
     return soile2.rt.stimuli.get();
   };
-  
+
   bin.setstimuli = function(arr){
     soile2.rt.stimuli.set(arr);
   };
@@ -1018,7 +1027,7 @@ SOILE2 = (function(){
   bin.pickstimulisubset= function(count) {
     soile2.rt.stimuli.subset(count);
   };
-  
+
   bin.length = function(o){
     if(_.isNumber(o)) {
       o = o.toString();
@@ -1029,7 +1038,7 @@ SOILE2 = (function(){
     }
     return -1;
   };
-  
+
   bin.kbdkey = function(name){
     if (_.isString(name)){
       return soile2.rt.kbd.keycode(name);
@@ -1062,7 +1071,7 @@ SOILE2 = (function(){
       }
       else {
        return  soile2.bin.randominteger(min,max,not);
-      } 
+      }
     }
   };
 
@@ -1098,12 +1107,12 @@ SOILE2 = (function(){
   bin.shuffle = function(arr) {
     return soile2.rt.shuffle(arr);
   };
-  
+
   bin.timeout = function(dur){
     soile2.rt.schd.suspend(dur);
   };
 
-  bin.append = function(str1, str2) { 
+  bin.append = function(str1, str2) {
 
     //More than two arguments
     if(arguments.length > 2) {
@@ -1143,7 +1152,7 @@ SOILE2 = (function(){
     }
 
     if(typeof str1 !== "object") {
-      //console.log("Appending strings " + str1 + str2);       
+      //console.log("Appending strings " + str1 + str2);
       var result = "";
       if(!_.isUndefined(str1) && !_.isUndefined(str2)) {
         return str1.toString() + str2.toString();
@@ -1244,9 +1253,9 @@ SOILE2 = (function(){
 
 
   /*
-    Toggle wether a standard score screen is displayed 
-    at the end of this test. 
-  */    
+    Toggle wether a standard score screen is displayed
+    at the end of this test.
+  */
   bin.showscore = function(bool) {
     // TODO: Implement this
     console.log("Showscore yes/no " + bool);
@@ -1258,7 +1267,7 @@ SOILE2 = (function(){
 
   bin.loadvariable = function(varName, defaultValue) {
     if (typeof defaultValue === "undefined") {
-      defaultValue = 0;    
+      defaultValue = 0;
     }
 
     var value = soile2.rt.persistantDataHandler.load(varName);
@@ -1276,7 +1285,7 @@ SOILE2 = (function(){
   // For dynamically added elements. (For instance, a call to 'imagefile' adds an element.)
   rt.dyn = (function(){
     var ids = [];
-    
+
     return {
       'add': function(id){
         ids.push(id);
@@ -1288,7 +1297,7 @@ SOILE2 = (function(){
       }
     };
   })();
-  
+
   rt.finalize_defs = function(){
     soile2.rt.seal(soile2.defs.gvars);
     soile2.rt.freeze(soile2.defs.vals);
@@ -1296,7 +1305,7 @@ SOILE2 = (function(){
 
     allReady = true;
   };
-  
+
   rt.freeze = (function(){
     if (Object.freeze !== undefined || typeof Object.freeze === 'function') {
       return function(obj){
@@ -1307,11 +1316,11 @@ SOILE2 = (function(){
       return obj;
     };
   })();
-  
+
   rt.truthvalue = function(value){
     // http://stackoverflow.com/questions/7615214/in-javascript-why-is-0-equal-to-false-but-not-false-by-itself
     // http://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/
-    
+
     if (_.isBoolean(value)) {
       return value;
     }
@@ -1320,7 +1329,7 @@ SOILE2 = (function(){
     }
     return true;
   };
-  
+
   rt.milliseconds = function(num){
     if (_.isNumber(num)){
       return Math.abs(num);
@@ -1330,10 +1339,10 @@ SOILE2 = (function(){
     }
     return 0;
   };
-  
+
   rt.undefvar = function(name){
     var vars = soile2.defs.vars;
-    
+
     if (vars.hasOwnProperty(name)){
       delete vars[name];
     }
@@ -1352,7 +1361,7 @@ SOILE2 = (function(){
 
     return msg;
   };
-  
+
   rt.kbd = (function(){
     var name2keycode = soile2.rt.freeze({
       "space":     32,
@@ -1411,7 +1420,7 @@ SOILE2 = (function(){
       "y": 89,
       "z": 90
     });
-    
+
     var keycode2name = soile2.rt.freeze({
       32:"space",
        8:"backspace",
@@ -1476,17 +1485,17 @@ SOILE2 = (function(){
       }
       return null;
     };
-    
+
     return {
       'name': function(keyCode){
         return lookupf.call(keycode2name, keyCode);
       },
-      
+
       'keycode': function(keyName){
         return lookupf.call(name2keycode, keyName);
       }
     };
-    
+
   })();
 
   // The keyhandler captures all keystrokes and executes a callback
@@ -1580,7 +1589,7 @@ SOILE2 = (function(){
 
         if (ignore === "onlyletters"){
           ignoreFunc = lettersOnly;
-        } 
+        }
         // Ignore case, specific letters
         if(ignore instanceof Array) {
           //Converting keynames to keycodes berfore use
@@ -1618,14 +1627,14 @@ SOILE2 = (function(){
   /*
   Methods for storing testdata.
   Single non repeating values should be stored with store single,
-  these will simply be sent and stored with the other summarty values. 
+  these will simply be sent and stored with the other summarty values.
 
   Repeating values, eg data from iterations in a test are stored, should be stored
   in a row as a key value pair. Summary operations can be performed on row data, where a
   field will be included if it exists or fills a certain criteria. The results are stored
   using key:values and are sent to the backend together with the single values.
 
-  Row values should also be stored in the backend if further analysis is neeeded.  
+  Row values should also be stored in the backend if further analysis is neeeded.
   */
   rt.dataHandler = (function() {
     var data;
@@ -1665,7 +1674,7 @@ SOILE2 = (function(){
 
     var _average = function(array) {
       if(!(array instanceof Array)) {
-        return 0; 
+        return 0;
       }
       var sum =  array.reduce(function(sum, value) {
         return sum + value;
@@ -1681,7 +1690,7 @@ SOILE2 = (function(){
     */
     var _avNminusOne = function(array) {
       if(!(array instanceof Array)) {
-        return 0; 
+        return 0;
       }
       var sum =  array.reduce(function(sum, value) {
         return sum + value;
@@ -1767,8 +1776,8 @@ SOILE2 = (function(){
         return count;
       },
       'median': function(field) {
-        var values = _fieldToArray(field); 
-        var median; 
+        var values = _fieldToArray(field);
+        var median;
 
         median = _median(values);
         return median;
@@ -1791,7 +1800,7 @@ SOILE2 = (function(){
           sd = _standardDeviation(arr);
         }
         if (multiplier === undefined) {
-          multiplier = 1; 
+          multiplier = 1;
         }
 
         var limit = sd * multiplier;
@@ -1899,7 +1908,7 @@ SOILE2 = (function(){
           return undefined;
         }
 
-        return _variables[name]; 
+        return _variables[name];
       },
       'get': function(){
         if (_.isEmpty(_variables)) {
@@ -1917,7 +1926,7 @@ SOILE2 = (function(){
   })();
 
   // Seedable randomfunction based on Math.sin. appears to produce sufficienlty
-  // random numbers for this use. 
+  // random numbers for this use.
   // http://stackoverflow.com/questions/521295/javascript-random-seeds
   rt.random = (function() {
     var _seed = Math.random();
@@ -1954,7 +1963,7 @@ SOILE2 = (function(){
     };
 
   })();
-  
+
   rt.stimuli = (function(){
     var _stimuli = [];
 
@@ -1974,8 +1983,8 @@ SOILE2 = (function(){
     return {
       'hasmore': _hasmore,
       /*
-        Get stimuli returns the current stimuli in the current iteration. Calling 
-        getstimuli multiple times in an iteration will return the same result so 
+        Get stimuli returns the current stimuli in the current iteration. Calling
+        getstimuli multiple times in an iteration will return the same result so
         it's not necessary to store the stimuli in another variable
       */
       'get': function(){
@@ -1993,7 +2002,7 @@ SOILE2 = (function(){
       },
       'set': function(arr){
         if (_.isArray(arr) && arr.length > 0) {
-          
+
           //Setting current stimuli to 0
           _iterationStimuli = null;
 
@@ -2040,7 +2049,7 @@ SOILE2 = (function(){
       }
     };
   })();
-  
+
   rt.clear_vars = function(){
     var __vars = soile2.defs.vars;
     for (var p in __vars){
@@ -2049,7 +2058,7 @@ SOILE2 = (function(){
       }
     }
   };
-  
+
   rt.reset_defs = function(){
     var reset = function(obj, name){
       if (obj.hasOwnProperty(name)){
@@ -2057,13 +2066,13 @@ SOILE2 = (function(){
       }
       obj[name] = {};
     };
-    
+
     reset(soile2.defs, 'gvars');
     reset(soile2.defs, 'vals');
     reset(soile2.defs, 'fns');
     reset(soile2.defs, 'vars');
   };
-  
+
   rt.opcodes = (function(){
     return soile2.rt.freeze({
       Eoc: -1,
@@ -2078,22 +2087,22 @@ SOILE2 = (function(){
       Suspend: 8
     });
   })();
-  
+
   // Get next "program instruction."
   rt.get_pi = undefined;
-  
+
   // Reset "program instructions."
   rt.reset_piarray = function(){
     soile2.rt.get_pi = function(idx){
       return null;
     };
   };
-  
+
   /*
-   * Save "program instructions." Note that we are 
-   * assigning a FUNCTION, not an array. The 
-   * "program instruction" array is really a 
-   * function which closes over an array 
+   * Save "program instructions." Note that we are
+   * assigning a FUNCTION, not an array. The
+   * "program instruction" array is really a
+   * function which closes over an array
    * (this is for encapsulation).
    */
   rt.set_piarray = function(piafunc){
@@ -2117,7 +2126,7 @@ SOILE2 = (function(){
       return arr;
     }
   };
-  
+
   rt.pi_opcode = function(pi){
     if (pi === undefined || pi === null){
       return -1;
@@ -2127,10 +2136,10 @@ SOILE2 = (function(){
     }
     return pi.opcode;
   };
-  
+
   rt.pi_index = (function(){
     var index = 0;
-    
+
     return {
       'get': function(){
         var current = index;
@@ -2157,7 +2166,7 @@ SOILE2 = (function(){
     var pi, opcode, idx;
 
     try {
-    
+
     while (true){
 
       if (rt.dowait) {
@@ -2180,7 +2189,7 @@ SOILE2 = (function(){
       if (opcode < 0){
         // TODO
         rt.finish();
-        
+
         // Program is over, remove listeners send data and navigate to next view
         break;
       }
@@ -2189,7 +2198,7 @@ SOILE2 = (function(){
           //soile2.assignDebugCallback(pi.host);
           soile2.assignDebugCallback(soile2.defs.gvars, soile2.defs.vars);
         }
-          
+
         pi.host[pi.name] = (pi.value)();
         continue;
       }
@@ -2252,13 +2261,13 @@ SOILE2 = (function(){
       }
     }
   }
-    
+
     if (dowait){
       scheduler.wait(waitfor);
       return;
     }
   };
-  
+
   // The scheduler.
   rt.schd = (function(){
     // The "unit" of the delay times; i.e. the delay time is some multiple of this.
@@ -2266,21 +2275,21 @@ SOILE2 = (function(){
 
     // How long the execution will be suspended. ('dur' stands for duration.)
     var suspend_dur = -1;
-    
+
     var due_ts;
-    
+
     // This will be the integer returned from a call to setTimeout.
     var settimeout_id;
-    
+
     var msleft = function(ts){
-      return ts - soile2.rt.timestamp();  
+      return ts - soile2.rt.timestamp();
       //return Math.abs(ts - soile2.rt.timestamp());
     };
-    
+
     var keep_waiting = function(ts){
       return (msleft(ts) > MINDELAY);
     };
-    
+
     var compute_delay = function(ts){
       var delay = msleft(ts);
       //console.log("Delay = " + delay)
@@ -2310,11 +2319,11 @@ SOILE2 = (function(){
       return 300;
       //return MINDELAY * 40;
     };
-    
+
     var schedule = function(delay){
       settimeout_id = setTimeout(scheduled, delay);
     };
-    
+
     var scheduled = function(){
       settimeout_id = undefined;
       if (keep_waiting(due_ts) === true){
@@ -2323,7 +2332,7 @@ SOILE2 = (function(){
       }
       resume();
     };
-    
+
     var cancel = function(){
       if (settimeout_id) {
         clearTimeout(settimeout_id);
@@ -2331,7 +2340,7 @@ SOILE2 = (function(){
         due_ts = -1;
       }
     };
-    
+
     var resume = function(){
       var args = Array.prototype.slice.call(arguments);
       if (args.length > 0) {
@@ -2341,17 +2350,17 @@ SOILE2 = (function(){
       }
       soile2.rt.exec_pi();
     };
-    
+
     var suspend = function(){
       var args = Array.prototype.slice.call(arguments);
-      
+
       /*
        * When the 'suspend' method is called with a number as a parameter,
-       * that will set the duration of suspension WITHOUT suspending the 
+       * that will set the duration of suspension WITHOUT suspending the
        * execution of the program flow.
-       * 
+       *
        * The researcher can control the length of the suspension with the
-       * built-in method soile2.bin.timeout (which corresponds to the 
+       * built-in method soile2.bin.timeout (which corresponds to the
        * 'timeout' built-in function in the domain specific language.
        */
       if (args.length > 0){
@@ -2360,7 +2369,7 @@ SOILE2 = (function(){
         }
         return;
       }
-      
+
       /*
        * If no suspension duration has been set previously, just stop the
        * execution of the program; otherwise, set a timeout.
@@ -2373,12 +2382,12 @@ SOILE2 = (function(){
         suspend_dur = -1;
       }
     };
-    
+
     var wait = function(ms){
       due_ts = soile2.rt.future_timestamp(ms);
       schedule(compute_delay(due_ts));
     };
-    
+
     return {
       'cancel': cancel,
       'resume': resume,
@@ -2406,7 +2415,7 @@ SOILE2 = (function(){
     //endFunc(soile2.rt.dataHandler.getData());
     endFunc(data, duration, score, persistantData);
   };
-  
+
   rt.seal = (function(){
     if (Object.seal !== undefined || typeof Object.seal === 'function') {
       return function(obj){
@@ -2417,11 +2426,11 @@ SOILE2 = (function(){
       return obj;
     };
   })();
-  
+
   rt.future_timestamp = function(ms) {
     return (soile2.rt.timestamp() + ms);
   };
-  
+
   rt.timestamp = (function(){
     // http://stackoverflow.com/questions/221294/how-do-you-get-a-timestamp-in-javascript
     if (Date.now !== undefined && typeof Date.now === 'function') {
@@ -2438,7 +2447,7 @@ SOILE2 = (function(){
     var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var prefix = 'id';
     var default_len = 16;
-    
+
     return function(){
       var args = Array.prototype.slice.call(arguments);
       var len = default_len;
@@ -2477,28 +2486,28 @@ SOILE2 = (function(){
   })();
 
   // High-level utility functions.
-  
+
   util.copyobject = function(oldObject){
     // https://github.com/douglascrockford/JSON-js
     // http://bestiejs.github.io/json3/
-    
+
     /*
-     * We copy an object, or an array, by first serializing 
+     * We copy an object, or an array, by first serializing
      * it into a JSON string, and then de-serializing it.
-     * It may not be the most efficient way, but it is 
+     * It may not be the most efficient way, but it is
      * conceptually simple and clear.
-     * 
+     *
      * We assume that the objects we copy do not contain
-     * functions. They would be lost in the 
+     * functions. They would be lost in the
      * serializing process.
      */
     return JSON.parse(JSON.stringify(oldObject));
   };
-  
+
   util.eval = function(code){
     jQuery.globalEval(code);
   };
-  
+
   util.setEndFunction = function(f) {
     endFunc = f;
   };
@@ -2539,12 +2548,12 @@ SOILE2 = (function(){
     }
     return s;
   };
-  
+
   // Return true if an object has an id property.
   util.hasobjid = function(elem){
     return (_.isObject(elem) && (_.has(elem, '_id') || _.has(elem, 'id')));
   };
-  
+
   util.is_boolean = function(o){
     return _.isBoolean(o);
   };
@@ -2619,6 +2628,6 @@ SOILE2 = (function(){
       SOILE2.rt.exec_pi();
     }
   };
-  
+
   return soile2;
 })();

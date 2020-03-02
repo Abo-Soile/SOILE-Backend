@@ -387,13 +387,14 @@ app.controller('expEditController', function($scope, $http, $location, $timeout,
 
     console.log("Executing soile");
 
-    SOILE2.util.eval($scope.compiledCode);
     SOILE2.util.setEndFunction($scope.endFunc);
     SOILE2.util.setLogFunction($scope.logFunc);
     SOILE2.util.setPilotMode($scope.isPilotMode);
 
     SOILE2.util.resetData();
     SOILE2.util.setDebug(setRuntimeError);
+
+    SOILE2.util.eval($scope.compiledCode);
     //SOILE2.util.setAssignCallback($scope.assignCallback);
 
     $timeout(function() {
