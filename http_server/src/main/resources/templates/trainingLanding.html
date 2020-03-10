@@ -5,7 +5,7 @@
 
 <div id="main" class="container">
   <div class="row">
-    <div id="expview" class="col-md-9"> 
+    <div id="expview" class="col-md-9">
 
       <div class="row">
         <div class="col-md-12">
@@ -21,25 +21,24 @@
           {/training.loggedInIntroVersion}
         </div>
       </div>
-      
       {?training.requireLogin}
         {?loggedIn}
           <div class="row">
             <div class="col-md-12">
-              <form action="{URI}/participate" method="post">
+              <form action="{URI}/participate?{URLQUERY}" method="post">
                 <button class="btn btn-primary"type="submit">Participate</button>
               </form>
 
             </div>
           </div>
         {:else}
-<!--           <p><strong>You need to sign in to proceed with the training. Sign in or create an account below</strong></p>
- -->          {>loginformpost /}
+            <!-- <p><strong>You need to sign in to proceed with the training. Sign in or create an account below</strong></p> -->
+          {>loginformpost /}
         {/loggedIn}
       {:else}
        <div class="row">
         <div class="col-md-12">
-          <form action="{URI}/participate" method="post">
+          <form action="{URI}/participate?{URLQUERY}" method="post">
             <button class="btn btn-primary"type="submit">Participate</button>
           </form>
 

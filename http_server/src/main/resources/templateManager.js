@@ -3,6 +3,7 @@ var console = require('vertx/console');
 var container = require('vertx/container');
 
 var config = container.config;
+var logger = container.logger;
 
 var port = config.port;
 var host = config.host;
@@ -56,8 +57,10 @@ var templateManager = (function() {
     'render_template': function(templateName, data, request) {
 
       data.URI = String(request.absoluteURI());
-
+      data.URI = data.URI.split("?")[0]
       data.URI = swapUrlPort(data.URI, externalPort);
+
+      data.URLQUERY = request.query()
 
       //data.URI = String(request.path());
       data.token = request.session.getPersonToken();

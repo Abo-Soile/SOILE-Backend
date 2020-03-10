@@ -200,6 +200,18 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-inline">
+            <label class="checkbox bigcheckbox">
+                Enable ID forwading
+                <input type="checkbox" ng-model="training.idForwarding" ng-true-value="true" ng-false-value="false">
+            </label>
+          </div>
+          <p ng-if="training.idForwarding">Soile will store ID's forwaded in the <i>externalid</i> query parameter e.g. <a href="#">soile.braintrain.fi/training/abc?externalid=id_that_is_stored</a></p>
+        </div>
+      </div>
+
     </div>
   </div>
 

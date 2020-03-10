@@ -2,6 +2,9 @@ var vertx = require("vertx");
 var CustomMatcher = require('router');
 var console = require('vertx/console');
 
+var container = require('vertx/container');
+var logger = container.logger;
+
 var templateManager = require('templateManager');
 var router = new CustomMatcher();
 
@@ -489,11 +492,29 @@ router.post("/training/:id/participate", function(request) {
   var id = request.params().get('id');
   var userid = request.session.getUserId();
 
+  var params = request.params();
+  var external_id = false;
+
+  if (params.contains("external_id")) {
+    logger.info("External id exists! " + external_id);
+    external_id = params.get("external_id")
+  }
+
+  logger.info("Params: " + request.query());
   trainingDAO.get(id, function(training) {
 
     //trainingDataDAO.getOrGenerateGeneral(userid, id, training.controlgroup, function(trainingData) {
     trainingDataDAO.getOrGenerateGeneral(userid, training, function(trainingData) {
+
+      if (external_id) {
+        trainingData.externalId = external_id;
+        trainingData.save(function(err) {
+          logger.info("External id saved: " + external_id);
+        });
+      }
+
       request.redirect("/training/" + id);
+
     });
   });
 });
