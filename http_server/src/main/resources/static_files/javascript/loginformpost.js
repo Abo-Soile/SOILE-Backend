@@ -8,9 +8,9 @@ function sArrayToJson(sArr) {
 }
 
 $("#showRegister").click(function() {
-    
+
     $("#showRegister").hide(0,function() {
-        $("#registerContainer").show("slow");   
+        $("#registerContainer").show("slow");
     });
 });
 var rForm = $("#registerform");
@@ -25,6 +25,8 @@ console.log($("#btn-register"));
 $("#btn-register").click(function(e) {
     var data =sArrayToJson(rForm.serializeArray());
 
+    data.username = data.username.trim();
+
     var req = {
         "username": data.username,
         "password":data.password,
@@ -34,7 +36,7 @@ $("#btn-register").click(function(e) {
     $.post("/signup/json", JSON.stringify(data), function(resp) {
         console.log(resp)
         if(resp.status=="ok") {
-           location.reload(); 
+           location.reload();
         } else {
             rAlert.css("display","block").html(resp.error);
 

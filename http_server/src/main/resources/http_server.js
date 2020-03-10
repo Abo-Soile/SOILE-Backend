@@ -38,6 +38,8 @@ console.log(JSON.stringify(container.config));
 
 var utils = require("utils");
 
+// var lodash = require("./node_modules/lodash/index");
+
 //var requireAdmin = utils.requireAdmin;
 var requireAdmin = middle.requireAdmin;
 
@@ -326,6 +328,14 @@ customMatcher.get('/signup', function(request) {
   templateManager.render_template('signup', {},request);
 });
 
+// function checkUsername(name) {
+//   if (typeof name != "string") {
+//     return false;
+//   }
+
+//   name = name.trim()
+// }
+
 function register(email, passwd, passwdAgain) {
   return new Promise(function(resolve, reject) {
     if(!(email && passwd && passwdAgain)) {
@@ -343,6 +353,12 @@ function register(email, passwd, passwdAgain) {
     }
 
     var newUser = new userModel();
+
+    email =email.trim()
+    if (email.indexOf(' ') !== -1) {
+      return reject("Username contains invalid characters");
+    }
+
     newUser.username = email;
     newUser.setPassword(passwd);
 
