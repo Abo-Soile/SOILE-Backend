@@ -57,12 +57,12 @@ var sessionManager =  {
   readCookie: function(name) {
     var nameEQ = name + "=";
     var i;
-    
+
     //Dont do anything if no cookies exist
     if(!this.cookies) {
-      return 0; 
+      return 0;
     }
-    
+
     var ca = this.cookies.split(';');
 
     for(i=0;i < ca.length;i++) {
@@ -87,7 +87,7 @@ var sessionManager =  {
       this.request.response.headers().add("Set-Cookie",c);
     }
   },
-  
+
   getPersonToken: function() {
     return this.readCookie("PersonToken");
   },
@@ -148,7 +148,7 @@ var sessionManager =  {
       this.renewSessionTimer(this.getSessionCookie(), data);
       return data;
     }
-      
+
   },
 
   isAdmin: function() {
@@ -193,7 +193,7 @@ var sessionManager =  {
 
       //console.log(JSON.stringify(this.request.response.headers()));
 
-    } 
+    }
    },
 
   checkSession: function(callback) {
@@ -236,4 +236,4 @@ var sessionManager =  {
 
 };
 
-module.exports = sessionManager; 
+module.exports = sessionManager;

@@ -62,10 +62,13 @@ function BaseModel(arg) {
 BaseModel.prototype.save = function(callback) {
   //console.log("Saving " + this.constructor.name);
 
+  this.updated = new Date();
+
   var obj = {"action":"save"};
   obj.document = this.filter();
 
   var that = this;
+
   this.sendToMongo(obj, function(reply) {
     if(typeof reply._id === "string" && reply.status === "ok") {
       that._id = reply._id;
