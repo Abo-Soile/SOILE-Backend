@@ -116,8 +116,9 @@
               <thead>
                 <th>#</th>
                 <th>ID</th>
+                <th ng-if="training.idForwarding == true">ExternalID</th>
                 <th>StartDate</th>
-                <th>EndDate</th>
+                <th>LastAction</th>
                 <th>Status</th>
                 <th>Group</th>
                 <th>Progress</th>
@@ -126,23 +127,27 @@
                 <tr ng-repeat="(key,user) in participants" ng-class="rowClass(user)">
                   <td>[([key])]</td>
                   <td>[([user.userId])]</td>
+                  <td ng-if="training.idForwarding == true">[([user.externalId])]</td>
                   <td>[([user.timestamp | date:'M/d/yyyy'])]</td>
-                  <td><span ng-if="user.mode != 'done'" am-time-ago="user.hoursTilDone"></span></td>
-                  <td><span class="label label-danger ">[([user.mode])]</span></td>
+                  <!-- <td><span ng-if="user.mode != 'done'" am-time-ago="user.hoursTilDone"></span></td> -->
+                  <!-- <td><span ng-if="user.mode != 'done'" am-time-ago="user.updated"></span></td> -->
+                  <td am-time-ago="user.updated"></td>
+                  <td><span ng-class="{'label-success': user.mode=='done', 'label-danger': user.mode!='done'}" class="label ">[([user.mode])]</span></td>
                   <td ng-if="user.inControlGroup == true">
                     <span class="label label-warning">Control</span>
                   </td>
                   <td ng-if="user.inControlGroup == false">
                     <span class="label label-info">Training</span>
                   </td>
-                  <td class="progressCell">
+                  <!-- <td class="progressCell">
                     <div class="progress">
                       <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="[([user.percentageDone])]" aria-valuemin="0" aria-valuemax="100" style="width: [([user.percentageDone])]%">
                         <span>[([user.percentageDone])]% </span>
                       </div>
-                  </div>
+                   </div>
+                  </td> -->
 
-                  </td>
+                  <td>[([user.trainingProgress])]/[([training.repeatcount])]</td>
                 </tr>
               </tbody>
 

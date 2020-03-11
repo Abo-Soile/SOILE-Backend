@@ -510,11 +510,11 @@ router.post("/training/:id/participate", function(request) {
         trainingData.externalId = external_id;
         trainingData.save(function(err) {
           logger.info("External id saved: " + external_id);
+          request.redirect("/training/" + id);
         });
+      } else {
+        request.redirect("/training/" + id);
       }
-
-      request.redirect("/training/" + id);
-
     });
   });
 });

@@ -116,29 +116,35 @@ app.controller('userProgressController', function($scope, $http, $location, over
       $scope.training = overviewService.training;
 
       for (var i = 0; i < $scope.participants.length; i++) {
+        var p = $scope.participants[i];
 
         $scope.participants[i].timestamp = new Date($scope.participants[i].timestamp);
 
         var hoursTilDone = 0;
         hoursTilDone = (2 + parseInt($scope.training.repeatcount)) * $scope.training.maxpause;
-        var p = $scope.participants[i];
+
+        p.trainingProgress = String(parseInt(p.trainingIteration));
+
         if(p.mode === "done") {
-          $scope.participants[i].percentageDone = 100;
+          p.percentageDone = 100;
           hoursTilDone = 0;
+          p.trainingProgress = $scope.training.repeatcount
         }
 
         if(p.mode === "pre") {
-          $scope.participants[i].percentageDone = 0;
+          p.percentageDone = 0;
         }
 
         if(p.mode === "training") {
           console.log("Pos " + (parseInt(p.trainingIteration)+1) + " repeatcount " + (parseInt($scope.training.repeatcount)+2)  + " res " + (parseInt(p.position) + 1)/(parseInt($scope.training.repeatcount) + 2));
-          $scope.participants[i].percentageDone = parseInt((parseInt(p.trainingIteration) + 1)/(parseInt($scope.training.repeatcount) + 2)*100);
+          p.percentageDone = parseInt((parseInt(p.trainingIteration) + 1)/(parseInt($scope.training.repeatcount) + 2)*100);
+
           hoursTilDone -= (1 + p.trainingIteration) * $scope.training.maxpause;
         }
 
         if(p.mode === "post") {
-          $scope.participants[i].percentageDone = ($scope.training.repeatcount + 2 - 1)/($scope.training.repeatcount + 2)*100;
+          p.percentageDone = ($scope.training.repeatcount + 2 - 1)/($scope.training.repeatcount + 2)*100;
+          p.trainingProgress = $scope.training.repeatcount;
           hoursTilDone = $scope.training.maxpause;
         }
 
