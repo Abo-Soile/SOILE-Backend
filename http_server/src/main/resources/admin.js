@@ -1,5 +1,5 @@
 /*
-  This controller contains admin releted funcions. 
+  This controller contains admin releted funcions.
 */
 
 var vertx = require('vertx');
@@ -86,6 +86,17 @@ router.get("/admin/user/:id", requireAdmin,function(request){
   var id = request.params().get('id');
 
   userDAO.get(id, function(user) {
+
+    if (user.role="user") {
+
+      return request.response.end(
+        JSON.stringify({
+          "username":user.username,
+          "_id":user._id
+        })
+      );
+    }
+
     request.response.end(JSON.stringify(user));
   });
 });

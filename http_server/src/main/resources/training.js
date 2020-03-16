@@ -273,7 +273,9 @@ router.get("/t/:name",function(request){
 
   trainingDAO.get({"shortname":name}, function(training) {
     if(training != "") {
-      return request.redirect("/training/" + training._id);
+      q = "?" + request.query();
+      // logger.info("QUERT: " + q);
+      return request.redirect("/training/" + training._id + q);
     }
     else {
       return request.notfound();

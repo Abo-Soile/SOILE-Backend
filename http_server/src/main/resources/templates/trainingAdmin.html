@@ -120,8 +120,8 @@
                 <th>StartDate</th>
                 <th>LastAction</th>
                 <th>Status</th>
-                <th>Group</th>
-                <th>Progress</th>
+                <th ng-if="training.controlgroup">Group</th>
+                <th>Training Progress</th>
               </thead>
               <tbody class="userProgress">
                 <tr ng-repeat="(key,user) in participants" ng-class="rowClass(user)">
@@ -133,10 +133,10 @@
                   <!-- <td><span ng-if="user.mode != 'done'" am-time-ago="user.updated"></span></td> -->
                   <td am-time-ago="user.updated"></td>
                   <td><span ng-class="{'label-success': user.mode=='done', 'label-danger': user.mode!='done'}" class="label ">[([user.mode])]</span></td>
-                  <td ng-if="user.inControlGroup == true">
+                  <td ng-if="user.inControlGroup == true && training.controlgroup">
                     <span class="label label-warning">Control</span>
                   </td>
-                  <td ng-if="user.inControlGroup == false">
+                  <td ng-if="user.inControlGroup == false && training.controlgroup">
                     <span class="label label-info">Training</span>
                   </td>
                   <!-- <td class="progressCell">

@@ -83,7 +83,9 @@ router.get("/e/:name",function(request){
 
   experimentDAO.get({"shortname":name}, function(exp) {
     if(exp != "") {
-      return request.redirect("/experiment/" + exp._id);
+      q = "?" + request.query();
+
+      return request.redirect("/experiment/" + exp._id + q);
     }
     else {
       return request.notfound();
