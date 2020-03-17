@@ -15,6 +15,11 @@
       background-color: rgba(49, 161, 49, 0.35);
     }
 
+    .userProgress-clickable {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
     table {
       //background-color: lightgray;
 
@@ -22,6 +27,7 @@
         margin-top: 10px;
         margin-bottom: 5px;
       }
+
 
       .progressCell {
         width:25%;

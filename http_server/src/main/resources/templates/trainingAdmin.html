@@ -112,6 +112,37 @@
         <div class="col-md-12">
           <div ng-controller="userProgressController" class="userProgress">
 
+            <script type="text/ng-template" id="myModalContent.html">
+              <div class="modal-header">
+                  <h3 class="modal-title" id="modal-title">User details</h3>
+              </div>
+
+              <div class="modal-body" id="modal-body">
+                <div ng-if="!error && userObj">
+                  <h4>User id:[([userObj._id])]</h4>
+                  <h4>Username:[([userObj.username])]</h4>
+
+                  <div class="checkbox-inline">
+                    <label>
+                      <input ng-false-value="false"
+                            ng-true-value="true"
+                            ng-model="forgottenPwd"
+                            ng-click="resetPassword(forgottenPwd)" type="checkbox">Password reset
+                    </label>
+                  </div>
+                  <span ng-show="userObj.forgottenPasswordToken && userObj.forgottenPasswordToken !== true"><a ng-href="/login/forgotten/[([userObj.forgottenPasswordToken])]"> link</a></span>
+                </div>
+                <div ng-if="error">
+                  <div class="alert alert-danger">[([error])]</div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+                  <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+              </div>
+            </script>
+
+
             <table class="table table-striped ">
               <thead>
                 <th>#</th>
@@ -126,7 +157,8 @@
               <tbody class="userProgress">
                 <tr ng-repeat="(key,user) in participants" ng-class="rowClass(user)">
                   <td>[([key])]</td>
-                  <td>[([user.userId])]</td>
+                  <!-- <td><div popover="I appeared on mouse enter!" popover-trigger="click">[([user.userId])]</div></td> -->
+                  <td class="userProgress-clickable" ng-click="open(user)">[([user.userId])]</td>
                   <td ng-if="training.idForwarding == true">[([user.externalId])]</td>
                   <td>[([user.timestamp | date:'M/d/yyyy'])]</td>
                   <!-- <td><span ng-if="user.mode != 'done'" am-time-ago="user.hoursTilDone"></span></td> -->

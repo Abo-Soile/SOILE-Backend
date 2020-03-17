@@ -5,7 +5,8 @@ app.config(function($interpolateProvider){
 });
 
 app.config(['$compileProvider', function ($compileProvider) {
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|):/);
+    // $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|):/);
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|tel|blob):/);
 }]);
 
 /**
@@ -22,6 +23,18 @@ function s2ab(s) {
 
 /*Marks html as safe*/
 app.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
+
+app.service('userService', function($http, $location, $q) {
+
+  //Gets the list of nuclear weapons
+  this.getUser = function (userId) {
+      return $http.get("http://" + location.host + "/admin/user/" + userId);
+  };
+
+  this.updateUser = function (user) {
+      return $http.post("http://" + location.host + "/admin/user/" + user._id, user);
+  };
+});
 
 app.service('overviewService', function($http, $location, $q) {
     this.users = [];
@@ -90,7 +103,7 @@ app.controller('overallStatsController', function ($scope, $http, $location, ove
   $scope.loadData()
 });
 
-app.controller('userProgressController', function($scope, $http, $location, overviewService) {
+app.controller('userProgressController', function($scope, $http, $location, $modal, overviewService, userService) {
   var baseUrl = $location.absUrl();
 
   $scope.rowClass = function(user){
@@ -163,8 +176,83 @@ app.controller('userProgressController', function($scope, $http, $location, over
 
 
   $scope.loadData();
+
+
+  $scope.open = function (uid) {
+
+    $scope.selectedUser = uid;
+
+    var modalInstance = $modal.open({
+      animation: true,
+      templateUrl: 'myModalContent.html',
+      controller: 'modalController',
+      size: "md",
+      resolve: {
+        user: function () {
+          return $scope.selectedUser;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      console.log('Modal dismissed at: ' + new Date());
+    });
+  };
+
 });
 
+
+app.controller('modalController', function ($scope, $modalInstance, userService, user) {
+
+  $scope.selectedUser = user;
+  $scope.userObj = null;
+  $scope.forgottenPwd = false;
+  // $scope.selected = {
+  //   item: $scope.items[0]
+  // };
+  $scope.error = false;
+
+  $scope.ok = function () {
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.getUserData = function(user) {
+    userService.getUser(user.userId).then(function(res) {
+      console.log("Got user", res);
+
+      $scope.userObj = res.data;
+
+      if ($scope.userObj.forgottenPasswordToken) {
+         $scope.forgottenPwd = true;
+        } else {
+          $scope.forgottenPwd = false;
+      }
+
+      if ($scope.userObj == '""' ||!$scope.userObj) {
+        $scope.error = "Could not find user " + user.userId;
+        $scope.userObj = null;
+      }
+    }).catch(function(err) {
+      $scope.error = "You do not have permission to view this";
+    })
+  };
+
+  $scope.resetPassword = function(val) {
+    $scope.userObj.forgottenPasswordToken = val;
+    userService.updateUser($scope.userObj).then(function(res) {
+      $scope.getUserData(user);
+    })
+  }
+
+  $scope.getUserData(user);
+
+});
 
 app.controller('trainingDataFilterController', function($scope, $http, $location, $window,overviewService) {
   var baseUrl = $location.absUrl();
