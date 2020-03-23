@@ -24,15 +24,20 @@ function s2ab(s) {
 /*Marks html as safe*/
 app.filter('unsafe', function($sce) { return $sce.trustAsHtml; });
 
-app.service('userService', function($http, $location, $q) {
+app.service('userService', function($http, $location, $q, $window) {
 
   //Gets the list of nuclear weapons
   this.getUser = function (userId) {
-      return $http.get("http://" + location.host + "/admin/user/" + userId);
+    var base = new $window.URL($location.absUrl()).origin
+
+    return $http.get(base + "/admin/user/" + userId);
+    // return $http.get(location.host + "/admin/user/" + userId);
   };
 
   this.updateUser = function (user) {
-      return $http.post("http://" + location.host + "/admin/user/" + user._id, user);
+    var base = new $window.URL($location.absUrl()).origin
+
+    return $http.post(base + "/admin/user/" + user._id, user);
   };
 });
 
