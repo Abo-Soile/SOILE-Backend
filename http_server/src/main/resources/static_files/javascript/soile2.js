@@ -41,6 +41,28 @@ SOILE2 = (function(){
   soile2.util.debug = false;
   soile2.util.pilotMode = false;
 
+  bin.calljs = function(func, lib) {
+    var args = Array.prototype.slice.call(arguments, 2)
+    var callObj = null;
+
+    if(lib == "bin") {
+      callObj = bin
+    } else {
+      console.log("Function not supported")
+    }
+
+    try {
+      if (callObj) {
+        return callObj[func].apply({},args)
+      } else {
+        return false
+      }
+    } catch (error) {
+      return false
+    }
+
+  }
+
   bin.onmouseclick = function(id, conf){
 
     //The args call basically converts a functions arguments object to
@@ -647,6 +669,23 @@ SOILE2 = (function(){
 
     return id;
   };
+
+  bin.jsonfile = function(url, name) {
+    console.log("Waiting for data")
+
+    // Wait for a while to ensure that we have data
+    rt.dowait = true
+    rt.waitfor = 1000
+
+    var json = jQuery.getJSON(url, "", function(data) {
+      soile2.defs.json[name] = data
+      rt.schd.resume()
+    });
+  }
+
+  bin.getdata = function(name) {
+    return soile2.defs.json[name];
+  }
 
 
   bin.draggable = function(mId, isdraggable, data) {
@@ -2071,6 +2110,7 @@ SOILE2 = (function(){
     reset(soile2.defs, 'vals');
     reset(soile2.defs, 'fns');
     reset(soile2.defs, 'vars');
+    reset(soile2.defs, 'json');
   };
 
   rt.opcodes = (function(){
