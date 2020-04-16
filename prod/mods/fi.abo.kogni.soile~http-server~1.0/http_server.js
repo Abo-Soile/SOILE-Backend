@@ -55,7 +55,7 @@ function sessionTest(func) {
 
     request.notfound = function() {
       this.response.statusCode(404);
-      
+
       var context = {};
       context.short = "404, not found" ;
       context.long =  "The content you're looking for couldn't be found.";
@@ -68,8 +68,8 @@ function sessionTest(func) {
     request.session = session;
 
     //Check if a db session exists
-    if((!session.loggedIn()) 
-        && (session.getSessionCookie()) 
+    if((!session.loggedIn())
+        && (session.getSessionCookie())
         && request.method()==="GET") {
       console.log("Checking session");
       session.checkSession(function callback(r) {
@@ -157,7 +157,7 @@ customMatcher.noMatch = function(handler) {
 
 // Generates  a new customMatcher and sets it to routmatcher
 // this matcher is then bound to de server object at the bottom
-// of this file. The normal routematcher can also be called if 
+// of this file. The normal routematcher can also be called if
 // needed.
 var routeMatcher = new customMatcher();
 
@@ -206,7 +206,7 @@ var sessionManager = require("sessionManager");
 
 customMatcher.get("/login", function(request) {
   var previous = request.headers().get("Referer");
-  
+
   templateManager.render_template('login', {"origin":previous},request);
 });
 
@@ -240,12 +240,12 @@ customMatcher.post("/login", function(request) {
     templateVars.origin = decodeURIComponent(origin);
 
     mongo.user.auth(username, password, remember, function(r) {
-      
+
       console.log(JSON.stringify(r));
       //Status ok, user found
       if (r.status==="ok") {
         request.session.login(r.result._id, r.result.username,r.result.admin, r.token);
-        mongo.experiment.updateDataIdentifier(r.result._id, 
+        mongo.experiment.updateDataIdentifier(r.result._id,
           request.session.getPersonToken(), function(s) {
 
           if(origin){
@@ -253,7 +253,7 @@ customMatcher.post("/login", function(request) {
           }
           return request.redirect("/");
         })
-        
+
       }
       //No user was found, error
       else {
@@ -298,14 +298,14 @@ customMatcher.post("/login/forgotten", function(request) {
       mailManager.passwordReset(username, uri, function(r) {
         console.log("Reset mail sent to: " + username + " " + JSON.stringify(r));
         templateManager.render_template("forgotten", templateParams, request)
-        
+
       })
 
     });
   });
 });
 
-customMatcher.get("/login/forgotten/:token", function(request) { 
+customMatcher.get("/login/forgotten/:token", function(request) {
     var token = request.params().get('token');
 
     mongo.user.getWithToken(token, function(r) {
@@ -318,7 +318,7 @@ customMatcher.get("/login/forgotten/:token", function(request) {
     })
 });
 
-customMatcher.post("/login/forgotten/:token", function(request) { 
+customMatcher.post("/login/forgotten/:token", function(request) {
   var data = new vertx.Buffer();
   var token = request.params().get('token');
 
@@ -326,7 +326,7 @@ customMatcher.post("/login/forgotten/:token", function(request) {
     data.appendBuffer(buffer);
   });
 
-  request.endHandler(function() { 
+  request.endHandler(function() {
     var params = data.getString(0, data.length());
     params = utils.getUrlParams(params);
 
@@ -449,7 +449,7 @@ customMatcher.get("/experiment", function(request){
 
 
 /*
-Creates a new empty experiment and redirects the user to the new 
+Creates a new empty experiment and redirects the user to the new
 experiments' edit page
 */
 customMatcher.get("/experiment/new", function(request){
@@ -486,7 +486,7 @@ customMatcher.post("/experiment/new", function(request) {
   request.endHandler(function() {
 
     var jsonData = JSON.parse(data.getString(0, data.length()));
-    console.log(data.getString(0, data.length())); 
+    console.log(data.getString(0, data.length()));
 
     var sDate = new Date(jsonData.startDate);
     var eDate = new Date(jsonData.endDate);
@@ -550,14 +550,14 @@ customMatcher.get('/experiment/:id', function(request){
         if (userdata) {
           console.log("Userdata exists " + JSON.stringify(userdata))
           //Redirect to right phase if available
-          if(userdata.position > 0) {          
+          if(userdata.position > 0) {
             request.redirect(request.absoluteURI() + "/phase/" + (userdata.position));
           }
           else{
             renderExp(r)
           }
         }
-        else { 
+        else {
           console.log("No userdata");
 
           var userdata = {}
@@ -567,20 +567,20 @@ customMatcher.get('/experiment/:id', function(request){
           if (exp.israndom) {
             var order = mongo.experiment.generateRandomOrder(exp);
             console.log("Generated random order " + JSON.stringify(order));
-            userdata.randomorder = order; 
+            userdata.randomorder = order;
           }
           mongo.experiment.initUserData(userdata, userID, exp._id, function(r2){
             renderExp(r);
           })
         }
       })
-    } 
+    }
     //Admin, navigation controls dont apply here, just show the view
     else {
       mongo.experiment.countParticipants(id, function(r2) {
         r.result.participants = r2;
         console.log(JSON.stringify(r));
-        renderExp(r); 
+        renderExp(r);
       })
     }
   });
@@ -597,7 +597,7 @@ customMatcher.get('/experiment/:id/edit', requireAdmin(function(request){
     console.log(JSON.stringify(r));
     templateManager.render_template("editexperiment", {"exp":experiment},request);
   });
- 
+
 }));
 
 
@@ -612,7 +612,7 @@ customMatcher.post('/experiment/:id/edit', requireAdmin(function(request){
 
       var id = request.params().get('id');
       var jsonData = JSON.parse(data.getString(0, data.length()));
-      console.log(data.getString(0, data.length())); 
+      console.log(data.getString(0, data.length()));
 
       var sDate = new Date(jsonData.startDate);
       var eDate = new Date(jsonData.endDate);
@@ -669,7 +669,7 @@ customMatcher.post('/experiment/:id/editformname', requireAdmin(function(request
     console.log(JSON.stringify(jsonData));
 
     var name = jsonData.name;
-    var formid = jsonData.id; 
+    var formid = jsonData.id;
 
     mongo.experiment.editFormName(expId, formid, name, function(r){
       console.log(JSON.stringify(r));
@@ -696,11 +696,11 @@ customMatcher.post("/experiment/:id/addtest", requireAdmin(function(request) {
     }
 
     mongo.experiment.addTest(expId, data.testId, data.name, function(r) {
-      
+
       var resp = r;
       resp.name = data.name;
       resp.id = data.testId;
-     
+
       console.log(JSON.stringify(resp));
       request.response.end(JSON.stringify(resp));
     });
@@ -785,11 +785,11 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         return request.redirect(request.absoluteURI().toString().replace(reg,""));
       }
       return request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (userdata.position)));
-    } 
+    }
 
     else {
       mongo.experiment.get(expID, function(r) {
-        var exp  = r.result; 
+        var exp  = r.result;
         phase = exp.components[phaseNo];
 
         //Redirecting to experiment end
@@ -817,7 +817,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
         if (exp.israndom) {
           console.log("------Translating phase number---------");
           console.log(phaseNo + " -> " + userdata.randomorder[phaseNo]);
-          phase = exp.components[userdata.randomorder[phaseNo]]; 
+          phase = exp.components[userdata.randomorder[phaseNo]];
         }
 
         //Formphase, rendering form template
@@ -844,7 +844,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
             templateManager.render_template("testphase", context, request);
           });
         }
-        
+
         else {
           console.log(phase.type);
           console.log("Phase type is undefined");
@@ -857,7 +857,7 @@ customMatcher.get('/experiment/:id/phase/:phase', function(request) {
 
 customMatcher.get('/experiment/:id/phase/:phase/json', function(request) {
   var expID = request.params().get('id');
-  var phaseNo = request.params().get('phase'); 
+  var phaseNo = request.params().get('phase');
   var phase;
 
   var userID = request.session.getPersonToken();
@@ -930,7 +930,7 @@ customMatcher.get('/experiment/:id/end', function(request) {
 customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
   var expID = request.params().get('id');
   mongo.experiment.formData(expID, function(r) {
-		  
+
 	var data = r.results;
     console.log(JSON.stringify(r));
 
@@ -938,7 +938,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 
     var fields = [];
     var userData = {};
-	
+
 
     //finding max phase an
     var i;
@@ -964,7 +964,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
       if(!userData[item.userid]) {
         userData[item.userid] = [];
       }
-      //Writing table data for each 
+      //Writing table data for each
       userData[item.userid][phase] = [];
       var j;
       for(j in item.data) {
@@ -973,17 +973,17 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
        // }
       }
     }
-    
-	fields = utils.cleanArray(fields);
-	for(var d in userData) {
-		userData[d] = utils.cleanArray(userData[d]);
-	}
-	var mergedFields = [];
-    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
+
+    fields = utils.cleanArray(fields);
+    for(var d in userData) {
+      userData[d] = utils.cleanArray(userData[d]);
+    }
+    var mergedFields = [];
+    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));
 
     var stringFields = mergedFields.join(sep);
-	
-	console.log("\n\n\n" + JSON.stringify(userData));
+
+    console.log("\n\n\n" + JSON.stringify(userData));
     var userFields = ""
     for(id in userData) {
       var mergedUserData = [];
@@ -1000,7 +1000,7 @@ customMatcher.get('/experiment/:id/data', requireAdmin(function(request) {
 }))
 
 
-// Does pretty much the same as the form data method, 
+// Does pretty much the same as the form data method,
 // Might generate empty fields when using phase no as array index
 customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
   var expID = request.params().get('id');
@@ -1018,7 +1018,7 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
       var item = data[i];
       console.log("\n" + i + " Index\n"  + JSON.stringify(item));
 	  item.single = item.data.single;
-      
+
 	  var phase = parseInt(item.phase);
 
       if(!("userid" in item)) {
@@ -1047,15 +1047,15 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
         userData[item.userid][phase].push(item.single[j]);
       }
     }
-	
-	fields = utils.cleanArray(fields);
-	for(var d in userData) {
-		userData[d] = utils.cleanArray(userData[d]);
-	}
+
+  fields = utils.cleanArray(fields);
+  for(var d in userData) {
+    userData[d] = utils.cleanArray(userData[d]);
+  }
 
     var mergedFields = [];
-    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));  
-    
+    mergedFields = (["userid"]).concat(mergedFields.concat.apply(mergedFields, fields));
+
     var stringFields = mergedFields.join(sep);
 
     var userFields = ""
@@ -1072,7 +1072,7 @@ customMatcher.get('/experiment/:id/testdata', requireAdmin(function(request) {
 
     request.response.end("\ufeff " + stringFields+"\n"+ userFields);
   })
- 
+
 }));
 // /experiment/:id/phase/:phase/rawdata'
 customMatcher.get('/experiment/:id/rawdata', requireAdmin(function(request) {
@@ -1085,7 +1085,7 @@ customMatcher.get('/experiment/:id/rawdata', requireAdmin(function(request) {
 }));
 
 
-// Returns raw tesdata from a testphase as a csv, data is formatted 
+// Returns raw tesdata from a testphase as a csv, data is formatted
 // Doesn't format correcly if some fields are missing from the data
 customMatcher.get('/experiment/:id/phase/:phase/rawdata', requireAdmin(function(request) {
   var expId = request.params().get('id');
@@ -1226,7 +1226,7 @@ customMatcher.get('/questionnaire/generated/:id', function(request) {
     //console.log(err);
     var i;
     for (i = 0; i < res.length; i++) {
-      console.log(res[i]);  
+      console.log(res[i]);
     }
   });
   request.response.sendFile(file);
@@ -1349,7 +1349,7 @@ customMatcher.get('/test/:id', requireAdmin(function(request) {
   vertx.fileSystem.readDir(testImages + "/" + id, function(err, res) {
     if (!err) {
       //files = res;
-       for (var i = 0; i < res.length; i++) { 
+       for (var i = 0; i < res.length; i++) {
           var img = res[i].toString();
           var file = {}
           file.url = img.substring(img.indexOf("testimages"));
@@ -1360,7 +1360,7 @@ customMatcher.get('/test/:id', requireAdmin(function(request) {
         console.log("\n\n\n");
     }
     mongo.test.get(id, function(r) {
-      templateManager.render_template('testEditor', 
+      templateManager.render_template('testEditor',
         {"code":code, "test":r.result, "files":files}, request);
     })
   });
@@ -1426,7 +1426,7 @@ customMatcher.post("/test/:id/imageupload", function(request) {
 
       //Replacing and removing unwanted characters from filename
       fixedFilename = fixedFilename.replace(/[å+ä]/gi, "a");
-      fixedFilename = fixedFilename.replace("ö", "o"); 
+      fixedFilename = fixedFilename.replace("ö", "o");
       fixedFilename = fixedFilename.replace(/[^a-z0-9+.]/gi, '_').toLowerCase();
 
       var path = testImages + "/" + id +"/" + fixedFilename;
@@ -1471,7 +1471,7 @@ customMatcher.get('/test/:id/imagelist', function(request) {
   vertx.fileSystem.readDir(testImages + "/" + id, function(err, res) {
     if (!err) {
       //files = res;
-      for (var i = 0; i < res.length; i++) { 
+      for (var i = 0; i < res.length; i++) {
         var img = res[i].toString();
         var file = {}
         file.url = img.substring(img.indexOf("testimages"));
@@ -1580,8 +1580,8 @@ customMatcher.get('/', function(request) {
 
 
 /*
-  Matches static files. Uses the normal routmatcher so that session stuff is 
-  ignored when sending static files. 
+  Matches static files. Uses the normal routmatcher so that session stuff is
+  ignored when sending static files.
 */
 routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff)$', function(req) {
   req.response.sendFile(utils.file_from_serverdir(req.path()));
