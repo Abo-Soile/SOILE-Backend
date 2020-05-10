@@ -25,7 +25,7 @@
 
 <div class="container experiment-edit" id="main" ng-app="experimentEdit" ng-controller="experimentController">
   <div class="row">
-    <div class="col-md-12">    
+    <div class="col-md-12">
         <label>Experiment name</label>
         <input  class="form-control"  ng-model="experiment.name">
 
@@ -37,7 +37,7 @@
 
         <label>End message</label>
         <textarea class="form-control animate" msd-elastic ng-model="experiment.endmessage"> </textarea>
-    </div> 
+    </div>
     <div class="col-md-12">
       <br>
     </div>
@@ -95,12 +95,12 @@
       <div class="panel panel-fancy" ng-controller="componentController">
         <h5>Components</h5>
         <div ui-tree>
-          <ul ui-tree-nodes="" ng-model="experiment.components" class="fancyList angularcomponentlist"> 
+          <ul ui-tree-nodes="" ng-model="experiment.components" class="fancyList angularcomponentlist">
 
             <li class="" ng-repeat="comp in experiment.components" ui-tree-node>
               <div class="dragHandle" ui-tree-handle><i class="fa fa-bars"></i></div>
                <div class="form-inline">
-              
+
                 <!-- IF TEST -->
                 <div ng-if="comp.type == 'test'" class="form-group">
                   <input class="form-control compname" ng-model=comp.name readonly>
@@ -124,8 +124,14 @@
 
                 <!--IF FORM -->
                 <span ng-if="comp.type == 'form'" class="form-group">
-                  <input class="form-control compname" ng-model=comp.name placeholder="Unnamed form"> 
+                  <input class="form-control compname" ng-model=comp.name placeholder="Unnamed form">
                   <a class="btn btn-warning" href="/questionnaire/mongo/[([comp.id])]" target="_blank">Edit</a>
+                </span>
+
+                <span ng-if="comp.type == 'video'" class="form-group">
+                  <input class="form-control compname" ng-model=comp.name placeholder="Unnamed form">
+                  <input class="form-control compname" ng-model=comp.videofile placeholder="noFile">
+
                 </span>
 
                 <button ng-click="delComponent(key, $index)" class="btn btn-danger pull-right " type="submit">Delete</button>
@@ -138,9 +144,12 @@
       </div>
     </div>
   </div>
-  <div class="row">      
+  <div class="row">
     <div class="col-md-1">
       <button class="btn btn-default" ng-click="addForm()">Add form</button>
+    </div>
+    <div class="col-md-1">
+      <button class="btn btn-default" ng-click="addVideo()">Add video</button>
     </div>
     <div class="col-md-10">
       <div class="form-group">
@@ -152,7 +161,7 @@
         </ui-select>
         <button class="btn btn-default" ng-disabled="test.selected == null" ng-click="addTest()">Add test</button>
       </div>
-    
+
     </div>
 
     <div class="col-md-12">
@@ -161,7 +170,7 @@
 
     <div class="col-md-12">
     <button class="btn btn-success" ng-click="save()" ladda="loading">Save</button>
-      
+
     </div>
   </div>
 

@@ -1,8 +1,8 @@
-var app = angular.module('experimentEdit', 
-       ['ui.tree', 
-        'ui.bootstrap', 
-        'ui.select', 
-        'ngSanitize', 
+var app = angular.module('experimentEdit',
+       ['ui.tree',
+        'ui.bootstrap',
+        'ui.select',
+        'ngSanitize',
         'angular-ladda',
         'monospaced.elastic',
         'useraccess'
@@ -54,7 +54,7 @@ app.controller('experimentController', function($scope, $http, $location) {
 
     //$scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = 'yyyy/MM/dd';
-    $scope.test = {};   
+    $scope.test = {};
 
 
     function loadData() {
@@ -159,6 +159,20 @@ app.controller('experimentController', function($scope, $http, $location) {
         $scope.save();
       });
     };
+
+  $scope.addVideo = function () {
+
+    var compObject = {};
+    compObject.name = "VideoPhase";
+    compObject.type = "video";
+    compObject.videofile = "pathToVideo.mp4";
+    compObject.record = "true";
+
+    $scope.experiment.components.push(compObject);
+
+    $scope.save();
+
+  };
 
     //$scope.startdate = new Date();
     //$scope.enddate = new Date();
