@@ -610,7 +610,7 @@ customMatcher.get('/', function(request) {
   Matches static files. Uses the normal routmatcher so that session stuff is
   ignored when sending static files.
 */
-customMatcher.routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff|json)$', function(request) {
+customMatcher.routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff|json|mp4|webm)$', function(request) {
   //logHttp(request);
 
   request.response.sendFile(utils.file_from_serverdir(request.path()));

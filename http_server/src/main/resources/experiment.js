@@ -267,6 +267,14 @@ router.get('/experiment/:id/phase/:phase', function(request) {
             });
           }
 
+          if(phase.type === "video") {
+            console.log("test");
+
+            context.config = {}
+            context.config.file = phase.videofile
+            templateManager.render_template("videophase", context, request);
+          }
+
           else {
             console.log(phase.type);
             console.log("Phase type is undefined");
@@ -328,6 +336,43 @@ router.post('/experiment/:id/phase/:phase', function(request) {
     });
   });
 });
+
+router.post('/experiment/:id/phase/:phase/video', function (request) {
+
+  request.expectMultiPart(true);
+
+  var expID = request.params().get('id');
+  var phase = request.params().get('phase');
+
+  var data = new vertx.Buffer();
+
+  request.uploadHandler(function (upload) {
+    //var path = testImages + id + "/" + upload.filename()
+    var userID = request.session.getPersonToken();
+    if (request.session.loggedIn()) {
+      userID = request.session.getUserId();
+    }
+
+    var fixedFilename = upload.filename();
+
+    //Replacing and removing unwanted characters from filename
+    fixedFilename = fixedFilename.replace(/[å+ä]/gi, "a");
+    fixedFilename = fixedFilename.replace("ö", "o");
+    fixedFilename = fixedFilename.replace(/[^a-z0-9+.]/gi, '_').toLowerCase();
+
+    // var path = "upload/" + expID +"_video_"+ userID + "/" + fixedFilename;
+    var path = "/home/danno/" + expID +"_video_"+ userID +fixedFilename;
+    //var path = testImages + "/" + id +"/" + upload.filename()
+    console.log("Uploading image to " + path);
+    upload.streamToFileSystem(path);
+  });
+
+  request.endHandler(function () {
+    console.log("Upload done")
+    request.response.end()
+  })
+
+})
 
 router.get('/experiment/:id/end', function(request) {
   var expID = request.params().get('id');
