@@ -131,6 +131,17 @@ SOILE2 = (function(){
     }
   };
 
+
+  bin.onkeyup = function(key, func) {
+    var keycode = soile2.rt.kbd.keycode(key);
+    if(func) {
+      rt.keyhandler.addkeyup(keycode, func);
+      }
+    else {
+      rt.keyhandler.removekeyup(keycode);
+    }
+  };
+
   bin.onanykey = function(func, ignore) {
     if(func) {
       if(ignore) {
@@ -1541,6 +1552,7 @@ SOILE2 = (function(){
   // function if a key is bound to one.
   rt.keyhandler = (function() {
     var keyfunctions = {};
+    var keyupfunctions = {};
     var anykeyfunctions = [];
     var lastKey = "";
     var lastActiveKey = "";
@@ -1584,17 +1596,34 @@ SOILE2 = (function(){
       }
     };
 
+    var keyUpFunction = function(e) {
+      lastKey = soile2.rt.kbd.name(e.keyCode);
+      //console.log(e.keyCode);
+      if (keyupfunctions[e.keyCode]) {
+        lastActiveKey = e.keyCode;
+        keyupfunctions[e.keyCode].apply(null, [lastKey]);
+      }
+    }
+
     document.onkeydown = keyFunction;
+    document.onkeyup = keyUpFunction;
 
     return {
       'add': function(keycode, func) {
         keyfunctions[keycode] = func;
       },
+      'addkeyup': function(keycode, func) {
+        keyupfunctions[keycode] = func;
+      },
       'remove': function(keycode, func) {
         keyfunctions[keycode] = null;
       },
+      'removekeyup': function(keycode, func) {
+        keyupfunctions[keycode] = null;
+      },
       'reset': function() {
         keyfunctions = {};
+        keyupfunctions = {};
         anykeyfunctions = [];
         lastKey = "";
         lastActiveKey = "";

@@ -135,6 +135,7 @@ public class Builtin {
 
         //Keys
         builtinFunctions.add("onkeypress");
+        builtinFunctions.add("onkeyup");
         builtinFunctions.add("resumeonkey");
         builtinFunctions.add("onanykey");
         builtinFunctions.add("getlastkey");
