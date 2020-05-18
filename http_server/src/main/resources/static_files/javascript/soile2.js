@@ -33,6 +33,8 @@ SOILE2 = (function(){
 
   var assignDebugCallback = null;
 
+  var intervalFunctions = [];
+
   soile2.defs = defs;
   soile2.rt = rt;
   soile2.bin = bin;
@@ -1328,6 +1330,16 @@ SOILE2 = (function(){
 
     return value;
   };
+
+  /** Create a looping function using set interval */
+  bin.setinterval = function(func, time) {
+    return setInterval(func, time)
+  }
+
+  /**Disable the given looping function */
+  bin.clearinterval = function(interval) {
+    clearInterval(interval)
+  }
 
   /*
   ---------------------------------------------
