@@ -33,6 +33,8 @@ SOILE2 = (function(){
 
   var assignDebugCallback = null;
 
+  var intervalFunctions = [];
+
   soile2.defs = defs;
   soile2.rt = rt;
   soile2.bin = bin;
@@ -128,6 +130,17 @@ SOILE2 = (function(){
       }
     else {
       rt.keyhandler.remove(keycode);
+    }
+  };
+
+
+  bin.onkeyup = function(key, func) {
+    var keycode = soile2.rt.kbd.keycode(key);
+    if(func) {
+      rt.keyhandler.addkeyup(keycode, func);
+      }
+    else {
+      rt.keyhandler.removekeyup(keycode);
     }
   };
 
@@ -1318,6 +1331,16 @@ SOILE2 = (function(){
     return value;
   };
 
+  /** Create a looping function using set interval */
+  bin.setinterval = function(func, time) {
+    return setInterval(func, time)
+  }
+
+  /**Disable the given looping function */
+  bin.clearinterval = function(interval) {
+    clearInterval(interval)
+  }
+
   /*
   ---------------------------------------------
   */
@@ -1541,6 +1564,7 @@ SOILE2 = (function(){
   // function if a key is bound to one.
   rt.keyhandler = (function() {
     var keyfunctions = {};
+    var keyupfunctions = {};
     var anykeyfunctions = [];
     var lastKey = "";
     var lastActiveKey = "";
@@ -1584,17 +1608,34 @@ SOILE2 = (function(){
       }
     };
 
+    var keyUpFunction = function(e) {
+      lastKey = soile2.rt.kbd.name(e.keyCode);
+      //console.log(e.keyCode);
+      if (keyupfunctions[e.keyCode]) {
+        lastActiveKey = e.keyCode;
+        keyupfunctions[e.keyCode].apply(null, [lastKey]);
+      }
+    }
+
     document.onkeydown = keyFunction;
+    document.onkeyup = keyUpFunction;
 
     return {
       'add': function(keycode, func) {
         keyfunctions[keycode] = func;
       },
+      'addkeyup': function(keycode, func) {
+        keyupfunctions[keycode] = func;
+      },
       'remove': function(keycode, func) {
         keyfunctions[keycode] = null;
       },
+      'removekeyup': function(keycode, func) {
+        keyupfunctions[keycode] = null;
+      },
       'reset': function() {
         keyfunctions = {};
+        keyupfunctions = {};
         anykeyfunctions = [];
         lastKey = "";
         lastActiveKey = "";
