@@ -12,9 +12,15 @@ function(
   ) {
   ready(function() {
 
+    var config = window.testConfig
+
+    var recordAfterVideo = config.recordingAfterVideo
+
+    var isRecordingAfter = false;
+
     //Preventing scroll on arrowkeys 37-40 and navigation on backspace 8
     document.addEventListener("keydown", function (e) {
-      if([37,38,39,40,8,32].indexOf(e.keyCode) > -1){
+      if([37,38,39,40,8].indexOf(e.keyCode) > -1){
         //console.log(e);
         if(e.target.tagName == "INPUT" || e.target.type == "text" || e.target.tagName == "TEXTAREA") {
           return
@@ -23,6 +29,21 @@ function(
         e.preventDefault();
       }
     }, false);
+
+
+    function sendCapture(fd) {
+      xhr.post(document.URL + "/video",
+        {
+          timeout: 50000,
+          data: fd,
+        }).then(
+          function (response) {
+            console.log("Upload Done")
+            console.log(response)
+
+            sendData(dataInput)
+          })
+    }
 
 
     function sendData(d) {
@@ -94,6 +115,14 @@ function(
       let key = event.key;
 
       writeData("input", key);
+
+      /* Stop recording on space*/
+      if (recordAfterVideo) {
+        if (key == " " || key == "Spacebar") {
+          let r = recorder.requestData()
+          recorder.stop()
+        }
+      }
     }
 
     /*Prevent backspace from going back*/
@@ -123,26 +152,36 @@ function(
 
     function startPlayback() {
       writeData("meta", "Requesting camera access");
-      navigator.mediaDevices.getUserMedia(vgaConstraints).
-        then((stream) => {
 
-          mainVideo.style.display = "inherit"
-          warning.style.display = "none"
+      if (recordAfterVideo) {
+        mainVideo.style.display = "inherit"
 
-          writeData("meta", "Camera access ok");
-          video.srcObject = stream;
+        mainVideo.play()
 
-          recorder = new MediaRecorder(stream)
-          recorder.ondataavailable = onData
-          recorder.onstop = stopRecording
+        document.addEventListener("keydown", onKeyInput);
+        writeData("meta", "started playback")
+      } else {
+        navigator.mediaDevices.getUserMedia(vgaConstraints).
+          then((stream) => {
 
-          document.addEventListener("keypress", onKeyInput);
-          writeData("meta", "start input recording")
+            mainVideo.style.display = "inherit"
+            warning.style.display = "none"
 
-          recorder.start()
-          mainVideo.play()
-          writeData("meta", "started playback")
-        });
+            writeData("meta", "Camera access ok");
+            video.srcObject = stream;
+
+            recorder = new MediaRecorder(stream)
+            recorder.ondataavailable = onData
+            recorder.onstop = stopRecording
+
+            document.addEventListener("keypress", onKeyInput);
+            writeData("meta", "start input recording")
+
+            recorder.start()
+            mainVideo.play()
+            writeData("meta", "started playback")
+          });
+      }
     }
 
     const stopRecording = function() {
@@ -161,17 +200,7 @@ function(
       // request.open("POST", "/");
       // request.send(fd);
 
-      xhr.post(document.URL + "/video",
-        {
-          timeout: 50000,
-          data: fd,
-        }).then(
-          function (response) {
-            console.log("Upload Done")
-            console.log(response)
-
-            sendData(dataInput)
-          })
+      sendCapture(fd)
 
       writeData("meta", "upload done")
 
@@ -180,11 +209,35 @@ function(
 
     mainVideo.onended = function () {
       writeData("meta", "Playback done")
-
-      let r = recorder.requestData()
-
       video.pause()
-      recorder.stop()
+
+      if (recordAfterVideo) {
+        navigator.mediaDevices.getUserMedia(vgaConstraints).
+          then((stream) => {
+
+            isRecordingAfter = true;
+
+            mainVideo.style.display = "inherit"
+            warning.style.display = "none"
+
+            video.srcObject = stream;
+
+            writeData("meta", "Camera access ok");
+
+            recorder = new MediaRecorder(stream)
+            recorder.ondataavailable = onData
+            recorder.onstop = stopRecording
+
+            writeData("meta", "start input recording")
+
+            recorder.start()
+          });
+
+      } else {
+        let r = recorder.requestData()
+        recorder.stop()
+      }
+
     }
   });
 });

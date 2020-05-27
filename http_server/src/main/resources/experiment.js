@@ -270,8 +270,11 @@ router.get('/experiment/:id/phase/:phase', function(request) {
           if(phase.type === "video") {
             console.log("test");
 
-            context.config = {}
-            context.config.file = phase.videofile
+            context.testConfig = {}
+            context.testConfig.file = phase.videofile
+            context.testConfig.recordingOnStart = phase.recordingOnStart
+            context.testConfig.recordingAfterVideo = phase.recordingAfterVideo
+
             templateManager.render_template("videophase", context, request);
           }
 

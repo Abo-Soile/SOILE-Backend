@@ -41,7 +41,8 @@
             <!-- <source src=small.webm type=video/webm> -->
             <!-- <source src=small.mp4 type=video/mp4> -->
             <!-- <source src=/testvideos/flower.mp4 type=video/mp4> -->
-            <source src=/testvideos/med.mp4 type=video/mp4>
+            <!-- <source src=/testvideos/med.mp4 type=video/mp4> -->
+            <source src="/testvideos/{testConfig.file}" type=video/mp4>
 
         </video>
         <div></div>
@@ -65,7 +66,7 @@
 
     {?testConfig}
     <script type="text/javascript">
-        window.testConfig = { testConfig| s | js};
+        window.testConfig = {testConfig|s|js};
     </script>
     {/testConfig}
 

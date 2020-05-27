@@ -131,6 +131,19 @@
                 <span ng-if="comp.type == 'video'" class="form-group">
                   <input class="form-control compname" ng-model=comp.name placeholder="Unnamed form">
                   <input class="form-control compname" ng-model=comp.videofile placeholder="noFile">
+                  <br>
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label>
+                        Start recording on video start
+                        <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingOnStart" ng-true-value="true" ng-false-value="false">
+                      </label>
+                      <label>
+                        Start recording after video
+                        <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingAfterVideo" ng-true-value="true" ng-false-value="false">
+                      </label>
+                    </div>
+                  </div>
 
                 </span>
 
