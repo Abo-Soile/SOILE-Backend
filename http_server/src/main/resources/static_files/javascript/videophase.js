@@ -98,6 +98,7 @@ function(
     const mainVideo = document.querySelector('#main-video');
     const video = document.querySelector('#camera-video');
     const warning = document.querySelector('#warning');
+    const message = document.querySelector('#message');
 
     const dataInput = [];
 
@@ -141,7 +142,7 @@ function(
 
     const vgaConstraints = {
       video: { width: { exact: 640 }, height: { exact: 480 } },
-      audio: false,
+      // audio: false,
     };
 
     mainVideo.addEventListener('canplaythrough', function () {
@@ -155,6 +156,7 @@ function(
 
       if (recordAfterVideo) {
         mainVideo.style.display = "inherit"
+        warning.style.display = "none"
 
         mainVideo.play()
 
@@ -212,12 +214,16 @@ function(
       video.pause()
 
       if (recordAfterVideo) {
+        mainVideo.style.display = "none"
+        message.style.display = "inherit"
+        message.innerHTML = "You answer is being recorded, press spacebar when you'r done"
+
         navigator.mediaDevices.getUserMedia(vgaConstraints).
           then((stream) => {
 
             isRecordingAfter = true;
 
-            mainVideo.style.display = "inherit"
+            mainVideo.style.display = "none"
             warning.style.display = "none"
 
             video.srcObject = stream;
