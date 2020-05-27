@@ -98,7 +98,7 @@ function(
     const mainVideo = document.querySelector('#main-video');
     const video = document.querySelector('#camera-video');
     const warning = document.querySelector('#warning');
-    const message = document.querySelector('#message');
+    const message = document.querySelector('#videomessage');
 
     const dataInput = [];
 
