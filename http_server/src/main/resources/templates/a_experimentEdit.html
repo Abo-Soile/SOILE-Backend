@@ -135,6 +135,10 @@
                   <div class="form-group">
                     <div class="checkbox">
                       <label>
+                        Record audio only
+                        <input name="recording-audio-[([$index])]" type="checkbox" ng-model="comp.recordAudioOnly" ng-true-value="true" ng-false-value="false">
+                      </label>
+                      <label>
                         Start recording on video start
                         <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingOnStart" ng-true-value="true" ng-false-value="false">
                       </label>

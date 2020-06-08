@@ -274,6 +274,7 @@ router.get('/experiment/:id/phase/:phase', function(request) {
             context.testConfig.file = phase.videofile
             context.testConfig.recordingOnStart = phase.recordingOnStart
             context.testConfig.recordingAfterVideo = phase.recordingAfterVideo
+            context.testConfig.recordAudioOnly = phase.recordAudioOnly
 
             templateManager.render_template("videophase", context, request);
           }
@@ -364,7 +365,7 @@ router.post('/experiment/:id/phase/:phase/video', function (request) {
     fixedFilename = fixedFilename.replace(/[^a-z0-9+.]/gi, '_').toLowerCase();
 
     // var path = "upload/" + expID +"_video_"+ userID + "/" + fixedFilename;
-    var path = "/home/danno/" + expID +"_video_"+ userID +fixedFilename;
+    var path = "/home/danno/" + expID +"_video_"+ userID + "_" + "p_" + phase + ".mp4";
     //var path = testImages + "/" + id +"/" + upload.filename()
     console.log("Uploading image to " + path);
     upload.streamToFileSystem(path);

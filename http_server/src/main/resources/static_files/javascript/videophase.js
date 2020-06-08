@@ -1,13 +1,13 @@
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
 require([
   "dojo/request/xhr",
   "dojo/json",
-  "levenshtein",
   "dojo/ready"
   ],
 function(
   xhr,
   JSON,
-  levenshtein,
   ready
   ) {
   ready(function() {
@@ -15,13 +15,49 @@ function(
     var config = window.testConfig
 
     var recordAfterVideo = config.recordingAfterVideo
+    var recordVideo = true;
+    var recordAudioOnly = config.recordAudioOnly;
 
     var isRecordingAfter = false;
+
+    // const mediaRecorderOptions = { mimeType: 'video/webm;codecs=h264' };
+    //var mediaRecorderOptions = { mimeType: 'audio/mpeg' };
+    // var mediaRecorderOptions = { mimeType: 'video/mp4;codecs=h264' };
+    var mediaRecorderOptions = { mimeType: 'video/mp4' };
+    var recordingUploadName = ""
+    var recordingUploadType = ""
+
+    const mainVideo = document.querySelector('#main-video');
+    const video = document.querySelector('#camera-video');
+    const warning = document.querySelector('#warning');
+    const message = document.querySelector('#videomessage');
+    const startButton = document.querySelector('#start-button');
+
+    const dataInput = [];
+
+    var mediaContstraints = {
+      audio: true,
+    };
+
+    if (recordAudioOnly) {
+      recordingUploadName = "recording.mp3";
+      recordingUploadType = "audio/mpeg";
+      // mediaRecorderOptions = { mimeType: 'audio/mpeg' };
+      mediaRecorderOptions = { mimeType: 'audio/webm' };
+
+    }
+    if (!recordAudioOnly) {
+      recordVideo = true;
+      recordingUploadName ="recording.mp4";
+      recordingUploadType = "video/mp4";
+      // mediaRecorderOptions = { mimeType: 'video/mp4;codecs=h264' };
+      mediaRecorderOptions = { mimeType: 'video/webm;codecs=h264' };
+      mediaContstraints.video = { width: { exact: 640 }, height: { exact: 480 } }
+    }
 
     //Preventing scroll on arrowkeys 37-40 and navigation on backspace 8
     document.addEventListener("keydown", function (e) {
       if([37,38,39,40,8].indexOf(e.keyCode) > -1){
-        //console.log(e);
         if(e.target.tagName == "INPUT" || e.target.type == "text" || e.target.tagName == "TEXTAREA") {
           return
         }
@@ -31,6 +67,10 @@ function(
     }, false);
 
 
+    /**
+     * Send captured video/audio data
+     * @param {*} fd
+     */
     function sendCapture(fd) {
       xhr.post(document.URL + "/video",
         {
@@ -45,9 +85,11 @@ function(
           })
     }
 
-
+    /**
+     * Send captured data to backend on phase end, doesn't include audioi/video tho
+     * @param {*} d
+     */
     function sendData(d) {
-
       //Send data xhr,
       xhr.post(document.URL, {timeout:10000,data:JSON.stringify(d)}).then(
         function(response) {
@@ -62,7 +104,6 @@ function(
           }
 
           else {
-            //Navigate to next phase
             var url = document.URL;
             var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
             url = url.slice(0, url.lastIndexOf("/")+1);
@@ -75,7 +116,7 @@ function(
             }
           }
         }, function(error) {
-          console.log("Sending data failed, retrying...");
+          console.log("Sending data failed, retrying...", error);
           setTimeout(function() {
             console.log("...resending");
             sendData(d);
@@ -85,22 +126,11 @@ function(
 
     let recorder = false;
 
-    const constraints = {
-      video: true
-    };
-
+    // Recording data stream
     const chunks = []
     let onData = (e) => {
-      console.log("got webcamera data")
       chunks.push(e.data)
     }
-
-    const mainVideo = document.querySelector('#main-video');
-    const video = document.querySelector('#camera-video');
-    const warning = document.querySelector('#warning');
-    const message = document.querySelector('#videomessage');
-
-    const dataInput = [];
 
     function writeData(messageType, message) {
       dataInput.push({
@@ -140,15 +170,15 @@ function(
     // navigator.mediaDevices.getUserMedia(constraints).
     //     then((stream) => { video.srcObject = stream });
 
-    const vgaConstraints = {
-      video: { width: { exact: 640 }, height: { exact: 480 } },
-      // audio: false,
-    };
-
-    mainVideo.addEventListener('canplaythrough', function () {
-      writeData("meta", "Video loaded");
+    startButton.onclick = function () {
+      writeData("meta", "start clicked");
       startPlayback();
-    });
+    }
+
+    // mainVideo.addEventListener('canplaythrough', function () {
+      // writeData("meta", "Video loaded");
+      // startPlayback();
+    // });
 
 
     function startPlayback() {
@@ -163,7 +193,7 @@ function(
         document.addEventListener("keydown", onKeyInput);
         writeData("meta", "started playback")
       } else {
-        navigator.mediaDevices.getUserMedia(vgaConstraints).
+        navigator.mediaDevices.getUserMedia(mediaContstraints).
           then((stream) => {
 
             mainVideo.style.display = "inherit"
@@ -172,7 +202,7 @@ function(
             writeData("meta", "Camera access ok");
             video.srcObject = stream;
 
-            recorder = new MediaRecorder(stream)
+            recorder = new MediaRecorder(stream, mediaRecorderOptions)
             recorder.ondataavailable = onData
             recorder.onstop = stopRecording
 
@@ -190,17 +220,15 @@ function(
       console.log("Stopping")
       // Upload
       // https://gist.github.com/rissem/d51b1997457a7f6dc4cf05064f5fe984
-      const bigVideoBlob = new Blob(chunks, { 'type': 'video/webm; codecs=webm' })
+      // const bigVideoBlob = new Blob(chunks, { 'type': 'video/webm; codecs=webm' })
+      // const bigVideoBlob = new Blob(chunks, { 'type': 'video/mp4;' })
+      const bigVideoBlob = new Blob(chunks, { 'type': recordingUploadType })
 
       let fd = new FormData()
-      fd.append('fname', 'testvideo.webm')
+      fd.append('fname', recordingUploadName)
       fd.append('data', bigVideoBlob)
 
       writeData("meta", "starting upload")
-
-      // var request = new XMLHttpRequest();
-      // request.open("POST", "/");
-      // request.send(fd);
 
       sendCapture(fd)
 
@@ -218,7 +246,7 @@ function(
         message.style.display = "inherit"
         message.innerHTML = "You answer is being recorded, press spacebar when you'r done"
 
-        navigator.mediaDevices.getUserMedia(vgaConstraints).
+        navigator.mediaDevices.getUserMedia(mediaContstraints).
           then((stream) => {
 
             isRecordingAfter = true;
@@ -230,7 +258,7 @@ function(
 
             writeData("meta", "Camera access ok");
 
-            recorder = new MediaRecorder(stream)
+            recorder = new MediaRecorder(stream, mediaRecorderOptions)
             recorder.ondataavailable = onData
             recorder.onstop = stopRecording
 

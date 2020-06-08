@@ -34,11 +34,12 @@
     <h1>{config.file}</h1> -->
     <div class="content">
         <div id="warning" >Please enable your webcamera</div>
-        <div id="videomessage" style="display: none;">REcord your answer, press spacebare when your done</div>
+        <div id="videomessage" style="display: none;">Record your answer, press spacebare when your done</div>
+        <button id=start-button> Start </button>
         <div>
             <!-- <h1>Videoplayback + recording demo</h1> -->
         </div>
-        <video muted id="main-video" style="display: none;">
+        <video id="main-video" style="display: none;">
             <!-- <source src=small.webm type=video/webm> -->
             <!-- <source src=small.mp4 type=video/mp4> -->
             <!-- <source src=/testvideos/flower.mp4 type=video/mp4> -->
@@ -47,7 +48,7 @@
 
         </video>
         <div></div>
-        <video autoplay id="camera-video"></video>
+        <video muted autoplay id="camera-video"></video>
     </div>
 
     <!-- <script src="video.js"></script> -->
