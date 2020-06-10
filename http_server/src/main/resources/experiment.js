@@ -276,6 +276,9 @@ router.get('/experiment/:id/phase/:phase', function(request) {
             context.testConfig.recordingAfterVideo = phase.recordingAfterVideo
             context.testConfig.recordAudioOnly = phase.recordAudioOnly
 
+            context.testConfig.description = phase.description
+            context.testConfig.button = phase.button
+
             templateManager.render_template("videophase", context, request);
           }
 

@@ -14,11 +14,16 @@ function(
 
     var config = window.testConfig
 
+    var recordingOnStart = config.recordingOnStart
     var recordAfterVideo = config.recordingAfterVideo
     var recordVideo = true;
     var recordAudioOnly = config.recordAudioOnly;
 
     var isRecordingAfter = false;
+
+    if (!(recordingOnStart ||recordAfterVideo)) {
+      recordVideo = false;
+    }
 
     // const mediaRecorderOptions = { mimeType: 'video/webm;codecs=h264' };
     //var mediaRecorderOptions = { mimeType: 'audio/mpeg' };
@@ -46,7 +51,7 @@ function(
       mediaRecorderOptions = { mimeType: 'audio/webm' };
 
     }
-    if (!recordAudioOnly) {
+    if (!recordAudioOnly && recordVideo) {
       recordVideo = true;
       recordingUploadName ="recording.mp4";
       recordingUploadType = "video/mp4";
@@ -184,7 +189,7 @@ function(
     function startPlayback() {
       writeData("meta", "Requesting camera access");
 
-      if (recordAfterVideo) {
+      if (recordAfterVideo || !(recordVideo)) {
         mainVideo.style.display = "inherit"
         warning.style.display = "none"
 
@@ -240,6 +245,11 @@ function(
     mainVideo.onended = function () {
       writeData("meta", "Playback done")
       video.pause()
+
+      if (!recordVideo) {
+        sendData(dataInput)
+        return;
+      }
 
       if (recordAfterVideo) {
         mainVideo.style.display = "none"
