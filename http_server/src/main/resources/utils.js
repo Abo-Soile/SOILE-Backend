@@ -100,7 +100,7 @@ var utils = (function() {
 
     'cleanArray':function(arr) {
       for (var i = 0; i < arr.length; i++) {
-        if (arr[i] == null) {         
+        if (arr[i] == null) {
             arr.splice(i, 1);
             i--;
         }
@@ -161,7 +161,7 @@ var utils = (function() {
       for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
       return obj3;
     },
-    
+
     'randomString': function(length, chars) {
       var result = '';
       for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
@@ -178,7 +178,7 @@ var utils = (function() {
 
       if (typeof components === 'undefined') {
         return false;
-      } 
+      }
 
       var randomCount = 0;
 
@@ -192,7 +192,7 @@ var utils = (function() {
         }
         else {
           longestRandom = 0;
-        } 
+        }
       }
 
       if(randomCount > 1) {
@@ -221,7 +221,7 @@ var utils = (function() {
       console.log("Random list   : " +JSON.stringify(randomList))
       console.log("Random mapping: " +JSON.stringify(randomMapping))
       console.log("Random groups : " +JSON.stringify(randomGroups))
-    
+
       randomGroups[0] = 0;
       var startRandomSequence = null;
 
@@ -264,7 +264,7 @@ var utils = (function() {
       return randomMapping;
     },
     // Generates a html renderable message from a string with newlines,
-    // first line is stripped up and returned seperately 
+    // first line is stripped up and returned seperately
     "messageGenerator":function(text) {
       var endMessage = text;
 
@@ -278,6 +278,10 @@ var utils = (function() {
       }
 
       return {title:endTitle, message:endMessage}
+    },
+    "generateDuplicateId": function generateDuplicateId(id) {
+      // return id + "_d_" + java.util.UUID.randomUUID().toString();
+      return "d_" + java.util.UUID.randomUUID().toString();
     }
   };
 

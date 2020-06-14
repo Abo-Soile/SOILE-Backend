@@ -1,5 +1,7 @@
 var vertx = require("vertx");
 var console = require('vertx/console');
+var logger = container.logger;
+
 var utils = require("utils");
 
 var csvUtils = require("csvUtils");
@@ -23,6 +25,8 @@ var testDAO = require("models/DAObjects").TestDAO;
 var requireAdmin = require('middleware').requireAdmin;
 var requireEditor = require('middleware').requireEditor;
 
+var Promise = require("mPromise");
+
 var bowser = require("node_modules/bowser/bowser");
 //var lodash = require("node_modules/lodash");
 
@@ -36,7 +40,6 @@ function swapUrlPort(url, newPort) {
 
   return url.replace(uriRegex, "$1://$2:" + newPort + "/");
 }
-
 
 function merge_options(obj1,obj2){
   var obj3 = {};
@@ -581,4 +584,64 @@ router.post("/experiment/:id/addform", requireEditor,function(request) {
       request.response.end(form.toJson());
     });
   });
+});
+
+var formsToClone = [];
+
+
+function updateComponents(item) {
+  console.log("MAPFUNC")
+  if (item.type == "form") {
+    item.old_id = item.id;
+    item.id = utils.generateDuplicateId(item.id);
+    formsToClone.push(item);
+  }
+
+  return item;
+}
+
+function getAndUpdateForm(fItem) {
+  var tempP = formDAO.getP({ _id: fItem.old_id })
+    .then(function (f) {
+      f._id = fItem.id;
+      return f.saveP();
+    }).then(function (res) {
+    }).catch(function (e) {
+      console.log(e);
+      console.log("Form update didn't work " + fItem.old_id)
+    });
+
+  return tempP
+}
+
+router.get("/experiment/:id/clone", requireEditor,function(request) {
+  var id = request.params().get('id');
+  logger.info("Trying to clone experiment");
+
+  experimentDAO.get(id, function(exp) {
+    logger.info("Cloning with model " + exp.name);
+
+    exp.original_id = exp.id;
+    exp._id = utils.generateDuplicateId(exp._id)
+    exp.name = exp.name + "_copy"
+
+    exp.components = exp.components.map(updateComponents)
+
+    exp.saveP().then(function(res) {
+      logger.info("Saved exp with id " + exp._id);
+
+      var p = Promise.each(formsToClone, function (formItem) {
+        return (getAndUpdateForm(formItem));
+      });
+
+      return p
+    }).then(function (res) {
+      return request.redirect("/experiment/" + exp._id);
+    }).catch(function (res) {
+      logger.error("Something didn't work")
+      logger.error(res);
+    })
+
+  })
+
 });
