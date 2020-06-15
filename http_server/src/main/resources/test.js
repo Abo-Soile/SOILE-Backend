@@ -53,7 +53,7 @@ router.get("/test/folder/json", requireEditor, function(request) {
 router.get("/test/json/compiled", requireEditor, function(request) {
  /* testDAO.list({"compiled":true}, function(result) {
     request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
-    request.response.end(JSON.stringify(result)); 
+    request.response.end(JSON.stringify(result));
   });*/
   var query =  {compiled:true};
   if(request.session.currentUser.isEditor()){
@@ -125,7 +125,7 @@ router.get('/test/:id', requireEditor, function(request) {
   vertx.fileSystem.readDir(testImages + "/" + id, function(err, res) {
     if (!err) {
       //files = res;
-       for (var i = 0; i < res.length; i++) { 
+       for (var i = 0; i < res.length; i++) {
           var img = res[i].toString();
           var file = {};
           file.url = img.substring(img.indexOf("testimages"));
@@ -137,10 +137,10 @@ router.get('/test/:id', requireEditor, function(request) {
     }
     testDAO.get(id, function(test) {
 
-      templateManager.render_template('testEditor', 
+      templateManager.render_template('testEditor',
         {"code":test.code, "test":test, "files":files}, request);
       /*var user = request.session.currentUser;
-      if (test.userHasAccess(user) || user.isAdmin()) { 
+      if (test.userHasAccess(user) || user.isAdmin()) {
       } else {
         return request.unauthorized();
       }*/
@@ -165,12 +165,12 @@ router.post("/test/:id", requireEditor, function(request) {
     var published = data.published;
     var allCanEdit = data.allCanEdit;
     var folder = data.folder;
-    var users = data.users; 
+    var users = data.users;
 
     if (typeof folder === "undefined" || folder === "") {
       folder = "Unspecified";
     }
-    
+
     testDAO.get(id, function(test) {
 
       test.name = name;
@@ -233,7 +233,7 @@ router.post("/test/:id/imageupload", requireEditor,function(request) {
 
       //Replacing and removing unwanted characters from filename
       fixedFilename = fixedFilename.replace(/[å+ä]/gi, "a");
-      fixedFilename = fixedFilename.replace("ö", "o"); 
+      fixedFilename = fixedFilename.replace("ö", "o");
       fixedFilename = fixedFilename.replace(/[^a-z0-9+.]/gi, '_').toLowerCase();
 
       var path = testImages + "/" + id +"/" + fixedFilename;
@@ -244,7 +244,7 @@ router.post("/test/:id/imageupload", requireEditor,function(request) {
 
   request.endHandler(function() {
 
-    console.log("Uploading");
+    console.log("Upload");
 
     request.response.end(200);
   });
@@ -288,7 +288,7 @@ router.get('/test/:id/imagelist', requireEditor,function(request) {
   vertx.fileSystem.readDir(testImages + "/" + id, function(err, res) {
     if (!err) {
       //files = res;
-      for (var i = 0; i < res.length; i++) { 
+      for (var i = 0; i < res.length; i++) {
         var img = res[i].toString();
         var file = {};
         file.url = img.substring(img.indexOf("testimages"));

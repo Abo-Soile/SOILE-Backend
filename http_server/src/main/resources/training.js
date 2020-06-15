@@ -498,8 +498,8 @@ router.post("/training/:id/participate", function(request) {
   var external_id = false;
 
   if (params.contains("external_id")) {
-    logger.info("External id exists! " + external_id);
     external_id = params.get("external_id")
+    logger.info("External id exists! " + external_id);
   }
 
   logger.info("Params: " + request.query());
