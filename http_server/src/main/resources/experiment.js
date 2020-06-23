@@ -27,9 +27,12 @@ var bowser = require("node_modules/bowser/bowser");
 //var lodash = require("node_modules/lodash");
 
 var container = require('vertx/container');
+var logger = container.logger
 
 var config = container.config;
 var externalPort = config.externalport;
+
+var babyparser = require("libs/babyparse");
 
 function swapUrlPort(url, newPort) {
   var uriRegex = /([a-zA-Z+.\-]+):\/\/([^\/]+):([0-9]+)\//;
@@ -368,10 +371,16 @@ router.post('/experiment/:id/phase/:phase/video', function (request) {
     fixedFilename = fixedFilename.replace(/[^a-z0-9+.]/gi, '_').toLowerCase();
 
     // var path = "upload/" + expID +"_video_"+ userID + "/" + fixedFilename;
-    var path = "/home/danno/" + expID +"_video_"+ userID + "_" + "p_" + phase + ".mp4";
-    //var path = testImages + "/" + id +"/" + upload.filename()
-    console.log("Uploading image to " + path);
-    upload.streamToFileSystem(path);
+    var videoRecordings = config.directory + "/exp_video_upload/";
+
+    vertx.fileSystem.mkDir(videoRecordings + expID, true, function (err, res) {
+
+      var path = videoRecordings + expID +"/video_"+ userID + "_" + "p_" + phase + ".mp4";
+      //var path = testImages + "/" + id +"/" + upload.filename()
+      console.log("Uploading image to " + path);
+      upload.streamToFileSystem(path);
+    })
+
   });
 
   request.endHandler(function () {
@@ -524,6 +533,30 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
   var projection = {};
 
   var command = "single";
+
+  if (filter1 === "videos") {
+    var videoRecordings = config.directory + "/exp_video_upload/";
+
+    return vertx.fileSystem.readDir(videoRecordings + id, function (err, res) {
+      if (!err) {
+        //files = res;
+        var files = [];
+        for (var i = 0; i < res.length; i++) {
+          var img = res[i].toString();
+          var file = {};
+          file.url = img.substring(img.indexOf("exp_video_upload/"));
+          file.name = img.substring(img.lastIndexOf("/") + 1);
+          files.push(file);
+        }
+
+        console.log(JSON.stringify(files))
+        request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+        request.response.putHeader("Content-Disposition", "attachment; filename=data.csv");
+
+        request.response.end(babyparser.unparse(files, { "delimiter": ";" }));
+      }
+    })
+  }
 
   if (filter1 === "confirmed") {
     matcher.confirmed = true;

@@ -5,7 +5,7 @@ app.config(function($interpolateProvider){
 });
 
 app.config(['$compileProvider', function ($compileProvider) {
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|):/);
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|mp4|https|http):/);
 }]);
 
 
@@ -78,7 +78,7 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
       if($scope.filter2 === "confirmed") {
         $scope.filter3 = undefined;
       }
-    } 
+    }
 
     query += "f1=" + ($scope.filter1 ? $scope.filter1 : "") + "&";
     query += "f2=" + ($scope.filter2 ? $scope.filter2 : "") + "&";
@@ -114,7 +114,7 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
       var jsonData = CSV.parse(data);
       if (jsonData.length > 1000) {
         $scope.warning = true;
-      } 
+      }
       $scope.datarows = jsonData;
       $scope.downloadData = true;
 
@@ -123,9 +123,9 @@ app.controller('experimentDataFilterController', function($scope, $http, $locati
       XLSX.utils.book_append_sheet(excelWb, XLSX.utils.json_to_sheet(jsonData), "Data");
 
       var wbout = XLSX.write(excelWb, {bookType:'xlsx', type:'binary'});
-      
-      var excelBolb =new Blob([s2ab(wbout)],{type:"application/octet-stream"});  
-      $scope.excelUrl = $window.URL || $window.webkitURL; 
+
+      var excelBolb =new Blob([s2ab(wbout)],{type:"application/octet-stream"});
+      $scope.excelUrl = $window.URL || $window.webkitURL;
       $scope.fileUrlExcel = $scope.excelUrl.createObjectURL(excelBolb);
 
       var blob=new Blob([data]);
