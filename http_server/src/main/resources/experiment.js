@@ -375,7 +375,7 @@ router.post('/experiment/:id/phase/:phase/video', function (request) {
 
     vertx.fileSystem.mkDir(videoRecordings + expID, true, function (err, res) {
 
-      var path = videoRecordings + expID +"/video_"+ userID + "_" + "p_" + phase + ".mp4";
+      var path = videoRecordings + expID +"/video_"+ userID + "_" + "p_" + phase + ".webm";
       //var path = testImages + "/" + id +"/" + upload.filename()
       console.log("Uploading image to " + path);
       upload.streamToFileSystem(path);
