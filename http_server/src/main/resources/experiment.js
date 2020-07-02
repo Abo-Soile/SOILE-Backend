@@ -31,6 +31,7 @@ var bowser = require("node_modules/bowser/bowser");
 //var lodash = require("node_modules/lodash");
 
 var container = require('vertx/container');
+var logger = container.logger;
 
 var config = container.config;
 var externalPort = config.externalport;
