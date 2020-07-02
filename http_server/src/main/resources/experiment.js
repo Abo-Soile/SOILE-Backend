@@ -1,6 +1,6 @@
 var vertx = require("vertx");
+var container = require('vertx/container');
 var console = require('vertx/console');
-var logger = container.logger;
 
 var utils = require("utils");
 
@@ -30,7 +30,6 @@ var Promise = require("mPromise");
 var bowser = require("node_modules/bowser/bowser");
 //var lodash = require("node_modules/lodash");
 
-var container = require('vertx/container');
 var logger = container.logger;
 
 var config = container.config;
