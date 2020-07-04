@@ -132,6 +132,29 @@ Experiment.prototype.save = function(callback) {
   return BaseModel.prototype.save.call(this, callback);
 };
 
+Experiment.prototype.init = function (callback) {
+  var that = this;
+
+  that.save(function (r) {
+    var dirName = experimentVideos + "/" + that._id;
+    var dirName2 = experimentUploads + "/" + that._id;
+
+    vertx.fileSystem.mkDir(dirName, true, function (err, res) {
+      if (!err) {
+        console.log('Experiment video directory created successfully');
+      }
+
+      vertx.fileSystem.mkDir(dirName2, true, function (err, res) {
+        if (!err) {
+          console.log('Experiment user video upload directory created successfully');
+        }
+        callback(err, res);
+      });
+    });
+
+  });
+};
+
 
 Experiment.prototype.isActive = function() {
   var currentDate = new Date();

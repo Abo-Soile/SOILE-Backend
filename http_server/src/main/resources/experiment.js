@@ -70,8 +70,8 @@ router.get("/experiment/new", requireEditor,function(request){
 
   newExp.users = [request.session.currentUser.username];
 
-  newExp.save(function(r){
-      console.log(JSON.stringify(r));
+  newExp.init(function(res, err) {
+      console.log(JSON.stringify(res));
 
       request.redirect("/experiment/"+newExp._id+"/edit");
       request.response.end();
