@@ -19,6 +19,9 @@ var container = require('vertx/container');
 var config = container.config;
 var testImages = config.directory + "/testimages";
 
+var experimentVideos = config.directory + "/testvideos";
+var experimentUploads = config.directory + "/exp_video_upload";
+
 var utils = require('utils');
 var BaseModel = require('models/baseModel');
 

@@ -38,6 +38,8 @@ function(
     const message = document.querySelector('#videomessage');
     const startButton = document.querySelector('#start-button');
 
+    startButton.innerHTML = config.button || "Start"
+
     const dataInput = [];
 
     var mediaContstraints = {
@@ -178,6 +180,9 @@ function(
     startButton.onclick = function () {
       writeData("meta", "start clicked");
       startPlayback();
+
+      startButton.style.display = "None";
+
     }
 
     // mainVideo.addEventListener('canplaythrough', function () {
@@ -253,8 +258,9 @@ function(
 
       if (recordAfterVideo) {
         mainVideo.style.display = "none"
+
         message.style.display = "inherit"
-        message.innerHTML = "You answer is being recorded, press spacebar when you'r done"
+        message.innerHTML = config.description || "Your answer is being recorded, press spacebar when you'r done"
 
         navigator.mediaDevices.getUserMedia(mediaContstraints).
           then((stream) => {

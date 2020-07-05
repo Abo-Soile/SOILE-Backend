@@ -20,6 +20,8 @@
 <script src="/javascript/bower_components/ladda/js/spin.js"></script>
 <script src="/javascript/bower_components/ladda/js/ladda.js"></script>
 <script src="/javascript/bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
+<script type="text/javascript" src="/javascript/bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
+
 
 <script type="text/javascript" src="/javascript/directives/userAccessDirective.js"></script>
 
@@ -97,7 +99,7 @@
         <div ui-tree>
           <ul ui-tree-nodes="" ng-model="experiment.components" class="fancyList angularcomponentlist">
 
-            <li class="" ng-repeat="comp in experiment.components" ui-tree-node>
+            <li class="" ng-repeat="(idx, comp) in experiment.components" ui-tree-node>
               <div class="dragHandle" ui-tree-handle><i class="fa fa-bars"></i></div>
                <div class="form-inline">
 
@@ -133,20 +135,6 @@
                   <input class="form-control compname" ng-model=comp.videofile placeholder="noFile">
                   <br>
                   <div class="form-group">
-                    <div class="checkbox">
-                      <label>
-                        Record audio only
-                        <input name="recording-audio-[([$index])]" type="checkbox" ng-model="comp.recordAudioOnly" ng-true-value="true" ng-false-value="false">
-                      </label>
-                      <label>
-                        Start recording on video start
-                        <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingOnStart" ng-true-value="true" ng-false-value="false">
-                      </label>
-                      <label>
-                        Start recording after video
-                        <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingAfterVideo" ng-true-value="true" ng-false-value="false">
-                      </label>
-                    </div>
                     <label>
                       Description
                       <input name="recording-[([$index])]" type="text" ng-model="comp.description" ng-true-value="true"
@@ -154,9 +142,27 @@
                     </label>
                     <label>
                       Button
-                      <input name="recording-[([$index])]" type="text" ng-model="comp.button" ng-true-value="true"
-                        ng-false-value="false">
+                      <input name="recording-[([$index])]" type="text" ng-model="comp.button" ng-true-value="true" ng-false-value="false">
                     </label>
+                  </div>
+                  <br>
+                  <div class="form-group form-inline">
+                    <div class="checkbox">
+                      <label>
+                        Record audio only
+                        <input name="recording-audio-[([$index])]" type="checkbox" ng-model="comp.recordAudioOnly" ng-true-value="true" ng-false-value="false">
+                      </label>
+                      <br>
+                      <label>
+                        Start recording on video start
+                        <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingOnStart" ng-true-value="true" ng-false-value="false">
+                      </label>
+                      <br>
+                      <label>
+                        Start recording after video
+                        <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingAfterVideo" ng-true-value="true" ng-false-value="false">
+                      </label>
+                    </div>
                   </div>
 
                 </span>
@@ -176,7 +182,9 @@
       <button class="btn btn-default" ng-click="addForm()">Add form</button>
     </div>
     <div class="col-md-1">
-      <button class="btn btn-default" ng-click="addVideo()">Add video</button>
+      <!-- <button class="btn btn-default" ng-click="addVideo()">Add video</button> -->
+      <input class="" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)">
+      <!-- <input  type="file" nv-file-select uploader="uploader"/> -->
     </div>
     <div class="col-md-10">
       <div class="form-group">
