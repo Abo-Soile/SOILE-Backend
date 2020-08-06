@@ -1,11 +1,12 @@
-var app = angular.module('experimentEdit', 
-       ['ui.tree', 
-        'ui.bootstrap', 
-        'ui.select', 
-        'ngSanitize', 
+var app = angular.module('experimentEdit',
+       ['ui.tree',
+        'ui.bootstrap',
+        'ui.select',
+        'ngSanitize',
         'angular-ladda',
         'monospaced.elastic',
-        'useraccess'
+        'useraccess',
+        'angularFileUpload'
         ]);
 
 app.config(function($interpolateProvider){
@@ -49,12 +50,23 @@ app.controller('componentController', function($scope, $http, $location) {
     };
 });
 
-app.controller('experimentController', function($scope, $http, $location) {
+app.controller('experimentController', function ($scope, $http, $location, FileUploader) {
     var baseUrl = $location.absUrl();
 
     //$scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = 'yyyy/MM/dd';
-    $scope.test = {};   
+    $scope.test = {};
+
+    $scope.uploader = new FileUploader({ url: "addvideo" });
+
+    $scope.uploader.autoUpload = true;
+    $scope.uploader.removeAfterUpload = true;
+    $scope.uploader.onCompleteItem = function(res) {
+      console.log("UPLOADD")
+      console.log(res)
+
+      $scope.addVideo(res.video)
+    };
 
 
     function loadData() {
@@ -159,6 +171,39 @@ app.controller('experimentController', function($scope, $http, $location) {
         $scope.save();
       });
     };
+
+  $scope.addVideo = function (filename) {
+
+    var compObject = {};
+    compObject.name = "VideoPhase";
+    compObject.type = "video";
+    compObject.videofile = filename;
+    compObject.record = "true";
+
+    $scope.experiment.components.push(compObject);
+
+    $scope.save();
+
+  };
+
+  $scope.uploadFile = function (files, videoId) {
+    var fd = new FormData();
+    //Take the first selected file
+    fd.append("file", files[0]);
+
+    var uploadUrl = "addvideo"
+
+    $http.post(uploadUrl, fd, {
+      headers: { 'Content-Type': undefined },
+      transformRequest: angular.identity
+    }).success(function(res) {
+      $scope.addVideo(res.video)
+      // $scope.experiment.components[index].videofile = res;
+    }).error(function(err) {
+      console.log("Something didnt work")
+    });
+
+  };
 
     //$scope.startdate = new Date();
     //$scope.enddate = new Date();

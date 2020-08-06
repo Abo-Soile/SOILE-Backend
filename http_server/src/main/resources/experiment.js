@@ -30,10 +30,17 @@ var Promise = require("mPromise");
 var bowser = require("node_modules/bowser/bowser");
 //var lodash = require("node_modules/lodash");
 
+<<<<<<< HEAD
 var logger = container.logger;
+=======
+var container = require('vertx/container');
+var logger = container.logger
+>>>>>>> feat/videomode
 
 var config = container.config;
 var externalPort = config.externalport;
+
+var babyparser = require("libs/babyparse");
 
 function swapUrlPort(url, newPort) {
   var uriRegex = /([a-zA-Z+.\-]+):\/\/([^\/]+):([0-9]+)\//;
@@ -70,8 +77,8 @@ router.get("/experiment/new", requireEditor,function(request){
 
   newExp.users = [request.session.currentUser.username];
 
-  newExp.save(function(r){
-      console.log(JSON.stringify(r));
+  newExp.init(function(res, err) {
+      console.log(JSON.stringify(res));
 
       request.redirect("/experiment/"+newExp._id+"/edit");
       request.response.end();
@@ -270,6 +277,22 @@ router.get('/experiment/:id/phase/:phase', function(request) {
             });
           }
 
+          if(phase.type === "video") {
+            console.log("test");
+
+            context.testConfig = {}
+            context.testConfig.file = phase.videofile
+            context.testConfig.recordingOnStart = phase.recordingOnStart
+            context.testConfig.recordingAfterVideo = phase.recordingAfterVideo
+            context.testConfig.recordAudioOnly = phase.recordAudioOnly
+            context.testConfig.showVideoPreview = phase.showVideoPreview
+
+            context.testConfig.description = phase.description
+            context.testConfig.button = phase.button
+
+            templateManager.render_template("videophase", context, request);
+          }
+
           else {
             console.log(phase.type);
             console.log("Phase type is undefined");
@@ -331,6 +354,49 @@ router.post('/experiment/:id/phase/:phase', function(request) {
     });
   });
 });
+
+router.post('/experiment/:id/phase/:phase/video', function (request) {
+
+  request.expectMultiPart(true);
+
+  var expID = request.params().get('id');
+  var phase = request.params().get('phase');
+
+  var data = new vertx.Buffer();
+
+  request.uploadHandler(function (upload) {
+    //var path = testImages + id + "/" + upload.filename()
+    var userID = request.session.getPersonToken();
+    if (request.session.loggedIn()) {
+      userID = request.session.getUserId();
+    }
+
+    var fixedFilename = upload.filename();
+
+    //Replacing and removing unwanted characters from filename
+    fixedFilename = fixedFilename.replace(/[å+ä]/gi, "a");
+    fixedFilename = fixedFilename.replace("ö", "o");
+    fixedFilename = fixedFilename.replace(/[^a-z0-9+.]/gi, '_').toLowerCase();
+
+    // var path = "upload/" + expID +"_video_"+ userID + "/" + fixedFilename;
+    var videoRecordings = config.directory + "/exp_video_upload/";
+
+    // vertx.fileSystem.mkDir(videoRecordings + expID, true, function (err, res) {
+
+    var path = videoRecordings + expID +"/video_"+ userID + "_" + "p_" + phase + ".webm";
+    //var path = testImages + "/" + id +"/" + upload.filename()
+    console.log("Uploading image to " + path);
+    upload.streamToFileSystem(path);
+    // })
+
+  });
+
+  request.endHandler(function () {
+    console.log("Upload done")
+    request.response.end()
+  })
+
+})
 
 router.get('/experiment/:id/end', function(request) {
   var expID = request.params().get('id');
@@ -475,6 +541,30 @@ router.get("/experiment/:id/loaddata", requireEditor,function(request) {
   var projection = {};
 
   var command = "single";
+
+  if (filter1 === "videos") {
+    var videoRecordings = config.directory + "/exp_video_upload/";
+
+    return vertx.fileSystem.readDir(videoRecordings + id, function (err, res) {
+      if (!err) {
+        //files = res;
+        var files = [];
+        for (var i = 0; i < res.length; i++) {
+          var img = res[i].toString();
+          var file = {};
+          file.url = img.substring(img.indexOf("exp_video_upload/"));
+          file.name = img.substring(img.lastIndexOf("/") + 1);
+          files.push(file);
+        }
+
+        console.log(JSON.stringify(files))
+        request.response.putHeader("Content-Type", "text/csv; charset=utf-8");
+        request.response.putHeader("Content-Disposition", "attachment; filename=data.csv");
+
+        request.response.end(babyparser.unparse(files, { "delimiter": ";" }));
+      }
+    })
+  }
 
   if (filter1 === "confirmed") {
     matcher.confirmed = true;
@@ -644,4 +734,46 @@ router.get("/experiment/:id/clone", requireEditor,function(request) {
 
   })
 
+});
+router.post("/experiment/:id/addvideo", requireEditor,function(request) {
+  var id = request.params().get('id');
+
+  var uploadFilename = "";
+  request.expectMultiPart(true);
+
+
+  request.uploadHandler(function (upload) {
+    //var path = testImages + id + "/" + upload.filename()
+    console.log("UPLOADING VIDEO TO EXPERIMENT");
+    var userID = request.session.getPersonToken();
+    if (request.session.loggedIn()) {
+      userID = request.session.getUserId();
+    }
+
+    var fixedFilename = upload.filename();
+
+    //Replacing and removing unwanted characters from filename
+    fixedFilename = fixedFilename.replace(/[å+ä]/gi, "a");
+    fixedFilename = fixedFilename.replace("ö", "o");
+    fixedFilename = fixedFilename.replace(/[^a-z0-9+.]/gi, '_').toLowerCase();
+
+    // var path = "upload/" + expID +"_video_"+ userID + "/" + fixedFilename;
+    var videoRecordings = config.directory + "/testvideos/"+ id + "";
+
+    // vertx.fileSystem.mkDir(videoRecordings, true, function (err, res) {
+
+    var path = videoRecordings + "/" + fixedFilename;
+    console.log("Uploading Video to " + path);
+    uploadFilename = "/testvideos/" + id + "/" + fixedFilename;
+
+    upload.streamToFileSystem(path);
+    // })
+
+  });
+
+  request.endHandler(function () {
+    console.log("ADD VIDEO ENDHANDLER")
+    request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
+    request.response.end(JSON.stringify({"video":uploadFilename}))
+  })
 });

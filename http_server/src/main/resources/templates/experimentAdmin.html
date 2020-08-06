@@ -73,7 +73,7 @@
       <div class="col-md-12">
         <h4>Filter data</h4>
         <div class="dataFilter form-inline">
-          <select class="form-control" ng-model="filter1" ng-options="o as o for o in ['all', 'confirmed','completions']" ng-init="filter1=['all', 'confirmed'][1]">
+          <select class="form-control" ng-model="filter1" ng-options="o as o for o in ['all', 'confirmed','completions', 'videos']" ng-init="filter1=['all', 'confirmed'][1]">
           </select>
 
           <select class="form-control" ng-model="filter2" ng-options="o as o for o in ['aggregate', 'raw', 'metadata']">
@@ -117,10 +117,27 @@
 
 
       <div class="col-md-12 overflow600">
-      <p></p>
-      <div ng-show="warning" class="alert alert-danger" role="alert">
-        <strong>Large dataset,</strong> only the 1000 first rows are shown below, click download to access the whole dataset
-      </div>
+        <p></p>
+        <div ng-show="warning" class="alert alert-danger" role="alert">
+          <strong>Large dataset,</strong> only the 1000 first rows are shown below, click download to access the whole dataset
+        </div>
+
+        <div ng-if="filter1=='videos'">
+          <table class="table table-striped table-condensed table-bordered">
+            <thead ng-repeat="row in datarows.slice(0,1)">
+              <tr>
+                <th >[([ row[0] ])]</th>
+                <th >[([ row[1] ])]</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="row in datarows.slice(1,entries.length) | limitTo:dataLimit">
+                <td ><a download ng-href="/[([ row[0] ])]">[([row[0] ])]</a></td>
+                <td >[([row[1] ])]</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
 
         <table class="table table-striped table-condensed table-bordered">

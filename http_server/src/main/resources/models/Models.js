@@ -19,6 +19,9 @@ var container = require('vertx/container');
 var config = container.config;
 var testImages = config.directory + "/testimages";
 
+var experimentVideos = config.directory + "/testvideos";
+var experimentUploads = config.directory + "/exp_video_upload";
+
 var utils = require('utils');
 var BaseModel = require('models/baseModel');
 
@@ -130,6 +133,29 @@ Experiment.prototype.save = function(callback) {
   this.lastupdate = new Date();
 
   return BaseModel.prototype.save.call(this, callback);
+};
+
+Experiment.prototype.init = function (callback) {
+  var that = this;
+
+  that.save(function (r) {
+    var dirName = experimentVideos + "/" + that._id;
+    var dirName2 = experimentUploads + "/" + that._id;
+
+    vertx.fileSystem.mkDir(dirName, true, function (err, res) {
+      if (!err) {
+        console.log('Experiment video directory created successfully');
+      }
+
+      vertx.fileSystem.mkDir(dirName2, true, function (err, res) {
+        if (!err) {
+          console.log('Experiment user video upload directory created successfully');
+        }
+        callback(err, res);
+      });
+    });
+
+  });
 };
 
 
