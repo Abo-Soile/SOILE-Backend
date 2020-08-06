@@ -186,12 +186,16 @@
     <div class="col-md-1">
       <button class="btn btn-default" ng-click="addForm()">Add form</button>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
       <!-- <button class="btn btn-default" ng-click="addVideo()">Add video</button> -->
-      <input class="" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)">
+      <label class="btn btn-default">
+        Add video
+        <input hidden class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)">
+      <!-- <input class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"> -->
+        </label>
       <!-- <input  type="file" nv-file-select uploader="uploader"/> -->
     </div>
-    <div class="col-md-10">
+    <div class="col-md-9">
       <div class="form-group">
         <ui-select ng-model="test.selected" theme="bootstrap" ng-disabled="disabled" >
           <ui-select-match placeholder="Select an experiment">[([$select.selected.findName])]</ui-select-match>
@@ -216,5 +220,11 @@
 
 </div>
 
+
+<style>
+[hidden] {
+  display: none !important;
+}
+</style>
 
 {>footer /}
