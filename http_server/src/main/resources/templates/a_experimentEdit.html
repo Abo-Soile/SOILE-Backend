@@ -162,6 +162,11 @@
                         Start recording after video
                         <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingAfterVideo" ng-true-value="true" ng-false-value="false">
                       </label>
+                      <br>
+                      <label ng-if="!comp.recordAudioOnly">
+                        Show video preview
+                        <input name="recording-[([$index])]" type="checkbox" ng-model="comp.showVideoPreview" ng-true-value="true" ng-false-value="false">
+                      </label>
                     </div>
                   </div>
 

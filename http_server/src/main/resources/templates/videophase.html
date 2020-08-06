@@ -18,13 +18,15 @@
     <div class="content">
         <div id="warning"></div>
         <div id="videomessage" style="display: none;"></div>
-        <button id=start-button></button>
+
+        <div class="col-md-12 text-center">
+            <button class="btn btn-lg btn-primary" id=start-button></button>
+        </div>
         <div>
             <!-- <h1>Videoplayback + recording demo</h1> -->
         </div>
         <video id="main-video" style="display: none;">
             <source src="{testConfig.file}" type=video/mp4>
-
         </video>
         <div></div>
         <video muted autoplay id="camera-video"></video>
@@ -70,15 +72,15 @@
 
     #camera-video {
         position: absolute;
-        top: 83px;
-        /* left: 1300px; */
-        left: 13000px;
+        top: 450px;
+        left: 1100px;
+        /* left: 13000px; */
     }
 
     .content {
         margin-left: 10%;
         margin-right: 10%;
-        min-height: 600px;
+        min-height: 700px;
     }
 </style>
 {>footer /}

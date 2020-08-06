@@ -18,6 +18,7 @@ function(
     var recordAfterVideo = config.recordingAfterVideo
     var recordVideo = true;
     var recordAudioOnly = config.recordAudioOnly;
+    var showVideoPreview = config.showVideoPreview;
 
     var isRecordingAfter = false;
 
@@ -73,6 +74,14 @@ function(
       }
     }, false);
 
+
+    function setPreviewDisplay() {
+      if ( (!recordAudioOnly && recordVideo) && showVideoPreview) {
+        video.style.display = "inherit";
+      } else {
+        video.style.display = "None";
+      }
+    }
 
     /**
      * Send captured video/audio data
@@ -206,6 +215,8 @@ function(
         navigator.mediaDevices.getUserMedia(mediaContstraints).
           then((stream) => {
 
+            setPreviewDisplay()
+
             mainVideo.style.display = "inherit"
             warning.style.display = "none"
 
@@ -264,6 +275,8 @@ function(
 
         navigator.mediaDevices.getUserMedia(mediaContstraints).
           then((stream) => {
+
+            setPreviewDisplay()
 
             isRecordingAfter = true;
 

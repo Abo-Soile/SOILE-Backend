@@ -62,7 +62,7 @@ router.get("/experiment/new", requireEditor,function(request){
   var eDate = Date.now() + (1000*60*60*24*700);  //Two years into the future
 
   var expData = {};
-  
+
   var newExp = new experimentModel();
   newExp.startDate = new Date(sDate);
   newExp.endDate = new Date(eDate);
@@ -278,6 +278,7 @@ router.get('/experiment/:id/phase/:phase', function(request) {
             context.testConfig.recordingOnStart = phase.recordingOnStart
             context.testConfig.recordingAfterVideo = phase.recordingAfterVideo
             context.testConfig.recordAudioOnly = phase.recordAudioOnly
+            context.testConfig.showVideoPreview = phase.showVideoPreview
 
             context.testConfig.description = phase.description
             context.testConfig.button = phase.button
