@@ -30,12 +30,8 @@ var Promise = require("mPromise");
 var bowser = require("node_modules/bowser/bowser");
 //var lodash = require("node_modules/lodash");
 
-<<<<<<< HEAD
-var logger = container.logger;
-=======
 var container = require('vertx/container');
 var logger = container.logger
->>>>>>> feat/videomode
 
 var config = container.config;
 var externalPort = config.externalport;
