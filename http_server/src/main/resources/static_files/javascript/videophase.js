@@ -188,7 +188,16 @@ function(
 
     startButton.onclick = function () {
       writeData("meta", "start clicked");
-      startPlayback();
+
+      /**
+       *  Request media access before starting playback this way we'll
+       *  several chained video -> recording requests will be more similar.
+       */
+      navigator.mediaDevices.getUserMedia(mediaContstraints).then((s) => {
+        startPlayback();
+      }).catch(function(err ) {
+        console.log("Media permission was denied!")
+      })
 
       startButton.style.display = "None";
 
