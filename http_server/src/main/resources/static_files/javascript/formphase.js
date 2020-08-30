@@ -1,10 +1,10 @@
 
 require(["dijit/form/HorizontalSlider",
-         "dijit/form/HorizontalRuleLabels", 
-         "dijit/form/HorizontalRule", 
+         "dijit/form/HorizontalRuleLabels",
+         "dijit/form/HorizontalRule",
          "myWidgets/ValidationRadioButton",
          "myWidgets/ValidationTextArea",
-         "dijit/form/Button", 
+         "dijit/form/Button",
          "dijit/form/Select",
          "dijit/form/FilteringSelect",
          "dijit/form/ComboBox",
@@ -13,10 +13,12 @@ require(["dijit/form/HorizontalSlider",
          "dijit/form/NumberSpinner",
          "dijit/form/TextBox",
          "dojo/dom",
-         "dojo/dom-construct", 
+         "dojo/dom-construct",
          "dojo/dom-class",
-         "dojo/aspect", 
-         "dijit/registry", 
+         "dojo/dom-attr",
+         "dojo/dom-prop",
+         "dojo/aspect",
+         "dijit/registry",
          "dojo/on",
          "dojo/parser",
          "dojo/query",
@@ -25,11 +27,11 @@ require(["dijit/form/HorizontalSlider",
          "dojo/request/xhr",
          "dojo/ready"],
   function(HorizontalSlider,
-           HorizontalRuleLabels, 
+           HorizontalRuleLabels,
            HorizontalRule,
            ValidationRadioButton,
-           ValidationTextArea, 
-           Button, 
+           ValidationTextArea,
+           Button,
            Select,
            FilteringSelect,
            ComboBox,
@@ -40,8 +42,10 @@ require(["dijit/form/HorizontalSlider",
            dom,
            domConstruct,
            domClass,
-           aspect, 
-           registry, 
+           domAttr,
+           domProp,
+           aspect,
+           registry,
            on,
            parser,
            query,
@@ -70,7 +74,7 @@ require(["dijit/form/HorizontalSlider",
       var doPrevent = false;
       if (event.keyCode === 8) {
           var d = event.srcElement || event.target;
-          if ((d.tagName.toUpperCase() === 'INPUT' && (d.type.toUpperCase() === 'TEXT' || d.type.toUpperCase() === 'PASSWORD' || d.type.toUpperCase() === 'FILE' || d.type.toUpperCase() === 'EMAIL' )) 
+          if ((d.tagName.toUpperCase() === 'INPUT' && (d.type.toUpperCase() === 'TEXT' || d.type.toUpperCase() === 'PASSWORD' || d.type.toUpperCase() === 'FILE' || d.type.toUpperCase() === 'EMAIL' ))
                || d.tagName.toUpperCase() === 'TEXTAREA') {
               doPrevent = d.readOnly || d.disabled;
           }
@@ -94,6 +98,25 @@ require(["dijit/form/HorizontalSlider",
 
     var inBuilder = false;
     var clashingColNames = [];
+
+    var insertID = query("#formcol .insertID")
+
+    for (let insert = 0; insert < insertID.length; insert++) {
+      var l = insertID[insert];
+
+      console.log(l)
+
+      if (window.userID) {
+        var href = domProp.get(l, "href")
+        href += userID
+        domProp.set(l, "href", href)
+        domProp.set(l, "target", "_blank")
+      }
+    }
+    var links = query("#formcol a")
+    for (let link = 0; link < links.length; link++) {
+      domProp.set(l, "target", "_blank");
+    }
 
     function addToQdata(col, value) {
       if(inBuilder) {
@@ -147,9 +170,9 @@ require(["dijit/form/HorizontalSlider",
     var save_value = function(data, params, column){
       var id = params[0];
       var value = registry.byId(params[0]).get('value');
-      
+
       addToQdata(column, value);
-      //qdata[column] = value; 
+      //qdata[column] = value;
     };
 
     var save_textwidget_value = function(data, params, column) {
@@ -164,14 +187,14 @@ require(["dijit/form/HorizontalSlider",
       else {
         text = text.substring(0, maxlen);
       }
-  
+
       addToQdata(column, text);
 
       //qdata[column] = text;
     };
 
     var save_first_checked = function(data,
-                                      ids, 
+                                      ids,
                                       values,
                                       column_name,
                                       default_value){
@@ -179,7 +202,7 @@ require(["dijit/form/HorizontalSlider",
       var i = 0;
       var use_default = true;
       var id, value;
-      
+
       while (i < len){
         id = ids[i];
         if (is_checked(id)){
@@ -198,7 +221,7 @@ require(["dijit/form/HorizontalSlider",
     };
 
     var save_all_checked = function(data,
-                                    ids, 
+                                    ids,
                                     values,
                                     column_names,
                                     default_value){
@@ -215,7 +238,7 @@ require(["dijit/form/HorizontalSlider",
           value = default_value;
         }
         //qdata[column] = value;
-        
+
         addToQdata(column, value);
         i += 1;
       }
@@ -224,7 +247,7 @@ require(["dijit/form/HorizontalSlider",
     var show_saved_data = function(data){
       //Emptying div before rendering
       domConstruct.empty("formdata");
-      
+
       for (var key in qdata){
         if (qdata.hasOwnProperty(key)){
 
@@ -280,7 +303,7 @@ require(["dijit/form/HorizontalSlider",
 
         var form = registry.byId("formcol");
 
-        var valid = form.validate(); 
+        var valid = form.validate();
 
         var d = loadData();
 
@@ -296,11 +319,11 @@ require(["dijit/form/HorizontalSlider",
           var isare = "is";
           if (clashingColNames.length > 1) {names = "names"; isare="are"}
 
-          var message = "WARING: The column " + names + " <strong>" + clashingColNames.toString() + 
+          var message = "WARING: The column " + names + " <strong>" + clashingColNames.toString() +
                         "</strong> " + isare + " used multiple times, is this intended?";
-        
+
           warningBox.innerHTML = message;
-          domClass.remove(warningBox, "hiddenelem");  
+          domClass.remove(warningBox, "hiddenelem");
         }
 
         inBuilder = false;
@@ -311,7 +334,7 @@ require(["dijit/form/HorizontalSlider",
     }
 
     if (dom.byId("submitButton")) {
-      on(registry.byId("submitButton"), "click", function() { 
+      on(registry.byId("submitButton"), "click", function() {
         console.log("submitbutton");
 
         var valid = formcol.validate();
@@ -330,7 +353,7 @@ require(["dijit/form/HorizontalSlider",
         if(!lastClick) {
           lastClick = Date.now();
         }
-        
+
         if(valid && clickLimit) {
           var formdata = loadData();
           send_questionnaire_data(formdata);
@@ -350,7 +373,7 @@ require(["dijit/form/HorizontalSlider",
               console.log("JSON_REDIRECTING");
               window.location.replace(response.redirect);
             }
-	            
+
             else {
               //currentPhase = parseInt(document.URL.slice(76));
               var currentPhase = parseInt(url.substr(url.lastIndexOf("/")+1));
@@ -363,7 +386,7 @@ require(["dijit/form/HorizontalSlider",
                 location.reload();
               }
               //window.location.assign("../");
-            }  
+            }
           });
         }
       });

@@ -115,26 +115,30 @@ require(["dijit/form/Button",
 		"dojo/dom-style",
 		"dojo/dom-construct",
 		"dojo/dom-class",
-		"dojo/request", 
+		"dojo/request",
 		"dijit/registry",
-		"dojo/on", 
+		"dojo/on",
 		"dojo/json",
 		"dojo/parser",
 		"dojox/layout/ContentPane",
-		"dojo/ready"], 
+		"dojo/query",
+		"dojo/dom-prop",
+		"dojo/ready"],
 	function(Button,
 		TestBox,
-		dom, 
+		dom,
 		domStyle,
 		domConstruct,
 		domClass,
-		request, 
+		request,
 		registry,
-		on, 
+		on,
 		json,
 		parser,
 		ContentPane,
-		ready){ 
+		query,
+		domProp,
+		ready){
 	ready(function() {
 
 	//var markup = dom.byId("markup");
@@ -175,7 +179,22 @@ require(["dijit/form/Button",
           return {name: ea.word, value: ea.word, score: ea.score, meta: "formcomponent"}
       }));
     }
-  }
+	}
+
+	var updateLinks = function() {
+		var insertID = query("#formcol .insertID")
+
+		for (let insert = 0; insert < insertID.length; insert++) {
+			var l = insertID[insert];
+
+			console.log(l)
+
+			var href = domProp.get(l, "href")
+			href += "USERID_HERE"
+			domProp.set(l, "href", href)
+			domProp.set(l, "target", "_blank")
+		}
+	}
 
   langTool.addCompleter(autocompleter);
 
@@ -186,10 +205,16 @@ require(["dijit/form/Button",
 
 	var contentPane = new ContentPane({
 			content:"This is a contentpane"
-		}).placeAt("renderWindow");		
+		}).placeAt("renderWindow");
+
+	contentPane.onDownloadEnd = function() {
+		updateLinks();
+	}
 
 	contentPane.set("href", getFormUrl);
 	contentPane.startup();
+
+	updateLinks();
 
 	on(expandButton,"click", function() {
 		console.log("EXPANDING " + editorHidden);
@@ -254,6 +279,8 @@ require(["dijit/form/Button",
 				contentPane = new ContentPane({
 					"content":cont}).placeAt("renderWindow");
 				contentPane.startup();
+
+				updateLinks()
 
 				$("#renderWindow").scrollTop(lastViewerScrollPos);
 			}

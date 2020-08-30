@@ -464,12 +464,19 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
             addTag(tag);
             break;
         case "link":
-            if (args.size() > 0) {
+            if (args.size() >= 1) {
                 tag.attribute("href", args.get(0));
                 addTag(tag);
                 textAsArgument = true;
                 setPendingTag(tag);
             }
+            if (args.size() == 2) {
+                tag.attribute("class", args.get(1));
+                addTag(tag);
+                textAsArgument = true;
+                setPendingTag(tag);
+            }
+
             break;
         case "p":           // "Paragraph"
             closeParagraph();

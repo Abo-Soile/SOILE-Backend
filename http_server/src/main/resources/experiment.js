@@ -258,6 +258,7 @@ router.get('/experiment/:id/phase/:phase', function(request) {
 
             formDAO.get(phase.id, function(form) {
               context.form = form.form;
+              context.userID = userID;
 
               templateManager.render_template("formphase", context, request);
             });
