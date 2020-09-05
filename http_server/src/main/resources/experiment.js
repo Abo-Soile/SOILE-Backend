@@ -714,21 +714,22 @@ router.get("/experiment/:id/clone", requireEditor,function(request) {
 
     exp.components = exp.components.map(updateComponents)
 
-    exp.saveP().then(function(res) {
-      logger.info("Saved exp with id " + exp._id);
+    exp.init(function (re) {
+      exp.saveP().then(function (res) {
+        logger.info("Saved exp with id " + exp._id);
 
-      var p = Promise.each(formsToClone, function (formItem) {
-        return (getAndUpdateForm(formItem));
-      });
+        var p = Promise.each(formsToClone, function (formItem) {
+          return (getAndUpdateForm(formItem));
+        });
 
-      return p
-    }).then(function (res) {
-      return request.redirect("/experiment/" + exp._id);
-    }).catch(function (res) {
-      logger.error("Something didn't work")
-      logger.error(res);
+        return p
+      }).then(function (res) {
+        return request.redirect("/experiment/" + exp._id);
+      }).catch(function (res) {
+        logger.error("Something didn't work")
+        logger.error(res);
+      })
     })
-
   })
 
 });
