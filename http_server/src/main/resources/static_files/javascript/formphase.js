@@ -115,6 +115,7 @@ require(["dijit/form/HorizontalSlider",
     }
     var links = query("#formcol a")
     for (let link = 0; link < links.length; link++) {
+      var l = links[link];
       domProp.set(l, "target", "_blank");
     }
 
