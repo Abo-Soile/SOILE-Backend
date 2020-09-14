@@ -162,7 +162,9 @@ router.get('/experiment/:id', function(request){
       */
       dataDAO.getOrGenerateGeneral(userID, exp, request, function(userdata) {
         if(userdata.position > 0) {
-            request.redirect(request.absoluteURI() + "/phase/" + (userdata.position));
+            var expUrl = "/experiment/" + id + "/";
+
+            request.redirect(expUrl + "phase/" + (userdata.position));
           }
         else {
           renderExp(exp, false);
@@ -196,19 +198,21 @@ router.get('/experiment/:id/phase/:phase', function(request) {
   dataDAO.get({"userid":userID, "expId": expID, "type":"general"}, function(userdata) {
     var reg = /phase\/\d*/;
 
-    //Checking if user has visited the landing page
+    var expUrl = "/experiment/" + expID + "/";
+
+    //Checking if user has visited the landing page, if not redirect to first
     if(userdata === "") {
       console.log("No userdata, redirecting ");
-      return request.redirect(request.absoluteURI().toString().replace(reg,""));
+      return request.redirect(expUrl);
     }
 
-    //Checking if user is in the wrong phase
+    //Checking if user is in the wrong phase, if  yes, redirect
     if(userdata.position != phaseNo) {
       console.log("Wrong position, redirecting to phase " + userdata.position);
       if (userdata.position == 0) {
-        return request.redirect(request.absoluteURI().toString().replace(reg,""));
+        return request.redirect(expUrl);
       }
-      return request.redirect(request.absoluteURI().toString().replace(reg, "phase/" + (userdata.position)));
+      return request.redirect(expUrl + "phase/" + (userdata.position));
     }
 
     else {
