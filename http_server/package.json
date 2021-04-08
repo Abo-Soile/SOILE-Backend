@@ -4,12 +4,18 @@
   "description": "Contains dev dependencies for the whole vertx/js project",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gulp": "gulp install",
+    "gulp": "gulp install --allow-root",
     "gulpsass": "gulp sass"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node-sass": "^4.14.1"
+  },
+  "engines": {
+    "node": "10.15.3",
+    "npm": "6.9.0"
+  },
   "devDependencies": {
-    "gulp": "~3.9.0",
+    "gulp": "~4",
     "gulp-concat": "~2.6.0",
     "gulp-install": "^0.6.0",
     "gulp-rename": "~1.2.2",
@@ -26,5 +32,8 @@
   "author": "Daniel Wärnå",
   "license": "ISC",
   "private": true,
-  "postinstall": "gulp install"
+  "postinstall": "gulp install",
+  "resolutions": {
+    "graceful-fs": "4.2.3"
+  }
 }
