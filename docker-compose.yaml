@@ -5,3 +5,7 @@ services:
     container_name: "soilemongo"
     ports:
       - "27017:27017"
+  soile:
+    build: .
+    ports:
+      - "8080:8080"
