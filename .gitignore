@@ -33,7 +33,7 @@ prod/mods/fi.abo.kogni.soile~http-server~1.0/
 
 docs/_build
 
-*io.vertx~mod-mongo-persistor~2.1.0/
+# *io.vertx~mod-mongo-persistor~2.1.0/
 
 
 seleniumtests/selenium-server-standalone-2.44.0.jar
