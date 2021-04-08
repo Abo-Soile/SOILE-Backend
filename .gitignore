@@ -4,7 +4,7 @@
 *.idea/tasks.xml
 
 bin/
-*.class
+# *.class
 generated/
 
 *soile-elang/jar
