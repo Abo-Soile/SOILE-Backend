@@ -10,6 +10,7 @@ var config = container.config;
 var shared_config = config.shared;
 var port = config.port;
 var host = config.host;
+var bindHost = config.bindhost;
 
 var testImages = config.directory + "/testimages";
 
@@ -665,8 +666,13 @@ customMatcher.noMatch(function(request) {
 //   req.response.sendFile(file);
 // });
 
-server.requestHandler(customMatcher.routeMatcher).listen(port, host);
-
+if (bindHost) {
+  logger.info("STARTING WITH BINDHOST " + bindHost)
+  server.requestHandler(customMatcher.routeMatcher).listen(port, bindHost);
+} else {
+  logger.info("STARTING WITH HOST" + host)
+  server.requestHandler(customMatcher.routeMatcher).listen(port, host);
+}
 function vertxStop() {
   server.close();
 }

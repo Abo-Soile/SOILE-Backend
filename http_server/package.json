@@ -10,12 +10,8 @@
   "dependencies": {
     "node-sass": "^4.14.1"
   },
-  "engines": {
-    "node": "10.15.3",
-    "npm": "6.9.0"
-  },
   "devDependencies": {
-    "gulp": "~4",
+    "gulp": "~3.9",
     "gulp-concat": "~2.6.0",
     "gulp-install": "^0.6.0",
     "gulp-rename": "~1.2.2",
