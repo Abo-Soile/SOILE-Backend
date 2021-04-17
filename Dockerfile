@@ -43,7 +43,7 @@ ADD . .
 
 
 # run apt-get install openjdk-8-jdk
-
+RUN chmod +x http_server/gradlew
 run bash deployAll.sh
 
 WORKDIR /soile/prod
