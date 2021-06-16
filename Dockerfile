@@ -18,9 +18,10 @@ RUN cd && \
 ENV ANT_HOME /opt/ant
 ENV PATH ${PATH}:/opt/ant/bin
 
-RUN wget https://bintray.com/vertx/downloads/download_file?file_path=vert.x-2.1.6.tar.gz -O vert.x-2.1.6.tar.gz
-run tar xzf vert.x-2.1.6.tar.gz
-run cp vert.x-2.1.6/bin/vertx /usr/bin/
+# RUN wget https://bintray.com/vertx/downloads/download_file?file_path=vert.x-2.1.6.tar.gz -O vert.x-2.1.6.tar.gz
+COPY lib/vert.x-2.1.6.tar.gz /
+RUN tar xzf /vert.x-2.1.6.tar.gz
+RUN cp vert.x-2.1.6/bin/vertx /usr/bin/
 
 WORKDIR /soile
 
@@ -50,7 +51,7 @@ WORKDIR /soile/prod
 RUN cp jars/apache-log4j-extras-1.2.17.jar /vert.x-2.1.6/lib/
 
 run chmod +x docker_run.sh
-CMD ["./docker_run.sh"]
+CMD ["./docker_run.sh && watch -n 2 bash ../rsync_http.sh"]
 
 # ENTRYPOINT ["tail"]
 # CMD ["-f","/dev/null"]
