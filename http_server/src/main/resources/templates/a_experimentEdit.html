@@ -162,10 +162,14 @@
                         <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingOnStart" ng-true-value="true" ng-false-value="false">
                       </label>
                       <br>
-                      <label>
-                        Start recording after video
-                        <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingAfterVideo" ng-true-value="true" ng-false-value="false">
-                      </label>
+                      <div class="form-group form-inline">
+                        <label>
+                          Start recording after video
+                          <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingAfterVideo" ng-true-value="true" ng-false-value="false">
+                        </label>
+                        <label ng-if="comp.recordingAfterVideo">Time until recording starts (Leave empty to start directly after video ended)</label>
+                        <input ng-if="comp.recordingAfterVideo" type="number" class="form-control" ng-model="comp.startRecordingDelay" id="delayStart">
+                      </div>
                       <br>
                       <label ng-if="!comp.recordAudioOnly">
                         Show video preview
