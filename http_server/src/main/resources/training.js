@@ -537,7 +537,7 @@ function getTrainingAndUserData(trainingid, userid, callback) {
   });
 }
 
-function renderTrainingPhase(components, position, translatedPhase,request, persistantData, training) {
+function renderTrainingPhase(components, position, translatedPhase, request, persistantData, training, userID) {
 
   var component = components[translatedPhase];
   var id = component.id;
@@ -554,6 +554,7 @@ function renderTrainingPhase(components, position, translatedPhase,request, pers
     template = "formphase";
     contextObj = "form";
     childObj = "form";
+    context.userID = userID;
   }
 
   if(component.type === "test") {
@@ -651,7 +652,7 @@ router.get("/training/:id/execute", function(request) {
       return request.redirect("/training/" + id);
     }
      else {
-      renderTrainingPhase(modeComponents, positionInMode, phase,request, trainingData.persistantData, training);
+      renderTrainingPhase(modeComponents, positionInMode, phase, request, trainingData.persistantData, training, userid);
 
       if (training.skipLastPhase) {
         var isSecondLastPhase = trainingData.isLastPhase(training);
