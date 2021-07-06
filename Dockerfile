@@ -51,7 +51,7 @@ WORKDIR /soile/prod
 RUN cp jars/apache-log4j-extras-1.2.17.jar /vert.x-2.1.6/lib/
 
 run chmod +x docker_run.sh
-CMD ["./docker_run.sh && watch -n 2 bash ../rsync_http.sh"]
-
+CMD ["./docker_run.sh"]
+#CMD ["./docker_run.sh && watch -n 2 bash ../rsync_http.sh"]
 # ENTRYPOINT ["tail"]
 # CMD ["-f","/dev/null"]
