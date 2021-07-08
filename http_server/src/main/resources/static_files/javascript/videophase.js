@@ -199,10 +199,6 @@ async function videophase() {
   }
   var response = await sendMetaData()
 
-  // //Initiate next phase
-  // if (typeof response !== 'undefined') {
-  //   response = JSON.parse(response)
-  // }
   if (response.redirect) {
     console.log('JSON_REDIRECTING')
     window.location.replace(response.redirect)
