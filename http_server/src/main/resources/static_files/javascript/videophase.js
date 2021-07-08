@@ -18,8 +18,6 @@ async function startRecording(stream, startDelay) {
     }, startDelay)
   )
 
-  console.log('recorder: ', recorder.state)
-
   //returns a function that is used to stop recording
   return async function () {
     recorder.stop()
@@ -99,14 +97,10 @@ async function videophase() {
   await new Promise((resolve, reject) => {
     startButton.addEventListener('click', (event) => resolve())
   })
-  log('meta', 'start clicked')
 
   startButton.style.display = 'None'
   preview.style.display = 'None'
 
-  //TODO - Figure out logic for videoPreview
-  //and how it should work with recordDuringVideo and recordAfterVideo
-  console.log('#Main-video: ', document.querySelector('#main-video'))
   if (!document.querySelector('#main-video') == '') {
   }
   //showVideo
@@ -141,7 +135,7 @@ async function videophase() {
       }
       mainVideo.addEventListener('ended', (event) => resolve())
     })
-    recordButton.innerHTML = config.recordButtonStart || 'Start recording'
+    recordButton.innerHTML = config.startRecordButton || 'Start recording'
     recordButton.style.visibility = 'visible'
     // Wait until the button was clicked
     await new Promise((resolve, reject) => {
@@ -150,7 +144,7 @@ async function videophase() {
 
     const stop = await startRecording(await getStream(), 0)
 
-    recordButton.innerHTML = config.recordButtonEnd || 'Stop recording'
+    recordButton.innerHTML = config.stopRecordButton || 'Stop recording'
 
     //Stop recording eventhandler
     await new Promise((resolve, reject) => {
