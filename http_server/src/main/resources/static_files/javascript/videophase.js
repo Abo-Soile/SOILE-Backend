@@ -3,7 +3,7 @@ navigator.getUserMedia =
   navigator.webkitGetUserMedia ||
   navigator.mozGetUserMedia
 
-//start video recording and returns stop-function inside a promise.
+//starts video recording and returns stop-function inside a promise.
 // When stop-function is called it stops recording and returns the video data inside a promise
 async function startRecording(stream, startDelay) {
   let recorder = new MediaRecorder(stream)
@@ -101,8 +101,6 @@ async function videophase() {
   startButton.style.display = 'None'
   preview.style.display = 'None'
 
-  if (!document.querySelector('#main-video') == '') {
-  }
   //showVideo
   const mainVideo = document.querySelector('#main-video')
   mainVideo.style.display = 'inherit'
@@ -166,6 +164,7 @@ async function videophase() {
 
     dataToStore.append('data', recordedBlob)
   }
+  //ends the video stream
   stream.getTracks().forEach((track) => track.stop())
   preview.style.display = 'none'
 
