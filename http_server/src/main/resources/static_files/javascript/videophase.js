@@ -74,11 +74,12 @@ async function videophase() {
   startButton.innerHTML = config.button || 'Start'
   startButton.style.display = 'true'
 
-  const preview = document.querySelector('#camera-video')
+  const preview = document.querySelector('#camera-preview')
+  const previewInsructions = document.querySelector('#preview-instructions')
 
   let stream = null
   //gets camera stream.
-  //this is a function so camera stream is started only when its used first time
+  //this is a function so that camera stream is started only when its used first time
   async function getStream() {
     if (stream === null) {
       stream = await navigator.mediaDevices.getUserMedia(mediaContstraints)
@@ -91,6 +92,8 @@ async function videophase() {
     preview.srcObject = await getStream()
     preview.captureStream = preview.captureStream || preview.mozCaptureStream
 
+    previewInsructions.innerHTML = config.previewInstructions
+
     await new Promise((resolve) => (preview.onplaying = resolve))
   }
   // Wait until the button was clicked
@@ -100,6 +103,7 @@ async function videophase() {
 
   startButton.style.display = 'None'
   preview.style.display = 'None'
+  previewInsructions.style.display = 'None'
 
   //showVideo
   const mainVideo = document.querySelector('#main-video')

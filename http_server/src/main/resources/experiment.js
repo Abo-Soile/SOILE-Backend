@@ -305,7 +305,8 @@ router.get('/experiment/:id/phase/:phase', function (request) {
               context.testConfig.startRecordButton = phase.startRecordButton
               context.testConfig.stopRecordButton = phase.stopRecordButton
 
-              context.testConfig.description = phase.description
+              context.testConfig.previewInstructions = phase.previewInstructions
+
               context.testConfig.button = phase.button
 
               templateManager.render_template('videophase', context, request)
@@ -430,6 +431,7 @@ router.get('/experiment/:id/end', function (request) {
   console.log('confirmed submitted data')
   experimentDAO.get(expID, function (exp) {
     var endMessage = exp.endmessage
+  
     var endTitle = ''
     if (typeof endMessage !== 'undefined') {
       endTitle = endMessage.split('\n')[0]
@@ -438,7 +440,7 @@ router.get('/experiment/:id/end', function (request) {
       endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />')
     }
 
-    var context = { endtitle: endTitle, endmessage: endMessage }
+    var context = { endtitle: endTitle, endmessage: endMessage, endVideo: exp.endVideo }
 
     if (typeof exp.hidelogin !== 'undefined') {
       context.hideLogin = exp.hidelogin

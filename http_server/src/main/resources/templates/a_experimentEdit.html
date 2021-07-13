@@ -39,6 +39,8 @@
 
         <label>End message</label>
         <textarea class="form-control animate" msd-elastic ng-model="experiment.endmessage"> </textarea>
+        <label>End video</label>
+        <input class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files, 'endVideo')">
     </div>
     <div class="col-md-12">
       <br>
@@ -140,12 +142,7 @@
                   <br>
                   <div class="form-group">
                     <label>
-                      Description
-                      <input name="recording-[([$index])]" type="text" ng-model="comp.description" ng-true-value="true"
-                        ng-false-value="false">
-                    </label>
-                    <label>
-                      Button
+                      Videophase start button 
                       <input name="recording-[([$index])]" type="text" ng-model="comp.button" ng-true-value="true" ng-false-value="false">
                     </label>
                   </div>
@@ -177,6 +174,9 @@
                       <label ng-if="!comp.recordAudioOnly">
                         Show video preview
                         <input name="recording-[([$index])]" type="checkbox" ng-model="comp.showVideoPreview" ng-true-value="true" ng-false-value="false">
+                        <br>
+                        <label ng-if="comp.showVideoPreview">Video preview instructions </label>
+                        <input ng-if="comp.showVideoPreview" type="text" class="form-control" ng-model="comp.previewInstructions" id="previewInstructions">
                       </label>
                     </div>
                   </div>
@@ -201,7 +201,7 @@
       <!-- <button class="btn btn-default" ng-click="addVideo()">Add video</button> -->
       <label class="btn btn-default">
         Add video
-        <input hidden class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)">
+        <input hidden class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files, 'videoPhase')">
       <!-- <input class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"> -->
         </label>
       <!-- <input  type="file" nv-file-select uploader="uploader"/> -->
