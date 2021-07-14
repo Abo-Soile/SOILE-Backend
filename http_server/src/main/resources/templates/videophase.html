@@ -41,17 +41,14 @@
     <!-- <script src="video.js"></script> -->
 
     <div class="col-md-6 col-md-offset-3">
-      <div class="progress">
-        <div
-          class="progress-bar progress-bar-success"
-          role="progressvar"
-          aria-valuenow="{completed}"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          style="width:{completed}%"
-        >
-          {phasesLeft}
-        </div>
+      <br class="progress">
+      <div class="progress-bar progress-bar-success" role="progressvar" aria-valuenow="{completed}"
+        aria-valuemin="0" aria-valuemax="100" style="width:{completed}%">
+        {phasesLeft}
+      </div>
+      <br>
+      <div class="text-center">
+        <button class="btn btn-sm btn-primary" id="exit-button" style="visibility: {exitButton}">{exitButtonLable}</button> 
       </div>
     </div>
   </div>
@@ -59,22 +56,23 @@
   {?testConfig}
   <script type="text/javascript">
     window.testConfig = {testConfig|s|js};
-  </script>
+    </script>
   {/testConfig} {?noSubmit}
   <script type="text/javascript">
     window.noSubmit = true
-  </script>
+    </script>
   {/noSubmit}
 </div>
 
 <script type="text/javascript" src="/javascript/videophase.js"></script>
+<script type="text/javascript" src="/javascript/exitButtonHandler.js"></script>
 
 <style>
   #main-video {
     max-width: 800px;
   }
 
-  #camera-video {
+  #preview-instructions {
     max-width: 800px;
     /* 
     position: absolute;

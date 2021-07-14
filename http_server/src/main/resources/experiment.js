@@ -255,6 +255,16 @@ router.get('/experiment/:id/phase/:phase', function (request) {
               completed: ((phaseNo + 1) / noOfPhases) * 100,
               phasesLeft: phaseNo + 1 + '/' + noOfPhases
             }
+            //Checking if exit button should be added
+            if(exp.exitButton){
+              context.exitButton = 'visible'
+              //checking if lable for the button is defined if not it's set to Exit
+              context.exitButtonLable = exp.exitButtonLable !== undefined ? exp.exitButtonLable : 'Exit'
+            } else {
+              context.exitButton = 'hidden'
+
+              context.exitButtonLable = ''
+            }
 
             if (typeof exp.hidelogin !== 'undefined') {
               context.hideLogin = exp.hidelogin

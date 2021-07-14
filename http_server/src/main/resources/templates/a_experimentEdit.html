@@ -39,8 +39,25 @@
 
         <label>End message</label>
         <textarea class="form-control animate" msd-elastic ng-model="experiment.endmessage"> </textarea>
-        <label>End video</label>
-        <input class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files, 'endVideo')">
+        <div class="form-inline">
+          <label class="checkbox bigcheckbox">
+            End video
+            <input type="checkbox" ng-model="experiment.hasEndVideo" ng-true-value="true" ng-false-value="false">
+          </label>
+        </div>
+        <input ng-if="experiment.hasEndVideo" class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files, 'endVideo')">
+
+        <div class="form-inline">
+          <label class="checkbox bigcheckbox">
+            Exit button
+            <input type="checkbox" ng-model="experiment.exitButton" ng-true-value="true" ng-false-value="false">
+          </label>
+        </div>
+        <!-- <label>Exit button</label>
+        <input class="checkbox bigcheckbox" type="checkbox" ng-model="experiment.exitButton" ng-true-value="true" ng-false-value="false"> -->
+        
+        <label ng-if="experiment.exitButton">Exit button label</label>
+        <input ng-if="experiment.exitButton" type="text" class="form-control" ng-model="experiment.exitButtonLable">
     </div>
     <div class="col-md-12">
       <br>
