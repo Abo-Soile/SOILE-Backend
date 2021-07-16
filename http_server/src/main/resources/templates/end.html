@@ -3,14 +3,18 @@
 	<div class="row">
 
 
-		<div class="col-md-10"> 
-			<h1> {endtitle} </h1>
+	<div class="col-md-10"> 
+	  <h1> {endtitle} </h1>
 			<!--<h3> Thank you for participating in the experiment </h3>-->
       <p>{endmessage|s}</p>
-	  <video id="end-video" autoplay controls>
-        <source src={endVideo}>
-      </video>
-		</div> 
+	</div> 
+	{?endVideo}
+	<div class="col-md-12 text-center">
+		<video id="end-video" style="max-width: 800px;" autoplay controls>
+			<source src={endVideo}>
+		</video>
+	</div>
+	{/endVideo}
 	</div>
 </div>
 

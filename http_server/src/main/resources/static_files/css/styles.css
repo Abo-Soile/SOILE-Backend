@@ -955,3 +955,9 @@ testeditor styles
 
 .ng-useraccess .panel {
   margin-top: 0px; }
+
+#exit-button {
+  position: absolute;
+  top: 500px;
+  left: 1100px;
+}

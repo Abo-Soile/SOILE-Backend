@@ -92,22 +92,25 @@ async function videophase() {
     preview.srcObject = await getStream()
     preview.captureStream = preview.captureStream || preview.mozCaptureStream
 
-    previewInsructions.innerHTML = config.previewInstructions
+    previewInsructions.innerHTML = config.previewInstructions || ''
 
     await new Promise((resolve) => (preview.onplaying = resolve))
+  } else {
+    preview.style.display = 'None'
+    previewInsructions.style.display = 'None'
   }
   // Wait until the button was clicked
   await new Promise((resolve, reject) => {
     startButton.addEventListener('click', (event) => resolve())
   })
-
+  
   startButton.style.display = 'None'
   preview.style.display = 'None'
   previewInsructions.style.display = 'None'
 
   //showVideo
   const mainVideo = document.querySelector('#main-video')
-  mainVideo.style.display = 'inherit'
+  mainVideo.style.display = ''
 
   mainVideo.play()
 
@@ -151,12 +154,6 @@ async function videophase() {
     //Stop recording eventhandler
     await new Promise((resolve, reject) => {
       recordButton.addEventListener('click', (event) => resolve())
-
-      document.addEventListener('keydown', (event) => {
-        if (event.key == ' ' || event.key == 'Spacebar') {
-          resolve()
-        }
-      })
     })
 
     const data = await stop()
@@ -173,13 +170,19 @@ async function videophase() {
   preview.style.display = 'none'
 
   //send recorded data
-  try {
-    await fetch(document.URL + '/video', {
-      body: dataToStore,
-      method: 'post'
+  if(config.recordingAfterVideo || config.recordingOnStart){
+    try {
+      await fetch(document.URL + '/video', {
+        body: dataToStore,
+        method: 'post'
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  } else {// if there is no recording, wait untill the video has finnished
+    await new Promise((resolve, reject) => {
+      mainVideo.addEventListener('ended', (event) => resolve())
     })
-  } catch (e) {
-    console.log(e)
   }
 
   //Send meta-data

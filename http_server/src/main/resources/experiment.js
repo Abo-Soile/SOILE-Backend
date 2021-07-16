@@ -260,6 +260,7 @@ router.get('/experiment/:id/phase/:phase', function (request) {
               context.exitButton = 'visible'
               //checking if lable for the button is defined if not it's set to Exit
               context.exitButtonLable = exp.exitButtonLable !== undefined ? exp.exitButtonLable : 'Exit'
+              context.exitUrl = '/experiment/' + expID + '/end'
             } else {
               context.exitButton = 'hidden'
 
@@ -450,7 +451,8 @@ router.get('/experiment/:id/end', function (request) {
       endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />')
     }
 
-    var context = { endtitle: endTitle, endmessage: endMessage, endVideo: exp.endVideo }
+    var context = exp.hasEndVideo ? { endtitle: endTitle, endmessage: endMessage, endVideo: exp.endVideo }
+    : { endtitle: endTitle, endmessage: endMessage}
 
     if (typeof exp.hidelogin !== 'undefined') {
       context.hideLogin = exp.hidelogin
