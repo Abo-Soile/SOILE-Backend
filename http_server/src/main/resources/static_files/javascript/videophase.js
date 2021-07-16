@@ -166,8 +166,10 @@ async function videophase() {
     dataToStore.append('data', recordedBlob)
   }
   //ends the video stream
-  stream.getTracks().forEach((track) => track.stop())
-  preview.style.display = 'none'
+  if(stream !== null){
+    stream.getTracks().forEach((track) => track.stop())
+    preview.style.display = 'none'
+  }
 
   //send recorded data
   if(config.recordingAfterVideo || config.recordingOnStart){
