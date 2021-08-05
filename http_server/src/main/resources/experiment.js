@@ -256,11 +256,12 @@ router.get('/experiment/:id/phase/:phase', function (request) {
               phasesLeft: phaseNo + 1 + '/' + noOfPhases
             }
             //Checking if exit button should be added
-            if(exp.exitButton){
+            if (exp.exitButton) {
               context.exitButton = 'visible'
               //checking if lable for the button is defined if not it's set to Exit
-              context.exitButtonLable = exp.exitButtonLable !== undefined ? exp.exitButtonLable : 'Exit'
-              context.exitUrl = '/experiment/' + expID + '/end'
+              context.exitButtonLable =
+                exp.exitButtonLable !== undefined ? exp.exitButtonLable : 'Exit'
+              context.exitUrl = '/experiment/' + expID + '/exit'
             } else {
               context.exitButton = 'hidden'
 
@@ -382,6 +383,49 @@ router.post('/experiment/:id/phase/:phase', function (request) {
   })
 })
 
+router.get('/experiment/:id/exit', function (request) {
+  var userID = request.session.getPersonToken()
+  var expID = request.params().get('id')
+
+  if (request.session.loggedIn()) {
+    userID = request.session.getUserId()
+  }
+
+  //completing all phases
+  experimentDAO.get(expID, function (exp) {
+    var totalPhases = exp.components.length
+
+    dataDAO.get(
+      { userid: userID, expId: expID, type: 'general' },
+      function (userdata) {
+        var position = userdata.position
+
+        var dataObj = new dataModel()
+
+        dataObj.phase = parseInt(position)
+        dataObj.expId = expID
+        dataObj.userid = userID
+
+        //exits when all phases have been completed
+        while (totalPhases >= position) {
+          experimentDAO.completePhase(dataObj, expID, function (r) {})
+
+          position += 1
+        }
+      }
+    )
+  })
+  var url = request.absoluteURI().toString()
+  url = swapUrlPort(url, externalPort)
+
+  var cut = url.indexOf('/exit')
+  url = url.substr(0, cut) + '/end'
+
+  dataDAO.completeExperiment(expID, userID, function (status) {
+    return request.redirect(url)
+  })
+})
+
 router.post('/experiment/:id/phase/:phase/video', function (request) {
   request.expectMultiPart(true)
 
@@ -442,7 +486,7 @@ router.get('/experiment/:id/end', function (request) {
   console.log('confirmed submitted data')
   experimentDAO.get(expID, function (exp) {
     var endMessage = exp.endmessage
-  
+
     var endTitle = ''
     if (typeof endMessage !== 'undefined') {
       endTitle = endMessage.split('\n')[0]
@@ -451,8 +495,9 @@ router.get('/experiment/:id/end', function (request) {
       endMessage = endMessage.replace(/(?:\r\n|\r|\n)/g, '<br />')
     }
 
-    var context = exp.hasEndVideo ? { endtitle: endTitle, endmessage: endMessage, endVideo: exp.endVideo }
-    : { endtitle: endTitle, endmessage: endMessage}
+    var context = exp.hasEndVideo
+      ? { endtitle: endTitle, endmessage: endMessage, endVideo: exp.endVideo }
+      : { endtitle: endTitle, endmessage: endMessage }
 
     if (typeof exp.hidelogin !== 'undefined') {
       context.hideLogin = exp.hidelogin

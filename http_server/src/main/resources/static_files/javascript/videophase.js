@@ -103,7 +103,7 @@ async function videophase() {
   await new Promise((resolve, reject) => {
     startButton.addEventListener('click', (event) => resolve())
   })
-  
+
   startButton.style.display = 'None'
   preview.style.display = 'None'
   previewInsructions.style.display = 'None'
@@ -166,13 +166,13 @@ async function videophase() {
     dataToStore.append('data', recordedBlob)
   }
   //ends the video stream
-  if(stream !== null){
+  if (stream !== null) {
     stream.getTracks().forEach((track) => track.stop())
     preview.style.display = 'none'
   }
 
   //send recorded data
-  if(config.recordingAfterVideo || config.recordingOnStart){
+  if (config.recordingAfterVideo || config.recordingOnStart) {
     try {
       await fetch(document.URL + '/video', {
         body: dataToStore,
@@ -181,7 +181,8 @@ async function videophase() {
     } catch (e) {
       console.log(e)
     }
-  } else {// if there is no recording, wait untill the video has finnished
+  } else {
+    // if there is no recording, wait untill the video has finnished
     await new Promise((resolve, reject) => {
       mainVideo.addEventListener('ended', (event) => resolve())
     })
