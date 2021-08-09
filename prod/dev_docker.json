@@ -64,6 +64,7 @@
     "adminuser":"admin",
     "adminpassword":"admin",
     "externalport":8080,
+    "externaluri": "127.0.0.1",
     "bindhost": "0.0.0.0"
   },
 

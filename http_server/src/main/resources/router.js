@@ -10,6 +10,8 @@ var config = container.config;
 
 var router = new vertx.RouteMatcher();
 
+var bindHost = config.bindhost;
+
 var portToUse = config["port"]
 if (config["externalport"]) {
   portToUse = config["externalport"]
@@ -56,7 +58,11 @@ function extendRequest(request, func) {
       return URI;
     }
 
-    URI = URI.replace(config["host"], config["externalURI"])
+    if (bindHost) {
+      URI = URI.replace(bindHost, config["externalURI"])
+    } else {
+      URI = URI.replace(config["host"], config["externalURI"])
+    }
 
     return URI;
   }
