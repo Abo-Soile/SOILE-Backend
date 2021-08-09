@@ -6,9 +6,20 @@ var templateManager = require('templateManager');
 var sessionManager = require("sessionManager");
 
 var logger = container.logger;
-
+var config = container.config;
 
 var router = new vertx.RouteMatcher();
+
+var portToUse = config["port"]
+if (config["externalport"]) {
+  portToUse = config["externalport"]
+}
+
+function swapUrlPort(url, newPort) {
+  var uriRegex = /([a-zA-Z+.\-]+):\/\/([^\/]+):([0-9]+)\//;
+
+  return url.replace(uriRegex, "$1://$2:" + newPort + "/");
+}
 
 function logHttp(request) {
   var method = request.method();
@@ -32,6 +43,22 @@ function extendRequest(request, func) {
       request.response.putHeader("Content-Type", "application/json; charset=UTF-8");
       request.response.end(JSON.stringify(data));
     }
+  }
+  /**
+   * Returns full external URI using either absouluteURI,
+   * or by building it using the externalURI configuration
+   */
+  request.absoluteExternalURI = function() {
+    var URI = this.absoluteURI().toString();
+    URI = swapUrlPort(URI, portToUse);
+
+    if (!config["externalURI"]) {
+      return URI;
+    }
+
+    URI = URI.replace(config["host"], config["externalURI"])
+
+    return URI;
   }
 
   request.redirect = function(url) {
@@ -67,7 +94,7 @@ function extendRequest(request, func) {
 
   request.notfound = function() {
     this.response.statusCode(404);
-    
+
     var context = {};
     context.short = "404, not found" ;
     context.long =  "The content you're looking for couldn't be found.";
@@ -90,12 +117,12 @@ function extendRequest(request, func) {
   request.session = session;
 
   //Check if a db session exists
-  if((!session.loggedIn()) && 
-      (session.getSessionCookie()) && 
+  if((!session.loggedIn()) &&
+      (session.getSessionCookie()) &&
       (request.method()==="GET" || request.method()==="POST")) {
     console.log("Checking session");
 
-    /* 
+    /*
       If postrequest
       Run the handler, but defer the call to the endhandler until the session check has
       been completed.
@@ -108,7 +135,7 @@ function extendRequest(request, func) {
 
     // Timer used to debug issues with the session check
     //vertx.setTimer(3000, function(tid) {
-      
+
     session.checkSession(function callback(user) {
       //Sending the session manager with the request
       console.log("user: " + user);
@@ -128,7 +155,7 @@ function extendRequest(request, func) {
         request.callEndHandler();
       }
       else {
-        func(request); 
+        func(request);
       }
     });
   }
@@ -166,8 +193,8 @@ CustomMatcher.prototype.handleArgs = function(arg) {
 };
 
 
-// 
-// Runs middleware and 
+//
+// Runs middleware and
 CustomMatcher.prototype.handleRequest = function(mCallback, middleware) {
   return function(request) {
 
@@ -249,8 +276,8 @@ CustomMatcher.prototype.handleRequest = function(mCallback, middleware) {
       }
     }
     request = extendRequest(request, defMiddleware);
-     
-  }; 
+
+  };
 };
 
 //More methods from the routematcher should be implementd as needed.
@@ -292,6 +319,6 @@ function a() {
 }
 
 //module.exports = CustomMatcher;
-module.exports = function(){ 
+module.exports = function(){
   return new CustomMatcher();
 };

@@ -456,7 +456,7 @@ router.post("/training/:id/enrolluser", requireEditor,function (request) {
     console.log(JSON.stringify(params))
 
     if (typeof params === "undefined" || params == "") {
-      request.redirect(request.absoluteURI());
+      request.redirect(request.absoluteExternalURI());
       return;
     }
 

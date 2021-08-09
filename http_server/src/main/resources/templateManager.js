@@ -56,7 +56,7 @@ var templateManager = (function() {
     },
     'render_template': function(templateName, data, request) {
 
-      data.URI = String(request.absoluteURI());
+      data.URI = String(request.absoluteExternalURI());
       data.URI = data.URI.split("?")[0]
       data.URI = swapUrlPort(data.URI, externalPort);
 

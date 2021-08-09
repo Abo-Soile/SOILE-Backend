@@ -221,8 +221,10 @@ router.get('/experiment/:id/phase/:phase', function(request) {
 
         //Redirecting to experiment end
         if(phase===undefined) {
-          var url = request.absoluteURI().toString();
-          url = swapUrlPort(url, externalPort);
+          // var url = request.absoluteURI().toString();
+          var url = request.absoluteExternalURI();
+
+          // url = swapUrlPort(url, externalPort);
 
           var cut = url.indexOf("/phase/");
           url = url.substr(0,cut) + "/end";

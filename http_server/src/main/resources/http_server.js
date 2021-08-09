@@ -205,8 +205,13 @@ customMatcher.get("/testeditor", function(request) {
     logger.error("Error Message!");
     logger.fatal("Fatal Message!");
 
+    // Test some url related variables here
+    logger.info("absoluteURI: " + request.absoluteURI());
+    logger.info("uri: " + request.uri());
+    logger.info("absoluteExternalUri: " + request.absoluteExternalURI());
+
     vertx.setTimer(300,function() {
-      a = asdfsdfs + sdklfj;
+      logger.info("Vertx timeout test");
     });
     request.response.end("Require editor");
 });
@@ -643,9 +648,6 @@ customMatcher.routeMatcher.allWithRegEx('.*\.(mp3)$', function(request) {
 });
 
 customMatcher.allWithRegEx('.*/', function(req) {
-  console.log(req.absoluteURI());
-  console.log(req.uri());
-
   var url = req.uri().substring(0, req.uri().length - 1);
 
   console.log(url);
