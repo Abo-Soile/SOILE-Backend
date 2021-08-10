@@ -1,16 +1,16 @@
 {
   "deploy": [
-    /*{ 
+    /*{
       "module": "fi.abo.kogni.soile~disk-io~1.0",
       "config": "disk_io",
       "instances": 1
     },*/
-    { 
+    {
       "module": "fi.abo.kogni.soile~experiment-lang~1.0",
       "config": "experiment_language",
       "instances": 1
     },
-    { 
+    {
       "module": "fi.abo.kogni.soile~questionnaire-render~1.0",
       "config": "questionnaire_markup",
       "instances": 1
@@ -67,8 +67,8 @@
     "debug":true,
     "adminuser":"admin",
     "adminpassword":"admin",
-    "externalport":80
-
+    "externalport":8081,
+    "externalURI": false
   },
 
   "questionnaire_markup": {

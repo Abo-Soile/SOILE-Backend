@@ -226,15 +226,19 @@ router.get('/experiment/:id/phase/:phase', function (request) {
         if (userdata.position == 0) {
           return request.redirect(expUrl)
         }
-        return request.redirect(expUrl + 'phase/' + userdata.position)
-      } else {
-        experimentDAO.get(expID, function (exp) {
-          phase = exp.components[phaseNo]
-
+        return request.redirect(expUrl + "phase/" + (userdata.position));
+      }
+  
+      else {
+        experimentDAO.get(expID, function(exp) {
+          phase = exp.components[phaseNo];
+  
           //Redirecting to experiment end
-          if (phase === undefined) {
-            var url = request.absoluteURI().toString()
-            url = swapUrlPort(url, externalPort)
+          if(phase===undefined) {
+            // var url = request.absoluteURI().toString();
+            var url = request.absoluteExternalURI();
+  
+            // url = swapUrlPort(url, externalPort);
 
             var cut = url.indexOf('/phase/')
             url = url.substr(0, cut) + '/end'
