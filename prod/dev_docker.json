@@ -61,9 +61,9 @@
     "directory": "./static_files",
     "template_folder":"templates/",
     "debug":true,
-    "adminuser":"admin",
-    "adminpassword":"admin",
-    "externalport":8080,
+    "adminuser":"aalto_admin",
+    "adminpassword":"7AQkBjHZtwFV72",
+    "externalport":80,
     "externaluri": "127.0.0.1",
     "bindhost": "0.0.0.0"
   },
