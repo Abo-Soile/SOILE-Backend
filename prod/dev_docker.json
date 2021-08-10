@@ -64,7 +64,7 @@
     "adminuser":"aalto_admin",
     "adminpassword":"7AQkBjHZtwFV72",
     "externalport":80,
-    "externaluri": "127.0.0.1",
+    "externaluri": "soile.nbe.aalto.fi",
     "bindhost": "0.0.0.0"
   },
 

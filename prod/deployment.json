@@ -68,7 +68,7 @@
     "adminuser":"admin",
     "adminpassword":"admin",
     "externalport":8081,
-    "externalURI": false
+    "externalURI": true
   },
 
   "questionnaire_markup": {
