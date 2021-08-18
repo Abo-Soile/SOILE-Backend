@@ -265,7 +265,11 @@ router.get('/experiment/:id/phase/:phase', function (request) {
               //checking if lable for the button is defined if not it's set to Exit
               context.exitButtonLable =
                 exp.exitButtonLable !== undefined ? exp.exitButtonLable : 'Exit'
-              context.exitUrl = '/experiment/' + expID + '/exit'
+              
+                var url = request.absoluteExternalURI();
+
+                var cut = url.indexOf('/phase/')
+                context.exitUrl = url.substr(0, cut) + '/exit'
             } else {
               context.exitButton = 'hidden'
 
@@ -419,8 +423,7 @@ router.get('/experiment/:id/exit', function (request) {
       }
     )
   })
-  var url = request.absoluteURI().toString()
-  url = swapUrlPort(url, externalPort)
+  var url = request.absoluteExternalURI()
 
   var cut = url.indexOf('/exit')
   url = url.substr(0, cut) + '/end'
