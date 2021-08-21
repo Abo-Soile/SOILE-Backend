@@ -14,4 +14,5 @@ services:
       volumes:
          - ./http_server/main/resources/static_files:/soile/http_server/main/resources/static_files
          - ./http_server/main/resources/templates:/soile/http_server/main/resources/templates
-         - /root/soilevideos:/soile/mods/fi.abo.kogni.soile~http-server~1.0/static_files/exp_video_upload
+         - /root/soilevideos/exp_video_upload:/soile/prod/mods/fi.abo.kogni.soile~http-server~1.1/static_files/exp_video_upload
+         - /root/soilevideos/testvideos:/soile/prod/mods/fi.abo.kogni.soile~http-server~1.1/static_files/testvideos
