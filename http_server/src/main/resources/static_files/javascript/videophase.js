@@ -111,6 +111,9 @@ async function videophase() {
   //showVideo
   const mainVideo = document.querySelector('#main-video')
   mainVideo.style.display = ''
+  if(config.fullScreen){
+    await mainVideo.requestFullscreen()
+  }
 
   mainVideo.play()
 

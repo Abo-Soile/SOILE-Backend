@@ -164,6 +164,11 @@
                   <div class="form-group form-inline">
                     <div class="checkbox">
                       <label>
+                        Fullscreen
+                        <input type="checkbox" ng-model="comp.fullScreen" ng-true-value="true" ng-false-value="false">
+                      </label>
+                      <br>
+                      <label>
                         Record audio only
                         <input name="recording-audio-[([$index])]" type="checkbox" ng-model="comp.recordAudioOnly" ng-true-value="true" ng-false-value="false">
                       </label>
