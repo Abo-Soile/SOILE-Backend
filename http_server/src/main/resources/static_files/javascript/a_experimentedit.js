@@ -187,7 +187,7 @@ app.controller('experimentController', function ($scope, $http, $location, FileU
   };
 
 
-  $scope.uploadFile = function (files, videoType) {
+  $scope.uploadFile = function (files) {
     var fd = new FormData();
     //Take the first selected file
     fd.append("file", files[0]);
@@ -198,15 +198,7 @@ app.controller('experimentController', function ($scope, $http, $location, FileU
       headers: { 'Content-Type': undefined },
       transformRequest: angular.identity
     }).success(function(res) {
-      if(videoType === 'videoPhase'){
         $scope.addVideo(res.video)
-      } else if (videoType === 'endVideo'){
-        //save the file name to endVideo
-        $scope.experiment.endVideo = res.video;
-
-        $scope.save();
-      }
-      // $scope.experiment.components[index].videofile = res;
     }).error(function(err) {
       console.log("Something didnt work")
     });

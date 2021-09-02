@@ -27,8 +27,11 @@
         <video id="main-video" style="display: none">
           <source src="{testConfig.file}" type=video/mp4>
         </video>
-        <label id="preview-instructions"></label>
+        <h1 id="preview-title"></h1>
+        <p id="preview-instructions"></p>
         <video id="camera-preview" autoplay muted></video>
+        <h1 id="title" style="visibility: hidden;"></h1>
+        <p id="text" style="visibility: hidden;"></p>
         <br>
         <button class="btn btn-lg btn-primary" id="start-button"></button>
         <button class="btn btn-lg btn-primary" id="record-button" style="visibility: hidden"></button>
@@ -62,13 +65,20 @@
 
 <style>
   #main-video {
-    width: 100%;
+    /* max-width: 800px; */
     height: 100%;
+    width: 100%;
   }
   
   #camera-preview {
-    width: 100%;
     height: 100%;
+    width: 100%;
+    /* 
+    max-width: 800px;
+    position: absolute;
+    top: 450px;
+    left: 1100px;
+    left: 13000px; */
   }
 
   .content {
