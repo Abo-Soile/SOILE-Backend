@@ -434,8 +434,6 @@ router.post('/experiment/:id/phase/:phase', function (request) {
 router.get('/experiment/:id/exit', function (request) {
   var userID = request.session.getPersonToken();
   var expID = request.params().get('id');
-  var position = 0;
-  var totalPhases = 0;
 
   if (request.session.loggedIn()) {
     userID = request.session.getUserId();
@@ -443,13 +441,13 @@ router.get('/experiment/:id/exit', function (request) {
 
   //completing all phases
   experimentDAO.get(expID, function (exp) {
-    totalPhases = exp.components.length;
+    var totalPhases = exp.components.length;
 
     if (exp.exitButton) {
       dataDAO.get(
         { userid: userID, expId: expID, type: 'general' },
         function (userdata) {
-          position = userdata.position;
+          var position = userdata.position;
 
           var dataObj = new dataModel();
 
@@ -465,17 +463,18 @@ router.get('/experiment/:id/exit', function (request) {
 
             position += 1;
           }
+          var url = request.absoluteExternalURI();
+        
+          var cut = url.indexOf('/exit');
+          var pathPhase = '/phase/' + position
+          var path = (position === totalPhases) ? '/end' : pathPhase;
+          url = url.substr(0, cut) + path;
+        
+          return request.redirect(url);
         }
       );
     }
   });
-  var url = request.absoluteExternalURI();
-
-  var cut = url.indexOf('/exit');
-  var path = (position === totalPhases) ? '/end' : + '/phase/' + position;
-  url = url.substr(0, cut) + path;
-
-  return request.redirect(url);
 });
 
 router.post('/experiment/:id/phase/:phase/video', function (request) {

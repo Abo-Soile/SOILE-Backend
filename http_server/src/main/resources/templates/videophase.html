@@ -20,7 +20,6 @@
     <!-- <title>VideoPhase</title>
     <h1>{config.file}</h1> -->
     <div class="content">
-      <div id="warning"></div>
       <div id="videomessage" style="display: none"></div>
 
       <div class="col-md-12 text-center">
@@ -30,11 +29,11 @@
         <h1 id="preview-title"></h1>
         <p id="preview-instructions"></p>
         <video id="camera-preview" autoplay muted></video>
-        <h1 id="title" style="visibility: hidden;"></h1>
-        <p id="text" style="visibility: hidden;"></p>
+        <h1 id="title" style="display: none"></h1>
+        <p id="text" style="display: none"></p>
         <br>
-        <button class="btn btn-lg btn-primary" id="start-button"></button>
-        <button class="btn btn-lg btn-primary" id="record-button" style="visibility: hidden"></button>
+        <button class="btn btn-lg btn-primary" id="start-button" style="display: none"></button>
+        <button class="btn btn-lg btn-primary" id="record-button" style="display: none"></button>
       </div>
     </div>
 
@@ -47,7 +46,9 @@
         {phasesLeft}
       </div>
     </div>
-    <a class="btn btn-sm btn-primary" id="exit-button" href="{exitUrl}" role="button" style="visibility: {exitButton}">{exitButtonLable}</a>
+  </div>
+  <div class="row-md text-right">
+    <a class="btn btn-sm btn-primary" id="exit-button" href="{exitUrl}" role="button" style="visibility:{exitButton}; margin-right:30px;">{exitButtonLable}</a>
   </div>
 
   {?testConfig}
@@ -84,7 +85,7 @@
   .content {
     margin-left: 10%;
     margin-right: 10%;
-    min-height: 700px;
+    min-height: 400px;
   }
 </style>
 {>footer /}

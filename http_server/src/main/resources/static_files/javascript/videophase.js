@@ -86,7 +86,7 @@ async function videophase() {
   //Startbutton
   const startButton = document.querySelector('#start-button');
   startButton.innerHTML = config.button || 'Start';
-  startButton.style.display = 'true';
+  startButton.style.display = 'initial';
 
   const preview = document.querySelector('#camera-preview');
   const previewInsructions = document.querySelector('#preview-instructions');
@@ -165,16 +165,16 @@ async function videophase() {
     });
     mainVideo.style.display = 'none';
     if(config.textAfterVideo){
-      text.style.visibility = 'visible';
+      text.style.display = 'inherit';
       text.innerHTML = config.textAfterVideo;
     }
     if(config.textAfterVideoTitle){
-      title.style.visibility = 'visible';
+      title.style.display = 'inherit';
       title.innerHTML = config.textAfterVideoTitle;
     }
 
     recordButton.innerHTML = config.startRecordButton || 'Start recording';
-    recordButton.style.visibility = 'visible';
+    recordButton.style.display = 'initial';
     // Wait until the button was clicked
     await new Promise((resolve, reject) => {
       recordButton.addEventListener('click', (event) => resolve());
@@ -190,7 +190,7 @@ async function videophase() {
     });
 
     const data = await stop();
-    recordButton.style.visibility = 'hidden';
+    recordButton.style.display = 'none';
 
     const recordedBlob = new Blob(data, {
       type: mediaRecorderOptions.mimeType
@@ -215,11 +215,11 @@ async function videophase() {
   //send recorded data
   if (config.recordingAfterVideo || config.recordingOnStart) {
     if(config.loadingText){
-      text.style.visibility = 'visible';
+      text.style.display = 'inherit';
       text.innerHTML = config.loadingText;
     }
     if(config.loadingTextTitle){
-      title.style.visibility = 'visible';
+      title.style.display = 'inherit';
       title.innerHTML = config.loadingTextTitle;
     }
     try {
