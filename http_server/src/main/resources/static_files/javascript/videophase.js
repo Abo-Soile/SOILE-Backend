@@ -93,6 +93,7 @@ async function videophase() {
   const previewTitle = document.querySelector('#preview-title');
   const text = document.querySelector('#text')
   const title = document.querySelector('#title')
+  const recordingText = document.querySelector('#recording-text')
 
   let stream = null;
   //gets camera stream.
@@ -103,26 +104,26 @@ async function videophase() {
     }
     return stream;
   }
+  
+    previewInsructions.innerHTML = config.previewInstructions || '';
+    previewTitle.innerHTML = config.previewInstructionsTitle || '';
 
   //show preview
   if (config.showVideoPreview) {
     preview.srcObject = await getStream();
     preview.captureStream = preview.captureStream || preview.mozCaptureStream;
 
-    previewInsructions.innerHTML = config.previewInstructions || '';
-    previewTitle.innerHTML = config.previewInstructionsTitle || '';
-
     await new Promise((resolve) => (preview.onplaying = resolve));
   } else {
     preview.style.display = 'None';
-    previewInsructions.style.display = 'None';
-    previewTitle.style.display = 'None';
   }
-  // Wait until the button was clicked
+  // Wait until the start button was clicked
   await new Promise((resolve, reject) => {
     startButton.addEventListener('click', (event) => resolve());
   });
-
+  previewInsructions.style.display = 'None';
+  previewTitle.style.display = 'None';
+  
   if (config.fullScreen) {
     await openFullscreen();
   }
@@ -134,18 +135,20 @@ async function videophase() {
 
   //showVideo
   const mainVideo = document.querySelector('#main-video');
-  mainVideo.style.display = '';
+  mainVideo.style.display = 'initial';
   mainVideo.play();
 
   //Record during video
   if (config.recordingOnStart) {
     const stop = await startRecording(await getStream(), 0);
+    recordingText.style.display = 'inherit';
 
     await new Promise((resolve, reject) => {
       mainVideo.addEventListener('ended', (event) => resolve());
     });
 
     const data = await stop();
+    recordingText.style.display = 'none';
 
     const recordedBlob = new Blob(data, {
       type: mediaRecorderOptions.mimeType
@@ -181,6 +184,7 @@ async function videophase() {
     });
 
     const stop = await startRecording(await getStream(), 0);
+    recordingText.style.display = 'inherit';
 
     recordButton.innerHTML = config.stopRecordButton || 'Stop recording';
 
@@ -190,6 +194,7 @@ async function videophase() {
     });
 
     const data = await stop();
+    recordingText.style.display = 'none';
     recordButton.style.display = 'none';
 
     const recordedBlob = new Blob(data, {

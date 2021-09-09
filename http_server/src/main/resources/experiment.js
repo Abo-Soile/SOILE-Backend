@@ -361,6 +361,7 @@ router.get('/experiment/:id/phase/:phase', function (request) {
               context.testConfig.recordAudioOnly = phase.recordAudioOnly;
               context.testConfig.showVideoPreview = phase.showVideoPreview;
               context.testConfig.fullScreen = phase.fullScreen;
+              context.testConfig.recordingText = phase.recordingText;
 
               context.testConfig.startRecordButton = phase.startRecordButton;
               context.testConfig.stopRecordButton = phase.stopRecordButton;
