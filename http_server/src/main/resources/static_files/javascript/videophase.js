@@ -107,6 +107,9 @@ async function videophase() {
   
     previewInsructions.innerHTML = config.previewInstructions || '';
     previewTitle.innerHTML = config.previewInstructionsTitle || '';
+    if(config.previewInstructionsTitle === '-'){
+      previewTitle.style.display = 'None';
+    }
 
   //show preview
   if (config.showVideoPreview) {
@@ -121,8 +124,6 @@ async function videophase() {
   await new Promise((resolve, reject) => {
     startButton.addEventListener('click', (event) => resolve());
   });
-  previewInsructions.style.display = 'None';
-  previewTitle.style.display = 'None';
   
   if (config.fullScreen) {
     await openFullscreen();
@@ -141,14 +142,12 @@ async function videophase() {
   //Record during video
   if (config.recordingOnStart) {
     const stop = await startRecording(await getStream(), 0);
-    recordingText.style.display = 'inherit';
 
     await new Promise((resolve, reject) => {
       mainVideo.addEventListener('ended', (event) => resolve());
     });
 
     const data = await stop();
-    recordingText.style.display = 'none';
 
     const recordedBlob = new Blob(data, {
       type: mediaRecorderOptions.mimeType
@@ -171,7 +170,7 @@ async function videophase() {
       text.style.display = 'inherit';
       text.innerHTML = config.textAfterVideo;
     }
-    if(config.textAfterVideoTitle){
+    if(config.textAfterVideoTitle && config.textAfterVideoTitle !== '-'){
       title.style.display = 'inherit';
       title.innerHTML = config.textAfterVideoTitle;
     }
@@ -223,9 +222,11 @@ async function videophase() {
       text.style.display = 'inherit';
       text.innerHTML = config.loadingText;
     }
-    if(config.loadingTextTitle){
+    if(config.loadingTextTitle && config.loadingTextTitle !== '-'){
       title.style.display = 'inherit';
       title.innerHTML = config.loadingTextTitle;
+    } else if (config.loadingTextTitle === '-') {
+      title.style.display = 'None';
     }
     try {
       await fetch(document.URL + '/video', {
