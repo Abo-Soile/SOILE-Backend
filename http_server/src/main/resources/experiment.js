@@ -479,6 +479,8 @@ router.get('/experiment/:id/exit', function (request) {
 });
 
 router.post('/experiment/:id/phase/:phase/video', function (request) {
+  //this count is used when there is multiple files uploaded
+  var count = 0;
   request.expectMultiPart(true);
 
   var expID = request.params().get('id');
@@ -513,7 +515,11 @@ router.post('/experiment/:id/phase/:phase/video', function (request) {
       '_' +
       'p_' +
       phase +
+      '_' +
+      count +
       '.webm';
+
+      count += 1;
     //var path = testImages + "/" + id +"/" + upload.filename()
     console.log('Uploading image to ' + path);
     upload.streamToFileSystem(path);
