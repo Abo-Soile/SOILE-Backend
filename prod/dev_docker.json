@@ -61,8 +61,8 @@
     "directory": "./static_files",
     "template_folder":"templates/",
     "debug":true,
-    "adminuser":"aalto_admin",
-    "adminpassword":"7AQkBjHZtwFV72",
+    "adminuser":"admin",
+    "adminpassword":"admin",
     "externalport":80,
     "externalURI": "soile.nbe.aalto.fi",
     "bindhost": "0.0.0.0"
