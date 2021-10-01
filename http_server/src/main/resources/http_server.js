@@ -612,14 +612,39 @@ customMatcher.get('/', function(request) {
 });
 
 
+
+
+// Check whether user is logged in, if they want to access images or other things under exp_video_upload
+customMatcher.allWithRegEx('^/exp_video_upload.*\.(png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff|json|mp4|webm)$', function(request) {
+  //logHttp(request);  
+	if (request.session.loggedIn()) {
+			request.response.sendFile(utils.file_from_serverdir(request.path()));	
+		}
+	else {
+		request.unauthorized();
+  		
+		}
+
+});
+
+
+
 /*
   Matches static files. Uses the normal routmatcher so that session stuff is
   ignored when sending static files.
 */
-customMatcher.routeMatcher.allWithRegEx('.*\.(html|htm|css|js|png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff|json|mp4|webm)$', function(request) {
+
+//Match any image or data file that is not part of exp_video_upload
+customMatcher.routeMatcher.allWithRegEx('^(?!/exp_video_upload).*\.(png|jpg|jpeg|gif|ico|md|wof|ttf|svg|woff|json|mp4|webm)$', function(request) {
+  //logHttp(request); 
+  request.response.sendFile(utils.file_from_serverdir(request.path()));
+});
+
+customMatcher.routeMatcher.allWithRegEx('.*\.(html|htm|css|js)$', function(request) {
   //logHttp(request);
 
   request.response.sendFile(utils.file_from_serverdir(request.path()));
+
 });
 
 /*
