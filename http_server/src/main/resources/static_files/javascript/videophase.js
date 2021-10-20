@@ -205,9 +205,8 @@ async function videophase() {
   //ends the video stream
   if (stream !== null) {
     stream.getTracks().forEach((track) => track.stop());
-    preview.style.display = 'none';
   }
-
+  mainVideo.style.display = 'none';
   let timer = null;
   //set feedback timer
   if(config.minLoadingTime && !isNaN(config.minLoadingTime) && Number(config.minLoadingTime)>0){
