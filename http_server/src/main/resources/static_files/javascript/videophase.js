@@ -206,6 +206,7 @@ async function videophase() {
   if (stream !== null) {
     stream.getTracks().forEach((track) => track.stop());
   }
+  
   mainVideo.style.display = 'none';
   let timer = null;
   //set feedback timer
