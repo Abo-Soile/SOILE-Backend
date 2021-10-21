@@ -134,33 +134,37 @@ async function videophase() {
   previewInsructions.style.display = 'None';
   previewTitle.style.display = 'None';
 
-  //showVideo
   const mainVideo = document.querySelector('#main-video');
-  mainVideo.style.display = 'initial';
-  mainVideo.play();
-
-  //Record during video
-  if (config.recordingOnStart) {
-    const stop = await startRecording(await getStream(), 0);
-
-    await new Promise((resolve, reject) => {
-      mainVideo.addEventListener('ended', (event) => resolve());
-    });
-
-    const data = await stop();
-
-    const recordedBlob = new Blob(data, {
-      type: mediaRecorderOptions.mimeType
-    });
-
-    dataToStore.append('data', recordedBlob);
+  
+  if(config.file){
+    //showVideo
+    mainVideo.style.display = 'initial';
+    mainVideo.play();
+    
+    //Record during video
+    if (config.recordingOnStart) {
+      const stop = await startRecording(await getStream(), 0);
+      
+      await new Promise((resolve, reject) => {
+        mainVideo.addEventListener('ended', (event) => resolve());
+      });
+      
+      const data = await stop();
+      
+      const recordedBlob = new Blob(data, {
+        type: mediaRecorderOptions.mimeType
+      });
+      
+      dataToStore.append('data', recordedBlob);
+    }//if (config.recordingOnStart)
   }
-  //Record after video
+
+    //Record after video
   if (config.recordingAfterVideo) {
     const recordButton = document.querySelector('#record-button');
 
     await new Promise((resolve, reject) => {
-      if (mainVideo.ended) {
+      if (mainVideo.ended || !config.file) {
         resolve();
       }
       mainVideo.addEventListener('ended', (event) => resolve());
@@ -201,7 +205,7 @@ async function videophase() {
     });
 
     dataToStore.append('data', recordedBlob);
-  }
+  }//  if (config.recordingAfterVideo) 
   //ends the video stream
   if (stream !== null) {
     stream.getTracks().forEach((track) => track.stop());

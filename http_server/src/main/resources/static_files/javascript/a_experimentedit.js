@@ -172,12 +172,11 @@ app.controller('experimentController', function ($scope, $http, $location, FileU
       });
     };
 
-  $scope.addVideo = function (filename) {
+  $scope.addVideoPhase = function () {
 
     var compObject = {};
     compObject.name = "VideoPhase";
     compObject.type = "video";
-    compObject.videofile = filename;
     compObject.record = "true";
 
     $scope.experiment.components.push(compObject);
@@ -186,9 +185,27 @@ app.controller('experimentController', function ($scope, $http, $location, FileU
 
   };
 
+  $scope.addVideo = function (filename, index) {
+    $scope.experiment.components[index].videofile = filename;
+    
+    $scope.save();
+  }
 
-  $scope.uploadFile = function (files) {
+  $scope.delVideo = function (index) {
+    $scope.experiment.components[index].videofile = false;
+    
+    $scope.save();
+    }
+
+
+  $scope.uploadFile = function (files, index) {
     var fd = new FormData();
+    //if there is no file
+    if(files.length == 0){
+      //sets component's videofile to false
+      $scope.addVideo(false, index);
+      return;
+    }
     //Take the first selected file
     fd.append("file", files[0]);
 
@@ -198,7 +215,7 @@ app.controller('experimentController', function ($scope, $http, $location, FileU
       headers: { 'Content-Type': undefined },
       transformRequest: angular.identity
     }).success(function(res) {
-        $scope.addVideo(res.video)
+        $scope.addVideo(res.video, index)
     }).error(function(err) {
       console.log("Something didnt work")
     });

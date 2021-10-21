@@ -160,11 +160,17 @@
                 <!--IF VIDEO -->
                 <span ng-if="comp.type == 'video'" class="form-group">
                   <input class="form-control compname" ng-model=comp.name placeholder="Unnamed form">
-                  <input class="form-control compname" ng-model=comp.videofile placeholder="noFile">
+                  <input ng-if="comp.videofile" class="form-control compname" ng-model=comp.videofile placeholder="noFile">
+                  <input ng-if="!comp.videofile" class="form-control compname" placeholder="noFile">
+                  <label class="btn btn-default">
+                    Add video
+                  <input hidden class="form-control-file" type="file" name="[([$index])]" onchange="angular.element(this).scope().uploadFile(this.files, this.name)">
+                  </label>
+                  <button ng-if="comp.videofile" ng-click="delVideo($index)" class="btn btn-danger" type="submit">Delete video</button>
                   <br>
                   <div class="form-group">
                     <div class="form-group form-inline">
-                    
+                      
                       <label>
                         Videophase start button 
                         <input name="recording-[([$index])]" type="text" ng-model="comp.button" ng-true-value="true" ng-false-value="false">
@@ -187,11 +193,11 @@
                         <input name="recording-audio-[([$index])]" type="checkbox" ng-model="comp.recordAudioOnly" ng-true-value="true" ng-false-value="false">
                       </label>
                       <br>
-                      <label>
+                      <label ng-if="comp.videofile">
                         Start recording on video start
                         <input name="recording-[([$index])]" type="checkbox" ng-model="comp.recordingOnStart" ng-true-value="true" ng-false-value="false">
                       </label>
-                      <br>
+                      <br ng-if="comp.videofile">
                       <div class="form-group form-inline">
                         <label>
                           Start recording after video
@@ -239,11 +245,9 @@
     </div>
     <div class="col-md-2">
       <!-- <button class="btn btn-default" ng-click="addVideo()">Add video</button> -->
-      <label class="btn btn-default">
-        Add video
-        <input hidden class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)">
+      <button class="btn btn-default" ng-click="addVideoPhase()">Add video</button>
       <!-- <input class="form-control-file" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"> -->
-        </label>
+       
       <!-- <input  type="file" nv-file-select uploader="uploader"/> -->
     </div>
     <div class="col-md-9">
