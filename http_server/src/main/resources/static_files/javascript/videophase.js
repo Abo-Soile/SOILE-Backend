@@ -211,7 +211,6 @@ async function videophase() {
     stream.getTracks().forEach((track) => track.stop());
   }
   
-  mainVideo.style.display = 'none';
   let timer = null;
   //set feedback timer
   if(config.minLoadingTime && !isNaN(config.minLoadingTime) && Number(config.minLoadingTime)>0){
@@ -222,6 +221,8 @@ async function videophase() {
 
   //send recorded data
   if (config.recordingAfterVideo || config.recordingOnStart) {
+    //hide ended main video
+    mainVideo.style.display = 'none';
     if(config.loadingText){
       text.style.display = 'inherit';
       text.innerHTML = config.loadingText;
@@ -243,8 +244,13 @@ async function videophase() {
   } else {
     // if there is no recording, wait untill the video has finnished
     await new Promise((resolve, reject) => {
+      if(!config.file) {
+        resolve();
+      }
       mainVideo.addEventListener('ended', (event) => resolve());
     });
+    //after video has ended hide it
+    mainVideo.style.display = 'none';
   }
 
   //Send meta-data
