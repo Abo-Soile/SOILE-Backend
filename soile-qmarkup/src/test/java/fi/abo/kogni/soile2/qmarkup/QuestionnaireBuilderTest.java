@@ -64,7 +64,7 @@ public class QuestionnaireBuilderTest extends TestCase {
     public void testIf() throws Exception {
         String result = buildForm("testIf.qmarkup");
         System.out.println(result);
-        assertFalse(succeeded);
+        assertTrue(succeeded);
 
     }
 
