@@ -1,19 +1,18 @@
 package fi.abo.kogni.soile2.qmarkup;
 
-// import com.sun.org.apache.xpath.internal.operations.Bool;
-import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
-import junit.framework.TestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+// import com.sun.org.apache.xpath.internal.operations.Bool;
+import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
+import junit.framework.TestCase;
 
 public class QuestionnaireBuilderTest extends TestCase {
 
@@ -22,7 +21,7 @@ public class QuestionnaireBuilderTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-       String template = ".\\soile-qmarkup\\tests\\resources\\questionnaire_embedded.stg";
+       String template = "questionnaire_embedded.stg";
        builder = new QuestionnaireBuilder(template);
 
        succeeded = true;
@@ -35,35 +34,35 @@ public class QuestionnaireBuilderTest extends TestCase {
 
     @Test
     public void testTitle() throws Exception {
-        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\titleTest.qmarkup");
+        String result = buildForm("titleTest.qmarkup");
         System.out.println(result);
         assertTrue(succeeded);
     }
 
     @Test
          public void testAllWidgets() throws Exception {
-        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\fullWidgetTest.qmarkup");
+        String result = buildForm("fullWidgetTest.qmarkup");
         //System.out.println(result);
         assertTrue(succeeded);
     }
 
     @Test
     public void testPilotForm() throws Exception {
-        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\pilotform.qmarkup");
+        String result = buildForm("pilotform.qmarkup");
         System.out.println(result);
         assertTrue(succeeded);
     }
 
     @Test
     public void testFailure() throws Exception {
-        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\failTest.qmarkup");
+        String result = buildForm("failTest.qmarkup");
         //System.out.println(result);
         assertFalse(succeeded);
     }
 
     @Test
     public void testIf() throws Exception {
-        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\testIf.qmarkup");
+        String result = buildForm("testIf.qmarkup");
         System.out.println(result);
         assertFalse(succeeded);
 
@@ -71,7 +70,7 @@ public class QuestionnaireBuilderTest extends TestCase {
 
     @Test
     public void testTemplateIf() throws Exception {
-        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\testTemplateIf.qmarkup");
+        String result = buildForm("testTemplateIf.qmarkup");
         System.out.println(result);
         assertTrue(succeeded);
 
@@ -79,7 +78,7 @@ public class QuestionnaireBuilderTest extends TestCase {
 
     @Test
     public void testNumberFieldEmpty() throws Exception {
-        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\testNumberField.qmarkup");
+        String result = buildForm("testNumberField.qmarkup");
         System.out.println(result);
         assertTrue(succeeded);
 
@@ -87,7 +86,7 @@ public class QuestionnaireBuilderTest extends TestCase {
 
     @Test
     public void testRadioOptional() throws Exception {
-        String result = buildForm(".\\soile-qmarkup\\tests\\resources\\testRadioOptional.qmarkup");
+        String result = buildForm("testRadioOptional.qmarkup");
         System.out.println(result);
         assertTrue(succeeded);
 
@@ -95,7 +94,8 @@ public class QuestionnaireBuilderTest extends TestCase {
 
 
     public String buildForm(String testPath) throws IOException {
-        InputReader reader = new InputReader(readFile(testPath, Charset.defaultCharset()));
+    	URL resource = this.getClass().getClassLoader().getResource(testPath);
+        InputReader reader = new InputReader(readFile(resource.getFile(), Charset.defaultCharset()));
         reader.addListener(builder);
 
         String output ="";
