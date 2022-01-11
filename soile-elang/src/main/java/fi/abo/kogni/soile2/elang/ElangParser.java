@@ -1,5 +1,6 @@
-// Generated from C:/Users/Danno/soileIDEA/soile2/soile-elang/src/fi/abo/kogni/soile2/elang\Elang.g4 by ANTLR 4.5.1
+// Generated from Elang.g4 by ANTLR 4.9.3
 package fi.abo.kogni.soile2.elang;
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ElangParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.5.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.9.3", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -42,39 +43,48 @@ public class ElangParser extends Parser {
 		RULE_transitions = 40, RULE_startTransition = 41, RULE_otherTransitions = 42, 
 		RULE_finalTransition = 43, RULE_transition = 44, RULE_transitionSrc = 45, 
 		RULE_transitionTo = 46, RULE_transitionCond = 47, RULE_number = 48, RULE_string = 49;
-	public static final String[] ruleNames = {
-		"file", "toplevelStmt", "gvarDef", "valDef", "functionDef", "functionDefParams", 
-		"functionDefParam", "functionBody", "fvarDefs", "fvarDef", "varDefs", 
-		"varDef", "block", "expr", "identifier", "literal", "functionCall", "functionIdentifier", 
-		"functionCallParams", "object", "array", "pair", "stmt", "stmtAssign", 
-		"stmtContinue", "stmtBreak", "stmtReturn", "stmtIfElse", "stmtIf", "stmtWhile", 
-		"phaseDefs", "phaseDef", "informationPhase", "intermezzoPhase", "interactionPhase", 
-		"phaseSetVar", "phaseSetVarValue", "phaseFunctionDef", "phaseFunctionBody", 
-		"transitionDefs", "transitions", "startTransition", "otherTransitions", 
-		"finalTransition", "transition", "transitionSrc", "transitionTo", "transitionCond", 
-		"number", "string"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"file", "toplevelStmt", "gvarDef", "valDef", "functionDef", "functionDefParams", 
+			"functionDefParam", "functionBody", "fvarDefs", "fvarDef", "varDefs", 
+			"varDef", "block", "expr", "identifier", "literal", "functionCall", "functionIdentifier", 
+			"functionCallParams", "object", "array", "pair", "stmt", "stmtAssign", 
+			"stmtContinue", "stmtBreak", "stmtReturn", "stmtIfElse", "stmtIf", "stmtWhile", 
+			"phaseDefs", "phaseDef", "informationPhase", "intermezzoPhase", "interactionPhase", 
+			"phaseSetVar", "phaseSetVarValue", "phaseFunctionDef", "phaseFunctionBody", 
+			"transitionDefs", "transitions", "startTransition", "otherTransitions", 
+			"finalTransition", "transition", "transitionSrc", "transitionTo", "transitionCond", 
+			"number", "string"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, "'information-phase'", "'intermezzo-phase'", "'interaction-phase'", 
-		null, "'+'", "'-'", "'*'", "'/'", "'<'", "'>'", "'='", "'!'", "'-\"-'", 
-		"'<-'", "'->'", "'{'", "'}'", "'['", "']'", "'break'", "':'", "','", "'continue'", 
-		"'do'", "'.'", "'else'", "'end'", "'false'", "'function'", "'fvar'", "'gvar'", 
-		"'#'", "'if'", "'no'", "'nothing'", "'null'", "'('", "')'", "'?'", "'\"'", 
-		"'return'", "'then'", "'final'", "'transition'", "'start'", "'true'", 
-		"'val'", "'var'", "'while'", "'yes'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, "DOCQUOTE", "SFN_PLUS", "SFN_MINUS", "SFN_MULTIPLY", 
-		"SFN_DIVIDE", "SFN_LESSTHAN", "SFN_GREATERTHAN", "SFN_EQUAL", "SFN_NEGATE", 
-		"T_TRANSNAMEREPEAT", "T_ARROWLEFT", "T_ARROWRIGHT", "T_BRACELEFT", "T_BRACERIGHT", 
-		"T_BRACKETLEFT", "T_BRACKETRIGHT", "T_BREAK", "T_COLON", "T_COMMA", "T_CONTINUE", 
-		"T_DO", "T_DOT", "T_ELSE", "T_END", "T_FALSE", "T_FUNCTION", "T_FVAR", 
-		"T_GVAR", "T_HASH", "T_IF", "T_NO", "T_NOTHING", "T_NULL", "T_PARENLEFT", 
-		"T_PARENRIGHT", "T_QMARK", "T_QUOTE", "T_RETURN", "T_THEN", "T_TRANSFINAL", 
-		"T_TRANSITION", "T_TRANSSTART", "T_TRUE", "T_VAL", "T_VAR", "T_WHILE", 
-		"T_YES", "ID", "NUMBER", "STRING", "COMMENT", "WS", "NL"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "'information-phase'", "'intermezzo-phase'", "'interaction-phase'", 
+			null, "'+'", "'-'", "'*'", "'/'", "'<'", "'>'", "'='", "'!'", "'-\"-'", 
+			"'<-'", "'->'", "'{'", "'}'", "'['", "']'", "'break'", "':'", "','", 
+			"'continue'", "'do'", "'.'", "'else'", "'end'", "'false'", "'function'", 
+			"'fvar'", "'gvar'", "'#'", "'if'", "'no'", "'nothing'", "'null'", "'('", 
+			"')'", "'?'", "'\"'", "'return'", "'then'", "'final'", "'transition'", 
+			"'start'", "'true'", "'val'", "'var'", "'while'", "'yes'"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, null, null, null, "DOCQUOTE", "SFN_PLUS", "SFN_MINUS", "SFN_MULTIPLY", 
+			"SFN_DIVIDE", "SFN_LESSTHAN", "SFN_GREATERTHAN", "SFN_EQUAL", "SFN_NEGATE", 
+			"T_TRANSNAMEREPEAT", "T_ARROWLEFT", "T_ARROWRIGHT", "T_BRACELEFT", "T_BRACERIGHT", 
+			"T_BRACKETLEFT", "T_BRACKETRIGHT", "T_BREAK", "T_COLON", "T_COMMA", "T_CONTINUE", 
+			"T_DO", "T_DOT", "T_ELSE", "T_END", "T_FALSE", "T_FUNCTION", "T_FVAR", 
+			"T_GVAR", "T_HASH", "T_IF", "T_NO", "T_NOTHING", "T_NULL", "T_PARENLEFT", 
+			"T_PARENRIGHT", "T_QMARK", "T_QUOTE", "T_RETURN", "T_THEN", "T_TRANSFINAL", 
+			"T_TRANSITION", "T_TRANSSTART", "T_TRUE", "T_VAL", "T_VAR", "T_WHILE", 
+			"T_YES", "ID", "NUMBER", "STRING", "COMMENT", "WS", "NL"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -124,6 +134,7 @@ public class ElangParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class FileContext extends ParserRuleContext {
 		public PhaseDefsContext phaseDefs() {
 			return getRuleContext(PhaseDefsContext.class,0);
@@ -181,6 +192,7 @@ public class ElangParser extends Parser {
 			setState(106);
 			phaseDefs();
 			setState(108);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T_TRANSITION) {
 				{
@@ -240,6 +252,7 @@ public class ElangParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(115);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T_GVAR:
 				{
@@ -276,9 +289,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class GvarDefContext extends ParserRuleContext {
+		public TerminalNode T_GVAR() { return getToken(ElangParser.T_GVAR, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_ARROWLEFT() { return getToken(ElangParser.T_ARROWLEFT, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -329,9 +344,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class ValDefContext extends ParserRuleContext {
+		public TerminalNode T_VAL() { return getToken(ElangParser.T_VAL, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_ARROWLEFT() { return getToken(ElangParser.T_ARROWLEFT, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -382,12 +399,16 @@ public class ElangParser extends Parser {
 	}
 
 	public static class FunctionDefContext extends ParserRuleContext {
+		public TerminalNode T_FUNCTION() { return getToken(ElangParser.T_FUNCTION, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_PARENLEFT() { return getToken(ElangParser.T_PARENLEFT, 0); }
+		public TerminalNode T_PARENRIGHT() { return getToken(ElangParser.T_PARENRIGHT, 0); }
 		public FunctionBodyContext functionBody() {
 			return getRuleContext(FunctionBodyContext.class,0);
 		}
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public FunctionDefParamsContext functionDefParams() {
 			return getRuleContext(FunctionDefParamsContext.class,0);
 		}
@@ -424,6 +445,7 @@ public class ElangParser extends Parser {
 			setState(129);
 			match(T_PARENLEFT);
 			setState(131);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ID) {
 				{
@@ -592,6 +614,7 @@ public class ElangParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(147);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T_FVAR) {
 				{
@@ -601,6 +624,7 @@ public class ElangParser extends Parser {
 			}
 
 			setState(150);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T_VAR) {
 				{
@@ -685,9 +709,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class FvarDefContext extends ParserRuleContext {
+		public TerminalNode T_FVAR() { return getToken(ElangParser.T_FVAR, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_ARROWLEFT() { return getToken(ElangParser.T_ARROWLEFT, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -798,9 +824,11 @@ public class ElangParser extends Parser {
 	}
 
 	public static class VarDefContext extends ParserRuleContext {
+		public TerminalNode T_VAR() { return getToken(ElangParser.T_VAR, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_ARROWLEFT() { return getToken(ElangParser.T_ARROWLEFT, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -944,6 +972,7 @@ public class ElangParser extends Parser {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode T_DOT() { return getToken(ElangParser.T_DOT, 0); }
 		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
 		public ExprProprefContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
@@ -964,9 +993,11 @@ public class ElangParser extends Parser {
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_BRACKETLEFT() { return getToken(ElangParser.T_BRACKETLEFT, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode T_BRACKETRIGHT() { return getToken(ElangParser.T_BRACKETRIGHT, 0); }
 		public ExprIndexingContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1037,6 +1068,7 @@ public class ElangParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(188);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 			case 1:
 				{
@@ -1174,6 +1206,7 @@ public class ElangParser extends Parser {
 		}
 	}
 	public static class NothingLiteralContext extends LiteralContext {
+		public TerminalNode T_NOTHING() { return getToken(ElangParser.T_NOTHING, 0); }
 		public NothingLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1228,6 +1261,8 @@ public class ElangParser extends Parser {
 		}
 	}
 	public static class BooleanLiteralContext extends LiteralContext {
+		public TerminalNode T_TRUE() { return getToken(ElangParser.T_TRUE, 0); }
+		public TerminalNode T_FALSE() { return getToken(ElangParser.T_FALSE, 0); }
 		public BooleanLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1244,6 +1279,8 @@ public class ElangParser extends Parser {
 		}
 	}
 	public static class YesNoLiteralContext extends LiteralContext {
+		public TerminalNode T_YES() { return getToken(ElangParser.T_YES, 0); }
+		public TerminalNode T_NO() { return getToken(ElangParser.T_NO, 0); }
 		public YesNoLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1279,6 +1316,7 @@ public class ElangParser extends Parser {
 		}
 	}
 	public static class NullLiteralContext extends LiteralContext {
+		public TerminalNode T_NULL() { return getToken(ElangParser.T_NULL, 0); }
 		public NullLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1319,6 +1357,7 @@ public class ElangParser extends Parser {
 		enterRule(_localctx, 30, RULE_literal);
 		try {
 			setState(210);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case STRING:
 				_localctx = new StringLiteralContext(_localctx);
@@ -1419,6 +1458,8 @@ public class ElangParser extends Parser {
 		public FunctionIdentifierContext functionIdentifier() {
 			return getRuleContext(FunctionIdentifierContext.class,0);
 		}
+		public TerminalNode T_PARENLEFT() { return getToken(ElangParser.T_PARENLEFT, 0); }
+		public TerminalNode T_PARENRIGHT() { return getToken(ElangParser.T_PARENRIGHT, 0); }
 		public FunctionCallParamsContext functionCallParams() {
 			return getRuleContext(FunctionCallParamsContext.class,0);
 		}
@@ -1453,6 +1494,7 @@ public class ElangParser extends Parser {
 			setState(213);
 			match(T_PARENLEFT);
 			setState(215);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T_BRACELEFT) | (1L << T_BRACKETLEFT) | (1L << T_FALSE) | (1L << T_NO) | (1L << T_NOTHING) | (1L << T_NULL) | (1L << T_TRUE) | (1L << T_YES) | (1L << ID) | (1L << NUMBER) | (1L << STRING))) != 0)) {
 				{
@@ -1583,6 +1625,8 @@ public class ElangParser extends Parser {
 	}
 
 	public static class ObjectContext extends ParserRuleContext {
+		public TerminalNode T_BRACELEFT() { return getToken(ElangParser.T_BRACELEFT, 0); }
+		public TerminalNode T_BRACERIGHT() { return getToken(ElangParser.T_BRACERIGHT, 0); }
 		public List<PairContext> pair() {
 			return getRuleContexts(PairContext.class);
 		}
@@ -1614,6 +1658,7 @@ public class ElangParser extends Parser {
 		int _la;
 		try {
 			setState(238);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -1661,6 +1706,8 @@ public class ElangParser extends Parser {
 	}
 
 	public static class ArrayContext extends ParserRuleContext {
+		public TerminalNode T_BRACKETLEFT() { return getToken(ElangParser.T_BRACKETLEFT, 0); }
+		public TerminalNode T_BRACKETRIGHT() { return getToken(ElangParser.T_BRACKETRIGHT, 0); }
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -1692,6 +1739,7 @@ public class ElangParser extends Parser {
 		int _la;
 		try {
 			setState(250);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -1740,6 +1788,7 @@ public class ElangParser extends Parser {
 
 	public static class PairContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
+		public TerminalNode T_COLON() { return getToken(ElangParser.T_COLON, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -1956,6 +2005,7 @@ public class ElangParser extends Parser {
 		enterRule(_localctx, 44, RULE_stmt);
 		try {
 			setState(264);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				_localctx = new ReturnStatementContext(_localctx);
@@ -2038,6 +2088,7 @@ public class ElangParser extends Parser {
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_ARROWLEFT() { return getToken(ElangParser.T_ARROWLEFT, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -2086,6 +2137,7 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtContinueContext extends ParserRuleContext {
+		public TerminalNode T_CONTINUE() { return getToken(ElangParser.T_CONTINUE, 0); }
 		public StmtContinueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2127,6 +2179,7 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtBreakContext extends ParserRuleContext {
+		public TerminalNode T_BREAK() { return getToken(ElangParser.T_BREAK, 0); }
 		public StmtBreakContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2168,6 +2221,7 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtReturnContext extends ParserRuleContext {
+		public TerminalNode T_RETURN() { return getToken(ElangParser.T_RETURN, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
@@ -2214,15 +2268,19 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtIfElseContext extends ParserRuleContext {
+		public TerminalNode T_IF() { return getToken(ElangParser.T_IF, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode T_THEN() { return getToken(ElangParser.T_THEN, 0); }
 		public List<BlockContext> block() {
 			return getRuleContexts(BlockContext.class);
 		}
 		public BlockContext block(int i) {
 			return getRuleContext(BlockContext.class,i);
 		}
+		public TerminalNode T_ELSE() { return getToken(ElangParser.T_ELSE, 0); }
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public StmtIfElseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2276,12 +2334,15 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtIfContext extends ParserRuleContext {
+		public TerminalNode T_IF() { return getToken(ElangParser.T_IF, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode T_THEN() { return getToken(ElangParser.T_THEN, 0); }
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public StmtIfContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2331,12 +2392,15 @@ public class ElangParser extends Parser {
 	}
 
 	public static class StmtWhileContext extends ParserRuleContext {
+		public TerminalNode T_WHILE() { return getToken(ElangParser.T_WHILE, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
+		public TerminalNode T_DO() { return getToken(ElangParser.T_DO, 0); }
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
+		public TerminalNode T_END() { return getToken(ElangParser.T_END, 0); }
 		public StmtWhileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2519,6 +2583,7 @@ public class ElangParser extends Parser {
 		enterRule(_localctx, 62, RULE_phaseDef);
 		try {
 			setState(305);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__0:
 				_localctx = new InformationPhaseDefContext(_localctx);
@@ -2733,6 +2798,7 @@ public class ElangParser extends Parser {
 
 	public static class PhaseSetVarContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(ElangParser.ID, 0); }
+		public TerminalNode T_COLON() { return getToken(ElangParser.T_COLON, 0); }
 		public PhaseSetVarValueContext phaseSetVarValue() {
 			return getRuleContext(PhaseSetVarValueContext.class,0);
 		}
@@ -2787,6 +2853,8 @@ public class ElangParser extends Parser {
 		public NumberContext number() {
 			return getRuleContext(NumberContext.class,0);
 		}
+		public TerminalNode T_TRUE() { return getToken(ElangParser.T_TRUE, 0); }
+		public TerminalNode T_FALSE() { return getToken(ElangParser.T_FALSE, 0); }
 		public PhaseSetVarValueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2811,6 +2879,7 @@ public class ElangParser extends Parser {
 		enterRule(_localctx, 72, RULE_phaseSetVarValue);
 		try {
 			setState(334);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case STRING:
 				enterOuterAlt(_localctx, 1);
@@ -2939,6 +3008,7 @@ public class ElangParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(341);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T_VAR) {
 				{
@@ -3016,6 +3086,10 @@ public class ElangParser extends Parser {
 		public StartTransitionContext startTransition() {
 			return getRuleContext(StartTransitionContext.class,0);
 		}
+		public List<TerminalNode> T_COMMA() { return getTokens(ElangParser.T_COMMA); }
+		public TerminalNode T_COMMA(int i) {
+			return getToken(ElangParser.T_COMMA, i);
+		}
 		public OtherTransitionsContext otherTransitions() {
 			return getRuleContext(OtherTransitionsContext.class,0);
 		}
@@ -3072,9 +3146,11 @@ public class ElangParser extends Parser {
 
 	public static class StartTransitionContext extends ParserRuleContext {
 		public TerminalNode T_TRANSSTART() { return getToken(ElangParser.T_TRANSSTART, 0); }
+		public TerminalNode T_PARENLEFT() { return getToken(ElangParser.T_PARENLEFT, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_PARENRIGHT() { return getToken(ElangParser.T_PARENRIGHT, 0); }
 		public StartTransitionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3127,6 +3203,10 @@ public class ElangParser extends Parser {
 		}
 		public TransitionContext transition(int i) {
 			return getRuleContext(TransitionContext.class,i);
+		}
+		public List<TerminalNode> T_COMMA() { return getTokens(ElangParser.T_COMMA); }
+		public TerminalNode T_COMMA(int i) {
+			return getToken(ElangParser.T_COMMA, i);
 		}
 		public OtherTransitionsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3189,9 +3269,11 @@ public class ElangParser extends Parser {
 
 	public static class FinalTransitionContext extends ParserRuleContext {
 		public TerminalNode T_TRANSFINAL() { return getToken(ElangParser.T_TRANSFINAL, 0); }
+		public TerminalNode T_PARENLEFT() { return getToken(ElangParser.T_PARENLEFT, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_PARENRIGHT() { return getToken(ElangParser.T_PARENRIGHT, 0); }
 		public FinalTransitionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3242,9 +3324,11 @@ public class ElangParser extends Parser {
 		public TransitionSrcContext transitionSrc() {
 			return getRuleContext(TransitionSrcContext.class,0);
 		}
+		public TerminalNode T_ARROWRIGHT() { return getToken(ElangParser.T_ARROWRIGHT, 0); }
 		public TransitionToContext transitionTo() {
 			return getRuleContext(TransitionToContext.class,0);
 		}
+		public TerminalNode T_IF() { return getToken(ElangParser.T_IF, 0); }
 		public TransitionCondContext transitionCond() {
 			return getRuleContext(TransitionCondContext.class,0);
 		}
@@ -3281,6 +3365,7 @@ public class ElangParser extends Parser {
 			setState(375);
 			transitionTo();
 			setState(378);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T_IF) {
 				{
@@ -3355,6 +3440,7 @@ public class ElangParser extends Parser {
 		enterRule(_localctx, 90, RULE_transitionSrc);
 		try {
 			setState(382);
+			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T_TRANSNAMEREPEAT:
 				_localctx = new TransitionSrcRepeatContext(_localctx);
@@ -3441,9 +3527,11 @@ public class ElangParser extends Parser {
 		}
 	}
 	public static class TransitionCondVarContext extends TransitionCondContext {
+		public TerminalNode T_PARENLEFT() { return getToken(ElangParser.T_PARENLEFT, 0); }
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TerminalNode T_PARENRIGHT() { return getToken(ElangParser.T_PARENRIGHT, 0); }
 		public TransitionCondVarContext(TransitionCondContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -3460,9 +3548,11 @@ public class ElangParser extends Parser {
 		}
 	}
 	public static class TransitionCondFcallContext extends TransitionCondContext {
+		public TerminalNode T_PARENLEFT() { return getToken(ElangParser.T_PARENLEFT, 0); }
 		public FunctionCallContext functionCall() {
 			return getRuleContext(FunctionCallContext.class,0);
 		}
+		public TerminalNode T_PARENRIGHT() { return getToken(ElangParser.T_PARENRIGHT, 0); }
 		public TransitionCondFcallContext(TransitionCondContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -3484,6 +3574,7 @@ public class ElangParser extends Parser {
 		enterRule(_localctx, 94, RULE_transitionCond);
 		try {
 			setState(394);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
 			case 1:
 				_localctx = new TransitionCondFcallContext(_localctx);
@@ -3622,7 +3713,7 @@ public class ElangParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3:\u0193\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3:\u0193\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -3651,12 +3742,12 @@ public class ElangParser extends Parser {
 		"\n,\f,\16,\u0171\13,\3-\3-\3-\3-\3-\3.\3.\3.\3.\3.\5.\u017d\n.\3/\3/\5"+
 		"/\u0181\n/\3\60\3\60\3\61\3\61\3\61\3\61\3\61\3\61\3\61\3\61\5\61\u018d"+
 		"\n\61\3\62\3\62\3\63\3\63\3\63\2\3\34\64\2\4\6\b\n\f\16\20\22\24\26\30"+
-		"\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bd\2\2\u0191\2i\3"+
-		"\2\2\2\4u\3\2\2\2\6w\3\2\2\2\b|\3\2\2\2\n\u0081\3\2\2\2\f\u008b\3\2\2"+
-		"\2\16\u0092\3\2\2\2\20\u0095\3\2\2\2\22\u009d\3\2\2\2\24\u00a1\3\2\2\2"+
-		"\26\u00a7\3\2\2\2\30\u00ab\3\2\2\2\32\u00b1\3\2\2\2\34\u00be\3\2\2\2\36"+
-		"\u00c8\3\2\2\2 \u00d4\3\2\2\2\"\u00d6\3\2\2\2$\u00dd\3\2\2\2&\u00df\3"+
-		"\2\2\2(\u00f0\3\2\2\2*\u00fc\3\2\2\2,\u00fe\3\2\2\2.\u010a\3\2\2\2\60"+
+		"\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bd\2\2\2\u0191\2i"+
+		"\3\2\2\2\4u\3\2\2\2\6w\3\2\2\2\b|\3\2\2\2\n\u0081\3\2\2\2\f\u008b\3\2"+
+		"\2\2\16\u0092\3\2\2\2\20\u0095\3\2\2\2\22\u009d\3\2\2\2\24\u00a1\3\2\2"+
+		"\2\26\u00a7\3\2\2\2\30\u00ab\3\2\2\2\32\u00b1\3\2\2\2\34\u00be\3\2\2\2"+
+		"\36\u00c8\3\2\2\2 \u00d4\3\2\2\2\"\u00d6\3\2\2\2$\u00dd\3\2\2\2&\u00df"+
+		"\3\2\2\2(\u00f0\3\2\2\2*\u00fc\3\2\2\2,\u00fe\3\2\2\2.\u010a\3\2\2\2\60"+
 		"\u010c\3\2\2\2\62\u0110\3\2\2\2\64\u0112\3\2\2\2\66\u0114\3\2\2\28\u0117"+
 		"\3\2\2\2:\u011f\3\2\2\2<\u0125\3\2\2\2>\u012c\3\2\2\2@\u0133\3\2\2\2B"+
 		"\u0135\3\2\2\2D\u013a\3\2\2\2F\u013f\3\2\2\2H\u0148\3\2\2\2J\u0150\3\2"+

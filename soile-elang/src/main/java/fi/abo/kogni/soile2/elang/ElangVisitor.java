@@ -1,5 +1,6 @@
-// Generated from C:/Users/Danno/soileIDEA/soile2/soile-elang/src/fi/abo/kogni/soile2/elang\Elang.g4 by ANTLR 4.5.1
+// Generated from Elang.g4 by ANTLR 4.9.3
 package fi.abo.kogni.soile2.elang;
+
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
