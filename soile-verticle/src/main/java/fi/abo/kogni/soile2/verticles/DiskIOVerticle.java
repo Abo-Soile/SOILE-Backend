@@ -1,17 +1,22 @@
-package fi.kogni.abo.soile2.verticles;
+package fi.abo.kogni.soile2.verticles;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.json.JsonObject;
 
-import fi.kogni.abo.soile2.handlers.VerticleMessageHandler;
+import fi.abo.kogni.soile2.handlers.VerticleMessageHandler;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 
 public final class DiskIOVerticle extends SoileVerticle {
 
+	
+	Logger privateLogger = Logger.getLogger("DiskIOVerticle");
+	
     @Override
     public void start() {
         handler = this.new Handler();
@@ -38,7 +43,7 @@ public final class DiskIOVerticle extends SoileVerticle {
             } catch (IOException e) {
                 String msg = String.format("DiskIOVerticle unable to write to file '%s': %s.", 
                         file.getAbsolutePath(), e.getMessage());
-                getLogger().error(msg);
+                privateLogger.log(Level.SEVERE,msg);
             }
         }
 

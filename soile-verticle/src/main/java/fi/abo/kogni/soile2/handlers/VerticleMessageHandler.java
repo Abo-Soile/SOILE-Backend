@@ -1,3 +1,3 @@
-package fi.kogni.abo.soile2.handlers;
+package fi.abo.kogni.soile2.handlers;
 
 public abstract class VerticleMessageHandler extends BaseHandler {}

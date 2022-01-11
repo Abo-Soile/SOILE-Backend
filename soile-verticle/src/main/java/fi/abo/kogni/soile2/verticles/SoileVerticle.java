@@ -1,14 +1,12 @@
-package fi.kogni.abo.soile2.verticles;
+package fi.abo.kogni.soile2.verticles;
 
-import org.vertx.java.core.eventbus.EventBus;
-import org.vertx.java.core.json.JsonObject;
-import org.vertx.java.core.logging.Logger;
-import org.vertx.java.platform.Verticle;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.json.JsonObject;
+import fi.abo.kogni.soile2.handlers.VerticleMessageHandler;
+import fi.abo.kogni.soile2.handlers.VerticleReplyHandler;
+import io.vertx.core.AbstractVerticle;
 
-import fi.kogni.abo.soile2.handlers.VerticleMessageHandler;
-import fi.kogni.abo.soile2.handlers.VerticleReplyHandler;
-
-public abstract class SoileVerticle extends Verticle {
+public abstract class SoileVerticle extends AbstractVerticle {
 
     public SoileVerticle() {
         super();
@@ -16,7 +14,14 @@ public abstract class SoileVerticle extends Verticle {
     
     @Override
     public void stop() {
-        super.stop();
+    	try
+    	{
+    		super.stop();
+    	}
+    	catch(Exception e)
+    	{
+    		//pass for now
+    	}
         VerticleMessageHandler handler = getMessageHandler();
         if (handler != null) {
             handler.deinit();
@@ -30,7 +35,7 @@ public abstract class SoileVerticle extends Verticle {
      */
     @Deprecated
     public JsonObject getShared() {
-        return getShared(getContainer().config());
+        return getShared(config());
     }
     
     /**
@@ -40,15 +45,15 @@ public abstract class SoileVerticle extends Verticle {
      */
     @Deprecated
     public JsonObject getShared(JsonObject conf) {
-        return conf.getObject("shared");
+        return conf.getJsonObject("shared");
     }
     
     public JsonObject getSharedConfig() {
-        return getContainer().config().getObject("shared");
+        return config().getJsonObject("shared");
     }
 
     public JsonObject getVerticleConfig() {
-        return getContainer().config().getObject("config");
+        return config().getJsonObject("config");
     }
 
     /**
@@ -59,7 +64,7 @@ public abstract class SoileVerticle extends Verticle {
      */
     @Deprecated
     public JsonObject getConfig() {
-        return getConfig(container.config());
+        return config();
     }
 
     /**
@@ -70,12 +75,12 @@ public abstract class SoileVerticle extends Verticle {
      */
     @Deprecated
     public JsonObject getConfig(JsonObject conf) {
-        return conf.getObject("config");
+        return conf.getJsonObject("config");
     }
     
     public JsonObject getAddresses() {
         JsonObject shared = getSharedConfig();
-        return shared.getObject("addresses");
+        return shared.getJsonObject("addresses");
     }
     
     public String getAddress(String address) {
@@ -85,7 +90,7 @@ public abstract class SoileVerticle extends Verticle {
     
     public JsonObject getDirectories() {
         JsonObject shared = getSharedConfig();
-        return shared.getObject("directories");
+        return shared.getJsonObject("directories");
     }
     
     public String getDirectoryName(String directory) {
@@ -95,11 +100,7 @@ public abstract class SoileVerticle extends Verticle {
     
     public EventBus getEventBus() {
         return vertx.eventBus();
-    }
-    
-    public Logger getLogger() {
-        return container.logger();
-    }
+    }    
     
     public void setMessageHandler(VerticleMessageHandler handler) {
         this.msgHandler = handler;
@@ -111,7 +112,7 @@ public abstract class SoileVerticle extends Verticle {
     
     public void registerMessageHandler(String address, VerticleMessageHandler handler) {
         setMessageHandler(handler);
-        getEventBus().registerHandler(address, handler);
+        getEventBus().consumer(address, handler);
     }
     
     public void sendMessage(String address, JsonObject message) {
@@ -121,7 +122,7 @@ public abstract class SoileVerticle extends Verticle {
     public void sendMessage(String address, 
                             JsonObject message, 
                             VerticleReplyHandler replyHandler) {
-        getEventBus().send(address, message, replyHandler);
+        getEventBus().request(address, message, replyHandler);
     }
     
     private VerticleMessageHandler msgHandler;

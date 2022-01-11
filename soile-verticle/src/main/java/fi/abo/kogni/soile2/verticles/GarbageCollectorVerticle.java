@@ -1,9 +1,8 @@
-package fi.kogni.abo.soile2.verticles;
+package fi.abo.kogni.soile2.verticles;
 
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.json.JsonObject;
-
-import fi.kogni.abo.soile2.handlers.VerticleMessageHandler;
+import fi.abo.kogni.soile2.handlers.VerticleMessageHandler;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 
 public final class GarbageCollectorVerticle extends SoileVerticle {
 

@@ -1,13 +1,10 @@
-package fi.kogni.abo.soile2.verticles;
+package fi.abo.kogni.soile2.verticles;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.core.AsyncResultHandler;
-import org.vertx.java.core.json.JsonArray;
-import org.vertx.java.core.json.JsonObject;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 
 public final class StartupVerticle extends SoileVerticle {
     
@@ -17,13 +14,14 @@ public final class StartupVerticle extends SoileVerticle {
 
     @Override
     public void start() {
-        JsonArray deploy = getContainer().config().getArray("deploy");
-        
+        JsonArray deploy = vertx.getOrCreateContext().config().getJsonArray("deploy");
+      /*  From what I understood this is not needed for vertx 4
         for (int i = 0; i < deploy.size(); ++i) {
-            deployModule(deploy.<JsonObject>get(i));
-        }
+            deployModule(deploy.getJsonObject(i));
+        }*/
     }
     
+   /* 
     private void undeployModules() {
         if (! deployed.isEmpty()) {
             Iterator<String> it = deployed.iterator();
@@ -34,7 +32,8 @@ public final class StartupVerticle extends SoileVerticle {
             deployed.clear();
         }
     }
-    
+    */
+    /* From what I understand from the docs of vertx, this needs to be done differently now. Lets check what happens without
     private void deployModule(JsonObject module) {
         final int defaultInstances = 1;
         final String moduleName = module.getString("module");
@@ -42,7 +41,7 @@ public final class StartupVerticle extends SoileVerticle {
         final int instances = module.getInteger("instances", defaultInstances);
 
         JsonObject conf = createConfig(confName);
-        AsyncResultHandler<String> doneHandler = new AsyncResultHandler<String>() {
+        Handler<AsyncResult<String>> doneHandler = new Handler<AsyncResult<String>>() {
 
             public void handle(AsyncResult<String> asyncResult) {
                 
@@ -58,7 +57,8 @@ public final class StartupVerticle extends SoileVerticle {
                             asyncResult.cause().getMessage());
                     System.err.println(msg);
                     System.err.println("Undeploying all verticles... Shutting down!");
-                    undeployModules();
+                    //From my understanding this should happen automatically
+                    //undeployModules();
                     System.err.println("Shut down - done!");
                     System.err.flush();
                     System.exit(1);
@@ -66,23 +66,24 @@ public final class StartupVerticle extends SoileVerticle {
             }
             
         };
-        getContainer().deployModule(moduleName, conf, instances, doneHandler);
+        vertx.de
+        vertx.getOrCreateContext().deployModule(moduleName, conf, instances, doneHandler);
     }
-    
+    */
     private JsonObject createConfig(String name) {
-        JsonObject appConf = container.config();
-        JsonObject sharedConf = appConf.getObject("shared");
-        JsonObject verticleConf = appConf.getObject(name);
+        JsonObject appConf = config();
+        JsonObject sharedConf = appConf.getJsonObject("shared");
+        JsonObject verticleConf = appConf.getJsonObject(name);
         
         if (verticleConf == null) {
             verticleConf = new JsonObject();
         }
         
         JsonObject config = new JsonObject();
-        config.putObject("shared", sharedConf);
+        config.put("shared", sharedConf);
 
         //TODO Refactor and remove the duplicated config object
-        config.putObject("config", verticleConf);  //Refactor away at some point
+        config.put("config", verticleConf);  //Refactor away at some point
 
         //Inserts the config in the jsonroot, vertx expects this so this method should be used
         config.mergeIn(verticleConf);

@@ -1,14 +1,14 @@
-package fi.kogni.abo.soile2.verticles;
+package fi.abo.kogni.soile2.verticles;
 
 import java.io.StringReader;
 
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.json.JsonObject;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 
 import fi.abo.kogni.soile2.elang.CodeGenerator;
-import fi.kogni.abo.soile2.handlers.VerticleMessageHandler;
+import fi.abo.kogni.soile2.handlers.VerticleMessageHandler;
 
 public class ExperimentLanguageVerticle extends SoileVerticle {
 
@@ -18,7 +18,13 @@ public class ExperimentLanguageVerticle extends SoileVerticle {
 
     @Override
     public void start() {
-        super.start();
+    	try {
+    		super.start();	
+    	}
+        catch(Exception e)
+    	{
+        	// pass for now
+    	}
         JsonObject config = getVerticleConfig();
         String address = getAddress("experiment_language");
         String templateFile = config.getString("code-gen-template");
@@ -46,10 +52,10 @@ public class ExperimentLanguageVerticle extends SoileVerticle {
             StringReader input = new StringReader(json.getString("code"));
             codeGen.generate(input);
             if (errors.length() > 0) {
-                reply.putString("errors", errors.toString());
+                reply.put("errors", errors.toString());
             }
             else {
-                reply.putString("code", code.toString());
+                reply.put("code", code.toString());
             }
             message.reply(reply);
         }

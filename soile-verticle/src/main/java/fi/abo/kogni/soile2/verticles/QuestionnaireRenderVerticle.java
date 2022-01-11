@@ -1,17 +1,15 @@
-package fi.kogni.abo.soile2.verticles;
+package fi.abo.kogni.soile2.verticles;
 
 import java.nio.ByteBuffer;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.json.JsonObject;
-
+import io.vertx.core.AsyncResult;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
+import fi.abo.kogni.soile2.handlers.VerticleMessageHandler;
 import fi.abo.kogni.soile2.qmarkup.InputReader;
 import fi.abo.kogni.soile2.qmarkup.QuestionnaireBuilder;
 import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
 import fi.abo.kogni.soile2.utils.generator.IdGenerator;
-import fi.kogni.abo.soile2.handlers.VerticleMessageHandler;
 
 
 
@@ -36,41 +34,35 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
         String address = getAddress("questionnaire_render");
         registerMessageHandler(address, handler);
     }
-    //Saves the questioneer to disk
-    private void saveToDisk(String id, String questionnaire) {
-        JsonObject msg = new JsonObject();
-        msg.putString("dirname", getDirectoryName("questionnaires"));
-        msg.putString("filename", id);
-        msg.putString("data", questionnaire);
-        sendMessage(getAddress("disk_io"), msg);
-
-        // TODO Send a message to garbage collector verticle, too.
-    }
 
     //Saves the questioneer to mongo
     private void saveToMongo(String id, String markup,String questionnaire) {
         JsonObject msg = new JsonObject();
 
         JsonObject data = new JsonObject();
-        data.putString("_id", id);
-        data.putString("form", questionnaire);
-        data.putString("markup", markup);
+        data.put("_id", id);
+        data.put("form", questionnaire);
+        data.put("markup", markup);
 
-        msg.putString("action","save");
-        msg.putString("collection", "forms");
-        msg.putObject("document",data);
+        msg.put("action","save");
+        msg.put("collection", "forms");
+        msg.put("document",data);
 
-        vertx.eventBus().send("vertx.mongo-persistor", msg, new org.vertx.java.core.Handler<Message>() {
+        vertx.eventBus().request("vertx.mongo-persistor", msg, new io.vertx.core.Handler<AsyncResult<Message<JsonObject>>>() {
             @Override
-            public void handle(Message message) {
-                System.out.println(message.body().toString());
+            public void handle(AsyncResult<Message<JsonObject>> message) {
+                System.out.println(message.result().body().toString());
             }
         });
                 sendMessage("vertx.mongo-persistor", msg);
     }
 
     private class Handler extends VerticleMessageHandler {
-
+        
+    	private QuestionnaireBuilder builder;
+        private IdGenerator generator;
+        private String directory;
+        
         public Handler(String directory) {
             super();
             this.directory = directory;
@@ -89,7 +81,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
         public void handle(Message<JsonObject> message) {
             JsonObject json = message.body();
             JsonObject reply = new JsonObject();
-            reply.putString("id", "");
+            reply.put("id", "");
             String markup = json.getString("markup");
             String action = json.getString("action");
 
@@ -114,7 +106,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
                 builder.finish();
                 String output = builder.output();
 
-                reply.putString("id", id);
+                reply.put("id", id);
                 if (action.equals("save")){
                     //saveToDisk(id, output);
                     if(hasID) {
@@ -124,14 +116,14 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
                         saveToMongo(id, markup, output);
                         System.out.println("Saving with generated");
                     }
-                    reply.putString("form", output);
+                    reply.put("form", output);
                 }
                 if(action.equals("render")){
-                    reply.putString("form", output);
+                    reply.put("form", output);
                 }
 
             } catch (MalformedCommandException e) {
-                reply.putString("error", e.getMessage());
+                reply.put("error", e.getMessage());
                 if(hasID) {
                     saveToMongo(json.getString(("id")), markup, "");
                 }else {
@@ -145,9 +137,6 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
             message.reply(reply);
             }
 
-        private QuestionnaireBuilder builder;
-        private IdGenerator generator;
-        private String directory;
     }
 
     private Handler handler;
