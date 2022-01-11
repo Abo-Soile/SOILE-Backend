@@ -24,7 +24,7 @@ public class CodeGeneratorTest extends TestCase {
     StringBuilder code;
     StringBuilder errors;
 
-    String templatePath = "./soile-elang/tests/resources/elang.stg";
+    URL templatePath = getClass().getClassLoader().getResource("elang.stg");
     STGroup templateGroup = new STGroupFile(templatePath);
 
     @Before
@@ -46,7 +46,7 @@ public class CodeGeneratorTest extends TestCase {
     @Test
     public void testGenerate() throws Exception {
 
-        String codeString = readFile("./soile-elang/tests/resources/codeTest1.elang", Charset.defaultCharset());
+        String codeString = readFile("codeTest1.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
@@ -59,7 +59,7 @@ public class CodeGeneratorTest extends TestCase {
     @Test
     public void testVar() throws Exception {
 
-        String codeString = readFile("./soile-elang/tests/resources/testVar.elang", Charset.defaultCharset());
+        String codeString = readFile("testVar.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
@@ -73,7 +73,7 @@ public class CodeGeneratorTest extends TestCase {
     @Test
     public void testUnassignedVar() throws Exception {
 
-        String codeString = readFile("./soile-elang/tests/resources/unassignedVariable.elang", Charset.defaultCharset());
+        String codeString = readFile("unassignedVariable.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
@@ -86,7 +86,7 @@ public class CodeGeneratorTest extends TestCase {
 
     @Test
     public void testUndefinedFunction() throws Exception {
-        String codeString = readFile("./soile-elang/tests/resources/undefinedFunction.elang", Charset.defaultCharset());
+        String codeString = readFile("undefinedFunction.elang", Charset.defaultCharset());
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
 
@@ -97,7 +97,7 @@ public class CodeGeneratorTest extends TestCase {
 
     @Test
     public void testAlreadyAssignedFunction() throws Exception {
-        String codeString = readFile("./soile-elang/tests/resources/alreadyAssignedFunction.elang", Charset.defaultCharset());
+        String codeString = readFile("alreadyAssignedFunction.elang", Charset.defaultCharset());
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
 
@@ -113,7 +113,7 @@ public class CodeGeneratorTest extends TestCase {
 
     @Test
     public void testBuggyJumps() throws Exception {
-        String codeString = readFile("./soile-elang/tests/resources/buggedJumps.elang", Charset.defaultCharset());
+        String codeString = readFile("buggedJumps.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
@@ -123,7 +123,7 @@ public class CodeGeneratorTest extends TestCase {
 
     @Test
     public void testBuggyJumps2() throws Exception {
-        String codeString = readFile("./soile-elang/tests/resources/buggyJumps2.elang", Charset.defaultCharset());
+        String codeString = readFile("buggyJumps2.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
@@ -134,7 +134,7 @@ public class CodeGeneratorTest extends TestCase {
     }
 
     public void testWait() throws Exception {
-        String codeString = readFile("./soile-elang/tests/resources/testWait.elang", Charset.defaultCharset());
+        String codeString = readFile("testWait.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
@@ -147,7 +147,7 @@ public class CodeGeneratorTest extends TestCase {
     }
 
     public void testUndefinedError() throws Exception {
-        String codeString = readFile("./soile-elang/tests/resources/undefinedErrorTest.elang", Charset.defaultCharset());
+        String codeString = readFile("undefinedErrorTest.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
@@ -158,7 +158,7 @@ public class CodeGeneratorTest extends TestCase {
     }
 
     public void testMultilineString() throws Exception {
-        String codeString = readFile("./soile-elang/tests/resources/testMultilineString.elang", Charset.defaultCharset());
+        String codeString = readFile("testMultilineString.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
@@ -174,10 +174,11 @@ public class CodeGeneratorTest extends TestCase {
         assertEquals(1,1);
     }
 
-    static String readFile(String path, Charset encoding)
+    static String readFile(String path, Charset encoding)    
             throws IOException
     {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
+    	URL resource = CodeGeneratorTest.class.getClassLoader().getResource(path);
+        byte[] encoded = Files.readAllBytes(Paths.get(resource.getPath()));
         return new String(encoded, encoding);
     }
 }
