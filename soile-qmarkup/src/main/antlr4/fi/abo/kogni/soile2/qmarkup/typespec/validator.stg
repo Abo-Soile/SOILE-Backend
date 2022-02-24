@@ -127,12 +127,11 @@ default_array_value(method_name, statements) ::= <<
 body(methods, innerclasses, validators) ::= <<
 package fi.abo.kogni.soile2.qmarkup.typespec;
 
-/******************************************************************
- * This file has been DYNAMICALLY generated! Do not edit by hand! *
- * Instead, make changes to the "./spec/t.typespec" file, and     *
- * run GenerateValidator.java. Finally, copy the generated code   *
- * to this file.                                                  *
- ******************************************************************/
+/************************************************************************************************
+ * This file has been DYNAMICALLY generated! Do not edit by hand!  Instead, make changes to the *
+ * "./src/main/antlr4/fi/abo/kgni/soile2/qmarkup/typespec/t.typespec" file, and run             *
+ * GenerateValidator.java.                                                                      *
+ ***********************************************************************************************/
 
 import java.util.ArrayList;
 import java.util.HashMap;
