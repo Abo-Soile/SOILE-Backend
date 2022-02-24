@@ -16,10 +16,10 @@ public class GenerateValidator {
         FileInputStream is = null;
         FileOutputStream out = null;
 
-        System.out.println(System.getProperty("user.dir"));
+        String Project_dir = System.getProperty("user.dir");
         try {
-            is = new FileInputStream("./soile-qmarkup/spec/t.typespec");
-            out = new FileOutputStream("./soile-qmarkup/generated/Validator.java");
+            is = new FileInputStream(Project_dir + "/src/main/antlr4/fi/abo/kogni/soile2/qmarkup/typespec/t.typespec");
+            out = new FileOutputStream(Project_dir + "/src/main/java/fi/abo/kogni/soile2/qmarkup/typespec/Validator.java");
             ANTLRInputStream input = new ANTLRInputStream(is);
             TypeSpecLexer lexer = new TypeSpecLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -34,9 +34,8 @@ public class GenerateValidator {
             walker.walk(p2, tree);
             String output = p2.output();
             out.write(output.getBytes());
-            System.out.println(output);
         } catch (IOException ex) {
-            System.err.println("IOException.");
+            System.err.println("IOException." + ex.getMessage());
         } finally {
             try {
                 is.close();

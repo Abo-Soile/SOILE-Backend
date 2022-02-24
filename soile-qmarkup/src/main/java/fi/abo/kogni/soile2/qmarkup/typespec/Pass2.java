@@ -28,9 +28,10 @@ public class Pass2 extends Pass {
 
     public Pass2(IdentityHashMap<ParserRuleContext, NodeData> nd) {
         super(nd);
-        //Template template = new Template("./soile-qmarkup/spec");
-        //tgroup = template.getTemplate("validator.stg");
-        tgroup = new STGroupFile(".//soile-qmarkup//spec//validator.stg");
+        // get the base for this 
+        String Project_dir = System.getProperty("user.dir");
+
+        tgroup = new STGroupFile(Project_dir + "/src/main/antlr4/fi/abo/kogni/soile2/qmarkup/typespec/validator.stg");
         validator = tgroup.getInstanceOf("body");
         generatedTypes = new HashSet<>();
         methodSignatures = new HashMap<>();
