@@ -33,7 +33,7 @@ public class CodeGenerator {
         TransitionTable transitionTable = new TransitionTable();
         Builtin.addBuiltins(symtab, template);
         try {
-            ANTLRInputStream inputStream = new ANTLRInputStream(input);
+            CharStream inputStream = CharStreams.fromReader(input);
             ElangLexer lexer = new ElangLexer(inputStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             ElangParser parser = new ElangParser(tokens);
