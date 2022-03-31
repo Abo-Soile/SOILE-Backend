@@ -1,6 +1,10 @@
 package fi.abo.kogni.soile2.qmarkup;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -49,7 +53,7 @@ public class QuestionnaireBuilderTest extends TestCase {
     @Test
     public void testPilotForm() throws Exception {
         String result = buildForm("pilotform.qmarkup");
-        System.out.println(result);
+
         assertTrue(succeeded);
     }
 
