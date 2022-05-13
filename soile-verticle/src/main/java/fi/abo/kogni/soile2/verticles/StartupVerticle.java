@@ -1,8 +1,12 @@
 package fi.abo.kogni.soile2.verticles;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
+import io.vertx.core.AsyncResult;
+import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
@@ -14,33 +18,36 @@ public final class StartupVerticle extends SoileVerticle {
 
     @Override
     public void start() {
+    	
         JsonArray deploy = vertx.getOrCreateContext().config().getJsonArray("deploy");
-      /*  From what I understood this is not needed for vertx 4
+        
         for (int i = 0; i < deploy.size(); ++i) {
             deployModule(deploy.getJsonObject(i));
-        }*/
+        }
     }
     
-   /* 
+   
     private void undeployModules() {
         if (! deployed.isEmpty()) {
             Iterator<String> it = deployed.iterator();
             while (it.hasNext()) {
                 String id = it.next();
-                getContainer().undeployModule(id);
+                vertx.undeploy(id);
             }
             deployed.clear();
         }
     }
-    */
-    /* From what I understand from the docs of vertx, this needs to be done differently now. Lets check what happens without
+   
+    //From what I understand from the docs of vertx, this needs to be done differently now. Lets check what happens without
     private void deployModule(JsonObject module) {
         final int defaultInstances = 1;
         final String moduleName = module.getString("module");
         String confName = module.getString("config");
         final int instances = module.getInteger("instances", defaultInstances);
-
         JsonObject conf = createConfig(confName);
+        DeploymentOptions opts = new DeploymentOptions(conf);
+        opts.setInstances(instances);        
+        
         Handler<AsyncResult<String>> doneHandler = new Handler<AsyncResult<String>>() {
 
             public void handle(AsyncResult<String> asyncResult) {
@@ -58,7 +65,7 @@ public final class StartupVerticle extends SoileVerticle {
                     System.err.println(msg);
                     System.err.println("Undeploying all verticles... Shutting down!");
                     //From my understanding this should happen automatically
-                    //undeployModules();
+                    undeployModules();
                     System.err.println("Shut down - done!");
                     System.err.flush();
                     System.exit(1);
@@ -66,10 +73,9 @@ public final class StartupVerticle extends SoileVerticle {
             }
             
         };
-        vertx.de
-        vertx.getOrCreateContext().deployModule(moduleName, conf, instances, doneHandler);
+        vertx.deployVerticle(moduleName, opts, doneHandler);
     }
-    */
+    
     private JsonObject createConfig(String name) {
         JsonObject appConf = config();
         JsonObject sharedConf = appConf.getJsonObject("shared");

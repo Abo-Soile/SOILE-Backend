@@ -1,22 +1,22 @@
 package fi.abo.kogni.soile2.elang;
 
-import junit.framework.TestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.stringtemplate.v4.STGroup;
-import org.stringtemplate.v4.STGroupFile;
-
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
+
+import junit.framework.TestCase;
 
 public class CodeGeneratorTest extends TestCase {
 
@@ -49,9 +49,15 @@ public class CodeGeneratorTest extends TestCase {
         String codeString = readFile("codeTest1.elang", Charset.defaultCharset());
 
         StringReader input = new StringReader(codeString);
-        codeGen.generate(input);
-
-
+        codeGen.generate(input);        
+        BufferedWriter bw = new BufferedWriter(new FileWriter(new File("Test2.html")));
+        try {
+        	bw.write(code.toString());
+        	bw.close();
+        }
+        catch(IOException e)
+        {        	
+        }
         assertEquals(errors.toString(), "");
         System.out.println(errors.toString());
     }
@@ -128,8 +134,16 @@ public class CodeGeneratorTest extends TestCase {
         StringReader input = new StringReader(codeString);
         codeGen.generate(input);
 
-        System.out.println(code.toString());
-
+        System.out.println(code.toString());        
+        BufferedWriter bw = new BufferedWriter(new FileWriter(new File("Test.html")));
+        try {
+        	bw.write(code.toString());
+        	bw.close();
+        }
+        catch(IOException e)
+        {        	
+        }
+        
         //System.out.println(errors.toString());
     }
 

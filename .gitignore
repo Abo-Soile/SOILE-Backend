@@ -41,3 +41,4 @@ seleniumtests/reports/
 seleniumtests/node_modules/
 
 prod/*.log
+/.metadata/

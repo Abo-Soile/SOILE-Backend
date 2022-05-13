@@ -11,11 +11,16 @@ mkdir soile-verticle/bin
 $ANT -f soile2ant.xml
 
 $ANT -f soile-qmarkup/build.xml makejar
-$ANT -f soile-elang/build.xml makejar
-$ANT -f soile-utils/build.xml makejar
-$ANT -f soile-verticle/build.xml makejar
+cd soile-qmarkup 
+mvn install 
+cd ../soile-elang 
+mvn install 
+cd ../soile-utils
+mvn install
+cd ../soile-verticle
+mvn install
 
-cp -avf soile-qmarkup/jar/soile2-qmarkup.jar prod/mods/fi.abo.kogni.soile~questionnaire-render~1.0/lib
-cp -avf soile-elang/jar/soile2-elang.jar  prod/mods/fi.abo.kogni.soile~experiment-lang~1.0/lib
-cp -avf soile-utils/jar/soile2-utils.jar $TO
-cp -avf soile-verticle/jar/soile2-verticle.jar $TO
+cp -avf soile-qmarkup/target/qmarkup-1.0.jar prod/mods/fi.abo.kogni.soile~questionnaire-render~1.0/lib
+cp -avf soile-elang/target/elang-1.0.jar  prod/mods/fi.abo.kogni.soile~experiment-lang~1.0/lib
+cp -avf soile-utils/jar/utils-1.0.jar $TO/soile2-utils.jar
+cp -avf soile-verticle/jar/verticles-1.0.jar $TO/soile2-verticle.jar

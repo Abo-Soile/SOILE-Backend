@@ -22,6 +22,7 @@ import fi.abo.kogni.soile2.utils.generator.IdGenerator;
 // inbuilt _id but this should work for now
 public final class QuestionnaireRenderVerticle extends SoileVerticle {
 
+	
     public QuestionnaireRenderVerticle() {
         super();
     }
@@ -47,13 +48,13 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
         msg.put("action","save");
         msg.put("collection", "forms");
         msg.put("document",data);
-
+        /* Debugging.
         vertx.eventBus().request("vertx.mongo-persistor", msg, new io.vertx.core.Handler<AsyncResult<Message<JsonObject>>>() {
             @Override
             public void handle(AsyncResult<Message<JsonObject>> message) {
                 System.out.println(message.result().body().toString());
             }
-        });
+        });*/
                 sendMessage("vertx.mongo-persistor", msg);
     }
 
@@ -94,6 +95,7 @@ public final class QuestionnaireRenderVerticle extends SoileVerticle {
             InputReader reader = new InputReader(markup);
             reader.addListener(builder);
             builder.questionnaireId("questionnaire-id");
+            //This key is currently completely unused
             builder.encryptionKey("vr7DlZqAyY061Y9M");
 
             ByteBuffer buffer = ByteBuffer.allocate(8);

@@ -1,9 +1,5 @@
 grammar TypeSpec;
 
-@header {
-package fi.abo.kogni.soile2.qmarkup.typespec;
-}
-
 spec: command+ ;
 
 command: 'command' commandname body ;
