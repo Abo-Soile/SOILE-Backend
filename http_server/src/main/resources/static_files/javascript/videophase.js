@@ -187,6 +187,8 @@ async function videophase() {
     });
 
     const stop = await startRecording(await getStream(), 0);
+    // Remove text after recording is started
+    text.innerHTML = '';
     recordingText.style.display = 'inherit';
 
     recordButton.innerHTML = config.stopRecordButton || 'Stop recording';
