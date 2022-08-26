@@ -342,6 +342,16 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Integer max = (Integer) value.getValue("maximum").asJavaObject();
                 Integer incr = (Integer) value.getValue("increment").asJavaObject();
                 Integer select = (Integer) value.getValue("select").asJavaObject();
+                
+                String style = "width: 400px";
+                try{
+                    style = (String) value.getValue("style").asJavaObject();
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace(System.out);
+                }
+                tmpl.add("style", style);
                 tmpl.add("minimum", min);
                 tmpl.add("maximum", max);
                 tmpl.add("increment", incr);

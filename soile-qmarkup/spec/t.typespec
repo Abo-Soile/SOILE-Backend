@@ -17,7 +17,8 @@ command slider {
     minimum: Integer,
     maximum: Integer,
     increment: Integer,
-    select: Integer
+    select: Integer,
+    style: String
 
 }
 

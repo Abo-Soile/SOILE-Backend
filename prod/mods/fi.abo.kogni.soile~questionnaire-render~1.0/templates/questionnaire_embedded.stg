@@ -170,9 +170,9 @@ $endif$
 
 >>
 
-slider(id, labels, minimum, maximum, increment, select, count) ::= <<
+slider(id, labels, minimum, maximum, increment, select, count, style) ::= <<
 
-<div style="width: 400px;">
+<div style="$style$">
 <ol data-dojo-type="dijit/form/HorizontalRuleLabels"
     data-dojo-props="container: 'topDecoration'"
     style="height: 1.1em; font-weight: bold">
