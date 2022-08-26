@@ -1,0 +1,39 @@
+  <div class="row-md text-right">
+    <button class="btn btn-sm btn-primary" id="exit-button"  style="visibility:{exitButton}; margin-right:30px;">{exitButtonLable}</button>
+  </div>
+
+<!-- The Modal -->
+<div id="closeModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modalclose">&times;</span>
+      <h2>{exitButtonLable}</h2>
+    </div>
+    <div class="modal-body">
+      <h3>Do you really want to exit the Experiment?</h3>
+    </div>
+    <div class="modal-footer">
+      <div class="row-md text-right">
+        <a class="btn btn-lg btn-primary" id="exit-confirm" href="{exitUrl}" role="button">{exitButtonLable}</a>
+        <button class="btn btn-lg btn-primary" id="exit-deny" role="button">Return</a>
+      </div>
+    </div>
+  </div>
+</div>  
+<script>
+var closemodal = document.getElementById("closeModal");
+var closebtn = document.getElementById("exit-button");
+var exitdenybtn = document.getElementById("exit-deny");
+var closespan = document.getElementsByClassName("modalclose")[0];
+
+closebtn.onclick = function() {
+  closemodal.style.display = "block";
+};
+closespan.onclick = function() {
+  closemodal.style.display = "none";
+};
+exitdenybtn.onclick = function() {
+  closemodal.style.display = "none";
+};
+</script>
