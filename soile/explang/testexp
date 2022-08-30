@@ -1,0 +1,110 @@
+gvar keyright <- imagefile("http://127.0.0.1:8081/testimages/c1f0730e-a9ec-4b65-9631-af769e1d01fa/keyright.png") 
+gvar keydown <- imagefile("http://127.0.0.1:8081/testimages/c1f0730e-a9ec-4b65-9631-af769e1d01fa/keydown.png") 
+gvar crosshair <- imagefile("http://127.0.0.1:8081/testimages/c1f0730e-a9ec-4b65-9631-af769e1d01fa/crosshair.jpg") 
+gvar redbox <- imagefile("http://127.0.0.1:8081/testimages/c1f0730e-a9ec-4b65-9631-af769e1d01fa/redbox.jpg") 
+gvar bluebox <- imagefile("http://127.0.0.1:8081/testimages/c1f0730e-a9ec-4b65-9631-af769e1d01fa/bluebox.jpg") 
+
+
+val center <- {top:240 left:470}
+val leftpos <- {top:200 left:200}
+val rightpos <- {top:200 left:600}
+
+val keypadpos <- {top:350 left:400}
+
+intermezzo-phase Start
+    plus(1 1)
+end
+
+intermezzo-phase Guide
+
+    
+    # Blue box left
+    #-----------------------
+    show(crosshair center)
+    wait(seconds(5))
+    hide(crosshair)
+    
+    var gaa <- 5
+    
+    showmsg("Fyrkanten är blå, alltså bör du trycka på nedpil, Tryck på nedpil för att fortsätta")
+    show(bluebox leftpos)
+    show(keydown keypadpos)
+
+    resumeonkey("down")
+    wait(56465489)
+    
+    hidemsg()
+    hide(bluebox)
+    hide(keydown)
+    
+    # Red box right
+    #-----------------------
+    show(crosshair center)
+    wait(seconds(5))
+    hide(crosshair)    
+    
+    showmsg("Fyrkanten är röd, alltså bör du trycka på högerpil, Tryck på högerpil för att fortsätta")
+    show(redbox leftpos)
+    show(keyright keypadpos)
+
+    resumeonkey("right")
+    wait(8859789)
+    
+    hidemsg()
+    hide(redbox)
+    hide(keyright)
+    
+    # Blue box right
+    #-----------------------
+    show(crosshair center)
+    wait(seconds(5))
+    hide(crosshair)
+    
+    showmsg("Fyrkanten är blå, alltså bör du trycka på nedpil, Tryck på nedpil för att fortsätta")
+    show(bluebox rightpos)
+    show(keydown keypadpos)
+
+    resumeonkey("down")
+    wait(8859789)
+    
+    hidemsg()
+    hide(bluebox)
+    hide(keydown)
+    
+    # Red box left
+    #-----------------------
+    show(crosshair center)
+    wait(seconds(5))
+    hide(crosshair)    
+    
+    showmsg("Fyrkanten är röd, alltså bör du trycka på högerpil, Tryck på högerpil för att fortsätta")
+    show(redbox rightpos)
+    show(keyright keypadpos)
+
+    resumeonkey("right")
+    wait(8859789)
+    
+    hidemsg()
+    hide(redbox)
+    hide(keyright)
+    
+    #Instruktioner done
+    #-----------------------
+    showmsg("Nu får du göra några exempeluppgifter.Tryck på nedåtpilen ifall fyrkanten är blå eller på högerpilen ifall fyrkanten är röd. Endast fyrkanterna och fixeringskorset kommer att vara synliga på skärmen. Svara så snabbt du kan, men undvik fel. Varje fyrkant är synlig på rutan tills du tryckt på en av svarsknapparna, men högst i 1,5 sekunder. Tryck på nedåtpilen för att börja övningsuppgiften.")
+
+    show(keydown keypadpos)
+    resumeonkey("down")
+    wait(353453453453)
+end
+
+intermezzo-phase FinalPhase
+    plus(1 1)
+end
+
+  
+transition
+  start(Start),
+  Start -> Guide,
+  Guide -> FinalPhase,
+  final(FinalPhase)
+end

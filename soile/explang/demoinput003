@@ -1,0 +1,34 @@
+gvar gv1 <- imagefile("url1")
+val vl1 <- null
+
+function fx(x1 x2)
+  fvar fv1 <- gv1
+  fvar fv2 <- "moi"
+  fvar fv3 <- divide(fv1 2)
+
+  var v1 <- 0
+  var v2 <- vl1
+
+  show(v1 v2)
+  while lt(v1 10) do
+    show(v1)
+    v1 <- plus(v1 1)
+  end
+  if not(gv1) then
+    hide("that")
+    show("this")
+  else
+    hide("this")
+    show("that")
+    return plus(1 2 3 4 5)
+  end
+  gv1 <- 11
+  v1 <- vl1
+end
+
+iteration
+  hide("moi")
+  wait(1000)
+  vl1 <- {a:"str" b:12 c:[1 2 3 4] d:{a:"d1" b:"d2"}}
+end
+

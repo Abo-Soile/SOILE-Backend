@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Soile Utilities" default="makejar" basedir=".">
+	<property name="jarDir" location="./jar" />
+	<target name ="makejar" depends="compile"
+		    description="Create a jar file for the project">
+		<jar destfile="${jarDir}/soile2-utils.jar" 
+			 compress="true"
+			 basedir="bin" />
+	</target>
+	
+	<target name="compile">
+		<javac srcdir="src" destdir="bin" includes="**" includeantruntime="true">
+		</javac>
+	</target>
+
+</project>

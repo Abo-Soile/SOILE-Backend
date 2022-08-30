@@ -1,0 +1,88 @@
+command dropdownmenu {
+
+    dbcolumn: String,
+    numeric: Boolean(true),
+    label: String,
+    inline: Boolean(false),
+    optional: Boolean(false),
+    options: [ {dbvalue: String, text: String}* ]
+
+}
+
+command slider {
+
+    dbcolumn: String,
+    numeric: Boolean(true),
+    labels: [Integer*],
+    minimum: Integer,
+    maximum: Integer,
+    increment: Integer,
+    select: Integer
+
+}
+
+command singleselect {
+
+    numeric: Boolean(true),
+    default_value: String,
+    colalign: Boolean(true),
+    inline: Boolean(false),
+    optional: Boolean(true),
+    dbcolumn: String,
+    options: [ [ {
+    		  dbvalue: String, 
+    		  text: String, 
+    		  checked: Boolean(false)}* ]* ]
+
+}
+
+command multiselect {
+
+    numeric: Boolean(true),
+    default_value: String,
+    colalign: Boolean(true),
+    inline: Boolean(false),
+    options: [ [ {dbcolumn: String,
+    		  dbvalue: String, 
+    		  text: String, 
+    		  checked: Boolean(false)}* ]* ]
+
+}
+
+command numberfield {
+
+    dbcolumn: String,
+    numeric: Boolean(true),
+    label: String,
+    value: Integer(0),
+    optional:Boolean(true),
+    minimum: Integer,
+    maximum: Integer,
+    increment: Float,
+    inline: Boolean(true)
+}
+
+command textarea {
+
+    dbcolumn: String,
+    rows: Integer(4),
+    columns: Integer(80),
+    label: String,
+    length: Integer,
+    optional: Boolean(true),
+    text: String("")
+
+}
+
+command textbox {
+
+    dbcolumn: String,
+    label: String(""),
+    linebreak: Boolean(false),
+    length: Integer,
+    optional: Boolean(true),
+    text: String("")
+    
+}
+
+

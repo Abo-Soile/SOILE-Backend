@@ -1,0 +1,143 @@
+gvar sentences <- [
+  {last:"askdh"  makesSense:true text:"asdash ajkdh asjk askdh" }
+  {last:"hdr"    makesSense:true text:"asdash ajkdh asjk hdr" }
+  {last:"cbdf"   makesSense:true text:"asdash ajkdh asjk cbdf" }
+  {last:"cvbdf"  makesSense:true text:"asdash ajkdh asjk cvbdf" }
+  {last:"dfgtre" makesSense:true text:"asdash ajkdh asjk dfgtre" }
+]
+
+gvar startLocation <- 0
+gvar currentSentence <- startLocation
+
+gvar sentenceDisplay <- 0
+
+gvar maxLevel <- 8
+gvar minLevel <- 2
+
+gvar currentLevel <- 3
+
+gvar yesButton <- button("yes")
+gvar noButton <- button("no")
+
+gvar yesButtonPos <- {top:400 left:400}
+gvar noButtonPos <- {top:400 left:600}
+
+gvar answerBoxes <- []
+gvar correctAnswers <- []
+
+gvar ansBoxOffset <- 30
+gvar ansBoxPos <- {top:100 left:100}
+
+gvar ansBoxLength <- 40
+
+gvar makesSenseAnswer <- 0
+
+function onAnswer(ans)
+  makseSenseAnswer <- ans
+  resume()
+end
+
+function showMakesSense()
+  show(yesButton yesButtonPos)
+  show(noButton noButtonPos)
+
+  onmouseclick(yesButton {action:onAnswer inputid:true})
+  onmouseclick(noButton {action:onAnswer inputid:false})
+end
+
+function hideMakesSense()
+  hide(yesButton)
+  hide(noButton)
+
+  onmouseclick(yesButton)
+  onmouseclick(noButton)
+end
+
+function showWordBoxes(count)
+  var counter <- 0
+  var tb <- 0
+
+  while lt(counter count)
+  do
+    tb <- textbox(ansBoxLength)
+    answerBoxes <- append(answerBoxes tb)
+
+    show(tb {left:ansBoxPos.left top:plus(100 multiply(ansBoxPos.top counter))})
+
+    counter <- plus(counter 1)
+  end
+end
+
+function handleBoxInput()
+  var counter <- 0
+  var correct <- true
+
+  while lt(counter length(answerBoxes))
+  do
+
+    if not(gt(fuzzyequal(readtext(answerBoxes[counter]) correctAnswers[counter])))
+    then
+      correct <- false
+    end
+
+    hide(answerBoxes[counter])
+    counter <- plus(counter 1)
+  end
+end
+
+intermezzo-phase information
+  showmsg("Sentence Reading Span")
+  wait(1000)
+  hidemsg()
+end
+
+intermezzo-phase ending
+  starttimer()
+  wait(1150)
+  helptext(elapsedtime())
+end
+
+interaction-phase test
+  enterphase
+    setstimuli([1 4 7 22 45 74 77 86 76 76 54 75 865 65 88 65 87 67 56 2])
+  end
+
+  iteration
+    var sCount <- 0
+    var text <- 0
+    var makesSenseCorrect <- 0
+
+    makseSenseAnswer <- 0
+    correctAnswers <- []
+    helptext("test")
+    #Showing words
+    while lt(sCount currentLevel)
+    do
+      text <- msgbox(sentences[currentSentence].text)
+      show(text "center")
+      showMakesSense()
+
+      hideMakesSense()
+      hide(text)
+
+      correctAnswers <- append(correctAnswers sentences[currentSentence].last)
+
+      if eq(makesSenseAnswer sentences[currentSentence].makesSense)
+      then
+        helptext("Makes sense correct")
+        makesSenseCorrect <- plus(makesSenseCorrect 1)
+      end
+
+      currentSentence <- plus(currentSentence 1)
+      sCount <- plus(sCount 1)
+    end
+
+  end
+end
+
+transition
+  start(information),
+  information -> test,
+  test -> ending,
+  final(ending)
+end

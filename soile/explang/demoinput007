@@ -1,0 +1,47 @@
+gvar loc1 <- {x: 10 y: 20}
+gvar loc2 <- {x: 20 y: 10}
+val c1 <- true
+val c2 <- null
+gvar img1 <- imagefile("http://www.jppf.org/images/logo2.gif")
+gvar img2 <- imagefile("http://www.uta.fi/sis/oikopolut4/mtt.png")
+
+gvar data <- [
+  { stimulus: img1 duration: 500 location: loc1 }
+  { stimulus: img2 duration: 1000 location: loc2 }
+  { stimulus: img1 duration: 1000 location: loc2 }
+  { stimulus: img2 duration: 500 location: loc1 }
+]
+
+function f2(x1 x2)
+  fvar fv1 <- "merkkijono"
+  var v <- 10
+  while gt(v 0) do
+    show(img1)
+    hide(img2)
+    show(x1)
+    hide(x2)
+    v <- minus(v 1)
+    f1(fv1)
+  end
+end
+
+function f1(x1 x2)
+  f2(plus(x1 x2))
+end
+
+iteration
+  var d <- datum
+  var img <- d.stimulus
+  var loc <- loc2
+  var dur <- d.duration
+
+  location(img loc.propName {p1:1 p2:2})
+  wait(dur)
+  show(img)
+  recordts()
+  loc <- plus(1 dur)
+  location(img)
+  wait(2000)
+  hide(img2)
+end
+

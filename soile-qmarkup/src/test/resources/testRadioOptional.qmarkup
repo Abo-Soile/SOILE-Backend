@@ -1,0 +1,74 @@
+/singleselect {
+  default_value: "",
+  dbcolumn: "sex",
+  optional:false,
+  options:
+  [[
+    {
+      dbvalue: "female",
+      text: "female"
+    }],
+    [{
+      dbvalue: "male",
+      text: "male"
+    }],
+    [{
+      dbvalue: "other",
+      text: "other"
+    }
+  ]]
+  }
+
+/multiselect {
+  default_value: "",
+  dbcolumn: "sex",
+  optional:false,
+  options:
+  [[
+    {
+      dbcolumn:"aa",
+      dbvalue: "female",
+      text: "female"
+    },
+    {
+      dbcolumn:"aa",
+      dbvalue: "male",
+      text: "male"
+    },
+    {
+      dbcolumn:"aa",
+      dbvalue: "other",
+      text: "other"
+    }
+  ]]
+  }
+
+/textbox {
+  dbcolumn:"sdada",
+  label:"Test",
+  length:22,
+  optional:false
+  }
+
+/singleselect {
+  default_value: "",
+  dbcolumn: "sex",
+  optional:true,
+  options:
+  [[
+    {
+      dbvalue: "female",
+      text: "female"
+    },
+    {
+      dbvalue: "male",
+      text: "male"
+    },
+    {
+      dbvalue: "other",
+      text: "other"
+    }
+  ]]
+ }
+
+ fdgfdg

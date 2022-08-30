@@ -1,0 +1,34 @@
+gvar a <- 66
+gvar b <- "saa"
+#val c <- a
+
+gvar reacted <- 0
+
+function clicked()
+  var arr <- [1 2 3 4 5]
+  var obj <- {a:2 c:3 f:6}
+  helptext(arrs)
+  helptext(obj)
+  reacted <- 1
+  resume()
+end
+
+intermezzo-phase p
+  #ss <- 55
+  #dasdasda()
+  helptext("dfgdfgd")
+  wait(3000)
+  clicked()
+  helptext("Helping")
+end
+
+intermezzo-phase g
+  #so <- 56
+  helptext("SDfsdfsd")
+end
+
+transition
+  start(p),
+  p -> g,
+  final(g)
+end

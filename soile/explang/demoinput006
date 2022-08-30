@@ -1,0 +1,19 @@
+
+iteration
+  var img1 <- imagefile("http://www.jppf.org/images/logo2.gif")
+  var img2 <- imagefile("http://www.uta.fi/sis/oikopolut4/mtt.png")
+  var i <- 0
+
+  while lt(i 5) do
+    show(img1 {top: 10 left: 100})
+    if eq(i 2) then
+      show(img2 {top: 100 left: 200})
+    end
+    wait(1000)
+    hide(img1)
+    wait(1000)
+    i <- plus(i 1)
+  end
+  hide(img2)
+end
+

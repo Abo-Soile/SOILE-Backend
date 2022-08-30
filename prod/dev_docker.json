@@ -1,0 +1,96 @@
+{
+  "deploy": [
+    /*{
+      "module": "fi.abo.kogni.soile~disk-io~1.0",
+      "config": "disk_io",
+      "instances": 1
+    },*/
+    {
+      "module": "fi.abo.kogni.soile~experiment-lang~1.0",
+      "config": "experiment_language",
+      "instances": 1
+    },
+    {
+      "module": "fi.abo.kogni.soile~questionnaire-render~1.0",
+      "config": "questionnaire_markup",
+      "instances": 1
+    },
+    {
+      "module": "fi.abo.kogni.soile~http-server~1.1",
+      "config": "http_server",
+      "instances": 1
+    },
+    {
+      "module": "fi.abo.kogni.soile~vertx-mod-template-engines~1.0",
+      "config": "dustjs",
+      "instances": 1
+    },
+    {
+      "module": "io.vertx~mod-mongo-persistor~2.1.0",
+      "config": "mongo",
+      "instances": 1
+    },
+    {
+      "module": "io.vertx~mod-mailer~2.0.0-final",
+      "config": "mailer",
+      "instances": 1
+    }
+  ],
+
+  "shared": {
+    "directories": {
+      "/": "/home/danno/SoileIDEA/soile2/prod",
+      "questionnaires": "./generated/questionnaire"
+    },
+    "addresses": {
+      "experiment_language": "soile.experiment.lang",
+      "questionnaire_render": "soile.workbench.questionnaire.render"
+    }
+  },
+
+  "experiment_language": {
+    "code-gen-template": "./templates/elang.stg"
+  },
+
+
+  /*"gc": {},*/
+
+  "http_server": {
+    "port": 8080,
+    "host": "127.0.0.1",
+    "directory": "./static_files",
+    "template_folder":"templates/",
+    "debug":true,
+    "adminuser":"admin",
+    "adminpassword":"admin",
+    "externalport":8080,
+    "externaluri": "127.0.0.1",
+    "bindhost": "0.0.0.0"
+  },
+
+  "questionnaire_markup": {
+    "templates": "./templates/questionnaire_embedded.stg"
+  },
+
+  "dustjs":{
+    "engine":"dustjs-linkedin",
+    "version": "2.0.3"
+  },
+
+  "mongo": {
+    "address": "vertx.mongo-persistor",
+    "host": "mongo",
+    "port": 27017,
+    "db_name": "soiletest"
+  },
+  "mailer": {
+    "address": "soile.my_mailer",
+    "host": "smtp.sendgrid.net",
+    "port": 465,
+    "auth": true,
+    "ssl": true,
+    "username": "soile",
+    "password": "soilesendgridpassword"
+  }
+
+}

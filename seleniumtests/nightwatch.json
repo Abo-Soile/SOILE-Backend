@@ -1,0 +1,52 @@
+{
+  "src_folders" : ["tests"],
+  "output_folder" : "reports",
+  "custom_commands_path" : "commands/",
+  "custom_assertions_path" : "",
+  "globals_path" : "",
+  
+  "selenium" : {
+    "start_process" : true,
+    "server_path" : "./selenium-server-standalone-2.45.0.jar",
+    "log_path" : "",
+    "host" : "127.0.0.1",
+    "port" : 4444,
+    "cli_args" : {
+      "webdriver.chrome.driver" : "C:/Users/Danno/soileIDEA/soile2/seleniumtests/chromedriver.exe",
+      "webdriver.ie.driver" : ""
+    }  
+  },
+  
+  "test_settings" : {
+    "default" : {
+      "launch_url" : "http://soile.fi:8080",
+      "selenium_port"  : 4444,
+      "selenium_host"  : "localhost",
+      "silent": true,
+      "screenshots" : {
+        "enabled" : false,
+        "path" : ""
+      },
+      "desiredCapabilities": {
+        "browserName": "firefox",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true
+      },
+      "globals": {
+        "url":"http://soile.fi:8080",
+        "adminuser":"admin",
+        "adminpass":"admin",
+        "testname":"NightTest",
+        "expname":"NightExp"
+      }
+    },
+
+    "chrome" : {
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true
+      }
+    }
+  }
+}

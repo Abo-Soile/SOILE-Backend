@@ -1,0 +1,65 @@
+questionnaire(title, blocks, modules, parameters) ::= <<
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>$title$</title>
+    <link rel="stylesheet" href="../dijit/themes/claro/claro.css" />
+</head>
+<body class="claro">
+
+<div data-dojo-type="dijit/form/Form" data-dojo-id="myForm"
+     id="myForm" encType="multipart/form-data" action="" method="">
+    <script type="dojo/on" data-dojo-event="reset">
+        return confirm('Press OK to reset widget values');
+    </script>
+
+    <script type="dojo/on" data-dojo-event="submit">
+        if(this.validate()){
+            return confirm('Form is valid, press OK to submit');
+        }else{
+            alert('Form contains invalid data.  Please correct first');
+            return false;
+        }
+        return true;
+    </script>
+    
+    $! $blocks:{block | $block.content$}; separator="\n"$ !$
+    
+    $blocks:{block | $add_block(block.content)$}$
+    
+    <div>
+      <button data-dojo-type="dijit/form/Button" 
+              type="button" 
+              onClick="console.log(myForm.getValues())">Get Values from form!</button>
+      <button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
+      <button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
+    </div>
+    
+    <script src="../dojo/dojo.js"
+            data-dojo-config="async: true">
+    </script>
+    <script>
+        require(["dojo/parser",
+                 "dojo/query",
+                 $modules:{mdl | "$mdl.file$"}; separator=",\n"$,
+                 "dojo/ready"], 
+          function(parser,
+                   query,
+                   Form,
+                   $parameters:{pm | $pm.name$}; separator=",\n"$) {
+            parser.parse();
+        });
+    </script>
+    </div>
+    </body>
+</html>
+
+>>
+
+add_block(block) ::= <<
+    $block$ $\n$
+    <p style="height: 0.1cm; clear: both">&nbsp;</p>
+>>
+

@@ -1,0 +1,94 @@
+/pagetitle
+Soile Widgets
+
+/p
+Paragraph
+/ts + large
+with some large text.
+
+/title
+dropdownmenu
+
+/dropdownmenu {
+  dbcolumn: "jagbori",
+  numeric: false,
+  label: "Select a state",
+  options: [{dbvalue: "tampere", text: "Tampere"},
+            {dbvalue: "helsinki", text: "Helsinki"},
+            {dbvalue: "turku", text: "Turku"},
+            {dbvalue: "oulu", text: "Oulu"},
+            {dbvalue: "vaasa", text: "Vantaa"}]
+}
+
+/title
+singleselect
+
+/singleselect {
+  default_value: "-1",
+  options: [[{dbcolumn: "age10", dbvalue: "0", text: "10", checked: true},
+             {dbcolumn: "age20", dbvalue: "1", text: "20"}],
+            [{dbcolumn: "age30", dbvalue: "2", text: "30"},
+             {dbcolumn: "age40", dbvalue: "3", text: "40"},
+             {dbcolumn: "age50", dbvalue: "4", text: "50"}]]
+}
+
+/title
+multiselect
+
+/multiselect {
+  default_value: "-1",
+  options: [[{dbcolumn: "msage10", dbvalue: "0", text: "10", checked: true},
+             {dbcolumn: "msage20", dbvalue: "1", text: "20"}],
+            [{dbcolumn: "msage30", dbvalue: "2", text: "30"},
+             {dbcolumn: "msage40", dbvalue: "3", text: "40"},
+             {dbcolumn: "msage50", dbvalue: "4", text: "50"}]]
+}
+
+/title
+numberfield
+
+/numberfield {
+    dbcolumn: "nfcolumn",
+    value: 199,
+    label: "A label for numberspinner",
+    minimum: 5,
+    maximum: 200, 
+    increment: 1
+}
+
+/title
+textarea
+
+/textarea {
+    dbcolumn: "column-name",
+    rows: 4,
+    label: "This is a description.",
+    length: 250,
+    optional: false,
+    text: "Write your name"
+}
+
+/title
+textbox
+
+/textbox {
+    dbcolumn: "column-name",
+    linebreak: true,
+    label: "A label",
+    length: 10,
+    text: "Text"
+}
+
+/title
+slider
+
+/slider {
+    dbcolumn: "column-name",
+    dbtype: "int",
+    labels: [0,1,2,3,4,5,6,7,8,9,10],
+    minimum: 0,
+    maximum: 10,
+    select: 5
+}
+
+

@@ -1,0 +1,6 @@
+//Visar var folk droppat ur ett experiment
+db.data.aggregate([
+  {$match:{expId:"5933384d-e3b6-4c2c-a327-421f6f112d31", type:"general"}},
+  {$group:{_id:"$position", count:{$sum:1}}}
+])
+

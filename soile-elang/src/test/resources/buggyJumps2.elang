@@ -1,0 +1,52 @@
+intermezzo-phase a
+  helptext("a")
+      if eq(1 2)
+    then
+      helptext("FAAAIL")
+    else
+      helptext("CORRECCCTOOO")
+    end
+end
+
+interaction-phase i
+  enterphase
+    setstimuli([1 2 3 4 5])
+  end
+
+  leavephase
+    helptext("leaving")
+  end
+
+  beforeiteration
+    plus(1 1)
+  end
+
+  afteriteration
+    plus(1 1)
+  end
+
+  iteration
+    var varWithALongName <- "ASDASDASDASDASD"
+    var ANOTHERLONGVAR <- "WWWWWWWW"
+    helptext("HELP ME")
+    helptext("javhol")
+    wait(seconds(2))
+  end
+end
+
+intermezzo-phase b
+    if eq(1 2)
+    then
+      helptext("FAAAIL")
+    else
+      helptext("CORRECCCTOOO")
+    end
+  helptext("b")
+end
+
+transition
+  start(a),
+  a -> i,
+  i -> b,
+  final(b)
+end

@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="soile2" default="all">
+  
+  
+  <property file="soile2ant.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.tox/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.zip"/>
+    <include name="*.apk"/>
+    <include name="*.war"/>
+    <include name="*.egg"/>
+    <include name="*.ear"/>
+    <include name="*.ane"/>
+    <include name="*.swc"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.7" value="${jdk.home.1.7}/bin"/>
+  <path id="jdk.classpath.1.7">
+    <fileset dir="${jdk.home.1.7}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxrt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.7}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.7}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.7"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.antlr-4.0-complete.classpath">
+    <pathelement location="${basedir}/soile-qmarkup/lib/antlr-4.0-complete.jar"/>
+  </path>
+  
+  <path id="library.antlr-4.5.1-complete.classpath">
+    <pathelement location="${basedir}/soile-elang/lib/antlr-4.5.1-complete.jar"/>
+  </path>
+  
+  <path id="library.junit:junit:4.11.classpath">
+    <pathelement location="${basedir}/lib/hamcrest-core-1.3.jar"/>
+    <pathelement location="${basedir}/lib/junit-4.11.jar"/>
+  </path>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module soile-utils -->
+  
+  <dirname property="module.soile-utils.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.soile-utils" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.soile-utils" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.soile-utils" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.soile-utils" value="-encoding windows-1252 -source 1.7 ${compiler.args}"/>
+  
+  <property name="soile-utils.output.dir" value="${module.soile-utils.basedir}/soile-utils/bin"/>
+  <property name="soile-utils.testoutput.dir" value="${module.soile-utils.basedir}/soile-utils/bin"/>
+  
+  <path id="soile-utils.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="soile-utils.module.production.classpath">
+    <path refid="${module.jdk.classpath.soile-utils}"/>
+    <pathelement location="${basedir}/soile-utils/lib/commons-io-2.4.jar"/>
+    <pathelement location="${basedir}/soile-utils/lib/commons-codec-1.8.jar"/>
+  </path>
+  
+  <path id="soile-utils.runtime.production.module.classpath">
+    <pathelement location="${soile-utils.output.dir}"/>
+    <pathelement location="${basedir}/soile-utils/lib/commons-io-2.4.jar"/>
+    <pathelement location="${basedir}/soile-utils/lib/commons-codec-1.8.jar"/>
+  </path>
+  
+  <path id="soile-utils.module.classpath">
+    <pathelement location="${soile-utils.output.dir}"/>
+    <path refid="${module.jdk.classpath.soile-utils}"/>
+    <pathelement location="${basedir}/soile-utils/lib/commons-io-2.4.jar"/>
+    <pathelement location="${basedir}/soile-utils/lib/commons-codec-1.8.jar"/>
+  </path>
+  
+  <path id="soile-utils.runtime.module.classpath">
+    <pathelement location="${soile-utils.output.dir}"/>
+    <pathelement location="${basedir}/soile-utils/lib/commons-io-2.4.jar"/>
+    <pathelement location="${basedir}/soile-utils/lib/commons-codec-1.8.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.soile-utils">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.soile-utils">
+    <patternset refid="excluded.from.module.soile-utils"/>
+  </patternset>
+  
+  <path id="soile-utils.module.sourcepath">
+    <dirset dir="${module.soile-utils.basedir}/soile-utils">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.soile-utils" depends="compile.module.soile-utils.production,compile.module.soile-utils.tests" description="Compile module soile-utils"/>
+  
+  <target name="compile.module.soile-utils.production" description="Compile module soile-utils; production classes">
+    <mkdir dir="${soile-utils.output.dir}"/>
+    <javac destdir="${soile-utils.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.soile-utils}/javac">
+      <compilerarg line="${compiler.args.soile-utils}"/>
+      <bootclasspath refid="soile-utils.module.bootclasspath"/>
+      <classpath refid="soile-utils.module.production.classpath"/>
+      <src refid="soile-utils.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.soile-utils"/>
+    </javac>
+    
+    <copy todir="${soile-utils.output.dir}">
+      <fileset dir="${module.soile-utils.basedir}/soile-utils/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.soile-utils.tests" depends="compile.module.soile-utils.production" description="compile module soile-utils; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.soile-utils" description="cleanup module">
+    <delete dir="${soile-utils.output.dir}"/>
+    <delete dir="${soile-utils.testoutput.dir}"/>
+  </target>
+  
+  
+  <!-- Module soile-elang -->
+  
+  <dirname property="module.soile-elang.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.soile-elang" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.soile-elang" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.soile-elang" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.soile-elang" value="-encoding windows-1252 -source 1.7 ${compiler.args}"/>
+  
+  <property name="soile-elang.output.dir" value="${module.soile-elang.basedir}/soile-elang/bin"/>
+  <property name="soile-elang.testoutput.dir" value="${module.soile-elang.basedir}/soile-elang/bin"/>
+  
+  <path id="soile-elang.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="soile-elang.module.production.classpath">
+    <path refid="${module.jdk.classpath.soile-elang}"/>
+    <pathelement location="${soile-utils.output.dir}"/>
+    <pathelement location="${basedir}/soile-elang/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/soile-elang/lib/fastutil-6.5.9.jar"/>
+    <path refid="library.junit:junit:4.11.classpath"/>
+    <path refid="library.antlr-4.5.1-complete.classpath"/>
+  </path>
+  
+  <path id="soile-elang.runtime.production.module.classpath">
+    <pathelement location="${soile-elang.output.dir}"/>
+    <path refid="soile-utils.runtime.production.module.classpath"/>
+    <pathelement location="${basedir}/soile-elang/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/soile-elang/lib/fastutil-6.5.9.jar"/>
+    <path refid="library.junit:junit:4.11.classpath"/>
+    <path refid="library.antlr-4.5.1-complete.classpath"/>
+  </path>
+  
+  <path id="soile-elang.module.classpath">
+    <pathelement location="${soile-elang.output.dir}"/>
+    <path refid="${module.jdk.classpath.soile-elang}"/>
+    <pathelement location="${soile-utils.output.dir}"/>
+    <pathelement location="${basedir}/soile-elang/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/soile-elang/lib/fastutil-6.5.9.jar"/>
+    <path refid="library.junit:junit:4.11.classpath"/>
+    <path refid="library.antlr-4.5.1-complete.classpath"/>
+  </path>
+  
+  <path id="soile-elang.runtime.module.classpath">
+    <pathelement location="${soile-elang.output.dir}"/>
+    <path refid="soile-utils.runtime.module.classpath"/>
+    <pathelement location="${basedir}/soile-elang/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/soile-elang/lib/fastutil-6.5.9.jar"/>
+    <path refid="library.junit:junit:4.11.classpath"/>
+    <path refid="library.antlr-4.5.1-complete.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.soile-elang">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.soile-elang">
+    <patternset refid="excluded.from.module.soile-elang"/>
+  </patternset>
+  
+  <path id="soile-elang.module.sourcepath">
+    <dirset dir="${module.soile-elang.basedir}/soile-elang">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="soile-elang.module.test.sourcepath">
+    <dirset dir="${module.soile-elang.basedir}/soile-elang">
+      <include name="tests"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.soile-elang" depends="compile.module.soile-elang.production,compile.module.soile-elang.tests" description="Compile module soile-elang"/>
+  
+  <target name="compile.module.soile-elang.production" depends="compile.module.soile-utils" description="Compile module soile-elang; production classes">
+    <mkdir dir="${soile-elang.output.dir}"/>
+    <javac destdir="${soile-elang.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.soile-elang}/javac">
+      <compilerarg line="${compiler.args.soile-elang}"/>
+      <bootclasspath refid="soile-elang.module.bootclasspath"/>
+      <classpath refid="soile-elang.module.production.classpath"/>
+      <src refid="soile-elang.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.soile-elang"/>
+    </javac>
+    
+    <copy todir="${soile-elang.output.dir}">
+      <fileset dir="${module.soile-elang.basedir}/soile-elang/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.soile-elang.tests" depends="compile.module.soile-elang.production" description="compile module soile-elang; test classes" unless="skip.tests">
+    <mkdir dir="${soile-elang.testoutput.dir}"/>
+    <javac destdir="${soile-elang.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.soile-elang}/javac">
+      <compilerarg line="${compiler.args.soile-elang}"/>
+      <bootclasspath refid="soile-elang.module.bootclasspath"/>
+      <classpath refid="soile-elang.module.classpath"/>
+      <src refid="soile-elang.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.soile-elang"/>
+    </javac>
+    
+    <copy todir="${soile-elang.testoutput.dir}">
+      <fileset dir="${module.soile-elang.basedir}/soile-elang/tests">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.soile-elang" description="cleanup module">
+    <delete dir="${soile-elang.output.dir}"/>
+    <delete dir="${soile-elang.testoutput.dir}"/>
+  </target>
+  
+  
+  <!-- Module soile-qmarkup -->
+  
+  <dirname property="module.soile-qmarkup.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.soile-qmarkup" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.soile-qmarkup" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.soile-qmarkup" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.soile-qmarkup" value="-encoding windows-1252 -source 1.7 ${compiler.args}"/>
+  
+  <property name="soile-qmarkup.output.dir" value="${module.soile-qmarkup.basedir}/soile-qmarkup/target/classes"/>
+  <property name="soile-qmarkup.testoutput.dir" value="${module.soile-qmarkup.basedir}/soile-qmarkup/target/classes"/>
+  
+  <path id="soile-qmarkup.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="soile-qmarkup.module.production.classpath">
+    <path refid="${module.jdk.classpath.soile-qmarkup}"/>
+    <pathelement location="${basedir}/soile-qmarkup/lib/commons-codec-1.8.jar"/>
+    <pathelement location="${basedir}/soile-qmarkup/lib/commons-lang3-3.1.jar"/>
+    <path refid="library.junit:junit:4.11.classpath"/>
+    <pathelement location="${soile-utils.output.dir}"/>
+    <path refid="library.antlr-4.0-complete.classpath"/>
+  </path>
+  
+  <path id="soile-qmarkup.runtime.production.module.classpath">
+    <pathelement location="${soile-qmarkup.output.dir}"/>
+    <pathelement location="${basedir}/soile-qmarkup/lib/commons-codec-1.8.jar"/>
+    <pathelement location="${basedir}/soile-qmarkup/lib/commons-lang3-3.1.jar"/>
+    <path refid="library.junit:junit:4.11.classpath"/>
+    <path refid="soile-utils.runtime.production.module.classpath"/>
+    <path refid="library.antlr-4.0-complete.classpath"/>
+  </path>
+  
+  <path id="soile-qmarkup.module.classpath">
+    <pathelement location="${soile-qmarkup.output.dir}"/>
+    <path refid="${module.jdk.classpath.soile-qmarkup}"/>
+    <pathelement location="${basedir}/soile-qmarkup/lib/commons-codec-1.8.jar"/>
+    <pathelement location="${basedir}/soile-qmarkup/lib/commons-lang3-3.1.jar"/>
+    <path refid="library.junit:junit:4.11.classpath"/>
+    <pathelement location="${soile-utils.output.dir}"/>
+    <path refid="library.antlr-4.0-complete.classpath"/>
+  </path>
+  
+  <path id="soile-qmarkup.runtime.module.classpath">
+    <pathelement location="${soile-qmarkup.output.dir}"/>
+    <pathelement location="${basedir}/soile-qmarkup/lib/commons-codec-1.8.jar"/>
+    <pathelement location="${basedir}/soile-qmarkup/lib/commons-lang3-3.1.jar"/>
+    <path refid="library.junit:junit:4.11.classpath"/>
+    <path refid="soile-utils.runtime.module.classpath"/>
+    <path refid="library.antlr-4.0-complete.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.soile-qmarkup">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.soile-qmarkup">
+    <patternset refid="excluded.from.module.soile-qmarkup"/>
+  </patternset>
+  
+  <path id="soile-qmarkup.module.sourcepath">
+    <dirset dir="${module.soile-qmarkup.basedir}/soile-qmarkup">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="soile-qmarkup.module.test.sourcepath">
+    <dirset dir="${module.soile-qmarkup.basedir}/soile-qmarkup">
+      <include name="tests"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.soile-qmarkup" depends="compile.module.soile-qmarkup.production,compile.module.soile-qmarkup.tests" description="Compile module soile-qmarkup"/>
+  
+  <target name="compile.module.soile-qmarkup.production" depends="compile.module.soile-utils" description="Compile module soile-qmarkup; production classes">
+    <mkdir dir="${soile-qmarkup.output.dir}"/>
+    <javac destdir="${soile-qmarkup.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.soile-qmarkup}/javac">
+      <compilerarg line="${compiler.args.soile-qmarkup}"/>
+      <bootclasspath refid="soile-qmarkup.module.bootclasspath"/>
+      <classpath refid="soile-qmarkup.module.production.classpath"/>
+      <src refid="soile-qmarkup.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.soile-qmarkup"/>
+    </javac>
+    
+    <copy todir="${soile-qmarkup.output.dir}">
+      <fileset dir="${module.soile-qmarkup.basedir}/soile-qmarkup/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.soile-qmarkup.tests" depends="compile.module.soile-qmarkup.production" description="compile module soile-qmarkup; test classes" unless="skip.tests">
+    <mkdir dir="${soile-qmarkup.testoutput.dir}"/>
+    <javac destdir="${soile-qmarkup.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.soile-qmarkup}/javac">
+      <compilerarg line="${compiler.args.soile-qmarkup}"/>
+      <bootclasspath refid="soile-qmarkup.module.bootclasspath"/>
+      <classpath refid="soile-qmarkup.module.classpath"/>
+      <src refid="soile-qmarkup.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.soile-qmarkup"/>
+    </javac>
+    
+    <copy todir="${soile-qmarkup.testoutput.dir}">
+      <fileset dir="${module.soile-qmarkup.basedir}/soile-qmarkup/tests">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.soile-qmarkup" description="cleanup module">
+    <delete dir="${soile-qmarkup.output.dir}"/>
+    <delete dir="${soile-qmarkup.testoutput.dir}"/>
+  </target>
+  
+  
+  <!-- Module soile-verticle -->
+  
+  <dirname property="module.soile-verticle.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.soile-verticle" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.soile-verticle" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.soile-verticle" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.soile-verticle" value="-encoding windows-1252 -source 1.7 ${compiler.args}"/>
+  
+  <property name="soile-verticle.output.dir" value="${module.soile-verticle.basedir}/soile-verticle/bin"/>
+  <property name="soile-verticle.testoutput.dir" value="${module.soile-verticle.basedir}/soile-verticle/bin"/>
+  
+  <path id="soile-verticle.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="soile-verticle.module.production.classpath">
+    <path refid="${module.jdk.classpath.soile-verticle}"/>
+    <pathelement location="${soile-qmarkup.output.dir}"/>
+    <pathelement location="${soile-utils.output.dir}"/>
+    <pathelement location="${soile-elang.output.dir}"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-codec-1.8.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-io-2.4.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/fastutil-6.5.9.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/hazelcast-2.6.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-annotations-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-core-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-databind-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/netty-all-4.0.2.Final.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/vertx-core-2.0.0-final.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/vertx-platform-2.0.0-final.jar"/>
+    <path refid="library.antlr-4.5.1-complete.classpath"/>
+  </path>
+  
+  <path id="soile-verticle.runtime.production.module.classpath">
+    <pathelement location="${soile-verticle.output.dir}"/>
+    <path refid="soile-qmarkup.runtime.production.module.classpath"/>
+    <path refid="soile-utils.runtime.production.module.classpath"/>
+    <path refid="soile-elang.runtime.production.module.classpath"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-codec-1.8.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-io-2.4.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/fastutil-6.5.9.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/hazelcast-2.6.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-annotations-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-core-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-databind-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/netty-all-4.0.2.Final.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/vertx-core-2.0.0-final.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/vertx-platform-2.0.0-final.jar"/>
+    <path refid="library.antlr-4.5.1-complete.classpath"/>
+  </path>
+  
+  <path id="soile-verticle.module.classpath">
+    <pathelement location="${soile-verticle.output.dir}"/>
+    <path refid="${module.jdk.classpath.soile-verticle}"/>
+    <pathelement location="${soile-qmarkup.output.dir}"/>
+    <pathelement location="${soile-utils.output.dir}"/>
+    <pathelement location="${soile-elang.output.dir}"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-codec-1.8.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-io-2.4.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/fastutil-6.5.9.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/hazelcast-2.6.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-annotations-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-core-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-databind-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/netty-all-4.0.2.Final.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/vertx-core-2.0.0-final.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/vertx-platform-2.0.0-final.jar"/>
+    <path refid="library.antlr-4.5.1-complete.classpath"/>
+  </path>
+  
+  <path id="soile-verticle.runtime.module.classpath">
+    <pathelement location="${soile-verticle.output.dir}"/>
+    <path refid="soile-qmarkup.runtime.module.classpath"/>
+    <path refid="soile-utils.runtime.module.classpath"/>
+    <path refid="soile-elang.runtime.module.classpath"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-codec-1.8.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-io-2.4.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/fastutil-6.5.9.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/hazelcast-2.6.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-annotations-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-core-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/jackson-databind-2.2.2.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/netty-all-4.0.2.Final.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/vertx-core-2.0.0-final.jar"/>
+    <pathelement location="${basedir}/soile-verticle/lib/vertx-platform-2.0.0-final.jar"/>
+    <path refid="library.antlr-4.5.1-complete.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.soile-verticle">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.soile-verticle">
+    <patternset refid="excluded.from.module.soile-verticle"/>
+  </patternset>
+  
+  <path id="soile-verticle.module.sourcepath">
+    <dirset dir="${module.soile-verticle.basedir}/soile-verticle">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.soile-verticle" depends="compile.module.soile-verticle.production,compile.module.soile-verticle.tests" description="Compile module soile-verticle"/>
+  
+  <target name="compile.module.soile-verticle.production" depends="compile.module.soile-qmarkup,compile.module.soile-utils,compile.module.soile-elang" description="Compile module soile-verticle; production classes">
+    <mkdir dir="${soile-verticle.output.dir}"/>
+    <javac destdir="${soile-verticle.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.soile-verticle}/javac">
+      <compilerarg line="${compiler.args.soile-verticle}"/>
+      <bootclasspath refid="soile-verticle.module.bootclasspath"/>
+      <classpath refid="soile-verticle.module.production.classpath"/>
+      <src refid="soile-verticle.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.soile-verticle"/>
+    </javac>
+    
+    <copy todir="${soile-verticle.output.dir}">
+      <fileset dir="${module.soile-verticle.basedir}/soile-verticle/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.soile-verticle.tests" depends="compile.module.soile-verticle.production" description="compile module soile-verticle; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.soile-verticle" description="cleanup module">
+    <delete dir="${soile-verticle.output.dir}"/>
+    <delete dir="${soile-verticle.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.soile-utils, clean.module.soile-elang, clean.module.soile-qmarkup, clean.module.soile-verticle" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.soile-utils, compile.module.soile-elang, compile.module.soile-qmarkup, compile.module.soile-verticle" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>

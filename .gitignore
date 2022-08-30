@@ -1,0 +1,44 @@
+#https://intellij-support.jetbrains.com/entries/23393067
+
+*.idea/workspace.xml
+*.idea/tasks.xml
+
+bin/
+# *.class
+generated/
+
+*soile-elang/jar
+*soile-utils/jar
+*soile-verticle/jar
+*soile-qmarkup/jar
+
+#Maven
+soile-elang/target/*
+soile-utils/target/*
+soile-verticle/target/*
+soile-qmarkup/target/*
+
+*prod/mods/fi.abo.kogni.soile~http-server~1.0/static_files/testimages
+
+prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-elang.jar
+prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-qmarkup.jar
+prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-utils.jar
+prod/mods/fi.abo.kogni.soile~common-resources~1.0/lib/soile2-verticle.jar
+
+# Sublime workspace files are user-specific
+*.sublime-workspace
+
+prod/mods/fi.abo.kogni.soile~http-server~1.1/
+prod/mods/fi.abo.kogni.soile~http-server~1.0/
+
+docs/_build
+
+# *io.vertx~mod-mongo-persistor~2.1.0/
+
+
+seleniumtests/selenium-server-standalone-2.44.0.jar
+seleniumtests/reports/
+seleniumtests/node_modules/
+
+prod/*.log
+/.metadata/

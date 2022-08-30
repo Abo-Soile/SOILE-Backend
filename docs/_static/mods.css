@@ -1,0 +1,37 @@
+.blue {
+    color: blue;
+}
+
+.blar {
+    color: blue;
+    font-size:120%; 
+}
+
+.bluu {
+    color: blue;
+    text-decoration: underline;
+}
+
+.monospace   {font-style: monospace;}
+.sanserif    {font-style: sanserif;}
+.serif       {font-style: serif;}
+.underline   {text-decoration: underline;}
+.linethtough {text-decoration: line-through;}
+.overline    {text-decoration: overline;}
+.small       {font-size: 80%;}
+.large       {font-style: 120%;}
+.aqua        {color: aqua;}
+.black       {color: black;}
+.blue        {color: blue;}
+.fuchsia     {color: fuchsia;}
+.gray        {color: gray;}
+.green       {color: green;}
+.lime        {color: lime;}
+.maroon      {color: maroon;}
+.navy        {color: navy;}
+.olive       {color: olive;}
+.orange      {color: orange;}
+.purple      {color: purple;}
+.red         {color: red;}
+.silver      {color: silver;}
+.teal        {color: teal;}

@@ -1,0 +1,17 @@
+function helptext(blaa)
+    plus(1 1)
+end
+
+intermezzo-phase p
+  helptext("Helping")
+end
+
+intermezzo-phase g
+  plus(1 1)
+end
+
+transition
+  start(p),
+  p -> g,
+  final(g)
+end
