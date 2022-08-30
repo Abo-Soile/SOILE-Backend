@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="antlr-4.0-complete">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/soile-qmarkup/lib/antlr-4.0-complete.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
