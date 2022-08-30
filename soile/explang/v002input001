@@ -1,5 +1,0 @@
-gvar counter <- 1
-
-function incrCounter()
-  return and(var1, !(var2), or(var3, {elem: 11}))
-end

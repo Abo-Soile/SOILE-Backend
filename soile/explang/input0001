@@ -1,7 +1,0 @@
-gvar varname <- [1, 2, 3, "string"];
-val constName <- Map [
-  2 -> "kaksi",
-  3 -> "kolme",
-  ? -> "tuntematon"
-];
-

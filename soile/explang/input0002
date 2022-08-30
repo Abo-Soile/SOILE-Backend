@@ -1,8 +1,0 @@
-val PI <- 3;
-
-function f(x)
-  if (x = 3)
-    return true;
-  end
-end
-
