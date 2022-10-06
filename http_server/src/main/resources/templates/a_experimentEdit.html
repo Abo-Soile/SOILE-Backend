@@ -48,6 +48,10 @@
         </div>        
         <label ng-if="experiment.exitButton">Exit button label</label>
         <input ng-if="experiment.exitButton" type="text" class="form-control" ng-model="experiment.exitButtonLable">
+        <label ng-if="experiment.exitButton">Return button label</label>
+        <input ng-if="experiment.exitButton" type="text" class="form-control" ng-model="experiment.exitReturnLable">
+        <label ng-if="experiment.exitButton">Exit confirmation question</label>
+        <input ng-if="experiment.exitButton" type="text" class="form-control" ng-model="experiment.exitConfirmationQuestion">
         
         <div class="form-inline">
           <label class="checkbox bigcheckbox">

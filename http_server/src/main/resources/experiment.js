@@ -264,7 +264,14 @@ router.get('/experiment/:id/phase/:phase', function (request) {
                 exp.exitButtonLable !== undefined
                   ? exp.exitButtonLable
                   : 'Exit';
-
+              context.exitReturnLable =
+                  exp.exitReturnLable !== undefined
+                    ? exp.exitReturnLable
+                    : 'Return';
+              context.exitConfirmationQuestion =
+                    exp.exitConfirmationQuestion !== undefined
+                      ? exp.exitConfirmationQuestion
+                      : 'Do you really want to exit the Experiment?';      
               var url = request.absoluteExternalURI();
 
               var cut = url.indexOf('/phase/');
