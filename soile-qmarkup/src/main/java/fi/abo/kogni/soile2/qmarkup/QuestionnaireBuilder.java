@@ -224,6 +224,15 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 }else {
                     tmpl.add("label", label);
                 }
+                Value separator;
+                if(value.getValue("separator") == null)
+                {
+                	separator = new StringValue("");
+                }
+                else
+                {
+                	separator = value.getValue("separator");
+                }
                 nfwd.setId(id);
                 String field = createColumnName(questionnaireId(),
                         value.getValue("dbcolumn").toString());
@@ -240,6 +249,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 tmpl.add("maximum", max);
                 tmpl.add("increment", incr);
                 tmpl.add("width", width);
+                tmpl.add("separator", separator);
                 if(startValue != 0) {
                     tmpl.add("value", startValue);
                 } else {
@@ -342,10 +352,17 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 Integer max = (Integer) value.getValue("maximum").asJavaObject();
                 Integer incr = (Integer) value.getValue("increment").asJavaObject();
                 Integer select = (Integer) value.getValue("select").asJavaObject();                
-                String style = "width = 380px"; 
+                String style; 
                 try {
-                	style = (String) value.getValue("style").asJavaObject();
-                	tmpl.add("style", style);
+                	if(value.getValue("style") == null)
+                	{
+                		style = "width = 380px";
+                	}
+                	else
+                	{
+                		style = (String) value.getValue("style").asJavaObject();
+                		tmpl.add("style", style);
+                	}
                 }
                 catch(Exception e)
                 {
@@ -384,6 +401,15 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                         value.getValue("dbcolumn").toString());
                 Value maxlen = value.getValue("length");
                 Boolean required = false;
+                Value separator;
+                if(value.getValue("separator") == null)
+                {
+                	separator = new StringValue("");
+                }
+                else
+                {
+                	separator = value.getValue("separator");
+                }
                 required = ((BooleanValue) value.getValue("optional")).asBoolean();
                 tmpl.add("id", id);
                 tmpl.add("rows", value.getValue("rows"));
@@ -394,6 +420,7 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
                 tawd.setId(id);
                 tawd.setColumn(encrypt(field));
                 tawd.setMaxLength(maxlen.toString());
+                tmpl.add("separator", separator);
                 addTag(tmpl.render());
                 Boolean optional = ((BooleanValue) value.getValue("optional")).asBoolean();
                 if (optional == false) {
