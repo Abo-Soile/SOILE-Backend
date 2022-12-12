@@ -5,10 +5,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import fi.abo.kogni.soile2.http_server.auth.JWTTokenCreator;
-import fi.abo.kogni.soile2.http_server.auth.SoileAuthenticationHandler;
+import fi.abo.kogni.soile2.http_server.auth.SoileAuthenticationBuilder;
 import fi.abo.kogni.soile2.http_server.auth.SoileFormLoginHandler;
 import fi.abo.kogni.soile2.http_server.authentication.SoileAuthentication;
 import fi.abo.kogni.soile2.http_server.authentication.SoileCookieCreationHandler;
+import fi.abo.kogni.soile2.http_server.routes.TaskRouter;
 import fi.abo.kogni.soile2.utils.DebugRouter;
 import fi.abo.kogni.soile2.utils.MessageResponseHandler;
 import fi.abo.kogni.soile2.utils.SoileCommUtils;
@@ -38,6 +39,7 @@ public class SoileRouteBuilding extends AbstractVerticle{
 	private MongoClient client;
 	private SoileCookieCreationHandler cookieHandler;
 	private Router soileRouter;
+	private SoileAuthenticationBuilder handler;
 	
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {		
@@ -47,15 +49,12 @@ public class SoileRouteBuilding extends AbstractVerticle{
 		RouterBuilder.create(vertx, config().getString("api"))
 					 .compose(this::setupAuth)
 					 .compose(this::setupLogin)
+					 .compose(this::addHandlers)
+					 .compose(this::setupTaskAPI)
 					 .onSuccess( routerBuilder ->
 					 {
 						// add Debug, Logger and Session Handlers.						
-						routerBuilder.rootHandler(LoggerHandler.create());
-						routerBuilder.rootHandler(SessionHandler.create(LocalSessionStore.create(vertx)));
-						routerBuilder.rootHandler(BodyHandler.create());
-						routerBuilder.rootHandler(new DebugRouter());
 						soileRouter = routerBuilder.createRouter();
-						LOGGER.debug("Routerbuilder started successfully");
 						startPromise.complete();
 					 })
 					 .onFailure(fail ->
@@ -71,18 +70,32 @@ public class SoileRouteBuilding extends AbstractVerticle{
 	{
 		return this.soileRouter;
 	}
-	
+	/**
+	 * Set up auth handling
+	 * @param builder the Routerbuilder to be used.
+	 * @return the routerbuilder in a future for composite use
+	 */
 	Future<RouterBuilder> setupAuth(RouterBuilder builder)
-	{		
-		builder.securityHandler("cookieAuth",SoileAuthenticationHandler.getCookieAuthProvider(vertx, client, cookieHandler))
-			   .securityHandler("JWTAuth", JWTAuthHandler.create(SoileAuthenticationHandler.getJWTAuthProvider(vertx)));
+	{	
+		handler = new SoileAuthenticationBuilder();
+		builder.securityHandler("cookieAuth",handler.getCookieAuthProvider(vertx, client, cookieHandler))
+			   .securityHandler("JWTAuth", JWTAuthHandler.create(handler.getJWTAuthProvider(vertx)));
+		return Future.<RouterBuilder>succeededFuture(builder);
+	}
+	
+	Future<RouterBuilder> addHandlers(RouterBuilder builder)
+	{
+		builder.rootHandler(LoggerHandler.create());
+		builder.rootHandler(SessionHandler.create(LocalSessionStore.create(vertx)));
+		builder.rootHandler(BodyHandler.create());
+		builder.rootHandler(new DebugRouter());
 		return Future.<RouterBuilder>succeededFuture(builder);
 	}
 	
 	Future<RouterBuilder> setupLogin(RouterBuilder builder)
 	{
 		builder.operation("addUser").handler(handleUserManagerCommand("addUser", MessageResponseHandler.createDefaultHandler(201)));
-		SoileFormLoginHandler formLoginHandler = new SoileFormLoginHandler(new SoileAuthentication(client), "username", "password",new JWTTokenCreator(), cookieHandler);
+		SoileFormLoginHandler formLoginHandler = new SoileFormLoginHandler(new SoileAuthentication(client), "username", "password",new JWTTokenCreator(handler,vertx), cookieHandler);
 		builder.operation("loginUser").handler(formLoginHandler::handle);
 		builder.operation("testAuth").handler(this::testAuth);
 		return Future.<RouterBuilder>succeededFuture(builder);
@@ -147,4 +160,11 @@ public class SoileRouteBuilding extends AbstractVerticle{
 		}
 	}	
 	
+	
+	public Future<RouterBuilder> setupTaskAPI(RouterBuilder builder)
+	{
+		TaskRouter router = new TaskRouter();
+		router.buildTaskAPI(builder);
+		return Future.<RouterBuilder>succeededFuture(builder);
+	}
 }

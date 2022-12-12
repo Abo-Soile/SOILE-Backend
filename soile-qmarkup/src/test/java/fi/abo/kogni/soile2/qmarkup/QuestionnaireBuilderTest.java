@@ -46,7 +46,7 @@ public class QuestionnaireBuilderTest extends TestCase {
     @Test
          public void testAllWidgets() throws Exception {
         String result = buildForm("fullWidgetTest.qmarkup");
-        //System.out.println(result);
+        System.out.println(result);
         assertTrue(succeeded);
     }
 

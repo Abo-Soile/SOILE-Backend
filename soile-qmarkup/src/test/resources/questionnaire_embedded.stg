@@ -120,7 +120,8 @@ numberfield(id,
       minimum, 
       maximum,
       optional,
-      increment) ::= <<
+      increment,
+      separator) ::= <<
 
 $if(label)$
 <label for="$id$">$label$</label>
@@ -155,7 +156,7 @@ $endif$
 
 >>
 
-textarea(id, text, rows, columns, label, required) ::= <<
+textarea(id, text, rows, columns, label, required, separator) ::= <<
 
 $if(label)$
 <label for="$id$">$label$</label>
