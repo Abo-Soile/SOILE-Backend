@@ -128,7 +128,7 @@ public abstract class APIElementBase<T extends ElementBase> implements APIElemen
 	@Override
 	@JsonProperty("private")
 	public Boolean getPrivate() {
-		return data.getBoolean("private");
+		return data.getBoolean("private", false);
 	}
 	
 	@Override
@@ -221,4 +221,10 @@ public abstract class APIElementBase<T extends ElementBase> implements APIElemen
 	public JsonObject getJson() {
 		return this.data;
 	}
+	
+	@Override
+	public void loadFromJson(JsonObject currentJson) {
+		this.data = currentJson;
+	}
+	
 }

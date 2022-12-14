@@ -28,25 +28,6 @@ public abstract class SoileVerticle extends AbstractVerticle {
         }
     }
 
-    /**
-     * Get the "shared" configuration of the verticle.
-     * 
-     * @deprecated use {@link #getSharedConfig()} instead.
-     */
-    @Deprecated
-    public JsonObject getShared() {
-        return getShared(config());
-    }
-    
-    /**
-     * Get the "shared" configuration of the verticle.
-     * 
-     * @deprecated use {@link #getSharedConfig()} instead.
-     */
-    @Deprecated
-    public JsonObject getShared(JsonObject conf) {
-        return conf.getJsonObject("shared");
-    }
     
     public JsonObject getSharedConfig() {
         return config().getJsonObject("shared");
@@ -55,29 +36,7 @@ public abstract class SoileVerticle extends AbstractVerticle {
     public JsonObject getVerticleConfig() {
         return config().getJsonObject("config");
     }
-
-    /**
-     * Get the "private" configuration of the verticle 
-     * (as opposed to "shared" configuration).
-     * 
-     * @deprecated use {@link #getVerticleConfig()} instead.
-     */
-    @Deprecated
-    public JsonObject getConfig() {
-        return config();
-    }
-
-    /**
-     * Get the "private" configuration of the verticle 
-     * (as opposed to "shared" configuration).
-     * 
-     * @deprecated use {@link #getVerticleConfig()} instead.
-     */
-    @Deprecated
-    public JsonObject getConfig(JsonObject conf) {
-        return conf.getJsonObject("config");
-    }
-    
+   
     public JsonObject getAddresses() {
         JsonObject shared = getSharedConfig();
         return shared.getJsonObject("addresses");

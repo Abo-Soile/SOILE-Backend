@@ -4,12 +4,25 @@ package fi.abo.kogni.soile2.http_server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import fi.abo.kogni.soile2.datamanagement.git.GitManager;
+import fi.abo.kogni.soile2.datamanagement.git.ResourceManager;
 import fi.abo.kogni.soile2.http_server.auth.JWTTokenCreator;
 import fi.abo.kogni.soile2.http_server.auth.SoileAuthenticationBuilder;
+import fi.abo.kogni.soile2.http_server.auth.SoileAuthorization;
+import fi.abo.kogni.soile2.http_server.auth.SoileAuthorization.PermissionType;
+import fi.abo.kogni.soile2.http_server.auth.SoileAuthorization.Roles;
+import fi.abo.kogni.soile2.http_server.auth.SoileAuthorization.TargetElementType;
+import fi.abo.kogni.soile2.http_server.auth.SoileIDBasedAuthorizationHandler;
 import fi.abo.kogni.soile2.http_server.auth.SoileFormLoginHandler;
 import fi.abo.kogni.soile2.http_server.authentication.SoileAuthentication;
 import fi.abo.kogni.soile2.http_server.authentication.SoileCookieCreationHandler;
+import fi.abo.kogni.soile2.http_server.routes.ElementRouter;
 import fi.abo.kogni.soile2.http_server.routes.TaskRouter;
+import fi.abo.kogni.soile2.projecthandling.apielements.APIExperiment;
+import fi.abo.kogni.soile2.projecthandling.apielements.APIProject;
+import fi.abo.kogni.soile2.projecthandling.projectElements.ElementManager;
+import fi.abo.kogni.soile2.projecthandling.projectElements.Experiment;
+import fi.abo.kogni.soile2.projecthandling.projectElements.Project;
 import fi.abo.kogni.soile2.utils.DebugRouter;
 import fi.abo.kogni.soile2.utils.MessageResponseHandler;
 import fi.abo.kogni.soile2.utils.SoileCommUtils;
@@ -21,6 +34,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.eventbus.ReplyException;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.authorization.PermissionBasedAuthorization;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -40,11 +54,16 @@ public class SoileRouteBuilding extends AbstractVerticle{
 	private SoileCookieCreationHandler cookieHandler;
 	private Router soileRouter;
 	private SoileAuthenticationBuilder handler;
-	
+	private SoileAuthorization soileAuthorization;
+	private GitManager gitManager;
+	private ResourceManager resourceManager;
 	@Override
-	public void start(Promise<Void> startPromise) throws Exception {		
+	public void start(Promise<Void> startPromise) throws Exception {
 		cookieHandler = new SoileCookieCreationHandler(vertx.eventBus());	
-		this.client = MongoClient.createShared(vertx, config().getJsonObject("db"));		
+		this.client = MongoClient.createShared(vertx, config().getJsonObject("db"));
+		gitManager = new GitManager(vertx.eventBus());
+		resourceManager = new ResourceManager(vertx.eventBus());
+		soileAuthorization = new SoileAuthorization(client);
 		LOGGER.debug("Starting Routerbuilder");
 		RouterBuilder.create(vertx, config().getString("api"))
 					 .compose(this::setupAuth)
@@ -64,6 +83,11 @@ public class SoileRouteBuilding extends AbstractVerticle{
 					 );
 		
 		
+	}
+	@Override
+	public void stop(Promise<Void> stopPromise)
+	{
+		stopPromise.complete();
 	}
 	
 	public Router getRouter()
@@ -148,6 +172,10 @@ public class SoileRouteBuilding extends AbstractVerticle{
 		LOGGER.debug("AuthTest got a request");
 		if(ctx.user() != null)
 		{
+			LOGGER.debug(ctx.user());
+			LOGGER.debug(ctx.user().principal().encodePrettily());
+			LOGGER.debug(ctx.user().attributes().encodePrettily());
+			LOGGER.debug(ctx.user().authorizations().toString());
 			ctx.request().response()
 			.putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
 			.end(new JsonObject().put("authenticated", true).put("user", ctx.user().principal().getString("username")).encodePrettily());
@@ -163,8 +191,36 @@ public class SoileRouteBuilding extends AbstractVerticle{
 	
 	public Future<RouterBuilder> setupTaskAPI(RouterBuilder builder)
 	{
-		TaskRouter router = new TaskRouter();
-		router.buildTaskAPI(builder);
+		TaskRouter router = new TaskRouter(gitManager, client, resourceManager, vertx.eventBus(), soileAuthorization);
+		builder.operation("getTaskList").handler(router::getElementList);
+		builder.operation("getVersionsForTask").handler(router::getVersionList);
+		builder.operation("createTask").handler(router::create);
+		builder.operation("getTask").handler(router::getElement);
+		builder.operation("updateTask").handler(router::writeElement);
+		builder.operation("getResource").handler(router::getResource);
+		builder.operation("putResource").handler(router::postResource);
+		return Future.<RouterBuilder>succeededFuture(builder);
+	}
+	
+	public Future<RouterBuilder> setupExperimentAPI(RouterBuilder builder)
+	{
+		ElementRouter<Experiment> router = new ElementRouter<Experiment>(new ElementManager<Experiment>(Experiment::new, APIExperiment::new, client, gitManager), soileAuthorization, vertx.eventBus(), client );
+		builder.operation("getExperimentList").handler(router::getElementList);
+		builder.operation("getVersionsForExperiment").handler(router::getVersionList);
+		builder.operation("createExperiment").handler(router::create);
+		builder.operation("getExperiment").handler(router::getElement);
+		builder.operation("updateExperiment").handler(router::writeElement);
+		return Future.<RouterBuilder>succeededFuture(builder);
+	}
+	
+	public Future<RouterBuilder> setupProjectAPI(RouterBuilder builder)
+	{
+		ElementRouter<Project> router = new ElementRouter<Project>(new ElementManager<Project>(Project::new, APIProject::new, client, gitManager), soileAuthorization, vertx.eventBus(), client );
+		builder.operation("getProjectList").handler(router::getElementList);
+		builder.operation("getVersionsForProject").handler(router::getVersionList);
+		builder.operation("createProject").handler(router::create);
+		builder.operation("getProject").handler(router::getElement);
+		builder.operation("updateProject").handler(router::writeElement);
 		return Future.<RouterBuilder>succeededFuture(builder);
 	}
 }

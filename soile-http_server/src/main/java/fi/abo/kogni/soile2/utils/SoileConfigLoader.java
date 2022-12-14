@@ -22,10 +22,16 @@ public class SoileConfigLoader {
 	public static final String COMMANDS = "commands";
 	public static final String HTTP_SERVER_CFG = "http_server";
 	public static final String TASK_CFG = "tasks";
+	public static final String VERTICLE_CFG = "verticles";
 
 	public static final String Owner = "Owner";
 	public static final String Participant = "Participant";
 	public static final String Collaborator = "Collaborator";	
+	
+	public static final String EXPERIMENT = "experiment";
+	public static final String PROJECT = "project";
+	public static final String TASK = "task";
+	public static final String INSTANCE = "instance";
 	
 	
 	private static JsonObject dbCfg;
@@ -36,6 +42,7 @@ public class SoileConfigLoader {
 	private static JsonObject expCfg;	
 	private static JsonObject serverCfg;
 	private static JsonObject taskCfg;
+	private static JsonObject verticleCfg;
 	
 	public static ConfigRetriever getRetriever(Vertx vertx)
 	{
@@ -62,6 +69,7 @@ public class SoileConfigLoader {
 		expCfg = config.getJsonObject(EXPERIMENT_CFG);
 		serverCfg = config.getJsonObject(HTTP_SERVER_CFG);
 		taskCfg = config.getJsonObject(TASK_CFG);
+		verticleCfg = config.getJsonObject(VERTICLE_CFG);
 		return Future.succeededFuture();
 	}
 	
@@ -186,6 +194,17 @@ public class SoileConfigLoader {
 	{
 		return taskCfg.getString(property);
 	}
+	
+	/**
+	 * Get a property from the Verticle config.
+	 * @param property - the property to obtain.
+	 * @return the property
+	 */
+	public static String getVerticleProperty(String property)
+	{
+		return verticleCfg.getString(property);
+	}
+	
 	/**
 	 * Get a property from the Communication config.
 	 * @param property - the property to obtain.
@@ -285,6 +304,46 @@ public class SoileConfigLoader {
 		MongoAuthorizationOptions res = new MongoAuthorizationOptions();
 		res.setCollectionName(dbCfg.getString("userCollection"));
 		res.setPermissionField(getdbField("userPermissionsField"));
+		res.setRoleField(getdbField("userRolesField"));
+		res.setUsernameField(getdbField("usernameField"));				
+		return res;
+	}
+	
+	public static MongoAuthorizationOptions getMongoTaskAuthorizationOptions()
+	{
+		MongoAuthorizationOptions res = new MongoAuthorizationOptions();
+		res.setCollectionName(dbCfg.getString("userCollection"));
+		res.setPermissionField(getdbField("taskPermissionsField"));
+		res.setRoleField(getdbField("userRolesField"));
+		res.setUsernameField(getdbField("usernameField"));				
+		return res;
+	}
+	
+	public static MongoAuthorizationOptions getMongoExperimentAuthorizationOptions()
+	{
+		MongoAuthorizationOptions res = new MongoAuthorizationOptions();
+		res.setCollectionName(dbCfg.getString("userCollection"));
+		res.setPermissionField(getdbField("experimentPermissionsField"));
+		res.setRoleField(getdbField("userRolesField"));
+		res.setUsernameField(getdbField("usernameField"));				
+		return res;
+	}
+	
+	public static MongoAuthorizationOptions getMongoProjectAuthorizationOptions()
+	{
+		MongoAuthorizationOptions res = new MongoAuthorizationOptions();
+		res.setCollectionName(dbCfg.getString("userCollection"));
+		res.setPermissionField(getdbField("projectPermissionsField"));
+		res.setRoleField(getdbField("userRolesField"));
+		res.setUsernameField(getdbField("usernameField"));				
+		return res;
+	}
+	
+	public static MongoAuthorizationOptions getMongoInstanceAuthorizationOptions()
+	{
+		MongoAuthorizationOptions res = new MongoAuthorizationOptions();
+		res.setCollectionName(dbCfg.getString("userCollection"));
+		res.setPermissionField(getdbField("instancePermissionsField"));
 		res.setRoleField(getdbField("userRolesField"));
 		res.setUsernameField(getdbField("usernameField"));				
 		return res;
