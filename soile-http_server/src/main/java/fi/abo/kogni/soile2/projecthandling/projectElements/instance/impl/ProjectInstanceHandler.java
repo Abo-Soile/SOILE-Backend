@@ -8,14 +8,17 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import fi.abo.kogni.soile2.datamanagement.datalake.DataLakeFile;
 import fi.abo.kogni.soile2.datamanagement.utils.TimeStampedMap;
 import fi.abo.kogni.soile2.projecthandling.participant.Participant;
 import fi.abo.kogni.soile2.projecthandling.participant.DataParticipant;
 import fi.abo.kogni.soile2.projecthandling.participant.impl.DBParticipant;
 import fi.abo.kogni.soile2.projecthandling.projectElements.instance.ProjectInstance;
+import fi.abo.kogni.soile2.utils.SoileConfigLoader;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.file.FileSystem;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
@@ -33,10 +36,9 @@ public class ProjectInstanceHandler {
 	 * @param dataLakeFolder The Folder where the dataLake for result files is located
 	 * @param client the mongoclient for connecting to the mongo database
 	 */
-	public ProjectInstanceHandler(String dataLakeFolder,
-			MongoClient client, EventBus eb) {
+	public ProjectInstanceHandler(MongoClient client, EventBus eb) {
 		super();
-		this.dataLakeFolder = dataLakeFolder;
+		this.dataLakeFolder = SoileConfigLoader.getServerProperty("soileResultDirectory");
 		this.manager = new ProjectInstanceManager(client, eb);
 		projects = new TimeStampedMap<String, ProjectInstance>(manager, 1000*60*60);
 	}
@@ -48,74 +50,53 @@ public class ProjectInstanceHandler {
 	 * @param client the mongoclient for connecting to the mongo database
 	 * @param manager a custom project Manager.
 	 */
-	public ProjectInstanceHandler( String dataLakeFolder,
-			MongoClient client, ProjectInstanceManager manager) {
+	public ProjectInstanceHandler(MongoClient client, ProjectInstanceManager manager) {
 		super();
-		this.dataLakeFolder = dataLakeFolder;
+		this.dataLakeFolder = SoileConfigLoader.getServerProperty("soileResultDirectory");
 		this.manager = manager;
 		projects = new TimeStampedMap<String, ProjectInstance>(manager, 1000*60*60);
 	}
 
-	
+	/**
+	 * Clean up the data in the Data Maps
+	 */
+	public void cleanup()
+	{
+		projects.cleanup();
+	}
 	/**
 	 * Get a list of all Files associated with the specified {@link DBParticipant} within this {@link ProjectInstance}.
 	 * @param p the {@link DBParticipant} for which to retrieve the file results.
 	 * @return
 	 */
-	public Set<File> getFilesinProject(Set<TaskFileResult> fileResults)
+	public Set<DataLakeFile> getFilesinProject(Set<TaskFileResult> fileResults)
 	{
-		HashSet<File> fileSet = new HashSet<File>();
+		HashSet<DataLakeFile> fileSet = new HashSet<DataLakeFile>();
 		for(TaskFileResult res : fileResults)
 		{
-			try {
-				fileSet.add(res.getFile(dataLakeFolder));
-			}
-			catch(FileNotFoundException e)
-			{
-				//TODO: properly handle this.
-				// if a file can't be found, that's fine it seems to already have been deleted.
-				continue;
-			}
+			fileSet.add(res.getFile(dataLakeFolder));
 		}
 		return fileSet;
 	}
 	
 	/**
-	 * Get the folders for a specific participant
-	 * @param p the participant for which to retrieve the folders within this project.
-	 * @return a set of Files representing the folders for this participant, the folders have been checked for existance at time of generation.
+	 * Add the participant to the project with the given ID.
+	 * @param projectInstanceID The id of the project to which to add the participant.
+	 * @param participant The id of the participant to add to the project.
+	 * @Return a Successfull future if the participant was added
 	 */
-	public Set<File> getTaskFoldersForParticipant(Set<String> tasks, String participantID)
-	{
-		HashSet<File> fileSet = new HashSet<File>();
-		for(String taskID : tasks)
-		{
-			File folder = new File(dataLakeFolder + File.separator +  taskID + File.separator + participantID);
-			if(folder.exists())
-			{
-				fileSet.add(folder);
-			}			
-		}
-		return fileSet;
-	}
-	
-	/**
-	 * Get the participant for the given id. if id is null, a new participant will be created.
-	 * @param id The id of the participant, or null if a new participant needs to be created.
-	 * @param handler the handler that handles the created participant.
-	 */
-	public Future<Boolean> addParticipant(String projectInstanceID, Participant p)
+	public Future<Void> addParticipant(String projectInstanceID, Participant participant)
 	{
 		
-		Promise<Boolean> addPromise = Promise.<Boolean>promise();
+		Promise<Void> addPromise = Promise.<Void>promise();
 				
 		// if no ID is provided, create a new Participant for the indicated project and add that participant to the list.		
 		projects.getData(projectInstanceID).onSuccess(targetProject -> 
 		{	
 			
-			targetProject.addParticipant(p)
+			targetProject.addParticipant(participant)
 			.onSuccess(success -> {
-				addPromise.complete(success);
+				addPromise.complete();
 			})
 			.onFailure(err -> addPromise.fail(err));
 		}).onFailure(fail -> {
@@ -123,6 +104,32 @@ public class ProjectInstanceHandler {
 		});		
 		return addPromise.future();
 	}
+	
+	/**
+	 * Remove the participant with the given id from the project.
+	 * @param projectInstanceID The id of the project to which to add the participant.
+	 * @param participant The participant to remove from the project.
+	 * @Return a Successfull future if the participant was removed
+	 */
+	public Future<Void> removeParticipant(String projectInstanceID, Participant participant)
+	{
+		
+		Promise<Void> addPromise = Promise.<Void>promise();
+				
+		// if no ID is provided, create a new Participant for the indicated project and add that participant to the list.		
+		projects.getData(projectInstanceID).onSuccess(targetProject -> 
+		{				
+			targetProject.deleteParticipant(participant)
+			.onSuccess(success -> {
+				addPromise.complete();
+			})
+			.onFailure(err -> addPromise.fail(err));
+		}).onFailure(fail -> {
+				addPromise.fail(fail);	
+		});		
+		return addPromise.future();
+	}
+	
 	
 	/**
 	 * Start a project with the given Project Information.
@@ -155,6 +162,17 @@ public class ProjectInstanceHandler {
 	 */
 	public Future<JsonArray> getProjectList(JsonArray Permissions)
 	{
-		return manager.getProjectInstances(Permissions);
+		return manager.getProjectInstanceStatus(Permissions);
+	}
+	
+	/**
+	 * 
+	 */
+	public Future<JsonObject> getAvailableData(ProjectInstance instance)
+	{
+		Promise<JsonObject> dataPromise = Promise.promise();
+		
+		
+		return dataPromise.future();
 	}
 }

@@ -96,11 +96,14 @@ public class CodeGenerator {
             processor.visit(iagen);
             this.codeOutput.append(generatedOutput.toCode());
         } catch (ParseTreeProcessorException e) {
+        	e.printStackTrace(System.out);
             this.errorMessages.append(e.getMessage());
         } catch (IOException e) {
+        	e.printStackTrace(System.out);
             this.errorMessages.append("Problem opening the template file.");
         }
         catch (NullPointerException e) {
+        	e.printStackTrace(System.out);
             this.errorMessages.append("Undefined error, make sure that variables are defined correctly before assignments.");
             this.errorMessages.append(e.getMessage());
         }

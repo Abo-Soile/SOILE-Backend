@@ -25,7 +25,7 @@ public class QuestionnaireBuilderTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-       String template = "questionnaire_embedded.stg";
+       String template = "questionnaire_embedded_test.stg";
        builder = new QuestionnaireBuilder(template);
 
        succeeded = true;

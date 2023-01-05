@@ -3,16 +3,19 @@ package fi.abo.kogni.soile2.http_server;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import fi.aalto.scicomp.gitFs.gitProviderVerticle;
+import fi.abo.kogni.soile2.http_server.verticles.CodeRetrieverVerticle;
 import fi.abo.kogni.soile2.http_server.verticles.ExperimentLanguageVerticle;
-import fi.abo.kogni.soile2.http_server.verticles.SoileAuthenticationVerticle;
-import fi.abo.kogni.soile2.http_server.verticles.SoileExperimentPermissionVerticle;
+import fi.abo.kogni.soile2.http_server.verticles.ParticipantVerticle;
+import fi.abo.kogni.soile2.http_server.verticles.QuestionnaireRenderVerticle;
 import fi.abo.kogni.soile2.http_server.verticles.SoileUserManagementVerticle;
+import fi.abo.kogni.soile2.http_server.verticles.TaskInformationverticle;
+import fi.abo.kogni.soile2.projecthandling.participant.ParticipantHandler;
+import fi.abo.kogni.soile2.projecthandling.projectElements.instance.impl.ProjectInstanceHandler;
 import fi.abo.kogni.soile2.utils.SoileConfigLoader;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.core.AbstractVerticle;
@@ -24,12 +27,9 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.JksOptions;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.sstore.LocalSessionStore;
-import io.vertx.ext.web.sstore.SessionStore;
 public class SoileServerVerticle extends AbstractVerticle {
 
-	static final Logger LOGGER = LogManager.getLogger(SoileExperimentPermissionVerticle.class);
+	static final Logger LOGGER = LogManager.getLogger(SoileServerVerticle.class);
 	private JsonObject soileConfig = new JsonObject();
 	SoileRouteBuilding soileRouter;
 	ConcurrentLinkedQueue<String> deployedVerticles;
@@ -37,16 +37,16 @@ public class SoileServerVerticle extends AbstractVerticle {
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		soileRouter = new SoileRouteBuilding();
-		deployedVerticles = new ConcurrentLinkedQueue<>();
-		getConfig()
-		.compose(this::storeConfig)
-		.compose(this::setupFolders)
-		.compose(this::deployVerticles)
+		deployedVerticles = new ConcurrentLinkedQueue<>();		
+		setupConfig()
+		.compose(this::setupFolders)		
+		.compose(this::deployVerticles)		
 		.compose(this::startHttpServer).onComplete(res ->
 		{
 			if(res.succeeded())
 			{
-				LOGGER.debug("Server started successfully");
+				LOGGER.debug("Server started successfully and listening on port " + SoileConfigLoader.getServerIntProperty("port"));
+				
 				startPromise.complete();
 			}
 			else
@@ -59,7 +59,6 @@ public class SoileServerVerticle extends AbstractVerticle {
 	}
 	@Override
 	public void stop(Promise<Void> stopPromise) throws Exception {
-		DeploymentOptions opts = new DeploymentOptions().setConfig(soileConfig);
 		List<Future> unDeploymentFutures = new LinkedList<Future>();		
 		for(String deploymentID : deployedVerticles)
 		{
@@ -85,29 +84,27 @@ public class SoileServerVerticle extends AbstractVerticle {
 	Future<Void> deployVerticles(Void unused)
 	{
 		DeploymentOptions opts = new DeploymentOptions().setConfig(soileConfig);
+		soileRouter.setDeploymentOptions(opts);
 		List<Future> deploymentFutures = new LinkedList<Future>();
 		deploymentFutures.add(addDeployedVerticle(vertx.deployVerticle(new SoileUserManagementVerticle(), opts)));
-		//deploymentFutures.add(Future.<String>future(promise -> vertx.deployVerticle(new SoileExperimentPermissionVerticle(), opts, promise)));				
-		// deploymentFutures.add(Future.<String>future(promise -> vertx.deployVerticle(new SoileAuthenticationVerticle(), opts, promise)));
 		deploymentFutures.add(addDeployedVerticle(vertx.deployVerticle(soileRouter, opts)));
 		deploymentFutures.add(addDeployedVerticle(vertx.deployVerticle(new gitProviderVerticle(SoileConfigLoader.getServerProperty("gitVerticleAddress"), SoileConfigLoader.getServerProperty("soileGitFolder")), opts )));
-		deploymentFutures.add(addDeployedVerticle(vertx.deployVerticle(new ExperimentLanguageVerticle(), opts)));
-		//deploymentFutures.add(Future.<String>future(promise -> vertx.deployVerticle("js:templateManager.js", opts, promise)));
 		return CompositeFuture.all(deploymentFutures).mapEmpty();
 	}
 	
-	Future<Void> storeConfig(JsonObject configLoadResult)
+	Future<Void> setupConfig()
 	{
-		soileConfig.mergeIn(configLoadResult);
-		return SoileConfigLoader.setConfigs(configLoadResult);		
+		Promise<Void> finishedSetupPromise = Promise.promise();		
+		SoileConfigLoader.setupConfig(vertx)
+		.onSuccess(finished -> {
+			soileConfig.mergeIn(SoileConfigLoader.config());
+			finishedSetupPromise.complete();
+		})
+		.onFailure(err -> finishedSetupPromise.fail(err));
+		
+		return finishedSetupPromise.future();		
 	}
 	
-	Future<JsonObject> getConfig()
-	{
-		ConfigRetriever cfgRetriever = SoileConfigLoader.getRetriever(vertx);		
-		return Future.future( promise -> cfgRetriever.getConfig(promise));
-	}
-
 
 	Future<Void> setupFolders(Void unused)
 	{
@@ -142,6 +139,7 @@ public class SoileServerVerticle extends AbstractVerticle {
 	
 	Future<Void> startHttpServer(Void unused)
 	{
+		LOGGER.info("Starting HTTP Server");
 		 JksOptions keyOptions = new JksOptions()
 		    .setPath("server-keystore.jks")
 		    .setPassword("secret");		    
@@ -153,8 +151,7 @@ public class SoileServerVerticle extends AbstractVerticle {
 									 .setSsl(true)
 									 .setKeyStoreOptions(keyOptions);
 		HttpServer server = vertx.createHttpServer(opts).requestHandler(soileRouter.getRouter());
-		int httpPort = http_config.getInteger("port", 8080);
-				
+		int httpPort = http_config.getInteger("port", SoileConfigLoader.getServerIntProperty("port"));			
 		return Future.<HttpServer>future(promise -> server.listen(httpPort,promise)).mapEmpty();	
 	}
 }

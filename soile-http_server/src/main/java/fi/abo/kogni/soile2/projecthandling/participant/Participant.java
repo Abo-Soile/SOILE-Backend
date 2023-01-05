@@ -33,6 +33,12 @@ public interface Participant {
 	String getProjectPosition();
 
 	/**
+	 * Get the ID of the project this participant is in.
+	 * @return
+	 */
+	String getProjectID();
+
+	/**
 	 * Get all tasks done for a given experiment
 	 * @return
 	 */
@@ -78,6 +84,7 @@ public interface Participant {
 
 	/**
 		 * Add the output to this participant, we try not to recalculate this....
+		 * This will ONLY set it within this instance and will NOT update 
 		 * @param taskID The taskID for the output
 		 * @param outputName the name of the output in the task
 		 * @param value the value of the output
@@ -85,7 +92,8 @@ public interface Participant {
 	void addOutput(String taskID, String outputName, Number value, Date outputDate);
 	
 	/**
-	 * Set outputs for the specified task 
+	 * Set outputs for the specified task This function should ALSO handle Database storage and update of the results.
+	 * Note, that only the latest results of a task will be available in the outputs.
 	 * @param taskID he task for which to store data
 	 * @param taskOutputData The output data in the format as specified for TaskData.outputdata
 	 */
@@ -119,7 +127,12 @@ public interface Participant {
 	 */
 	String getID();
 
-
+	/**
+	 * Sart the project for this user, resetting the data
+	 * @param taskID The task to set as the starting task
+	 * @return Retuurning the position of this participant
+	 */
+	Future<Void> startProject(String taskID);
 
 	/**
 	 * Get a Json of this participant that contains all necessary information to continue the project.
@@ -128,12 +141,36 @@ public interface Participant {
 	 */
 	Future<JsonObject> toJson();
 
+	/**
+	 * Whether this is equal to another participant. They are equal if they have the same ID.
+	 * @param other
+	 * @return whether the participants have the same ID
+	 */
 	boolean equals(Object other);
+	
+	/**
+	 * Check whether the participant has finished its project.
+	 * @return whether the participant has finished this project.
+	 */
+	boolean isFinished();
 
+	
 	/**
 	 * Save this Participant updating all relevant Information except resultData.
 	 * @return
 	 */
 	Future<String> save();
 	
+	/**
+	 * Indicate whether this participant has a token associated with it.
+	 * @return
+	 */
+	boolean hasToken();
+	
+	/**
+	 * Get the token associated with this participant.
+	 * @return
+	 */
+	String getToken();
+
 }

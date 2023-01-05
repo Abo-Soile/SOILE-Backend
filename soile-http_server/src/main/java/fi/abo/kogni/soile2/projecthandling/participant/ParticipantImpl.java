@@ -38,27 +38,29 @@ public abstract class ParticipantImpl implements Participant{
 		protected String uuid;
 		//protected JsonArray finished;
 		protected String position;
-		protected JsonObject outputData;
+//		protected JsonObject outputData;
 		protected JsonArray steps;
 		protected JsonArray activeExperiments;
-		HashMap<String,List> finishedExperimentTasks;
+		HashMap<String,List<String>> finishedExperimentTasks;
 		protected int currentStep;
 		protected boolean finished;
+		protected String project;
 		/**
 		 * This map is a way to get output data faster than relying on outputData
 		 */	
-		private DatedDataMap<String,Double> outputMap;	
+		protected DatedDataMap<String,Double> outputMap;	
 		static final Logger LOGGER = LogManager.getLogger(ParticipantImpl.class);
 		private static DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy - HH:SS");
+		
 		/**
 		 * A Participant is strictly associated with one project, thus we can construct it from the participant json and the project information. 	 
 		 * @param data the data for the participant
-		 * @param p the Project it is associatd with.
+		 * @param p the Project it is associated with.
 		 */
 		public ParticipantImpl(JsonObject data)
 		{
 			// if this json comes from the db, we have an _id						
-			outputData = new JsonObject();
+//			outputData = new JsonObject();
 			finishedExperimentTasks = new HashMap<>();									
 			setupParticipant(data);
 		}
@@ -74,6 +76,7 @@ public abstract class ParticipantImpl implements Participant{
 			finished = participantInfo.getBoolean("finished",false);
 			parseOutputData(participantInfo.getJsonArray("outputData", new JsonArray()));	
 			activeExperiments = participantInfo.getJsonArray("activeExperiments",new JsonArray());
+			project = participantInfo.getString("project", "");
 			for(Object o : participantInfo.getJsonArray("finishedExperimentTasks",new JsonArray()))
 			{			
 				JsonObject jo = (JsonObject) o;
@@ -112,29 +115,14 @@ public abstract class ParticipantImpl implements Participant{
 					}
 				}
 			}
-		}		
-				
-		
-		/**
-		 * Encode the output data into a {@link JsonArray}.
-		 * @return The jsonArray of Output data as required by the database
-		 */
-		private JsonArray encodeOutputDataForDB()
+		}					
+
+		@Override
+		public String getProjectID()
 		{
-			JsonArray currentOutputs = new JsonArray();
-			for(String taskName : outputData.fieldNames())
-			{
-				JsonArray taskData = outputData.getJsonArray(taskName);
-				JsonObject OutputTaskElement = new JsonObject();
-				OutputTaskElement.put("task", taskName);
-				OutputTaskElement.put("outputs", taskData);			
-				currentOutputs.add(OutputTaskElement);
-			}
-			return currentOutputs;
+			return project;
 		}
-
-
-
+		
 		/**
 		 * Get the map of Outputs to provide to a Math-parser. This is generated once per user on request and only updated afterwards.
 		 * @return a Map of all t<TaskUUID>.<output> -> value mappings. 
@@ -161,6 +149,7 @@ public abstract class ParticipantImpl implements Participant{
 		 * @param taskID The taskID for the output
 		 * @param outputName the name of the output in the task
 		 * @param value the value of the output
+		 * @param outputDate the timestamp for this output.
 		 */
 		@Override
 		public void addOutput(String taskID, String outputName, Number value, Date outputDate)
@@ -169,24 +158,9 @@ public abstract class ParticipantImpl implements Participant{
 			{
 				outputMap = new DatedDataMap<>();
 			}		
-			outputMap.addDatedEntry(taskID + "." + outputName, new TimeStampedData<Double>(value.doubleValue()));		
+			outputMap.addDatedEntry(taskID + "." + outputName, new TimeStampedData<Double>(value.doubleValue()));							
 
-			if(!outputData.containsKey(taskID))
-			{
-				outputData.put(taskID, new JsonArray());
-			}
-			outputData.getJsonArray(taskID).add(new JsonObject().put("name",outputName).put("value",value).put("timestamp", dateFormatter.format(outputDate)));		
 		}
-		/**
-		 * Get whether a a specific task is finished for this participant
-		 * @param taskID the Task to check
-		 * @return whether the task is finished or not.
-		 */
-//		public boolean finished(String taskID)
-//		{
-//			return finished.contains(taskID);
-//		}
-
 		/**
 		 * Get the position of this participant within its project
 		 * @return
@@ -262,7 +236,7 @@ public abstract class ParticipantImpl implements Participant{
 		/**
 		 * Set outputs for the specified task 
 		 * @param taskID he task for which to store data
-		 * @param taskOutputData The output data in the format as specified for TaskData.outputdata
+		 * @param taskOutputData The output data in the format as specified for TaskData.outputData
 		 */
 		@Override
 		public Future<Void> setOutputDataForTask(String taskID, JsonArray taskOutputData)
@@ -287,6 +261,18 @@ public abstract class ParticipantImpl implements Participant{
 		{					
 			// All data processed. Save this participant.
 			return save().mapEmpty();
+		}
+		
+		@Override 
+		public Future<Void> startProject(String taskID)
+		{				
+			position = taskID;
+			currentStep = 1;
+			steps = new JsonArray();
+			finished = false;
+			activeExperiments = new JsonArray();
+			finishedExperimentTasks = new HashMap<>();
+			return resetParticipantResults();						
 		}
 		
 		@Override
@@ -334,6 +320,7 @@ public abstract class ParticipantImpl implements Participant{
 			.put("finished", finished)
 			.put("position", position)			
 			.put("activeExperiments", this.activeExperiments)
+			.put("project", project)
 			.put("finishedExperimentTasks", convertFinishedTasks());
 			return Future.succeededFuture(current);
 		}
@@ -364,9 +351,40 @@ public abstract class ParticipantImpl implements Participant{
 		}
 		
 		@Override
+		public boolean isFinished()
+		{
+			return finished;
+		}
+		
+		@Override
 		public abstract Future<String> save();
 
 		@Override
 		public abstract Future<Integer> getCurrentStep();
+
+		public Future<Void> resetParticipantResults()
+		{					
+			return resetOutputs().compose(this::save).mapEmpty();
+		}
 		
+		private Future<Void> save(Void unused)
+		{								
+			return save().mapEmpty();
+		}
+		
+		public Future<Void> resetOutputs()
+		{
+			outputMap = new DatedDataMap<>();
+			return Future.succeededFuture();
+		}
+		
+		public boolean hasToken()
+		{
+			return false;
+		}
+		
+		public String getToken()
+		{
+			return null;
+		}
 }

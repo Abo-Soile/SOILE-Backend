@@ -1,20 +1,23 @@
 package fi.abo.kogni.soile2.projecthandling.participant;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fi.abo.kogni.soile2.datamanagement.utils.CheckDirtyMap;
-import fi.abo.kogni.soile2.datamanagement.utils.TimeStampedMap;
 import fi.abo.kogni.soile2.projecthandling.projectElements.instance.ProjectInstance;
 import fi.abo.kogni.soile2.projecthandling.projectElements.instance.impl.ProjectInstanceHandler;
+import fi.abo.kogni.soile2.utils.SoileConfigLoader;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 /**
  * The participantHandler keeps track of all participants. 
@@ -25,12 +28,12 @@ import io.vertx.ext.mongo.MongoClient;
 public class ParticipantHandler {
 	MongoClient client;
 	ProjectInstanceHandler project;
-	CheckDirtyMap<String,Participant> activeparticipants;
-	
+	CheckDirtyMap<String,Participant> activeparticipants;	
 	ParticipantManager manager;
-	DataParticipantManager resultManager;
 	Vertx vertx;
-	
+	String dataLakeFolder;
+	static final Logger LOGGER = LogManager.getLogger(ParticipantHandler.class);
+
 	
 	
 	
@@ -41,6 +44,7 @@ public class ParticipantHandler {
 		this.manager = new ParticipantManager(client);
 		this.vertx = vertx;
 		activeparticipants = new CheckDirtyMap<String, Participant>(manager, 2*3600); //Keep for two hours
+		dataLakeFolder = SoileConfigLoader.getServerProperty("soileResultDirectory");
 	}
 	/**
 	 * Create a participant in the database, store that  and let the handler handle it
@@ -59,7 +63,15 @@ public class ParticipantHandler {
 	{
 		return manager.createParticipant(p);
 	}
-	
+
+	/**
+	 * Create a participant in the database
+	 * @param handler
+	 */
+	public Future<Participant> createTokenUser(ProjectInstance p)
+	{
+		return manager.createTokenParticipant(p);
+	}
 	
 	/**
 	 * Clean up the data currently stored by this Participant handler. 
@@ -67,7 +79,7 @@ public class ParticipantHandler {
 	 */
 	public void cleanup()
 	{
-		Collection<Participant> partsToClean = activeparticipants.cleanup();
+		activeparticipants.cleanup();
 	}
 	
 	/**
@@ -87,9 +99,30 @@ public class ParticipantHandler {
 	 * @param id the uid of the participant
 	 * @param handler the handler that requested the participant.
 	 */
-	public Future<Participant> getParticpant(String id)
+	public Future<Participant> getParticipant(String id)
 	{
 		return activeparticipants.getData(id);		
+	}
+	
+	/**
+	 * Retrieve a participant from the database (or memory) and return the participant
+	 * based on the participants uID.
+	 * @param id the uid of the participant
+	 * @param handler the handler that requested the participant.
+	 */
+	public Future<Participant> getParticipantForToken(String token, String projectID)
+	{
+		Promise<Participant> partPromise = Promise.<Participant>promise();
+		manager.getParticipantIDForToken(token, projectID)
+		.onSuccess(id -> {
+			getParticipant(id)
+			.onSuccess(participant -> {
+				partPromise.complete(participant);
+			})
+			.onFailure(err -> partPromise.fail(err));
+		})
+		.onFailure(err -> partPromise.fail(err));
+		return partPromise.future();
 	}
 	
 	/**
@@ -110,6 +143,7 @@ public class ParticipantHandler {
 		return particpantPromise.future();
 
 	}
+
 	
 	/**
 	 * Delete a participant and all data associated with the participant from the project.
@@ -118,41 +152,97 @@ public class ParticipantHandler {
 	public Future<Void> deleteParticipant(String id)
 	{
 		Promise<Void> deletionPromise = Promise.<Void>promise();
-		manager.getParticipantResults(id)
-		.onSuccess(resultJson-> 
-		{			
-			List<Future> deletionFutures = new LinkedList<Future>();
-			for(File f : project.getFilesinProject(manager.getFilesFromResults(resultJson)))
+		// all Files for a participant are stored in the folder: datalake/PARTICIPANTID
+		getParticipant(id)
+		.onSuccess( participant -> {
+			vertx.fileSystem().deleteRecursive(Path.of(dataLakeFolder, id).toString(), true)
+			.onSuccess(filesDeleted -> 			
 			{
-				deletionFutures.add(vertx.fileSystem().delete(f.getAbsolutePath()));
-			}
-			CompositeFuture.all(deletionFutures).onFailure(failure ->
-			{
-				deletionPromise.fail(failure.getCause());
-			}).onSuccess(success ->
-			{
-				List<Future> deletedFolders = new LinkedList<Future>();
-				for(File f : project.getTaskFoldersForParticipant(manager.getTaskWithFilesFromResults(resultJson), id))
-				{
-					deletedFolders.add(vertx.fileSystem().delete(f.getAbsolutePath()));
-				}
-				CompositeFuture.all(deletedFolders)
-				.onSuccess(deltionDone ->{
-					// now, all files and folders have been removed. So we will delete the participant ID.
+				//TODO: Need to change this, so that it is FIRST removed from the projectInstance and THEN deleted from the participant db.... 
+				
+				// now, all files and folders have been removed. So we will delete the participant ID.
+				project.removeParticipant(participant.getProjectID(), participant)
+				.onSuccess( success -> {
 					manager.deleteParticipant(id)
-					.onSuccess(Void -> {
+					.onSuccess(deletionSuccess -> {
+										
+						activeparticipants.cleanElement(id);
 						deletionPromise.complete();
-					})
-					.onFailure(err -> deletionPromise.fail(err));
+					}).onFailure(err -> {
+						LOGGER.error("Error while deleting participant " + id + ". Couldnt remove from the participant database!");
+						LOGGER.error(err);
+						deletionPromise.fail(err);	
+					});										
 				})
-				.onFailure(err -> deletionPromise.fail(err));
+				.onFailure(err -> {
+					LOGGER.error("Error while deleting participant " + id + ". Couldnt remove from the Project !");
+					LOGGER.error(err);
+					deletionPromise.fail(err);	
+				});
 			})
-			.onFailure(err -> deletionPromise.fail(err));			
+			.onFailure(
+					err -> {
+						LOGGER.error("Error while deleting files for participant " + id + "!");
+						LOGGER.error(err);
+						deletionPromise.fail(err);	
+					});
 		})
-		.onFailure(err -> deletionPromise.fail(err));
+		.onFailure(err -> deletionPromise.fail(err));			
 		return deletionPromise.future();
 	}
+		
 	
+	/**
+	 * Get a {@link JsonArray} of {@link JsonObject} elements that contain the 
+	 * @param project
+	 * @return
+	 */
+	public Future<JsonArray> getParticipantStatusForProject(ProjectInstance project)
+	{
+		return manager.getParticipantStatusForProject(project);
+	}
+
+	/**
+	 * Get a {@link JsonArray} of {@link JsonObject} elements that contain the 
+	 * @param project
+	 * @return
+	 */
+	public Future<List<JsonObject>> getTaskDataforParticipants(JsonArray participantIDs, String taskID, String projectID)
+	{
+		return manager.getParticipantsResultsForTask(participantIDs, projectID, taskID);
+	}
 	
-	
+	/**
+	 * Get a {@link List} of {@link JsonObject} elements that contain the results along with some additional information for each participant. 
+	 * @param project
+	 * @return
+	 */
+	public Future<List<JsonObject>> getParticipantData(ProjectInstance project, JsonArray particpantIDs)
+	{
+		Promise<List<JsonObject>> dataPromise = Promise.<List<JsonObject>>promise();
+		if(particpantIDs == null)
+		{// this is a request for all Participants, so just collect the data.
+			project.getParticipants().onSuccess(participants -> 
+			{				
+				getParticipantData(project, participants)
+				.onSuccess(res -> 
+				{
+					dataPromise.complete(res);
+				})
+				.onFailure(err -> dataPromise.fail(err));
+			})
+			.onFailure(err -> dataPromise.fail(err));
+					
+		}
+		else
+		{
+			manager.getParticipantsResults(particpantIDs, project.getID())
+			.onSuccess( res -> {
+				dataPromise.complete(res);
+			})
+			.onFailure(err -> dataPromise.fail(err));
+			
+		}
+		return dataPromise.future();
+	}	
 }

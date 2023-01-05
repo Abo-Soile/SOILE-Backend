@@ -12,7 +12,7 @@ import io.vertx.core.json.JsonObject;
 
 public class APITask extends APIElementBase<Task> {
 
-	private String[] gitFields = new String[] {"name", "codetype", "resources"};
+	private String[] gitFields = new String[] {"name", "codeType", "resources"};
 	private Object[] gitDefaults = new Object[] {"", "javascript", new JsonArray()};
 	
 	public APITask() {
@@ -25,13 +25,13 @@ public class APITask extends APIElementBase<Task> {
 		loadGitJson(data);
 	}
 
-	@JsonProperty("codetype")
+	@JsonProperty("codeType")
 	public String getCodetype() {
-		return data.getString("codetype");
+		return data.getString("codeType", "");
 	}
-	@JsonProperty("codetype")
-	public void setCodetype(String codetype) {
-		data.put("codetype", codetype);
+	@JsonProperty("codeType")
+	public void setCodetype(String codeType) {
+		data.put("codeType", codeType);
 	}
 
 	/**
@@ -40,7 +40,8 @@ public class APITask extends APIElementBase<Task> {
 	 */
 	@JsonProperty("resources")
 	public JsonArray getResources() {
-		return data.getJsonArray("resources");
+		System.out.println(data.getValue("resources"));
+		return data.getJsonArray("resources", new JsonArray());
 	}
 	@JsonProperty("resources")
 	public void setResources(JsonArray resources) {
@@ -53,7 +54,7 @@ public class APITask extends APIElementBase<Task> {
 	}
 	@JsonProperty("code")
 	public void setCode(String code) {
-		data.put("codetype", code);
+		data.put("code", code);
 	}
 	@Override
 	public void setElementProperties(Task task)
@@ -84,18 +85,18 @@ public class APITask extends APIElementBase<Task> {
 	{
 		return true;
 	}
-	
-	public Future<String> storeAdditionalData(String currentVersion, GitManager gitManager)
+	@Override
+	public Future<String> storeAdditionalData(String currentVersion, GitManager gitManager, String targetRepository)
 	{
 		// We need to store the code. Resources are stored individually.
-		GitFile g = new GitFile("Code.obj", getUUID(), currentVersion);
+		GitFile g = new GitFile("Code.obj", targetRepository, currentVersion);
 		return gitManager.writeGitFile(g, getCode());
 	}
-	
-	public Future<Boolean> loadAdditionalData(GitManager gitManager)
+	@Override
+	public Future<Boolean> loadAdditionalData(GitManager gitManager, String targetRepository)
 	{
 		Promise<Boolean> successPromise = Promise.promise();
-		GitFile g = new GitFile("Code.obj", getUUID(), this.getVersion());
+		GitFile g = new GitFile("Code.obj", targetRepository, this.getVersion());
 		gitManager.getGitFileContents(g).onSuccess(code -> {
 			setCode(code);
 			successPromise.complete(true);

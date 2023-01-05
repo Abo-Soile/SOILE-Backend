@@ -6,8 +6,10 @@ import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
+import org.junit.After;
 
 import fi.abo.kogni.soile2.datamanagement.git.GitManager;
+import fi.abo.kogni.soile2.utils.SoileConfigLoader;
 import fi.abo.kogni.soile2.utils.VerticleInitialiser;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
@@ -16,7 +18,8 @@ public abstract class GitTest extends MongoTest {
 
 	protected String gitDir;
 	protected GitManager gitManager;
-	protected String dataLakeDir;
+	protected String gitDataLakeDir;
+	protected String resultDataLakeDir;
 	@Override
 	public void runBeforeTests(TestContext context)
 	{		
@@ -30,25 +33,37 @@ public abstract class GitTest extends MongoTest {
 			context.fail(err);
 			gitInit.complete();
 		});
-		gitManager = new GitManager(vertx.eventBus());
+		gitManager = new GitManager(vertx.eventBus());			
+	}
+	
+	@Override
+	public void setupTestConfig(TestContext context)
+	{
+		super.setupTestConfig(context);
 		try {
-			dataLakeDir = Files.createTempDirectory("dataLakeDir").toFile().getAbsolutePath();
+			gitDataLakeDir = Files.createTempDirectory("gitdataLakeDir").toFile().getAbsolutePath();
+			resultDataLakeDir = Files.createTempDirectory("resultdataLakeDir").toFile().getAbsolutePath();
+			// we need to Update the config for some verticles, which derive their pathes from the config.
+			SoileConfigLoader.getConfig(SoileConfigLoader.HTTP_SERVER_CFG)
+			.put("soileGitFolder", gitDir)
+			.put("soileGitDataLakeFolder", gitDataLakeDir)
+			.put("soileResultDirectory", resultDataLakeDir);
 		}
 		catch(IOException e)
 		{
 			context.fail(e);
 		}
-		
-		
 	}
-	
+
+	@Override
 	public void tearDown(TestContext context)
 	{
 		super.tearDown(context);
 		try
 		{
-			FileUtils.deleteDirectory(new File(dataLakeDir));
-			//FileUtils.deleteDirectory(new File(gitDir));
+			FileUtils.deleteDirectory(new File(gitDataLakeDir));
+			FileUtils.deleteDirectory(new File(resultDataLakeDir));
+			FileUtils.deleteDirectory(new File(gitDir));
 		}
 		catch(Exception e)
 		{
