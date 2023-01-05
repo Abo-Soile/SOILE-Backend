@@ -24,7 +24,7 @@ public class CodeGeneratorTest extends TestCase {
     StringBuilder code;
     StringBuilder errors;
 
-    URL templatePath = getClass().getClassLoader().getResource("elang.stg");
+    URL templatePath = getClass().getClassLoader().getResource("elang2.stg");
     STGroup templateGroup = new STGroupFile(templatePath);
 
     @Before
