@@ -1,6 +1,7 @@
 package fi.abo.kogni.soile2.elang.verticle;
 
 import java.io.StringReader;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 import org.stringtemplate.v4.STGroup;
@@ -20,15 +21,13 @@ public class ExperimentLanguageVerticle extends AbstractVerticle {
 	public ExperimentLanguageVerticle(String address) {
 		// TODO Auto-generated constructor stub
 		this.address = address;
-		String fullFileName = ExperimentLanguageVerticle.class.getClassLoader().getResource("elang.stg").getFile();
+		URL fullFileName = ExperimentLanguageVerticle.class.getClassLoader().getResource("elang.stg");
 		template1 = new STGroupFile(fullFileName);
 	}
 	
     @Override
     public void start() {
         
-		System.out.println("Deploying ExperimentLanguageVerticle with id : " + deploymentID());    	
-    	System.out.println("Registering Elang Verticle at address " + address);       
         vertx.eventBus().consumer(address, this::getCodeTemplate);                
     }
 

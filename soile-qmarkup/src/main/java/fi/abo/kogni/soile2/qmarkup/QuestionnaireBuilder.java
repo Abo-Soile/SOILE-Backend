@@ -1,5 +1,8 @@
 package fi.abo.kogni.soile2.qmarkup;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,13 +14,14 @@ import org.stringtemplate.v4.STGroup;
 
 import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
 import fi.abo.kogni.soile2.qmarkup.typespec.Validator;
+import fi.abo.kogni.soile2.qmarkup.verticle.QuestionnaireRenderVerticle;
 import fi.abo.kogni.soile2.utils.generator.UniqueStringGenerator;
 import org.stringtemplate.v4.STGroupFile;
 
 
 public class QuestionnaireBuilder implements QuestionnaireProcessor {
 
-    public QuestionnaireBuilder(String template) {
+    public QuestionnaireBuilder(URL template) {
         super();
         this.pendingTags = new ArrayDeque<>();
         this.tsStack = new ArrayDeque<>();
@@ -46,7 +50,11 @@ public class QuestionnaireBuilder implements QuestionnaireProcessor {
         this.nameGen = new UniqueStringGenerator("name");
         this.nameGen.setCounter(counter);
     }
-
+    
+    public QuestionnaireBuilder(String template) throws MalformedURLException
+    {
+    	this(QuestionnaireBuilder.class.getClassLoader().getResource("questionnaire_embedded.stg"));    	
+    }
     public void questionnaireId(String id) {
         this.questionnaireId = id;
     }
