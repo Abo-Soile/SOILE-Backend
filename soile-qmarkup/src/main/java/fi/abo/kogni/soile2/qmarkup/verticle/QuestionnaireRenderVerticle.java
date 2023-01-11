@@ -1,5 +1,7 @@
 package fi.abo.kogni.soile2.qmarkup.verticle;
 
+import java.net.URL;
+
 import fi.abo.kogni.soile2.qmarkup.InputReader;
 import fi.abo.kogni.soile2.qmarkup.QuestionnaireBuilder;
 import fi.abo.kogni.soile2.qmarkup.typespec.MalformedCommandException;
@@ -24,7 +26,7 @@ public final class QuestionnaireRenderVerticle extends AbstractVerticle {
 	
 	@Override
 	public void start() {		
-		String template = QuestionnaireRenderVerticle.class.getClassLoader().getResource("questionnaire_embedded.stg").getPath();
+		URL template = QuestionnaireRenderVerticle.class.getClassLoader().getResource("questionnaire_embedded.stg");
 	    builder = new QuestionnaireBuilder(template);
 		generator = IdGenerator.shortIdGenerator();		
 		generator.seed(1024);
